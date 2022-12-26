@@ -2,6 +2,7 @@ package cn.siriusbot.siriuspro.entity.api;
 
 import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.entity.impl.Schedule;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ public interface ScheduleApi {
      * @param since      起始时间戳(ms)
      * @return 返回日程列表
      */
-    public abstract Map<List<Schedule>,Object> getScheduleListByChannel_id(Bot bot, String channel_id, String since);
+    public abstract Tuple<List<Schedule>,String> getScheduleListByChannel_id(Bot bot, String channel_id, String since);
 
     /**
      * 获取日程详情
@@ -32,7 +33,7 @@ public interface ScheduleApi {
      * @param schedule_id 日程ID
      * @return 返回日程对象
      */
-    public abstract Map<Schedule,Object> getScheduleInfo(Bot bot, String channel_id, String schedule_id);
+    public abstract Tuple<Schedule,String> getScheduleInfo(Bot bot, String channel_id, String schedule_id);
 
     /**
      * 删除日程
@@ -50,7 +51,7 @@ public interface ScheduleApi {
      * @param schedule 不带id的日程对象
      * @return 返回日程对象
      */
-    public abstract Map<Schedule,Object> createSchedule(Bot bot,String channel_id,Schedule schedule);
+    public abstract Tuple<Schedule,String> createSchedule(Bot bot,String channel_id,Schedule schedule);
 
     /**
      * 修改日程
@@ -60,5 +61,5 @@ public interface ScheduleApi {
      * @param schedule 修改后的日程对象，不带id
      * @return 返回日程对象
      */
-    public abstract Map<Schedule,Object> modifySchedule(Bot bot,String channel_id,String schedule_id,Schedule schedule);
+    public abstract Tuple<Schedule,String> modifySchedule(Bot bot,String channel_id,String schedule_id,Schedule schedule);
 }

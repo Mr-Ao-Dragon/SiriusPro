@@ -6,6 +6,7 @@ import cn.siriusbot.siriuspro.entity.impl.Channel;
 import cn.siriusbot.siriuspro.entity.impl.role.GuildRoleList;
 import cn.siriusbot.siriuspro.entity.impl.role.NewRole;
 import cn.siriusbot.siriuspro.entity.impl.role.Role;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 
 import java.util.Map;
 
@@ -24,7 +25,7 @@ public interface RoleApi {
      * @param hoist    是否在成员列表中单独展示,0:否,1:是
      * @return 返回身份组对象
      */
-    public abstract Map<Role,Object> createRole(Bot bot, String guild_id, String name, Integer color, Integer hoist);
+    public abstract Tuple<Role, String> createRole(Bot bot, String guild_id, String name, Integer color, Integer hoist);
 
     /**
      * 将指定用户，从指定频道的身份组中移除
@@ -61,7 +62,7 @@ public interface RoleApi {
      * @param hoist    是否在成员列表中单独展示,0:否,1:是
      * @return 修改后的身份组信息
      */
-    public abstract Map<NewRole,Object> modifyRoleByGuild(Bot bot, String guild_id, String role_id, String name, Integer color, Integer hoist);
+    public abstract Tuple<NewRole,String> modifyRoleByGuild(Bot bot, String guild_id, String role_id, String name, Integer color, Integer hoist);
 
     /**
      * 从指定频道中删除指定身份组
@@ -80,5 +81,5 @@ public interface RoleApi {
      * @param guild_id 频道ID
      * @return 身份组列表
      */
-    public abstract Map<GuildRoleList,Object> getRoleListByGuild(Bot bot, String guild_id);
+    public abstract Tuple<GuildRoleList,String> getRoleListByGuild(Bot bot, String guild_id);
 }

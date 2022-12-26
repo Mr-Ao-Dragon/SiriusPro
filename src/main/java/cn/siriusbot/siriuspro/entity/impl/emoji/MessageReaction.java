@@ -3,6 +3,7 @@ package cn.siriusbot.siriuspro.entity.impl.emoji;
 import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.api.MessageReactionApi;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
 
@@ -62,7 +63,7 @@ public class MessageReaction implements MessageReactionApi {
      */
     @SneakyThrows
     @Override
-    public Map<ReactionReply,Object>  getReactionUsers(Bot bot, String channel_id, String message_id, Integer type, String id, String cookie, Integer limit) {
+    public Tuple<ReactionReply,String> getReactionUsers(Bot bot, String channel_id, String message_id, Integer type, String id, String cookie, Integer limit) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request;
         if(cookie==null){
@@ -72,9 +73,9 @@ public class MessageReaction implements MessageReactionApi {
         }
         String data = SiriusHttpUtils.getRequest(bot, request).body().string();
 
-        Map<ReactionReply,Object> map = new HashMap<>();
-        map.put(JSONObject.parseObject(data,ReactionReply.class),data);
-        return map;
+        Tuple<ReactionReply,String> tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data,ReactionReply.class)).setSecond(data);
+        return tuple;
 
     }
 

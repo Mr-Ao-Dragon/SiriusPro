@@ -4,6 +4,7 @@ package cn.siriusbot.siriuspro.entity.impl.announces;
 import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.api.AnnouncesApi;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
 
@@ -65,7 +66,7 @@ public class Announces implements AnnouncesApi {
      */
     @SneakyThrows
     @Override
-    public Announces createGuildAnnounces(Bot bot, String guild_id, String message_id, String channel_id) {
+    public Tuple<Announces,String> createGuildAnnounces(Bot bot, String guild_id, String message_id, String channel_id) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/announces").build();
         MediaType mediaType = MediaType.parse("application/json;text/plain");
@@ -74,7 +75,10 @@ public class Announces implements AnnouncesApi {
         json.put("channel_id", channel_id);
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         Response response = SiriusHttpUtils.postRequest(bot, request, body);
-        return JSONObject.parseObject(response.body().string(), this.getClass());
+        String data = response.body().string();
+        Tuple<Announces,String> tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, this.getClass())).setSecond(data);
+        return tuple;
     }
 
 
@@ -105,7 +109,7 @@ public class Announces implements AnnouncesApi {
      */
     @SneakyThrows
     @Override
-    public Announces createGuildRecommend_Channels(Bot bot, String guild_id, Integer announces_type,List<RecommendChannel> recommendChannels) {
+    public Tuple<Announces,String> createGuildRecommend_Channels(Bot bot, String guild_id, Integer announces_type,List<RecommendChannel> recommendChannels) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl()+"guilds/"+guild_id+"/announces").build();
         MediaType mediaType = MediaType.parse("application/json;text/plain");
@@ -114,7 +118,10 @@ public class Announces implements AnnouncesApi {
         json.put("announces_type",announces_type);
         RequestBody body = RequestBody.create(mediaType,json.toJSONString());
         Response response = SiriusHttpUtils.postRequest(bot, request, body);
-        return JSONObject.parseObject(response.body().string(),this.getClass());
+        String data = response.body().string();
+        Tuple<Announces,String> tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, this.getClass())).setSecond(data);
+        return tuple;
     }
 
 

@@ -3,6 +3,7 @@ package cn.siriusbot.siriuspro.entity.api;
 
 import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.entity.impl.emoji.ReactionReply;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 
 
 import java.util.Map;
@@ -24,7 +25,7 @@ public interface MessageReactionApi {
      * @param limit      每次拉取数量，默认20，最多50，只在第一次请求设置
      * @return 拉取表情表态响应对象
      */
-    public Map<ReactionReply,Object> getReactionUsers(Bot bot, String channel_id, String message_id, Integer type, String id, String cookie, Integer limit);
+    public Tuple<ReactionReply,String> getReactionUsers(Bot bot, String channel_id, String message_id, Integer type, String id, String cookie, Integer limit);
 
 
     /**

@@ -21,8 +21,8 @@ public class SiriusProApplication {
         Thread.sleep(2000);
 //        AudioControl audioControl = new AudioControl();
 //        audioControl.setAudio_url("http://home.siriusbot.cn/test.mp3").setStatus(AudioControl.STATUS.START.getValue()).setText("测试播放");
-//        new AudioControl().audioControl(bot, "39137206",audioControl);
-        new Message().sendMessage(bot,"6034803","测试",null,null,null);
+//        new AudioControl().singEnd(bot, "39137206");
+        System.out.println("数据内容:"+new Message().sendMessage(bot,"6034803","测试",null,null,null).getFirst());
     }
 
 }

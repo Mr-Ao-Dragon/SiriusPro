@@ -4,6 +4,7 @@ import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.entity.impl.forum.responseObj.ThreadList;
 import cn.siriusbot.siriuspro.entity.impl.forum.responseObj.createThread;
 import cn.siriusbot.siriuspro.entity.impl.forum.thread.ForumThread;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 
 
 import java.util.Map;
@@ -21,7 +22,7 @@ public interface ForumApi {
      * @param channel_id 子频道ID
      * @return 帖子列表对象
      */
-    public abstract Map<ThreadList,Object> getThreadsByChannelId(Bot bot, String channel_id);
+    public abstract Tuple<ThreadList,String> getThreadsByChannelId(Bot bot, String channel_id);
 
     /**
      * 获取子频道详情
@@ -33,7 +34,7 @@ public interface ForumApi {
      * @param thread_id  帖子ID
      * @return 帖子详情对象
      */
-    public abstract Map<ForumThread,Object> getThreadInfo(Bot bot, String channel_id, String thread_id);
+    public abstract Tuple<ForumThread,String>  getThreadInfo(Bot bot, String channel_id, String thread_id);
 
     /**
      * 发表帖子
@@ -45,7 +46,7 @@ public interface ForumApi {
      * @param format     解析模式，参考Forum下Thread的FORMAT枚举类型
      * @return 返回发表帖子响应对象
      */
-    public abstract Map<createThread,Object> postThread(Bot bot, String channel_id, String title, String content, Integer format);
+    public abstract Tuple<createThread,String> postThread(Bot bot, String channel_id, String title, String content, Integer format);
 
     /**
      * 删除帖子

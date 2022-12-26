@@ -3,6 +3,7 @@ package cn.siriusbot.siriuspro.entity.impl;
 import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.api.UserApi;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
@@ -59,16 +60,16 @@ public class User implements UserApi {
 
     @SneakyThrows
     @Override
-    public Map<User,Object> getRobotInfo(Bot bot) {
+    public Tuple<User,String> getRobotInfo(Bot bot) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl() + "users/@me").build();
         Response response = SiriusHttpUtils.getRequest(bot, request);
         String data = response.body().string();
         User user = JSONObject.parseObject(data, User.class);
         user.setBot(true);
-        HashMap<User, Object> map = new HashMap<>();
-        map.put(user,data);
-        return map;
+        Tuple<User,String> tuple = new Tuple<>();
+        tuple.setFirst(user).setSecond(data);
+        return tuple;
     }
 
 
@@ -83,7 +84,7 @@ public class User implements UserApi {
      */
     @SneakyThrows
     @Override
-    public Map<List<Guild>,Object>  getGuildList(Bot bot, String before, String after, int limit) {
+    public Tuple<List<Guild>,String>  getGuildList(Bot bot, String before, String after, int limit) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl()).build();
         String path = bot.getOpenUrl() + "users/@me/guilds";
@@ -102,8 +103,9 @@ public class User implements UserApi {
         Response response = SiriusHttpUtils.getRequest(bot, request);
         String data = response.body().string();
         List<Guild> guildList = JSONObject.parseObject(data, List.class);
-        Map map = new HashMap<List<Guild>,String>();
-        map.put(guildList,data);
-        return map;
+        Tuple<List<Guild>,String> tuple = new Tuple<>();
+        tuple.setFirst(guildList);
+        tuple.setSecond(data);
+        return tuple;
     }
 }

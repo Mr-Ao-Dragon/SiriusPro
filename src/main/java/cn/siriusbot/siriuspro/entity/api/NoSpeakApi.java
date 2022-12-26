@@ -2,6 +2,7 @@ package cn.siriusbot.siriuspro.entity.api;
 
 import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.entity.impl.NoSpeak;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 
 
 import java.util.List;
@@ -33,7 +34,7 @@ public interface NoSpeakApi {
      * @param mute_seconds 禁言秒数
      * @return 返回禁言成员对象
      */
-    public abstract Map<NoSpeak,Object> noSpeakByUser_ids(Bot bot, String guild_id, List<String> user_ids, String mute_end_timestamp, String mute_seconds);
+    public abstract Tuple<NoSpeak,String> noSpeakByUser_ids(Bot bot, String guild_id, List<String> user_ids, String mute_end_timestamp, String mute_seconds);
 
 
     /**

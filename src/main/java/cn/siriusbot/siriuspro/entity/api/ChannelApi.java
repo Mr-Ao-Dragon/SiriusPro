@@ -2,6 +2,7 @@ package cn.siriusbot.siriuspro.entity.api;
 
 import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.entity.impl.Channel;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ public interface ChannelApi {
      * @param guild_id 频道ID
      * @return 返回存放子频道的容器对象
      */
-    public abstract Map<List<Channel>,Object> getChannelList(Bot bot, String guild_id);
+    public abstract Tuple<List<Channel>,String> getChannelList(Bot bot, String guild_id);
 
 
     /**
@@ -26,7 +27,7 @@ public interface ChannelApi {
      * @param channel_id 子频道ID
      * @return 返回子频道对象
      */
-    public abstract Map<Channel,Object> getChannelInfo(Bot bot,String channel_id);
+    public abstract Tuple<Channel,String> getChannelInfo(Bot bot,String channel_id);
 
     /**
      * 创建子频道
@@ -35,7 +36,7 @@ public interface ChannelApi {
      * @param channel 子频道对象
      * @return 返回子频道对象
      */
-    public abstract Map<Channel,Object> createChannel(Bot bot,String guild_id,Channel channel);
+    public abstract Tuple<Channel,String> createChannel(Bot bot,String guild_id,Channel channel);
 
     /**
      * 修改子频道
@@ -44,7 +45,7 @@ public interface ChannelApi {
      * @param channel 修改后的子频道对象
      * @return 修改后的子频道对象
      */
-    public abstract Map<Channel,Object> modifyChannel(Bot bot, String channel_id, Channel channel);
+    public abstract Tuple<Channel,String>  modifyChannel(Bot bot, String channel_id, Channel channel);
 
     /**
      * 删除子频道

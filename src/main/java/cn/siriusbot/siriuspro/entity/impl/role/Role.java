@@ -5,6 +5,7 @@ import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.api.RoleApi;
 import cn.siriusbot.siriuspro.entity.impl.Channel;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
 
@@ -75,7 +76,7 @@ public class Role implements RoleApi {
      */
     @SneakyThrows
     @Override
-    public Map<Role, Object> createRole(Bot bot, String guild_id, String name, Integer color, Integer hoist) {
+    public Tuple<Role, String> createRole(Bot bot, String guild_id, String name, Integer color, Integer hoist) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/roles").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
@@ -88,9 +89,9 @@ public class Role implements RoleApi {
         String data = response.body().string();
         JSONObject roleObject = JSONObject.parseObject(data);
         Role role = roleObject.getJSONObject("role").toJavaObject(this.getClass());
-        Map<Role, Object> map = new HashMap<>();
-        map.put(role,data);
-        return map;
+        Tuple<Role, String> tuple = new Tuple<>();
+        tuple.setFirst(role).setSecond(data);
+        return tuple;
     }
 
     /**
@@ -147,7 +148,7 @@ public class Role implements RoleApi {
      */
     @SneakyThrows
     @Override
-    public Map<NewRole,Object> modifyRoleByGuild(Bot bot, String guild_id, String role_id, String name, Integer color, Integer hoist) {
+    public Tuple<NewRole,String> modifyRoleByGuild(Bot bot, String guild_id, String role_id, String name, Integer color, Integer hoist) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/roles/" + role_id).build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
@@ -159,9 +160,9 @@ public class Role implements RoleApi {
         Response response = SiriusHttpUtils.patchRequest(bot, request, body);
         String data = response.body().string();
         NewRole newRole = JSONObject.parseObject(data, NewRole.class);
-        Map<NewRole,Object> map = new HashMap<>();
-        map.put(newRole,data);
-        return map;
+        Tuple<NewRole,String> tuple = new Tuple<>();
+        tuple.setFirst(newRole).setSecond(data);
+        return tuple;
     }
 
     /**
@@ -189,15 +190,15 @@ public class Role implements RoleApi {
      */
     @SneakyThrows
     @Override
-    public Map<GuildRoleList,Object> getRoleListByGuild(Bot bot, String guild_id) {
+    public Tuple<GuildRoleList,String>  getRoleListByGuild(Bot bot, String guild_id) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/roles").build();
         Response response = SiriusHttpUtils.getRequest(bot, request);
         String data = response.body().string();
         GuildRoleList guildRoleList = JSONObject.parseObject(response.body().string(), GuildRoleList.class);
-        Map<GuildRoleList,Object> map = new HashMap<>();
-        map.put(guildRoleList,data);
-        return map;
+        Tuple<GuildRoleList,String> tuple =new Tuple<>();
+        tuple.setFirst(guildRoleList).setSecond(data);
+        return tuple;
     }
 
     /**

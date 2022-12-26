@@ -72,8 +72,7 @@ public class AudioControl implements AudioApi {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl()+"channels/"+channel_id+"/mic").build();
         Response response = SiriusHttpUtils.putRequest(bot, request, RequestBody.create(MediaType.parse("text/plain;application/json"), ""));
-        System.out.println(response.body().string());
-        return  null;
+        return  response.code()==200;
     }
 
     /**
@@ -89,8 +88,7 @@ public class AudioControl implements AudioApi {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl()+"channels/"+channel_id+"/mic").build();
         Response response = SiriusHttpUtils.deleteRequest(bot, request,null);
-        System.out.println(response.body().string());
-        return  null;
+        return  response.code()==200;
     }
 
     public enum STATUS{

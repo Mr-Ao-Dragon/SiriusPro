@@ -4,6 +4,7 @@ package cn.siriusbot.siriuspro.entity.impl;
 import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.api.MessageSettingApi;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
@@ -51,13 +52,13 @@ public class MessageSetting implements MessageSettingApi {
      */
     @SneakyThrows
     @Override
-    public Map<MessageSetting,Object> getMessageSettingInfo(Bot bot, String guild_id) {
+    public Tuple<MessageSetting,String> getMessageSettingInfo(Bot bot, String guild_id) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl()+"guilds/"+guild_id+"/message/setting").build();
         Response response = SiriusHttpUtils.getRequest(bot, request);
-        Map<MessageSetting,Object> map = new HashMap<>();
+        Tuple<MessageSetting,String> tuple = new Tuple<>();
         String data = response.body().string();
-        map.put(JSONObject.parseObject(data,this.getClass()),data);
-        return map;
+        tuple.setFirst(JSONObject.parseObject(data,this.getClass())).setSecond(data);
+        return tuple;
     }
 }

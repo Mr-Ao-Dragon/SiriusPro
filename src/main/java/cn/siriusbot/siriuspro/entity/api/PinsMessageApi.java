@@ -2,6 +2,7 @@ package cn.siriusbot.siriuspro.entity.api;
 
 import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.entity.impl.PinsMessage;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 
 import java.util.Map;
 
@@ -17,7 +18,7 @@ public interface PinsMessageApi {
      * @param message_id 消息ID
      * @return 返回精华消息对象
      */
-    public abstract Map<PinsMessage,Object> addPinsMessage(Bot bot, String channel_id, String message_id);
+    public abstract Tuple<PinsMessage,String> addPinsMessage(Bot bot, String channel_id, String message_id);
 
 
     /**
@@ -26,7 +27,7 @@ public interface PinsMessageApi {
      * @param channel_id 子频道ID
      * @return 返回精华消息对象
      */
-    public abstract Map<PinsMessage,Object> getPinsMessage(Bot bot, String channel_id);
+    public abstract Tuple<PinsMessage,String> getPinsMessage(Bot bot, String channel_id);
 
     /**
      * 删除精华消息

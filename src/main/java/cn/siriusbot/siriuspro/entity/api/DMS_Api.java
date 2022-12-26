@@ -7,6 +7,7 @@ import cn.siriusbot.siriuspro.entity.impl.message.MessageMarkdown;
 import cn.siriusbot.siriuspro.entity.impl.message.MessageReference;
 import cn.siriusbot.siriuspro.entity.impl.message.ark.MessageArk;
 import cn.siriusbot.siriuspro.entity.impl.message.embed.MessageEmbed;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 
 import java.util.Map;
 
@@ -26,7 +27,7 @@ public interface DMS_Api {
      * @param source_guild_id 源频道ID
      * @return 私信会话对象
      */
-    public abstract Map<DMS,Object> createDMS(Bot bot, String recipient_id, String source_guild_id);
+    public abstract Tuple<DMS,String>createDMS(Bot bot, String recipient_id, String source_guild_id);
 
     /**
      * 发送普通私信消息
@@ -46,7 +47,7 @@ public interface DMS_Api {
      * @param event_id  事件ID
      * @return 消息对象
      */
-    public abstract Map<Message,Object>  sendMessage(Bot bot, String guild_id, String content, String image_Url, String msg_id, String event_id);
+    public abstract Tuple<Message,String>  sendMessage(Bot bot, String guild_id, String content, String image_Url, String msg_id, String event_id);
 
 
     /**
@@ -65,7 +66,7 @@ public interface DMS_Api {
      * @param reference 引用消息对象
      * @return 返回消息对象
      */
-    public abstract Map<Message,Object>  sendReferenceMessage(Bot bot, String guild_id, String content, MessageReference reference);
+    public abstract Tuple<Message,String>  sendReferenceMessage(Bot bot, String guild_id, String content, MessageReference reference);
 
     /**
      * 发送markdown消息(富文本)
@@ -89,7 +90,7 @@ public interface DMS_Api {
      * @param markdown   markdown对象
      * @return 返回消息对象
      */
-    public abstract Map<Message,Object>  sendMarkdownMessage(Bot bot, String guild_id, String msg_id, String event_id, MessageMarkdown markdown);
+    public abstract Tuple<Message,String>  sendMarkdownMessage(Bot bot, String guild_id, String msg_id, String event_id, MessageMarkdown markdown);
 
     /**
      * 用于撤回机器人发送的，指定私信会话消息。
@@ -117,7 +118,7 @@ public interface DMS_Api {
      * @param event_id   事件ID
      * @return 消息对象
      */
-    public abstract Map<Message,Object>  sendArkMessage(Bot bot, String guild_id, MessageArk ark, String msg_id, String event_id);
+    public abstract Tuple<Message,String>  sendArkMessage(Bot bot, String guild_id, MessageArk ark, String msg_id, String event_id);
 
     /**
      * 发送embed模板消息
@@ -130,7 +131,7 @@ public interface DMS_Api {
      * @param event_id   事件id
      * @return 消息对象
      */
-    public abstract Map<Message,Object>  sendEmbedMessage(Bot bot, String guild_id, MessageEmbed embed, String msg_id, String event_id);
+    public abstract Tuple<Message,String>  sendEmbedMessage(Bot bot, String guild_id, MessageEmbed embed, String msg_id, String event_id);
 
     /**
      * 发送图文消息
@@ -143,5 +144,5 @@ public interface DMS_Api {
      * @param event_id   事件ID
      * @return 消息对象
      */
-    public abstract Map<Message,Object> sendImageAndTextMessage(Bot bot, String guild_id, String content, String image_path, String msg_id, String event_id);
+    public abstract Tuple<Message,String> sendImageAndTextMessage(Bot bot, String guild_id, String content, String image_path, String msg_id, String event_id);
 }

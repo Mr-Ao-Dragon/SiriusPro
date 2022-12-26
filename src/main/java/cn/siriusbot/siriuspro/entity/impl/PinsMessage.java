@@ -4,6 +4,7 @@ package cn.siriusbot.siriuspro.entity.impl;
 import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.api.PinsMessageApi;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
 
@@ -48,7 +49,7 @@ public class PinsMessage implements PinsMessageApi {
      */
     @SneakyThrows
     @Override
-    public Map<PinsMessage, Object> addPinsMessage(Bot bot, String channel_id, String message_id) {
+    public Tuple<PinsMessage, String> addPinsMessage(Bot bot, String channel_id, String message_id) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/pins/" + message_id).build();
         MediaType mediaType = MediaType.parse("application/json;text/plain");
@@ -56,9 +57,9 @@ public class PinsMessage implements PinsMessageApi {
         Response response = SiriusHttpUtils.putRequest(bot, request, body);
         String data = response.body().string();
         PinsMessage pinsMessage = JSONObject.parseObject(data, this.getClass());
-        Map<PinsMessage, Object> map = new HashMap<>();
-        map.put(pinsMessage, data);
-        return map;
+        Tuple<PinsMessage, String> tuple = new Tuple<>();
+        tuple.setFirst(pinsMessage).setSecond(data);
+        return tuple;
     }
 
 
@@ -71,14 +72,14 @@ public class PinsMessage implements PinsMessageApi {
      */
     @SneakyThrows
     @Override
-    public Map<PinsMessage, Object> getPinsMessage(Bot bot, String channel_id) {
+    public Tuple<PinsMessage,String> getPinsMessage(Bot bot, String channel_id) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/pins").build();
         String data = SiriusHttpUtils.getRequest(bot, request).body().string();
         PinsMessage pinsMessage = JSONObject.parseObject(SiriusHttpUtils.getRequest(bot, request).body().string(), this.getClass());
-        Map<PinsMessage,Object> map = new HashMap<>();
-        map.put(pinsMessage,data);
-        return map;
+        Tuple<PinsMessage,String> tuple = new Tuple<>();
+        tuple.setFirst(pinsMessage).setSecond(data);
+        return tuple;
     }
 
 

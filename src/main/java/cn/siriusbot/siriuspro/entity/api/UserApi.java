@@ -3,6 +3,7 @@ package cn.siriusbot.siriuspro.entity.api;
 import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.entity.impl.Guild;
 import cn.siriusbot.siriuspro.entity.impl.User;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 
 
 import java.util.List;
@@ -17,7 +18,7 @@ public interface UserApi {
      * 获取机器人基本信息
      * @return 返回Bot(机器人)对象
      */
-    public abstract Map<User,Object> getRobotInfo(Bot bot);
+    public abstract Tuple<User,String> getRobotInfo(Bot bot);
 
     /**
      * 获取频道指定机器人频道列表
@@ -28,5 +29,5 @@ public interface UserApi {
      * @return 频道数组
      * after 和 before 同时设置时， after 参数无效
      */
-    public abstract Map<List<Guild>,Object> getGuildList(Bot bot, String before, String after, int limit);
+    public abstract Tuple<List<Guild>,String> getGuildList(Bot bot, String before, String after, int limit);
 }

@@ -8,6 +8,7 @@ import cn.siriusbot.siriuspro.entity.impl.message.MessageReference;
 import cn.siriusbot.siriuspro.entity.impl.message.ark.MessageArk;
 import cn.siriusbot.siriuspro.entity.impl.message.embed.MessageEmbed;
 import cn.siriusbot.siriuspro.entity.impl.message.requestPack.RequestCustomKeyboard;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 
 
 import java.util.Map;
@@ -36,7 +37,7 @@ public interface MessageApi {
      * @param event_id   事件ID
      * @return 消息对象
      */
-    public abstract Map<Message,Object> sendMessage(Bot bot, String channel_id, String content, String image_Url, String msg_id, String event_id);
+    public abstract Tuple<Message,String> sendMessage(Bot bot, String channel_id, String content, String image_Url, String msg_id, String event_id);
 
     /**
      * 获取指定子频道的指定消息详情
@@ -46,7 +47,7 @@ public interface MessageApi {
      * @param message_id 消息ID
      * @return 返回消息对象
      */
-    public abstract Map<Message,Object> getMessageById(Bot bot, String channel_id, String message_id);
+    public abstract Tuple<Message,String> getMessageById(Bot bot, String channel_id, String message_id);
 
     /**
      * 发送引用消息
@@ -57,7 +58,7 @@ public interface MessageApi {
      * @param reference  引用消息对象
      * @return 返回消息对象
      */
-    public abstract Map<Message,Object> sendReferenceMessage(Bot bot, String channel_id, String content, MessageReference reference);
+    public abstract Tuple<Message,String> sendReferenceMessage(Bot bot, String channel_id, String content, MessageReference reference);
 
     /**
      * 发送markdown消息(富文本)
@@ -74,7 +75,7 @@ public interface MessageApi {
      * @param markdown   markdown对象
      * @return 返回消息对象
      */
-    public abstract Map<Message,Object> sendMarkdownMessage(Bot bot, String channel_id, String msg_id, String event_id, MessageMarkdown markdown);
+    public abstract Tuple<Message,String> sendMarkdownMessage(Bot bot, String channel_id, String msg_id, String event_id, MessageMarkdown markdown);
 
     /**
      * 用于撤回子频道 channel_id 下的消息 message_id。
@@ -105,7 +106,7 @@ public interface MessageApi {
      * @param event_id 事件ID
      * @return 消息对象
      */
-    public abstract Map<Message,Object> sendArkMessage(Bot bot, String channel_id, MessageArk ark, String msg_id, String event_id);
+    public abstract Tuple<Message,String> sendArkMessage(Bot bot, String channel_id, MessageArk ark, String msg_id, String event_id);
 
     /**
      * 发送embed模板消息
@@ -117,7 +118,7 @@ public interface MessageApi {
      * @param event_id 事件id
      * @return 消息对象
      */
-    public abstract Map<Message,Object> sendEmbedMessage(Bot bot, String channel_id, MessageEmbed embed, String msg_id, String event_id);
+    public abstract Tuple<Message,String> sendEmbedMessage(Bot bot, String channel_id, MessageEmbed embed, String msg_id, String event_id);
 
     /**
      * 发送图文消息
@@ -129,7 +130,7 @@ public interface MessageApi {
      * @param event_id 事件ID
      * @return 消息对象
      */
-    public abstract Map<Message,Object> sendImageAndTextMessage(Bot bot,String channel_id,String content,String image_path,String msg_id,String event_id);
+    public abstract Tuple<Message,String> sendImageAndTextMessage(Bot bot,String channel_id,String content,String image_path,String msg_id,String event_id);
 
     /**
      * 发送自定义按钮模板对象
@@ -138,5 +139,5 @@ public interface MessageApi {
      * @param requestCustomKeyboard 自定义按钮请求对象
      * @return 返回消息对象
      */
-    public abstract Map<Message,Object> sendCustomInLineKeyword(Bot bot, String channel_id, RequestCustomKeyboard requestCustomKeyboard);
+    public abstract Tuple<Message,String> sendCustomInLineKeyword(Bot bot, String channel_id, RequestCustomKeyboard requestCustomKeyboard);
 }

@@ -6,6 +6,7 @@ import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.api.ForumApi;
 import cn.siriusbot.siriuspro.entity.impl.forum.responseObj.ThreadList;
 import cn.siriusbot.siriuspro.entity.impl.forum.responseObj.createThread;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
 
@@ -59,14 +60,14 @@ public class ForumThread implements ForumApi {
      */
     @SneakyThrows
     @Override
-    public Map<ThreadList, Object> getThreadsByChannelId(Bot bot, String channel_id) {
+    public Tuple<ThreadList,String> getThreadsByChannelId(Bot bot, String channel_id) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/threads").build();
         String data = SiriusHttpUtils.getRequest(bot, request).body().string();
         ThreadList threadList = JSONObject.parseObject(data, ThreadList.class);
-        Map<ThreadList,Object> map = new HashMap<>();
-        map.put(threadList,data);
-        return map;
+        Tuple<ThreadList,String> tuple = new Tuple<>();
+        tuple.setFirst(threadList).setSecond(data);
+        return tuple;
     }
 
     /**
@@ -81,15 +82,15 @@ public class ForumThread implements ForumApi {
      */
     @SneakyThrows
     @Override
-    public Map<ForumThread,Object> getThreadInfo(Bot bot, String channel_id, String thread_id) {
+    public Tuple<ForumThread,String> getThreadInfo(Bot bot, String channel_id, String thread_id) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/threads/" + thread_id).build();
         String data = SiriusHttpUtils.getRequest(bot, request).body().string();
         JSONObject json = JSONObject.parseObject(data);
         ForumThread forumThread = json.getObject("thread", this.getClass());
-        Map<ForumThread,Object> map = new HashMap<>();
-        map.put(forumThread,data);
-        return map;
+        Tuple<ForumThread,String> tuple = new Tuple<>();
+        tuple.setFirst(forumThread).setSecond(data);
+        return tuple;
     }
 
     /**
@@ -104,7 +105,7 @@ public class ForumThread implements ForumApi {
      */
     @SneakyThrows
     @Override
-    public Map<createThread,Object> postThread(Bot bot, String channel_id, String title, String content, Integer format) {
+    public Tuple<createThread,String> postThread(Bot bot, String channel_id, String title, String content, Integer format) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/threads").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
@@ -114,9 +115,9 @@ public class ForumThread implements ForumApi {
         json.put("format", format);
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         String data = SiriusHttpUtils.putRequest(bot, request, body).body().string();
-        Map<createThread,Object> map = new HashMap<>();
-        map.put(JSONObject.parseObject(data, createThread.class),data);
-        return map;
+        Tuple<createThread,String> tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, createThread.class)).setSecond(data);
+        return tuple;
     }
 
     /**

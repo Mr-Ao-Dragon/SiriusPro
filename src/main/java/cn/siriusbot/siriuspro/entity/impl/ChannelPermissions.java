@@ -4,6 +4,7 @@ package cn.siriusbot.siriuspro.entity.impl;
 import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.api.ChannelPermissionsApi;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
 
@@ -58,14 +59,14 @@ public class ChannelPermissions implements ChannelPermissionsApi {
      */
     @SneakyThrows
     @Override
-    public Map<ChannelPermissions, Object> getChannelPermissionsByUser_id(Bot bot, String channel_id, String user_id) {
+    public Tuple<ChannelPermissions,String> getChannelPermissionsByUser_id(Bot bot, String channel_id, String user_id) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/members/" + user_id + "/permissions").build();
         Response response = SiriusHttpUtils.getRequest(bot, request);
         String data = response.body().string();
-        Map<ChannelPermissions, Object> map = new HashMap<>();
-        map.put(JSONObject.parseObject(data, this.getClass()), data);
-        return map;
+        Tuple<ChannelPermissions,String> tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, this.getClass())).setSecond(data);
+        return tuple;
     }
 
 
@@ -136,14 +137,14 @@ public class ChannelPermissions implements ChannelPermissionsApi {
      */
     @SneakyThrows
     @Override
-    public Map<ChannelPermissions, Object> getChannelPermissionsByRole_id(Bot bot, String channel_id, String role_id) {
+    public Tuple<ChannelPermissions,String> getChannelPermissionsByRole_id(Bot bot, String channel_id, String role_id) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/roles/" + role_id + "/permissions").build();
         Response response = SiriusHttpUtils.getRequest(bot, request);
         String data = response.body().string();
-        Map<ChannelPermissions, Object> map = new HashMap<>();
-        map.put(JSONObject.parseObject(data, this.getClass()), data);
-        return map;
+        Tuple<ChannelPermissions,String> tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, this.getClass())).setSecond(data);
+        return tuple;
     }
 
 

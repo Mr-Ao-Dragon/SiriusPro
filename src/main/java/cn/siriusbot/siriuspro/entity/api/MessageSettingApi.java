@@ -2,6 +2,7 @@ package cn.siriusbot.siriuspro.entity.api;
 
 import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.entity.impl.MessageSetting;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 
 import java.util.Map;
 
@@ -18,5 +19,5 @@ public interface MessageSettingApi {
      * @param guild_id 频道ID
      * @return 返回频道消息频率设置对象
      */
-    public abstract Map<MessageSetting,Object> getMessageSettingInfo(Bot bot, String guild_id);
+    public abstract Tuple<MessageSetting,String> getMessageSettingInfo(Bot bot, String guild_id);
 }

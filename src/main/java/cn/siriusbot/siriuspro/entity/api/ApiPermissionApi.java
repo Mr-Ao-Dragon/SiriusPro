@@ -5,8 +5,10 @@ import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.entity.impl.apipermission.APIPermission;
 import cn.siriusbot.siriuspro.entity.impl.apipermission.ApiPermissionDemand;
 import cn.siriusbot.siriuspro.entity.impl.apipermission.ApiPermissionDemandIdentify;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 
 import java.util.List;
+import java.util.Timer;
 
 /**
  * Api权限对象Api
@@ -22,7 +24,7 @@ public interface ApiPermissionApi {
      * @param desc 机器人申请对于的API接口权限后，可使用功能的描述
      * @return Api接口权限需求对象
      */
-    public abstract ApiPermissionDemand createApiGrantLink(Bot bot, String guild_id, String channel_id, ApiPermissionDemandIdentify api_identify, String desc);
+    public abstract Tuple<ApiPermissionDemand,String> createApiGrantLink(Bot bot, String guild_id, String channel_id, ApiPermissionDemandIdentify api_identify, String desc);
 
     /**
      * 获取频道可用权限列表
@@ -30,5 +32,5 @@ public interface ApiPermissionApi {
      * @param guild_id 频道ID
      * @return 返回可用Api权限对象列表
      */
-    public abstract List<APIPermission> getAPIPermissions(Bot bot, String guild_id);
+    public abstract Tuple<List<APIPermission>,String> getAPIPermissions(Bot bot, String guild_id);
 }

@@ -3,6 +3,7 @@ package cn.siriusbot.siriuspro.entity.api;
 
 import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.entity.impl.Guild;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 
 import java.util.Map;
 
@@ -17,5 +18,5 @@ public interface GuildApi {
      * @param guild_id 频道ID
      * @return 返回频道详情对象
      */
-    public abstract Map<Guild,Object> getGuildInfo(Bot bot, String guild_id);
+    public abstract Tuple<Guild,String> getGuildInfo(Bot bot, String guild_id);
 }

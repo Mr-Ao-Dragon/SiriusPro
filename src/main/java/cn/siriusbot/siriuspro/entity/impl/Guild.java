@@ -74,15 +74,15 @@ public class Guild implements GuildApi {
      * @return 返回频道详情对象
      */
     @SneakyThrows
-    public Map<Guild,Object> getGuildInfo(Bot bot, String guild_id) {
+    public Tuple<Guild,String> getGuildInfo(Bot bot, String guild_id) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl()+"guilds/"+guild_id).build();
         Response response = SiriusHttpUtils.getRequest(bot, request);
         String data;
         data = response.body().string();
-        Map<Guild,Object> map = new HashMap<>();
-        map.put(JSONObject.parseObject(data,Guild.class),data);
-        return map;
+        Tuple<Guild,String> tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data,Guild.class)).setSecond(data);
+        return tuple;
     }
 
 

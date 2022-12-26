@@ -3,6 +3,7 @@ package cn.siriusbot.siriuspro.entity.impl;
 import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.api.ChannelApi;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
 
@@ -286,15 +287,15 @@ public class Channel implements ChannelApi {
      */
     @SneakyThrows
     @Override
-    public Map<List<Channel>,Object> getChannelList(Bot bot, String guild_id) {
+    public Tuple<List<Channel>,String> getChannelList(Bot bot, String guild_id) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/channels").build();
         Response response = SiriusHttpUtils.getRequest(bot, request);
         String data = response.body().string();
 
-        Map<List<Channel>,Object> map = new HashMap<>();
-        map.put(JSONObject.parseObject(data, List.class),data);
-        return map;
+        Tuple<List<Channel>,String> tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, List.class)).setSecond(data);
+        return tuple;
     }
 
 
@@ -306,14 +307,14 @@ public class Channel implements ChannelApi {
      */
     @SneakyThrows
     @Override
-    public Map<Channel,Object> getChannelInfo(Bot bot, String channel_id) {
+    public Tuple<Channel,String> getChannelInfo(Bot bot, String channel_id) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id).build();
         Response response = SiriusHttpUtils.getRequest(bot, request);
         String data = response.body().string();
-        Map<Channel,Object> map = new HashMap<>();
-        map.put(JSONObject.parseObject(data, this.getClass()),data);
-        return map;
+        Tuple<Channel,String> tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, this.getClass())).setSecond(data);
+        return tuple;
     }
 
     /**
@@ -325,17 +326,16 @@ public class Channel implements ChannelApi {
      */
     @SneakyThrows
     @Override
-    public Map<Channel,Object> createChannel(Bot bot, String guild_id, Channel channel) {
+    public Tuple<Channel,String>createChannel(Bot bot, String guild_id, Channel channel) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/channels").build();
         RequestBody body = RequestBody.create(mediaType, JSONObject.toJSONString(channel));
-        System.out.println(JSONObject.toJSONString(channel));
         Response response = SiriusHttpUtils.postRequest(bot, request, body);
         String data = response.body().string();
-        Map<Channel,Object> map = new HashMap<>();
-        map.put(JSONObject.parseObject(data, this.getClass()),data);
-        return map;
+        Tuple<Channel,String> tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, this.getClass())).setSecond(data);
+        return tuple;
     }
 
     /**
@@ -347,16 +347,16 @@ public class Channel implements ChannelApi {
      */
     @SneakyThrows
     @Override
-    public Map<Channel,Object> modifyChannel(Bot bot, String channel_id, Channel channel) {
+    public Tuple<Channel,String> modifyChannel(Bot bot, String channel_id, Channel channel) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id).build();
         RequestBody body = RequestBody.create(mediaType, JSONObject.toJSONString(channel));
         Response response = SiriusHttpUtils.patchRequest(bot, request, body);
         String data = response.body().string();
-        Map<Channel,Object> map = new HashMap<>();
-        map.put(JSONObject.parseObject(data, this.getClass()),data);
-        return map;
+        Tuple<Channel,String> tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, this.getClass())).setSecond(data);
+        return tuple;
     }
 
     /**

@@ -15,5 +15,6 @@ public class Tuple <K, V>{
         this.second = second;
     }
 
-
+    public Tuple() {
+    }
 }

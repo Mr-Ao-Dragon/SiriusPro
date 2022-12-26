@@ -9,6 +9,7 @@ import cn.siriusbot.siriuspro.entity.impl.message.ark.MessageArk;
 import cn.siriusbot.siriuspro.entity.impl.message.embed.MessageEmbed;
 import cn.siriusbot.siriuspro.entity.impl.message.requestPack.RequestCustomKeyboard;
 import cn.siriusbot.siriuspro.entity.impl.message.requestPack.member.Member;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
 
@@ -140,7 +141,7 @@ public class Message implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Map<Message,Object> sendMessage(Bot bot, String channel_id, String content, String image_Url, String msg_id, String event_id) {
+    public Tuple<Message,String> sendMessage(Bot bot, String channel_id, String content, String image_Url, String msg_id, String event_id) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/messages").build();
         if (channel_id == null || channel_id == "")
@@ -155,9 +156,9 @@ public class Message implements MessageApi {
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         Response response = SiriusHttpUtils.postRequest(bot, request, body);
         String data = response.body().string();
-        Map<Message,Object> map = new HashMap<>();
-        map.put(JSONObject.parseObject(response.body().string(), this.getClass()),data);
-        return map;
+        Tuple<Message,String>tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, this.getClass())).setSecond(data);
+        return tuple;
     }
 
     /**
@@ -170,14 +171,14 @@ public class Message implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Map<Message,Object> getMessageById(Bot bot, String channel_id, String message_id) {
+    public Tuple<Message,String> getMessageById(Bot bot, String channel_id, String message_id) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "messages/" + message_id).build();
         Response response = SiriusHttpUtils.getRequest(bot, request);
         String data = response.body().string();
-        Map<Message,Object> map = new HashMap<>();
-        map.put(JSONObject.parseObject(response.body().string(), this.getClass()),data);
-        return map;
+        Tuple<Message,String>tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, this.getClass())).setSecond(data);
+        return tuple;
     }
 
     /**
@@ -191,7 +192,7 @@ public class Message implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Map<Message,Object> sendReferenceMessage(Bot bot, String channel_id, String content, MessageReference reference) {
+    public Tuple<Message,String> sendReferenceMessage(Bot bot, String channel_id, String content, MessageReference reference) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
@@ -202,9 +203,9 @@ public class Message implements MessageApi {
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         Response response = SiriusHttpUtils.postRequest(bot, request, body);
         String data = response.body().string();
-        Map<Message, Object> map = new HashMap<>();
-        map.put(JSONObject.parseObject(data,this.getClass()),data);
-        return map;
+        Tuple<Message,String>tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, this.getClass())).setSecond(data);
+        return tuple;
 
     }
 
@@ -226,7 +227,7 @@ public class Message implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Map<Message, Object> sendMarkdownMessage(Bot bot, String channel_id, String msg_id, String event_id, MessageMarkdown markdown) {
+    public Tuple<Message,String> sendMarkdownMessage(Bot bot, String channel_id, String msg_id, String event_id, MessageMarkdown markdown) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
@@ -237,9 +238,9 @@ public class Message implements MessageApi {
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         Response response = SiriusHttpUtils.postRequest(bot, request, body);
         String data = response.body().string();
-        Map<Message, Object> map = new HashMap<>();
-        map.put(JSONObject.parseObject(data,this.getClass()),data);
-        return map;
+        Tuple<Message,String>tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, this.getClass())).setSecond(data);
+        return tuple;
     }
 
 
@@ -281,7 +282,7 @@ public class Message implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Map<Message, Object> sendArkMessage(Bot bot, String channel_id, MessageArk ark, String msg_id, String event_id) {
+    public Tuple<Message,String> sendArkMessage(Bot bot, String channel_id, MessageArk ark, String msg_id, String event_id) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
@@ -292,9 +293,9 @@ public class Message implements MessageApi {
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         Response response = SiriusHttpUtils.postRequest(bot, request, body);
         String data = response.body().string();
-        Map<Message, Object> map = new HashMap<>();
-        map.put(JSONObject.parseObject(data,this.getClass()),data);
-        return map;
+        Tuple<Message,String>tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, this.getClass())).setSecond(data);
+        return tuple;
     }
 
 
@@ -311,7 +312,7 @@ public class Message implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Map<Message, Object> sendEmbedMessage(Bot bot, String channel_id, MessageEmbed embed, String msg_id, String event_id) {
+    public Tuple<Message,String> sendEmbedMessage(Bot bot, String channel_id, MessageEmbed embed, String msg_id, String event_id) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
@@ -322,9 +323,9 @@ public class Message implements MessageApi {
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         Response response = SiriusHttpUtils.postRequest(bot, request, body);
         String data = response.body().string();
-        Map<Message,Object> map = new HashMap<>();
-        map.put(JSONObject.parseObject(data, this.getClass()),data);
-        return map;
+        Tuple<Message,String>tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, this.getClass())).setSecond(data);
+        return tuple;
     }
 
 
@@ -341,7 +342,7 @@ public class Message implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Map<Message, Object> sendImageAndTextMessage(Bot bot, String channel_id, String content, String image_path, String msg_id, String event_id) {
+    public Tuple<Message,String> sendImageAndTextMessage(Bot bot, String channel_id, String content, String image_path, String msg_id, String event_id) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/messages").build();
 
@@ -354,9 +355,9 @@ public class Message implements MessageApi {
                 .addFormDataPart("file_image", file.getAbsolutePath(), RequestBody.create(mediaType, file)).build();
         Response response = SiriusHttpUtils.postRequest(bot, request, body, "multipart/form-data");
         String data = response.body().string();
-        Map<Message, Object> map = new HashMap<>();
-        map.put(JSONObject.parseObject(data,Message.class),data);
-        return map;
+        Tuple<Message,String>tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, this.getClass())).setSecond(data);
+        return tuple;
     }
 
     /**
@@ -369,7 +370,7 @@ public class Message implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Map<Message, Object> sendCustomInLineKeyword(Bot bot, String channel_id, RequestCustomKeyboard requestCustomKeyboard) {
+    public Tuple<Message,String> sendCustomInLineKeyword(Bot bot, String channel_id, RequestCustomKeyboard requestCustomKeyboard) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/messages").build();
         JSONObject json = new JSONObject();
@@ -380,9 +381,9 @@ public class Message implements MessageApi {
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         Response response = SiriusHttpUtils.postRequest(bot, request, body);
         String data = response.body().string();
-        Map<Message, Object> map = new HashMap<>();
-        map.put(JSONObject.parseObject(data, this.getClass()), data);
-        return map;
+        Tuple<Message,String>tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, this.getClass())).setSecond(data);
+        return tuple;
     }
 
 

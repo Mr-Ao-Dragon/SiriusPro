@@ -4,6 +4,7 @@ package cn.siriusbot.siriuspro.entity.impl;
 import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.api.NoSpeakApi;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
 
@@ -74,7 +75,7 @@ public class NoSpeak implements NoSpeakApi {
      */
     @SneakyThrows
     @Override
-    public Map<NoSpeak,Object> noSpeakByUser_ids(Bot bot, String guild_id, List<String> user_ids, String mute_end_timestamp, String mute_seconds) {
+    public Tuple<NoSpeak,String> noSpeakByUser_ids(Bot bot, String guild_id, List<String> user_ids, String mute_end_timestamp, String mute_seconds) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/mute").build();
         JSONObject json = new JSONObject();
@@ -85,9 +86,9 @@ public class NoSpeak implements NoSpeakApi {
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         Response response = SiriusHttpUtils.patchRequest(bot, request, body);
         String data = response.body().string();
-        Map<NoSpeak,Object> map = new HashMap<>();
-        map.put(JSONObject.parseObject(data, this.getClass()),data);
-        return map;
+        Tuple<NoSpeak,String> tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, this.getClass())).setSecond(data);
+        return tuple;
     }
 
 

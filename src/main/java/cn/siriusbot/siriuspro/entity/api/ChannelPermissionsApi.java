@@ -3,6 +3,7 @@ package cn.siriusbot.siriuspro.entity.api;
 
 import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.entity.impl.ChannelPermissions;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 
 
 import java.util.Map;
@@ -23,7 +24,7 @@ public interface ChannelPermissionsApi {
      * @param user_id    用户ID
      * @return 子频道权限对象
      */
-    public abstract Map<ChannelPermissions,Object> getChannelPermissionsByUser_id(Bot bot, String channel_id, String user_id);
+    public abstract Tuple<ChannelPermissions,String> getChannelPermissionsByUser_id(Bot bot, String channel_id, String user_id);
 
     /**
      * 修改子频道身份组权限
@@ -65,5 +66,5 @@ public interface ChannelPermissionsApi {
      * @param role_id    身份组ID
      * @return 子频道权限对象
      */
-    public abstract Map<ChannelPermissions,Object> getChannelPermissionsByRole_id(Bot bot, String channel_id, String role_id);
+    public abstract Tuple<ChannelPermissions,String> getChannelPermissionsByRole_id(Bot bot, String channel_id, String role_id);
 }

@@ -4,6 +4,7 @@ package cn.siriusbot.siriuspro.entity.api;
 import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.entity.impl.announces.Announces;
 import cn.siriusbot.siriuspro.entity.impl.announces.RecommendChannel;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public interface AnnouncesApi {
      * @param channel_id        子频道ID
      * @return 返回公告对象
      */
-    public abstract Announces createGuildAnnounces(Bot bot, String guild_id, String message_id, String channel_id);
+    public abstract Tuple<Announces,String> createGuildAnnounces(Bot bot, String guild_id, String message_id, String channel_id);
 
     /**
      * 删除频道公告
@@ -51,5 +52,5 @@ public interface AnnouncesApi {
      * @param recommendChannels 机器人推荐列表
      * @return 返回公告对象
      */
-    public abstract Announces createGuildRecommend_Channels(Bot bot,String guild_id,Integer announces_type,List<RecommendChannel> recommendChannels);
+    public abstract Tuple<Announces,String> createGuildRecommend_Channels(Bot bot, String guild_id, Integer announces_type, List<RecommendChannel> recommendChannels);
 }

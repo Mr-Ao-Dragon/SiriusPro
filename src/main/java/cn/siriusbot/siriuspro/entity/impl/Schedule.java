@@ -4,6 +4,7 @@ package cn.siriusbot.siriuspro.entity.impl;
 import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.api.ScheduleApi;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
 
@@ -79,7 +80,7 @@ public class Schedule implements ScheduleApi {
      */
     @SneakyThrows
     @Override
-    public Map<List<Schedule>, Object> getScheduleListByChannel_id(Bot bot, String channel_id, String since) {
+    public Tuple<List<Schedule>, String> getScheduleListByChannel_id(Bot bot, String channel_id, String since) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request;
         if (since != null) {
@@ -89,9 +90,9 @@ public class Schedule implements ScheduleApi {
         }
 
         String data = SiriusHttpUtils.getRequest(bot, request).body().string();
-        Map<List<Schedule>, Object> map = new HashMap<>();
-        map.put(JSONObject.parseObject(SiriusHttpUtils.getRequest(bot, request).body().string(), List.class), data);
-        return map;
+        Tuple<List<Schedule>, String> tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, List.class)).setSecond(data);
+        return tuple;
     }
 
 
@@ -106,13 +107,13 @@ public class Schedule implements ScheduleApi {
      */
     @SneakyThrows
     @Override
-    public Map<Schedule, Object> getScheduleInfo(Bot bot, String channel_id, String schedule_id) {
+    public Tuple<Schedule, String> getScheduleInfo(Bot bot, String channel_id, String schedule_id) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/schedules/" + schedule_id).build();
         String data = SiriusHttpUtils.getRequest(bot, request).body().string();
-        Map<Schedule, Object> map = new HashMap<>();
-        map.put(JSONObject.parseObject(data, this.getClass()), data);
-        return map;
+        Tuple<Schedule, String> tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, this.getClass())).setSecond(data);
+        return tuple;
     }
 
 
@@ -142,7 +143,7 @@ public class Schedule implements ScheduleApi {
      */
     @SneakyThrows
     @Override
-    public Map<Schedule, Object> createSchedule(Bot bot, String channel_id, Schedule schedule) {
+    public Tuple<Schedule,String> createSchedule(Bot bot, String channel_id, Schedule schedule) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/schedules").build();
         JSONObject json = new JSONObject();
@@ -151,9 +152,9 @@ public class Schedule implements ScheduleApi {
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         String data = SiriusHttpUtils.postRequest(bot, request, body).body().string();
         Schedule sc = JSONObject.parseObject(SiriusHttpUtils.postRequest(bot, request, body).body().string(), this.getClass());
-        Map<Schedule, Object> map = new HashMap<>();
-        map.put(sc,data);
-        return map;
+        Tuple<Schedule,String> tuple = new Tuple<>();
+        tuple.setFirst(schedule).setSecond(data);
+        return tuple;
     }
 
 
@@ -168,7 +169,7 @@ public class Schedule implements ScheduleApi {
      */
     @SneakyThrows
     @Override
-    public Map<Schedule,Object> modifySchedule(Bot bot, String channel_id, String schedule_id, Schedule schedule) {
+    public Tuple<Schedule,String> modifySchedule(Bot bot, String channel_id, String schedule_id, Schedule schedule) {
         bot = BotManager.getBotByBotId(bot.getBotId());
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/schedules/" + schedule_id).build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
@@ -176,9 +177,9 @@ public class Schedule implements ScheduleApi {
         json.put("schedule", schedule);
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         String data = SiriusHttpUtils.patchRequest(bot, request, body).body().string();
-        Map<Schedule,Object> map = new HashMap<>();
-        map.put(JSONObject.parseObject(data, this.getClass()),data);
-        return map;
+        Tuple<Schedule,String> tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, this.getClass())).setSecond(data);
+        return tuple;
     }
 
     public enum REMIND_TYPE {
