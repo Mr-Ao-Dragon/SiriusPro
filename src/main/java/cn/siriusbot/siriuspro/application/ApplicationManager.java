@@ -58,9 +58,9 @@ public class ApplicationManager {
                 //判断是否为天狼星应用
                 try {
                     aClass = appClass.loadClass(fileName);
-                    SiriusApplication application = (SiriusApplication) aClass.newInstance();
+                    Object application = aClass.newInstance();
                     if (application instanceof SiriusApplication) {
-                        return  application;
+                        return  (SiriusApplication) application;
                     }
                 } catch (Throwable e) {
 
