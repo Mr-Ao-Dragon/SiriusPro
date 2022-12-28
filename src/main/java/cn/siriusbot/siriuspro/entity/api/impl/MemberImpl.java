@@ -1,15 +1,13 @@
-package cn.siriusbot.siriuspro.entity.pojo.message.requestPack.member;
+package cn.siriusbot.siriuspro.entity.api.impl;
 
 import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.api.MemberApi;
-import cn.siriusbot.siriuspro.entity.pojo.User;
+import cn.siriusbot.siriuspro.entity.pojo.member.Member;
+import cn.siriusbot.siriuspro.entity.pojo.member.MemberQueryLimit;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
-
-import lombok.Data;
 import lombok.SneakyThrows;
-import lombok.experimental.Accessors;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -19,30 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Data
-@Accessors(chain = true)
-public class Member implements MemberApi {
-    /**
-     * 用户的频道基础信息
-     */
-    private User user;
-
-    /**
-     * 用户的昵称
-     */
-    private String nick;
-
-    /**
-     * 用户在频道内的身份组ID数组
-     */
-    private List<String> roles;
-
-    /**
-     * 用户加入频道的时间
-     */
-    private String joined_at;
-
-
+public class MemberImpl implements MemberApi {
     /**
      * 获取频道成员列表
      *
@@ -83,7 +58,7 @@ public class Member implements MemberApi {
         Response response = SiriusHttpUtils.getRequest(bot, request);
         String data = response.body().string();
         Map<Member,Object> map = new HashMap<>();
-        map.put(JSONObject.parseObject(data, this.getClass()),data);
+        map.put(JSONObject.parseObject(data, Member.class),data);
         return map;
     }
 
@@ -133,7 +108,4 @@ public class Member implements MemberApi {
         Response response = SiriusHttpUtils.deleteRequest(bot, request, body);
         return response.code() == 204;
     }
-
-
-
 }

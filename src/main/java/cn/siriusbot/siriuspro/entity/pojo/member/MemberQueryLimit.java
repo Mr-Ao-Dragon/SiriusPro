@@ -1,4 +1,4 @@
-package cn.siriusbot.siriuspro.entity.pojo.message.requestPack.member;
+package cn.siriusbot.siriuspro.entity.pojo.member;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

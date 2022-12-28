@@ -20,7 +20,7 @@ import java.util.List;
 
 @Data
 @Accessors(chain = true)
-public class PinsMessage implements PinsMessageApi {
+public class PinsMessage {
     /**
      * 频道ID
      */
@@ -37,62 +37,5 @@ public class PinsMessage implements PinsMessageApi {
     private List<String> message_ids;
 
 
-    /**
-     * 添加精华消息
-     *
-     * @param bot        传入机器人对象
-     * @param channel_id 子频道ID
-     * @param message_id 消息ID
-     * @return 返回精华消息对象
-     */
-    @SneakyThrows
-    @Override
-    public Tuple<PinsMessage, String> addPinsMessage(Bot bot, String channel_id, String message_id) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/pins/" + message_id).build();
-        MediaType mediaType = MediaType.parse("application/json;text/plain");
-        RequestBody body = RequestBody.create(mediaType, "");
-        Response response = SiriusHttpUtils.putRequest(bot, request, body);
-        String data = response.body().string();
-        PinsMessage pinsMessage = JSONObject.parseObject(data, this.getClass());
-        Tuple<PinsMessage, String> tuple = new Tuple<>();
-        tuple.setFirst(pinsMessage).setSecond(data);
-        return tuple;
-    }
 
-
-    /**
-     * 获取当前子频道精华消息
-     *
-     * @param bot        传入机器人对象
-     * @param channel_id 子频道ID
-     * @return 返回精华消息对象
-     */
-    @SneakyThrows
-    @Override
-    public Tuple<PinsMessage,String> getPinsMessage(Bot bot, String channel_id) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/pins").build();
-        String data = SiriusHttpUtils.getRequest(bot, request).body().string();
-        PinsMessage pinsMessage = JSONObject.parseObject(SiriusHttpUtils.getRequest(bot, request).body().string(), this.getClass());
-        Tuple<PinsMessage,String> tuple = new Tuple<>();
-        tuple.setFirst(pinsMessage).setSecond(data);
-        return tuple;
-    }
-
-
-    /**
-     * 删除精华消息
-     *
-     * @param bot        传入机器人对象
-     * @param channel_id 子频道ID
-     * @param message_id 消息ID
-     * @return 删除结果
-     */
-    @Override
-    public Boolean deletePinsMessage(Bot bot, String channel_id, String message_id) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/pins/" + message_id).build();
-        return SiriusHttpUtils.deleteRequest(bot, request, null).code() == 204;
-    }
 }
