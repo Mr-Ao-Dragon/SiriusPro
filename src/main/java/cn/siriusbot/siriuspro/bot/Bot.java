@@ -1,13 +1,9 @@
 package cn.siriusbot.siriuspro.bot;
 
-import cn.siriusbot.siriuspro.entity.impl.User;
-import cn.siriusbot.siriuspro.message.MessageManager;
+import cn.siriusbot.siriuspro.entity.pojo.User;
 import cn.siriusbot.siriuspro.timer.SiriusTimer;
-import cn.siriusbot.siriuspro.webapi.pojo.BotInfo;
 import cn.siriusbot.siriuspro.websocket.SiriusWebSocketClient;
-import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import okhttp3.OkHttpClient;
 

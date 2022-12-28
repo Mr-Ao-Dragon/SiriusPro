@@ -1,7 +1,7 @@
 package cn.siriusbot.siriuspro.entity.api;
 
 import cn.siriusbot.siriuspro.bot.Bot;
-import cn.siriusbot.siriuspro.entity.impl.audio.AudioControl;
+import cn.siriusbot.siriuspro.entity.pojo.audio.AudioControl;
 
 /**
  * 语音对象Api

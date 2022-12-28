@@ -1,6 +1,6 @@
 package cn.siriusbot.siriuspro.message.MessageReactionEvent;
 
-import cn.siriusbot.siriuspro.entity.impl.emoji.MessageReaction;
+import cn.siriusbot.siriuspro.entity.pojo.emoji.MessageReaction;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

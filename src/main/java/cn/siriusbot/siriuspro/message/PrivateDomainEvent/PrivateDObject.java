@@ -2,8 +2,8 @@ package cn.siriusbot.siriuspro.message.PrivateDomainEvent;
 
 
 import cn.siriusbot.siriuspro.entity.Op_User;
-import cn.siriusbot.siriuspro.entity.impl.User;
-import cn.siriusbot.siriuspro.entity.impl.message.Message;
+import cn.siriusbot.siriuspro.entity.pojo.User;
+import cn.siriusbot.siriuspro.entity.pojo.message.Message;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

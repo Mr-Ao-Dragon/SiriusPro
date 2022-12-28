@@ -1,7 +1,6 @@
 package cn.siriusbot.siriuspro.message.GuildMemberEvent;
 
-import cn.siriusbot.siriuspro.entity.impl.User;
-import cn.siriusbot.siriuspro.entity.impl.role.Role;
+import cn.siriusbot.siriuspro.entity.pojo.User;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

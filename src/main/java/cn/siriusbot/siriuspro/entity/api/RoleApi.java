@@ -2,13 +2,11 @@ package cn.siriusbot.siriuspro.entity.api;
 
 
 import cn.siriusbot.siriuspro.bot.Bot;
-import cn.siriusbot.siriuspro.entity.impl.Channel;
-import cn.siriusbot.siriuspro.entity.impl.role.GuildRoleList;
-import cn.siriusbot.siriuspro.entity.impl.role.NewRole;
-import cn.siriusbot.siriuspro.entity.impl.role.Role;
+import cn.siriusbot.siriuspro.entity.pojo.Channel;
+import cn.siriusbot.siriuspro.entity.pojo.role.GuildRoleList;
+import cn.siriusbot.siriuspro.entity.pojo.role.NewRole;
+import cn.siriusbot.siriuspro.entity.pojo.role.Role;
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
-
-import java.util.Map;
 
 /**
  * 身份组Api

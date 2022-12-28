@@ -1,12 +1,11 @@
 package cn.siriusbot.siriuspro.entity.api;
 
 import cn.siriusbot.siriuspro.bot.Bot;
-import cn.siriusbot.siriuspro.entity.impl.NoSpeak;
+import cn.siriusbot.siriuspro.entity.pojo.NoSpeak;
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
 
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 禁言Api

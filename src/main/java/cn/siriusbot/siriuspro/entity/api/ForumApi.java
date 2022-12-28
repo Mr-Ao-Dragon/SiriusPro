@@ -1,13 +1,10 @@
 package cn.siriusbot.siriuspro.entity.api;
 
 import cn.siriusbot.siriuspro.bot.Bot;
-import cn.siriusbot.siriuspro.entity.impl.forum.responseObj.ThreadList;
-import cn.siriusbot.siriuspro.entity.impl.forum.responseObj.createThread;
-import cn.siriusbot.siriuspro.entity.impl.forum.thread.ForumThread;
+import cn.siriusbot.siriuspro.entity.pojo.forum.responseObj.ThreadList;
+import cn.siriusbot.siriuspro.entity.pojo.forum.responseObj.createThread;
+import cn.siriusbot.siriuspro.entity.pojo.forum.thread.ForumThread;
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
-
-
-import java.util.Map;
 
 /**
  * 论坛消息Api

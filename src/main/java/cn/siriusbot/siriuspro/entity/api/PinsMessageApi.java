@@ -1,10 +1,8 @@
 package cn.siriusbot.siriuspro.entity.api;
 
 import cn.siriusbot.siriuspro.bot.Bot;
-import cn.siriusbot.siriuspro.entity.impl.PinsMessage;
+import cn.siriusbot.siriuspro.entity.pojo.PinsMessage;
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
-
-import java.util.Map;
 
 /**
  * 精华消息对象Api

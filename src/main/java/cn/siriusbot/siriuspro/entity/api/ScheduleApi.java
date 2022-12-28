@@ -1,11 +1,10 @@
 package cn.siriusbot.siriuspro.entity.api;
 
 import cn.siriusbot.siriuspro.bot.Bot;
-import cn.siriusbot.siriuspro.entity.impl.Schedule;
+import cn.siriusbot.siriuspro.entity.pojo.Schedule;
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 日程对象Api

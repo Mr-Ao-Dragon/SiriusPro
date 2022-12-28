@@ -1,11 +1,10 @@
 package cn.siriusbot.siriuspro.entity.api;
 
 import cn.siriusbot.siriuspro.bot.Bot;
-import cn.siriusbot.siriuspro.entity.impl.Channel;
+import cn.siriusbot.siriuspro.entity.pojo.Channel;
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 子频道Api

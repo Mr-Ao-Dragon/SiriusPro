@@ -1,7 +1,7 @@
 package cn.siriusbot.siriuspro.message.DirectMessageEvent;
 
 import cn.siriusbot.siriuspro.entity.Op_User;
-import cn.siriusbot.siriuspro.entity.impl.User;
+import cn.siriusbot.siriuspro.entity.pojo.User;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.logging.log4j.message.Message;

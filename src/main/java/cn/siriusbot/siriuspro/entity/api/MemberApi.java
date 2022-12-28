@@ -2,8 +2,8 @@ package cn.siriusbot.siriuspro.entity.api;
 
 
 import cn.siriusbot.siriuspro.bot.Bot;
-import cn.siriusbot.siriuspro.entity.impl.message.requestPack.member.Member;
-import cn.siriusbot.siriuspro.entity.impl.message.requestPack.member.MemberQueryLimit;
+import cn.siriusbot.siriuspro.entity.pojo.message.requestPack.member.Member;
+import cn.siriusbot.siriuspro.entity.pojo.message.requestPack.member.MemberQueryLimit;
 
 import java.util.List;
 import java.util.Map;

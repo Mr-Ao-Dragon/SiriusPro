@@ -2,11 +2,8 @@ package cn.siriusbot.siriuspro.entity.api;
 
 
 import cn.siriusbot.siriuspro.bot.Bot;
-import cn.siriusbot.siriuspro.entity.impl.ChannelPermissions;
+import cn.siriusbot.siriuspro.entity.pojo.ChannelPermissions;
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
-
-
-import java.util.Map;
 
 /**
  * 子频道权限接口

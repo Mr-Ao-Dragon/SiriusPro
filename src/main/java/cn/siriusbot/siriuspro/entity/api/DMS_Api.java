@@ -1,15 +1,13 @@
 package cn.siriusbot.siriuspro.entity.api;
 
 import cn.siriusbot.siriuspro.bot.Bot;
-import cn.siriusbot.siriuspro.entity.impl.DMS;
-import cn.siriusbot.siriuspro.entity.impl.message.Message;
-import cn.siriusbot.siriuspro.entity.impl.message.MessageMarkdown;
-import cn.siriusbot.siriuspro.entity.impl.message.MessageReference;
-import cn.siriusbot.siriuspro.entity.impl.message.ark.MessageArk;
-import cn.siriusbot.siriuspro.entity.impl.message.embed.MessageEmbed;
+import cn.siriusbot.siriuspro.entity.pojo.DMS;
+import cn.siriusbot.siriuspro.entity.pojo.message.Message;
+import cn.siriusbot.siriuspro.entity.pojo.message.MessageMarkdown;
+import cn.siriusbot.siriuspro.entity.pojo.message.MessageReference;
+import cn.siriusbot.siriuspro.entity.pojo.message.ark.MessageArk;
+import cn.siriusbot.siriuspro.entity.pojo.message.embed.MessageEmbed;
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
-
-import java.util.Map;
 
 /**
  * 私信对象Api

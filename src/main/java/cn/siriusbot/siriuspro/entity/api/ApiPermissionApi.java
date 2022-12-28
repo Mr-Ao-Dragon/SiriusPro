@@ -2,13 +2,12 @@ package cn.siriusbot.siriuspro.entity.api;
 
 
 import cn.siriusbot.siriuspro.bot.Bot;
-import cn.siriusbot.siriuspro.entity.impl.apipermission.APIPermission;
-import cn.siriusbot.siriuspro.entity.impl.apipermission.ApiPermissionDemand;
-import cn.siriusbot.siriuspro.entity.impl.apipermission.ApiPermissionDemandIdentify;
+import cn.siriusbot.siriuspro.entity.pojo.apipermission.APIPermission;
+import cn.siriusbot.siriuspro.entity.pojo.apipermission.ApiPermissionDemand;
+import cn.siriusbot.siriuspro.entity.pojo.apipermission.ApiPermissionDemandIdentify;
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
 
 import java.util.List;
-import java.util.Timer;
 
 /**
  * Api权限对象Api

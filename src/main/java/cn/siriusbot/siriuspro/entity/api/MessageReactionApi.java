@@ -2,11 +2,8 @@ package cn.siriusbot.siriuspro.entity.api;
 
 
 import cn.siriusbot.siriuspro.bot.Bot;
-import cn.siriusbot.siriuspro.entity.impl.emoji.ReactionReply;
+import cn.siriusbot.siriuspro.entity.pojo.emoji.ReactionReply;
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
-
-
-import java.util.Map;
 
 /**
  * 消息表情表态Api

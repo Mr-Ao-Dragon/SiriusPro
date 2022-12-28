@@ -4,13 +4,9 @@ import cn.siriusbot.siriuspro.application.ApplicationManager;
 import cn.siriusbot.siriuspro.application.ApplicationUtils;
 import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.bot.BotManager;
-import cn.siriusbot.siriuspro.entity.impl.audio.AudioControl;
-import cn.siriusbot.siriuspro.entity.impl.message.Message;
-import cn.siriusbot.siriuspro.message.MessageManager;
 import lombok.SneakyThrows;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.integration.IntegrationProperties;
 
 @SpringBootApplication
 public class SiriusProApplication {

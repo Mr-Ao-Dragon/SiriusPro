@@ -4,7 +4,7 @@ package cn.siriusbot.siriuspro.message;
 import cn.siriusbot.siriuspro.application.ApplicationManager;
 import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.bot.BotManager;
-import cn.siriusbot.siriuspro.entity.impl.User;
+import cn.siriusbot.siriuspro.entity.pojo.User;
 import cn.siriusbot.siriuspro.message.AudioLiveChannelEvent.AudioLiveChannelMemberEvent;
 import cn.siriusbot.siriuspro.message.AudioMessageEvent.AudioMessageEvent;
 import cn.siriusbot.siriuspro.message.AuditMessageEvent.AuditMessageEvent;
