@@ -98,96 +98,96 @@ public class MessageManager {
                 /**
                  * 机器人加入频道事件
                  */
-                System.out.println(JSONObject.parseObject(message, GuildEventInfo.class));
+                ApplicationManager.GuildCreateEventPush(bot.getBotId(),JSONObject.parseObject(message, GuildEventInfo.class));
                 break;
 
             case "GUILD_UPDATE":
                 /**
                  * 频道信息更改事件
                  */
-                System.out.println(JSONObject.parseObject(message, GuildEventInfo.class));
+                ApplicationManager.GuildUpdateEventPush(bot.getBotId(),JSONObject.parseObject(message, GuildEventInfo.class));
                 break;
 
             case "GUILD_DELETE":
                 /**
                  * 频道解散或机器人被移除事件
                  */
-                System.out.println(JSONObject.parseObject(message, GuildEventInfo.class));
+                ApplicationManager.GuildDeleteEventPush(bot.getBotId(),JSONObject.parseObject(message, GuildEventInfo.class));
                 break;
             case "CHANNEL_CREATE":
                 /**
                  * 子频道创建事件
                  */
-                System.out.println(JSONObject.parseObject(message, ChannelEventInfo.class));
+                ApplicationManager.ChannelCreateEventPush(bot.getBotId(),JSONObject.parseObject(message, ChannelEventInfo.class));
                 break;
             case "CHANNEL_UPDATE":
                 /**
                  * 子频道更新事件
                  */
-                System.out.println(JSONObject.parseObject(message, ChannelEventInfo.class));
+                ApplicationManager.ChannelUpdateEventPush(bot.getBotId(),JSONObject.parseObject(message, ChannelEventInfo.class));
                 break;
             case "CHANNEL_DELETE":
                 /**
                  * 子频道删除事件
                  */
-                System.out.println(JSONObject.parseObject(message, ChannelEventInfo.class));
+                ApplicationManager.ChannelDeleteEventPush(bot.getBotId(),JSONObject.parseObject(message, ChannelEventInfo.class));
                 break;
 
             case "GUILD_MEMBER_ADD":
                 /**
                  * 频道成员加入事件
                  */
-                System.out.println(JSONObject.parseObject(message, GuildMemberCreateEventInfo.class));
+                ApplicationManager.GuildMemberAddEventPush(bot.getBotId(),JSONObject.parseObject(message,GuildMemberCreateEventInfo.class));
                 break;
             case "GUILD_MEMBER_UPDATE":
                 /**
                  * 频道成员信息更改事件
                  */
-                System.out.println(JSONObject.parseObject(message,GuildMemberEventInfo.class));
+                ApplicationManager.GuildMemberUpdateEventPush(bot.getBotId(),JSONObject.parseObject(message,GuildMemberEventInfo.class));
                 break;
             case "GUILD_MEMBER_REMOVE":
                 /**
                  * 频道成员退出或被移除事件
                  */
-                System.out.println(JSONObject.parseObject(message,GuildMemberEventInfo.class));
+                ApplicationManager.GuildMemberRemoveEventPush(bot.getBotId(),JSONObject.parseObject(message,GuildMemberEventInfo.class));
                 break;
             case "MESSAGE_CREATE":
                 /**
                  * 私域消息被创建事件
                  */
-                System.out.println( JSONObject.parseObject(message, PrivateDomainMessageInfo.class));
+                ApplicationManager.PrivateMessageCreateEventPush(bot.getBotId(),JSONObject.parseObject(message, PrivateDomainMessageInfo.class));
                 break;
             case "MESSAGE_DELETE":
                 /**
                  * 私域消息被撤回事件
                  */
-                System.out.println(JSONObject.parseObject(message, PrivateDomainMessageInfo.class));
+                ApplicationManager.PrivateMessageDeleteEventPush(bot.getBotId(),JSONObject.parseObject(message, PrivateDomainMessageInfo.class));
                 break;
 
             case  "MESSAGE_REACTION_ADD":
                 /**
                  * 表情表态添加事件
                  */
-                System.out.println(JSONObject.parseObject(message, ReactionEventInfo.class));
+                ApplicationManager.MessageReactionAddEventPush(bot.getBotId(),JSONObject.parseObject(message, ReactionEventInfo.class));
                 break;
             case "MESSAGE_REACTION_REMOVE":
                 /**
                  * 表情表态移除事件
                  */
-                System.out.println(JSONObject.parseObject(message, ReactionEventInfo.class));
+                ApplicationManager.MessageReactionRemoveEventPush(bot.getBotId(),JSONObject.parseObject(message, ReactionEventInfo.class));
                 break;
 
             case "DIRECT_MESSAGE_CREATE":
                 /**
                  * 收到用户私信消息事件
                  */
-                System.out.println(JSONObject.parseObject(message, DirectMessageEventInfo.class));
+                ApplicationManager.DirectMessageCreateEventPush(bot.getBotId(),JSONObject.parseObject(message, DirectMessageEventInfo.class));
                 break;
             case "DIRECT_MESSAGE_DELETE":
                 /**
                  * 私信消息撤回事件
                  */
-                System.out.println(JSONObject.parseObject(message, DirectMessageEventInfo.class));
+                ApplicationManager.DirectMessageDeleteEventPush(bot.getBotId(),JSONObject.parseObject(message, DirectMessageEventInfo.class));
                 break;
 
                 //公域论坛事件
@@ -195,44 +195,44 @@ public class MessageManager {
                 /**
                  * 用户创建主题事件
                  */
-                System.out.println(JSONObject.parseObject(message, OpenForumEventInfo.class));
+                ApplicationManager.OpenForumThreadCreateEventPush(bot.getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
                 break;
             case "OPEN_FORUM_THREAD_UPDATE":
                 /**
                  * 用户更新主题事件
                  */
-                System.out.println(JSONObject.parseObject(message, OpenForumEventInfo.class));
+                ApplicationManager.OpenForumThreadUpdateEventPush(bot.getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
                 break;
             case "OPEN_FORUM_THREAD_DELETE":
                 /**
                  * 用户删除主题事件
                  */
-                System.out.println(JSONObject.parseObject(message, OpenForumEventInfo.class));
+                ApplicationManager.OpenForumThreadDeleteEventPush(bot.getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
                 break;
             case "OPEN_FORUM_POST_CREATE":
                 /**
                  * 用户创建帖子事件
                  */
-                System.out.println(JSONObject.parseObject(message, OpenForumEventInfo.class));
+                ApplicationManager.OpenForumPostCreateEventPush(bot.getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
                 break;
             case "OPEN_FORUM_POST_DELETE":
                 /**
                  * 用户删除帖子事件
                  */
-                System.out.println(JSONObject.parseObject(message, OpenForumEventInfo.class));
+                ApplicationManager.OpenForumPostDeleteEventPush(bot.getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
                 break;
             case "OPEN_FORUM_REPLY_CREATE":
                 /**
                  * 用户回复评论事件
                  */
-                System.out.println(JSONObject.parseObject(message, OpenForumEventInfo.class));
+                ApplicationManager.OpenForumReplyCreateEventPush(bot.getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
                 break;
 
             case "OPEN_FORUM_REPLY_DELETE":
                 /**
                  * 用户删除评论事件
                  */
-                System.out.println(JSONObject.parseObject(message, OpenForumEventInfo.class));
+                ApplicationManager.OpenForumReplyDeleteEventPush(bot.getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
                 break;
 
                 //音视频/直播子频道成员进出事件
@@ -240,21 +240,21 @@ public class MessageManager {
                 /**
                  * 当用户进入音视频/直播子频道事件
                  */
-                System.out.println(JSONObject.parseObject(message, AudioLiveChannelMemberEvent.class));
+                ApplicationManager.AudioORLiveChannelMemberEnterEventPush(bot.getBotId(),JSONObject.parseObject(message, AudioLiveChannelMemberEvent.class));
                 break;
 
             case "AUDIO_OR_LIVE_CHANNEL_MEMBER_EXIT":
                 /**
                  * 当用户离开音视频/直播子频道事件
                  */
-                System.out.println(JSONObject.parseObject(message, AudioLiveChannelMemberEvent.class));
+                ApplicationManager.AudioORLiveChannelMemberExitEventPush(bot.getBotId(),JSONObject.parseObject(message, AudioLiveChannelMemberEvent.class));
                 break;
                 //互动事件，多为按钮等回调事件
             case "INTERACTION_CREATE":
                 /**
                  * 互动消息创建事件
                  */
-                System.out.println(JSONObject.parseObject(message, InterActionEvent.class));
+                ApplicationManager.InterActonCreateEventPush(bot.getBotId(),JSONObject.parseObject(message, InterActionEvent.class));
                 break;
 
                 //消息审核事件,一般为发送主动消息
@@ -262,14 +262,14 @@ public class MessageManager {
                 /**
                  * 消息审核通过事件
                  */
-                System.out.println(JSONObject.parseObject(message,AuditMessageEvent.class));
+                ApplicationManager.MessageAuditPassEventPush(bot.getBotId(),JSONObject.parseObject(message,AuditMessageEvent.class));
                 break;
 
             case "MESSAGE_AUDIT_REJECT":
                 /**
                  * 消息审核不通过事件
                  */
-                System.out.println(JSONObject.parseObject(message,AuditMessageEvent.class));
+                ApplicationManager.MessageAuditRejectEventPush(bot.getBotId(),JSONObject.parseObject(message,AuditMessageEvent.class));
                 break;
 
                 //私域论坛事件
@@ -277,49 +277,49 @@ public class MessageManager {
                 /**
                  * 用户创建主题事件
                  */
-                System.out.println(JSONObject.parseObject(message, ForumEvent.class));
+                ApplicationManager.ForumThreadCreateEventPush(bot.getBotId(),JSONObject.parseObject(message,ForumEvent.class));
                 break;
             case "FORUM_THREAD_UPDATE":
                 /**
                  * 用户更新主题事件
                  */
-                System.out.println(JSONObject.parseObject(message,ForumEvent.class));
+                ApplicationManager.ForumThreadUpdateEventPush(bot.getBotId(),JSONObject.parseObject(message,ForumEvent.class));
                 break;
             case "FORUM_THREAD_DELETE":
                 /**
                  * 用户删除主题事件
                  */
-                System.out.println(JSONObject.parseObject(message,ForumEvent.class));
+                ApplicationManager.ForumThreadDeleteEventPush(bot.getBotId(),JSONObject.parseObject(message,ForumEvent.class));
                 break;
             case "FORUM_POST_CREATE":
                 /**
                  * 用户创建帖子事件
                  */
-                System.out.println(JSONObject.parseObject(message,ForumEvent.class));
+                ApplicationManager.ForumPostCreateEventPush(bot.getBotId(),JSONObject.parseObject(message,ForumEvent.class));
                 break;
             case "FORUM_POST_DELETE":
                 /**
                  * 用户删除帖子事件
                  */
-                System.out.println(JSONObject.parseObject(message,ForumEvent.class));
+                ApplicationManager.ForumPostDeleteEventPush(bot.getBotId(),JSONObject.parseObject(message,ForumEvent.class));
                 break;
             case "FORUM_REPLY_CREATE":
                 /**
                  * 用户回复评论事件
                  */
-                System.out.println(JSONObject.parseObject(message,ForumEvent.class));
+                ApplicationManager.ForumReplyCreateEventPush(bot.getBotId(),JSONObject.parseObject(message,ForumEvent.class));
                 break;
             case "FORUM_REPLY_DELETE":
                 /**
                  * 用户删除评论事件
                  */
-                System.out.println(JSONObject.parseObject(message,ForumEvent.class));
+                ApplicationManager.ForumReplyDeleteEventPush(bot.getBotId(),JSONObject.parseObject(message,ForumEvent.class));
                 break;
             case "FORUM_PUBLISH_AUDIT_RESULT":
                 /**
                  * 用户发表审核通过事件
                  */
-                System.out.println(JSONObject.parseObject(message,ForumEvent.class));
+                ApplicationManager.ForumPublishAuditResultEventPush(bot.getBotId(),JSONObject.parseObject(message,ForumEvent.class));
                 break;
 
                 //音频事件
@@ -327,39 +327,38 @@ public class MessageManager {
                 /**
                  * 音频开始播放事件
                  */
-                System.out.println(JSONObject.parseObject(message, AudioMessageEvent.class));
+                ApplicationManager.AudioStartEventPush(bot.getBotId(),JSONObject.parseObject(message, AudioMessageEvent.class));
                 break;
             case "AUDIO_FINISH":
                 /**
                  * 音频播放结束事件
                  */
-                System.out.println(JSONObject.parseObject(message, AudioMessageEvent.class));
+                ApplicationManager.AudioFinishEventPush(bot.getBotId(),JSONObject.parseObject(message, AudioMessageEvent.class));
                 break;
             case "AUDIO_ON_MIC":
                 /**
                  * 机器人上麦事件
                  */
-                System.out.println(JSONObject.parseObject(message, AudioMessageEvent.class));
+                ApplicationManager.AudioOnMicEventPush(bot.getBotId(),JSONObject.parseObject(message, AudioMessageEvent.class));
                 break;
             case "AUDIO_OFF_MIC":
                 /**
                  * 音频下麦事件
                  */
-                System.out.println(JSONObject.parseObject(message, AudioMessageEvent.class));
+                ApplicationManager.AudioOffMicEventPush(bot.getBotId(),JSONObject.parseObject(message, AudioMessageEvent.class));
                 break;
-
                 //公域消息事件
             case "AT_MESSAGE_CREATE":
                 /**
                  * 收到@机器人消息事件
                  */
-                ApplicationManager.PublicMessageEventPush(bot.getBotId(),JSONObject.parseObject(message,PublicMessageEvent.class));
+                ApplicationManager.PublicMessageCreateEventPush(bot.getBotId(),JSONObject.parseObject(message,PublicMessageEvent.class));
                 break;
             case "PUBLIC_MESSAGE_DELETE":
                 /**
                  * 消息删除事件
                  */
-                System.out.println(JSONObject.parseObject(message, PublicMessageEvent.class));
+                ApplicationManager.PublicMessageDeleteEventPush(bot.getBotId(),JSONObject.parseObject(message,PublicMessageEvent.class));
                 break;
         }
     }

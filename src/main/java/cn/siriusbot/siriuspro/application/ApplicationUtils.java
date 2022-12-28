@@ -26,6 +26,12 @@ public class ApplicationUtils {
     /**
      * 遍历应用目录
      */
-    private void showApp(){
+    public void showApp(){
+    }
+    public static void initAppPath(){
+        System.out.println(appsPath);
+        if(!appsPathExist()){
+            createAppsPath();
+        }
     }
 }

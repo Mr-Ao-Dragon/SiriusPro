@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
+
 import java.net.URI;
 
 public class SiriusWebSocketClient extends WebSocketClient {

@@ -31,7 +31,7 @@ public class PinsMessage implements PinsMessageApi {
     /**
      * 子频道ID
      */
-    private String chanel_id;
+    private String channel_id;
 
     /**
      * 子频道内精华消息id数组

@@ -128,14 +128,14 @@ public abstract class SiriusApplication {
      * @param bot_id 事件所属机器人ID
      * @param event 事件对象
      */
-    public abstract void direct_message_create(String bot_id, DirectMessageEventInfo event);
+    public abstract void direct_message_create_event(String bot_id, DirectMessageEventInfo event);
 
     /**
      * 私信消息被撤回事件
      * @param bot_id 事件所属机器人ID
      * @param event 事件对象
      */
-    public abstract void direct_message_delete(String bot_id,DirectMessageEventInfo event);
+    public abstract void direct_message_delete_event(String bot_id,DirectMessageEventInfo event);
 
 
     /**
@@ -193,6 +193,7 @@ public abstract class SiriusApplication {
      * @param event 事件对象
      */
     public abstract void audio_or_live_channel_member_enter_event(String bot_id, AudioLiveChannelMemberEvent event);
+
     /**
      * 当用户离开直播或视频子频道事件
      * @param bot_id 事件所属机器人ID
@@ -236,6 +237,7 @@ public abstract class SiriusApplication {
      * @param event 事件对象
      */
     public abstract void forum_thread_update_event(String bot_id,ForumEvent event);
+
     /**
      * （私域）主题被删除事件
      * @param bot_id 事件所属机器人ID
