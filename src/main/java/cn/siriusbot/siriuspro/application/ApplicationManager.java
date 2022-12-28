@@ -66,19 +66,13 @@ public class ApplicationManager {
             String fileName = jarEntry.getName();
             if (fileName.contains(".class")) {
                 fileName = fileName.replace("/", ".").replace(".class", "");
-//                if(fileName.equals("cn/sirius/SiriusApp.class")){
-//                    return null;
-//                }
                 Class<?> aClass = null;
                 //判断是否为天狼星应用
                 try {
                     aClass = appClass.loadClass(fileName);
                     Object application = aClass.newInstance();
-//
-//                    System.out.println((fileName+":")+(application instanceof SiriusApplication));
-//                    System.out.println("类型:"+application.getClass().toString());
-//                    System.out.println(SiriusApplication.class.getClass());
                     if (application instanceof SiriusApplication) {
+                        System.out.println(fileName);
                         return  (SiriusApplication) application;
                     }
                 } catch (Throwable e) {
@@ -100,7 +94,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void GuildCreateEventPush(String botId, GuildEventInfo event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("guild_create_event").invoke(botId,event);
+            app.appInfo.getMethods().get("guild_create_event").invoke(app,botId,event);
         }
     }
 
@@ -112,7 +106,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void GuildUpdateEventPush(String botId, GuildEventInfo event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("guild_update_event").invoke(botId,event);
+            app.appInfo.getMethods().get("guild_update_event").invoke(app,botId,event);
         }
     }
 
@@ -124,7 +118,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void GuildDeleteEventPush(String botId, GuildEventInfo event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("guild_delete_event").invoke(botId,event);
+            app.appInfo.getMethods().get("guild_delete_event").invoke(app,botId,event);
         }
     }
 
@@ -136,7 +130,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void ChannelCreateEventPush(String botId, ChannelEventInfo event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("channel_create_event").invoke(botId,event);
+            app.appInfo.getMethods().get("channel_create_event").invoke(app,botId,event);
         }
     }
 
@@ -150,7 +144,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void ChannelUpdateEventPush(String botId, ChannelEventInfo event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("channel_update_event").invoke(botId,event);
+            app.appInfo.getMethods().get("channel_update_event").invoke(app,botId,event);
         }
     }
 
@@ -162,7 +156,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void ChannelDeleteEventPush(String botId, ChannelEventInfo event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("channel_delete_event").invoke(botId,event);
+            app.appInfo.getMethods().get("channel_delete_event").invoke(app,botId,event);
         }
     }
 
@@ -174,7 +168,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void GuildMemberAddEventPush(String botId, GuildMemberCreateEventInfo event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("guild_member_add_event").invoke(botId,event);
+            app.appInfo.getMethods().get("guild_member_add_event").invoke(app,botId,event);
         }
     }
 
@@ -186,7 +180,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void GuildMemberUpdateEventPush(String botId, GuildMemberEventInfo event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("guild_member_update_event").invoke(botId,event);
+            app.appInfo.getMethods().get("guild_member_update_event").invoke(app,botId,event);
         }
     }
 
@@ -198,7 +192,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void GuildMemberRemoveEventPush(String botId, GuildMemberEventInfo event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("guild_member_remove_event").invoke(botId,event);
+            app.appInfo.getMethods().get("guild_member_remove_event").invoke(app,botId,event);
         }
     }
 
@@ -210,7 +204,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void PrivateMessageCreateEventPush(String botId, PrivateDomainMessageInfo event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("private_message_create_event").invoke(botId,event);
+            app.appInfo.getMethods().get("private_message_create_event").invoke(app,botId,event);
         }
     }
 
@@ -222,7 +216,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void PrivateMessageDeleteEventPush(String botId, PrivateDomainMessageInfo event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("private_message_delete_event").invoke(botId,event);
+            app.appInfo.getMethods().get("private_message_delete_event").invoke(app,botId,event);
         }
     }
 
@@ -234,7 +228,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void MessageReactionAddEventPush(String botId, ReactionEventInfo event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("message_reaction_add_event").invoke(botId,event);
+            app.appInfo.getMethods().get("message_reaction_add_event").invoke(app,botId,event);
         }
     }
 
@@ -246,7 +240,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void MessageReactionRemoveEventPush(String botId, ReactionEventInfo event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("message_reaction_remove_event").invoke(botId,event);
+            app.appInfo.getMethods().get("message_reaction_remove_event").invoke(app,botId,event);
         }
     }
 
@@ -258,7 +252,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void DirectMessageCreateEventPush(String botId, DirectMessageEventInfo event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("direct_message_create_event").invoke(botId,event);
+            app.appInfo.getMethods().get("direct_message_create_event").invoke(app,botId,event);
         }
     }
 
@@ -271,7 +265,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void DirectMessageDeleteEventPush(String botId, DirectMessageEventInfo event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("direct_message_delete_event").invoke(botId,event);
+            app.appInfo.getMethods().get("direct_message_delete_event").invoke(app,botId,event);
         }
     }
 
@@ -283,7 +277,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void OpenForumThreadCreateEventPush(String botId, OpenForumEventInfo event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("open_forum_thread_create_event").invoke(botId,event);
+            app.appInfo.getMethods().get("open_forum_thread_create_event").invoke(app,botId,event);
         }
     }
 
@@ -295,7 +289,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void OpenForumThreadUpdateEventPush(String botId, OpenForumEventInfo event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("open_forum_thread_update_event").invoke(botId,event);
+            app.appInfo.getMethods().get("open_forum_thread_update_event").invoke(app,botId,event);
         }
     }
 
@@ -308,7 +302,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void OpenForumThreadDeleteEventPush(String botId, OpenForumEventInfo event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("open_forum_thread_delete_event").invoke(botId,event);
+            app.appInfo.getMethods().get("open_forum_thread_delete_event").invoke(app,botId,event);
         }
     }
 
@@ -321,7 +315,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void OpenForumPostCreateEventPush(String botId, OpenForumEventInfo event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("open_forum_post_create_event").invoke(botId,event);
+            app.appInfo.getMethods().get("open_forum_post_create_event").invoke(app,botId,event);
         }
     }
 
@@ -333,7 +327,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void OpenForumPostDeleteEventPush(String botId, OpenForumEventInfo event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("open_forum_post_delete_event").invoke(botId,event);
+            app.appInfo.getMethods().get("open_forum_post_delete_event").invoke(app,botId,event);
         }
     }
 
@@ -345,7 +339,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void OpenForumReplyCreateEventPush(String botId, OpenForumEventInfo event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get(" open_forum_reply_create_event").invoke(botId,event);
+            app.appInfo.getMethods().get(" open_forum_reply_create_event").invoke(app,botId,event);
         }
     }
 
@@ -357,7 +351,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void OpenForumReplyDeleteEventPush(String botId, OpenForumEventInfo event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("open_forum_reply_delete_event").invoke(botId,event);
+            app.appInfo.getMethods().get("open_forum_reply_delete_event").invoke(app,botId,event);
         }
     }
 
@@ -369,7 +363,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void AudioORLiveChannelMemberEnterEventPush(String botId, AudioLiveChannelMemberEvent event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("audio_or_live_channel_member_enter_event").invoke(botId,event);
+            app.appInfo.getMethods().get("audio_or_live_channel_member_enter_event").invoke(app,botId,event);
         }
     }
 
@@ -381,7 +375,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void AudioORLiveChannelMemberExitEventPush(String botId, AudioLiveChannelMemberEvent event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("audio_or_live_channel_member_exit_event").invoke(botId,event);
+            app.appInfo.getMethods().get("audio_or_live_channel_member_exit_event").invoke(app,botId,event);
         }
     }
 
@@ -393,7 +387,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void InterActonCreateEventPush(String botId, InterActionEvent event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("interaction_create_event").invoke(botId,event);
+            app.appInfo.getMethods().get("interaction_create_event").invoke(app,botId,event);
         }
     }
 
@@ -405,7 +399,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void MessageAuditRejectEventPush(String botId, AuditMessageEvent event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("audit_message_reject_event").invoke(botId,event);
+            app.appInfo.getMethods().get("audit_message_reject_event").invoke(app,botId,event);
         }
     }
 
@@ -417,7 +411,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void MessageAuditPassEventPush(String botId, AuditMessageEvent event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("audit_message_pass_event").invoke(botId,event);
+            app.appInfo.getMethods().get("audit_message_pass_event").invoke(app,botId,event);
         }
     }
 
@@ -430,7 +424,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void ForumThreadCreateEventPush(String botId, ForumEvent event){
         for (SiriusApplication app : apps) {
-            app.getAppInfo().getMethods().get("forum_thread_create_event").invoke(botId,event);
+            app.getAppInfo().getMethods().get("forum_thread_create_event").invoke(app,botId,event);
         }
     }
 
@@ -442,7 +436,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void ForumThreadUpdateEventPush(String botId, ForumEvent event){
         for (SiriusApplication app : apps) {
-            app.getAppInfo().getMethods().get("forum_thread_update_event").invoke(botId,event);
+            app.getAppInfo().getMethods().get("forum_thread_update_event").invoke(app,botId,event);
         }
     }
 
@@ -454,7 +448,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void ForumThreadDeleteEventPush(String botId, ForumEvent event){
         for (SiriusApplication app : apps) {
-            app.getAppInfo().getMethods().get("forum_thread_create_event").invoke(botId,event);
+            app.getAppInfo().getMethods().get("forum_thread_create_event").invoke(app,botId,event);
         }
     }
 
@@ -466,7 +460,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void ForumPostCreateEventPush(String botId, ForumEvent event){
         for (SiriusApplication app : apps) {
-            app.getAppInfo().getMethods().get("forum_post_create_event").invoke(botId,event);
+            app.getAppInfo().getMethods().get("forum_post_create_event").invoke(app,botId,event);
         }
     }
 
@@ -478,7 +472,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void ForumPostDeleteEventPush(String botId, ForumEvent event){
         for (SiriusApplication app : apps) {
-            app.getAppInfo().getMethods().get("forum_post_delete_event").invoke(botId,event);
+            app.getAppInfo().getMethods().get("forum_post_delete_event").invoke(app,botId,event);
         }
     }
 
@@ -490,7 +484,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void ForumReplyCreateEventPush(String botId, ForumEvent event){
         for (SiriusApplication app : apps) {
-            app.getAppInfo().getMethods().get("forum_reply_create_event").invoke(botId,event);
+            app.getAppInfo().getMethods().get("forum_reply_create_event").invoke(app,botId,event);
         }
     }
 
@@ -502,7 +496,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void ForumReplyDeleteEventPush(String botId, ForumEvent event){
         for (SiriusApplication app : apps) {
-            app.getAppInfo().getMethods().get("forum_reply_delete_event").invoke(botId,event);
+            app.getAppInfo().getMethods().get("forum_reply_delete_event").invoke(app,botId,event);
         }
     }
 
@@ -514,7 +508,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void ForumPublishAuditResultEventPush(String botId, ForumEvent event){
         for (SiriusApplication app : apps) {
-            app.getAppInfo().getMethods().get("forum_publish_audit_result").invoke(botId,event);
+            app.getAppInfo().getMethods().get("forum_publish_audit_result").invoke(app,botId,event);
         }
     }
 
@@ -526,7 +520,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void AudioStartEventPush(String botId, AudioMessageEvent event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("audio_start_event").invoke(botId,event);
+            app.appInfo.getMethods().get("audio_start_event").invoke(app,botId,event);
         }
     }
 
@@ -538,7 +532,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void AudioFinishEventPush(String botId, AudioMessageEvent event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("audio_finish_event").invoke(botId,event);
+            app.appInfo.getMethods().get("audio_finish_event").invoke(app,botId,event);
         }
     }
 
@@ -550,7 +544,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void AudioOnMicEventPush(String botId, AudioMessageEvent event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("audio_on_mic_event").invoke(botId,event);
+            app.appInfo.getMethods().get("audio_on_mic_event").invoke(app,botId,event);
         }
     }
 
@@ -562,7 +556,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void AudioOffMicEventPush(String botId, AudioMessageEvent event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("audio_off_mic_event").invoke(botId,event);
+            app.appInfo.getMethods().get("audio_off_mic_event").invoke(app,botId,event);
         }
     }
 
@@ -588,7 +582,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void PublicMessageDeleteEventPush(String botId, PublicMessageEvent event){
         for (SiriusApplication app : apps) {
-            app.appInfo.getMethods().get("public_message_delete_event").invoke(botId,event);
+            app.appInfo.getMethods().get("public_message_delete_event").invoke(app,botId,event);
         }
     }
 }
