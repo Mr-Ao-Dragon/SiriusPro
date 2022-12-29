@@ -1,5 +1,7 @@
 package cn.siriusbot.siriuspro.config;
 
+import cn.siriusbot.siriuspro.admin.dao.RobotMapper;
+import cn.siriusbot.siriuspro.admin.entity.Robot;
 import cn.siriusbot.siriuspro.application.ApplicationManager;
 import cn.siriusbot.siriuspro.application.ApplicationUtils;
 import cn.siriusbot.siriuspro.bot.BotToken;
@@ -18,12 +20,13 @@ public class ApplicationRunnerStart implements ApplicationRunner {
     @Autowired
     ApplicationManager manager;
 
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
         // 项目初始化
         log.info("框架初始化中...");
-        ApplicationUtils.initAppPath();
         manager.loadApps();
+
 
         SiriusBotClient siriusBotClient = new SiriusBotClient("102004321", "VwUd3zkSBZIbLlWZOXNlhrBsZDCtn6Dn", BotToken.botType.PUBLIC_TYPE, false);
         BotManager.AuthBot(siriusBotClient);

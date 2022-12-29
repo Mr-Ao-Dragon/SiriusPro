@@ -1,11 +1,14 @@
 package cn.siriusbot.siriuspro.webapi.controller;
 
 
+import cn.siriusbot.siriuspro.admin.dao.RobotMapper;
+import cn.siriusbot.siriuspro.admin.entity.Robot;
 import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.bot.BotToken;
 import cn.siriusbot.siriuspro.webapi.R.R;
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import cn.siriusbot.siriuspro.webapi.pojo.BotInfo;
 
@@ -53,4 +56,18 @@ public class BotController {
         }
         return new R().setData(JSONObject.toJSONString(list));
     }
+
+
+    @Autowired
+    RobotMapper robotMapper;
+
+    @GetMapping("/bot/test")
+    public void test(){
+        robotMapper.insert(
+                new Robot()
+                        .setBot_id("102004321")
+                        .setToken("VwUd3zkSBZIbLlWZOXNlhrBsZDCtn6Dn")
+        );
+    }
+
 }
