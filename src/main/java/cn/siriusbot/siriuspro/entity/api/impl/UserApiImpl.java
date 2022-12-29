@@ -22,8 +22,8 @@ public class UserApiImpl implements UserApi {
 
     @SneakyThrows
     @Override
-    public Tuple<User,String> getRobotInfo(Bot bot) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<User,String> getRobotInfo(String bot_id) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "users/@me").build();
         Response response = SiriusHttpUtils.getRequest(bot, request);
         String data = response.body().string();
@@ -37,7 +37,7 @@ public class UserApiImpl implements UserApi {
 
     /**
      * 获取频道指定机器人频道列表
-     * @param bot 传入机器人对象
+     * @param bot_id 传入机器人对象ID
      * @param before 读此 guild id 之前的数据
      * @param after 读此 guild id 之后的数据
      * @param limit 每次查询的条数，默认100，最大100
@@ -46,8 +46,8 @@ public class UserApiImpl implements UserApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<List<Guild>,String>  getGuildList(Bot bot, String before, String after, int limit) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<List<Guild>,String>  getGuildList(String bot_id, String before, String after, int limit) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl()).build();
         String path = bot.getOpenUrl() + "users/@me/guilds";
         try {

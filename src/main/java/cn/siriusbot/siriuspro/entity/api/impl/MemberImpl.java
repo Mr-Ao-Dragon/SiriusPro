@@ -21,15 +21,15 @@ public class MemberImpl implements MemberApi {
     /**
      * 获取频道成员列表
      *
-     * @param bot      传入机器人对象
+     * @param bot_id      传入机器人对象ID
      * @param guild_id 频道ID
      * @param after    上一次回包中最后一个member的user id， 如果是第一次请求填 0，默认为 0
      * @return 返回成员列表 分页大小，1-400，默认是 1。成员较多的频道尽量使用较大的limit值，以减少请求数
      */
     @SneakyThrows
     @Override
-    public Map<List<Member>,Object> getMemberList(Bot bot, String guild_id, String after, int limit) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Map<List<Member>,Object> getMemberList(String bot_id, String guild_id, String after, int limit) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         if (after == null)
             after = "0";
         Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/members?after=" + after + "&limit=" + limit).build();
@@ -45,15 +45,15 @@ public class MemberImpl implements MemberApi {
     /**
      * 获取成员详情
      *
-     * @param bot      传入机器人对象
+     * @param bot_id      传入机器人对象ID
      * @param guild_id 频道ID
      * @param user_id  用户ID
      * @return 返回成员对象
      */
     @SneakyThrows
     @Override
-    public Map<Member,Object> getMemberInfo(Bot bot, String guild_id, String user_id) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Map<Member,Object> getMemberInfo(String bot_id, String guild_id, String user_id) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/members/" + user_id).build();
         Response response = SiriusHttpUtils.getRequest(bot, request);
         String data = response.body().string();
@@ -65,7 +65,7 @@ public class MemberImpl implements MemberApi {
     /**
      * 获取拥有此身份组的成员列表
      *
-     * @param bot         传入机器人对象
+     * @param bot_id         传入机器人对象ID
      * @param guild_id    频道ID
      * @param role_id     身份组ID
      * @param start_index 上一次返回包中的next，第一次请求填0，默认0
@@ -74,8 +74,8 @@ public class MemberImpl implements MemberApi {
      */
     @SneakyThrows
     @Override
-    public Map<MemberQueryLimit,Object> getMemberListByRoleId(Bot bot, String guild_id, String role_id, String start_index, int limit) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Map<MemberQueryLimit,Object> getMemberListByRoleId(String bot_id, String guild_id, String role_id, String start_index, int limit) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/roles/" + role_id + "/members?start_index=" + start_index + "&limit=" + limit).build();
         Response response = SiriusHttpUtils.getRequest(bot, request);
         String data = response.body().string();
@@ -88,7 +88,7 @@ public class MemberImpl implements MemberApi {
     /**
      * 将指定成员从频道内移除
      *
-     * @param bot                     传入机器人对象
+     * @param bot_id                     传入机器人对象ID
      * @param user_id                 用户ID
      * @param guild_id                频道ID
      * @param add_black               添加到黑名单
@@ -97,8 +97,8 @@ public class MemberImpl implements MemberApi {
      */
     @SneakyThrows
     @Override
-    public boolean deleteMemberByUserId(Bot bot, String guild_id, String user_id, boolean add_black, int delete_history_msg_days) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public boolean deleteMemberByUserId(String bot_id, String guild_id, String user_id, boolean add_black, int delete_history_msg_days) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/members/" + user_id).build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();

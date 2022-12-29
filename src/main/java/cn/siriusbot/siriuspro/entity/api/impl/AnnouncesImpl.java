@@ -27,7 +27,7 @@ public class AnnouncesImpl implements AnnouncesApi {
      * 只有子频道权限为全体成员可见才可设置为推荐子频道。
      * 删除推荐子频道类型的频道公告请使用 删除频道公告,并将 message_id 设置为 all。
      *
-     * @param bot               传入机器人对象
+     * @param bot_id               传入机器人对象ID
      * @param guild_id          频道ID
      * @param message_id        消息ID
      * @param channel_id        子频道ID
@@ -35,8 +35,8 @@ public class AnnouncesImpl implements AnnouncesApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Announces,String> createGuildAnnounces(Bot bot, String guild_id, String message_id, String channel_id) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<Announces,String> createGuildAnnounces(String bot_id, String guild_id, String message_id, String channel_id) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/announces").build();
         MediaType mediaType = MediaType.parse("application/json;text/plain");
         JSONObject json = new JSONObject();
@@ -56,14 +56,14 @@ public class AnnouncesImpl implements AnnouncesApi {
      * 用于删除频道 guild_id 下指定 message_id 的全局公告。
      * message_id 有值时，会校验 message_id 合法性，若不校验校验 message_id，请将 message_id 设置为 all
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人对象ID
      * @param guild_id   频道ID
      * @param message_id 消息ID
      * @return 返回删除结果
      */
     @Override
-    public Boolean deleteAnnouncesByGuildId(Bot bot, String guild_id, String message_id) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Boolean deleteAnnouncesByGuildId(String bot_id, String guild_id, String message_id) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/announces/" + message_id).build();
         Response response = SiriusHttpUtils.deleteRequest(bot, request, null);
         return response.code() == 204;
@@ -71,15 +71,15 @@ public class AnnouncesImpl implements AnnouncesApi {
 
     /**
      * 创建频道推荐子频道列表
-     * @param bot 传入机器人对象
+     * @param bot_id 传入机器人对象ID
      * @param guild_id 频道ID
      * @param recommendChannels 机器人推荐列表
      * @return 返回公告对象
      */
     @SneakyThrows
     @Override
-    public Tuple<Announces,String> createGuildRecommend_Channels(Bot bot, String guild_id, Integer announces_type, List<RecommendChannel> recommendChannels) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<Announces,String> createGuildRecommend_Channels(String bot_id, String guild_id, Integer announces_type, List<RecommendChannel> recommendChannels) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl()+"guilds/"+guild_id+"/announces").build();
         MediaType mediaType = MediaType.parse("application/json;text/plain");
         JSONObject json = new JSONObject();

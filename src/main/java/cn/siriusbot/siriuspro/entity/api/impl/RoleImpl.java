@@ -20,7 +20,7 @@ public class RoleImpl implements RoleApi {
     /**
      * 创建频道身份组
      *
-     * @param bot      传入机器人对象
+     * @param bot_id      传入机器人对象ID
      * @param guild_id 频道ID
      * @param name     身份组名称
      * @param color    身份组颜色
@@ -29,8 +29,8 @@ public class RoleImpl implements RoleApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Role, String> createRole(Bot bot, String guild_id, String name, Integer color, Integer hoist) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<Role, String> createRole(String bot_id, String guild_id, String name, Integer color, Integer hoist) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/roles").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();
@@ -50,7 +50,7 @@ public class RoleImpl implements RoleApi {
     /**
      * 将指定用户，从指定频道的身份组中移除
      *
-     * @param bot      传入机器人对象
+     * @param bot_id      传入机器人对象ID
      * @param guild_id 频道ID
      * @param role_id  身份组ID
      * @param user_id  用户ID
@@ -58,8 +58,8 @@ public class RoleImpl implements RoleApi {
      * @return 返回操作结果
      */
     @Override
-    public Boolean removeRoleMemberForGuild(Bot bot, String guild_id, String role_id, String user_id, Channel channel) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Boolean removeRoleMemberForGuild(String bot_id, String guild_id, String role_id, String user_id, Channel channel) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/members/" + user_id + "/roles/" + role_id).build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         RequestBody body = RequestBody.create(mediaType, JSONObject.toJSONString(channel));
@@ -70,7 +70,7 @@ public class RoleImpl implements RoleApi {
     /**
      * 将指定成员，加入到指定频道的，指定身份组中
      *
-     * @param bot      传入机器人对象
+     * @param bot_id      传入机器人对象ID
      * @param guild_id 频道ID
      * @param user_id  用户ID
      * @param role_id  身份组ID
@@ -79,8 +79,8 @@ public class RoleImpl implements RoleApi {
      */
     @SneakyThrows
     @Override
-    public Boolean createRoleMemberInGuild(Bot bot, String guild_id, String user_id, String role_id, Channel channel) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Boolean createRoleMemberInGuild(String bot_id, String guild_id, String user_id, String role_id, Channel channel) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/members/" + user_id + "/roles/" + role_id).build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         RequestBody body = RequestBody.create(mediaType, JSONObject.toJSONString(channel));
@@ -91,7 +91,7 @@ public class RoleImpl implements RoleApi {
     /**
      * 修改频道身份组
      *
-     * @param bot      传入机器人对象
+     * @param bot_id      传入机器人对象ID
      * @param guild_id 频道ID
      * @param role_id  身份组ID
      * @param name     最新身份组名称
@@ -101,8 +101,8 @@ public class RoleImpl implements RoleApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<NewRole,String> modifyRoleByGuild(Bot bot, String guild_id, String role_id, String name, Integer color, Integer hoist) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<NewRole,String> modifyRoleByGuild(String bot_id, String guild_id, String role_id, String name, Integer color, Integer hoist) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/roles/" + role_id).build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();
@@ -121,14 +121,14 @@ public class RoleImpl implements RoleApi {
     /**
      * 从指定频道中删除指定身份组
      *
-     * @param bot      传入机器人对象
+     * @param bot_id      传入机器人对象ID
      * @param guild_id 频道ID
      * @param role_id  身份组ID
      * @return 操作结果
      */
     @Override
-    public Boolean deleteRoleForGuild(Bot bot, String guild_id, String role_id) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Boolean deleteRoleForGuild(String bot_id, String guild_id, String role_id) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/roles/" + role_id).build();
         Response response = SiriusHttpUtils.deleteRequest(bot, request, null);
         return response.code() == 204;
@@ -137,14 +137,14 @@ public class RoleImpl implements RoleApi {
     /**
      * 从指定频道中获取所有身份组
      *
-     * @param bot      传入机器人对象
+     * @param bot_id      传入机器人对象ID
      * @param guild_id 频道ID
      * @return 身份组列表
      */
     @SneakyThrows
     @Override
-    public Tuple<GuildRoleList,String>  getRoleListByGuild(Bot bot, String guild_id) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<GuildRoleList,String>  getRoleListByGuild(String bot_id, String guild_id) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/roles").build();
         Response response = SiriusHttpUtils.getRequest(bot, request);
         String data = response.body().string();

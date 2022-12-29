@@ -18,7 +18,7 @@ import java.util.List;
 public class NoSpeakImpl implements NoSpeakApi {
     /**
      * 禁言指定成员
-     * @param bot 传入机器人对象
+     * @param bot_id 传入机器人对象ID
      * @param guild_id 频道ID
      * @param user_id 用户ID
      * @param mute_end_timestamp 禁言到期时间戳
@@ -26,8 +26,8 @@ public class NoSpeakImpl implements NoSpeakApi {
      * @return 返回禁言结果
      */
     @Override
-    public Boolean noSpeakByUser_id(Bot bot, String guild_id, String user_id, String mute_end_timestamp, String mute_seconds) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Boolean noSpeakByUser_id(String bot_id, String guild_id, String user_id, String mute_end_timestamp, String mute_seconds) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/members/" + user_id + "/mute").build();
         JSONObject json = new JSONObject();
         json.put("mute_end_timestamp", mute_end_timestamp);
@@ -41,7 +41,7 @@ public class NoSpeakImpl implements NoSpeakApi {
 
     /**
      * 批量禁言成员
-     * @param bot 传入机器人对象
+     * @param bot_id 传入机器人对象ID
      * @param guild_id 频道ID
      * @param user_ids 需要禁言的成员列表
      * @param mute_end_timestamp 禁言到期时间戳
@@ -50,8 +50,8 @@ public class NoSpeakImpl implements NoSpeakApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<NoSpeak,String> noSpeakByUser_ids(Bot bot, String guild_id, List<String> user_ids, String mute_end_timestamp, String mute_seconds) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<NoSpeak,String> noSpeakByUser_ids(String bot_id, String guild_id, List<String> user_ids, String mute_end_timestamp, String mute_seconds) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/mute").build();
         JSONObject json = new JSONObject();
         MediaType mediaType = MediaType.parse("application/json;text/plain");
@@ -69,14 +69,14 @@ public class NoSpeakImpl implements NoSpeakApi {
 
     /**
      * 全员禁言
-     * @param bot 传入机器人对象
+     * @param bot_id 传入机器人对象ID
      * @param mute_end_timestamp 禁言到期时间戳
      * @param mute_seconds 禁言秒数
      * @return 返回禁言结果
      */
     @Override
-    public Boolean nodeSpeakAll(Bot bot, String guild_id, String mute_end_timestamp, String mute_seconds) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Boolean nodeSpeakAll(String bot_id, String guild_id, String mute_end_timestamp, String mute_seconds) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         MediaType mediaType = MediaType.parse("application/json;text/plain");
         Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/mute").build();
         JSONObject json = new JSONObject();

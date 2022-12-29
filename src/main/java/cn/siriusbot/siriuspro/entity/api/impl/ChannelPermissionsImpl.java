@@ -20,15 +20,15 @@ public class ChannelPermissionsImpl implements ChannelPermissionsApi {
      * 获取子频道用户权限。
      * 要求操作人具有管理子频道的权限，如果是机器人，则需要将机器人设置为管理员
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人对象ID
      * @param channel_id 子频道ID
      * @param user_id    用户ID
      * @return 子频道权限对象
      */
     @SneakyThrows
     @Override
-    public Tuple<ChannelPermissions,String> getChannelPermissionsByUser_id(Bot bot, String channel_id, String user_id) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<ChannelPermissions,String> getChannelPermissionsByUser_id(String bot_id, String channel_id, String user_id) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/members/" + user_id + "/permissions").build();
         Response response = SiriusHttpUtils.getRequest(bot, request);
         String data = response.body().string();
@@ -44,7 +44,7 @@ public class ChannelPermissionsImpl implements ChannelPermissionsApi {
      * 获取子频道用户权限。
      * 要求操作人具有管理子频道的权限，如果是机器人，则需要将机器人设置为管理员
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人对象ID
      * @param channel_id 子频道ID
      * @param role_id    身份组ID
      * @param add        要添加的权限
@@ -53,8 +53,8 @@ public class ChannelPermissionsImpl implements ChannelPermissionsApi {
      */
     @SneakyThrows
     @Override
-    public Boolean modifyChannelPermissionsByRole_id(Bot bot, String channel_id, String role_id, String add, String remove) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Boolean modifyChannelPermissionsByRole_id(String bot_id, String channel_id, String role_id, String add, String remove) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/roles/" + role_id + "/permissions").build();
         MediaType mediaType = MediaType.parse("application/json");
         JSONObject json = new JSONObject();
@@ -72,7 +72,7 @@ public class ChannelPermissionsImpl implements ChannelPermissionsApi {
      * 获取子频道用户权限。
      * 要求操作人具有管理子频道的权限，如果是机器人，则需要将机器人设置为管理员
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人对象ID
      * @param channel_id 子频道ID
      * @param user_id    用户id
      * @param add        添加的权限
@@ -80,8 +80,8 @@ public class ChannelPermissionsImpl implements ChannelPermissionsApi {
      * @return 返回修改结果
      */
     @Override
-    public Boolean modifyChannelPermissionsByUser_id(Bot bot, String channel_id, String user_id, String add, String remove) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Boolean modifyChannelPermissionsByUser_id(String bot_id, String channel_id, String user_id, String add, String remove) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/members/" + user_id + "/permissions").build();
         MediaType mediaType = MediaType.parse("application/json");
         JSONObject json = new JSONObject();
@@ -98,15 +98,15 @@ public class ChannelPermissionsImpl implements ChannelPermissionsApi {
      * 用于获取子频道 channel_id 下身份组 role_id 的权限。
      * 要求操作人具有管理子频道的权限，如果是机器人，则需要将机器人设置为管理员。
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人对象ID
      * @param channel_id 子频道ID
      * @param role_id    身份组ID
      * @return 子频道权限对象
      */
     @SneakyThrows
     @Override
-    public Tuple<ChannelPermissions,String> getChannelPermissionsByRole_id(Bot bot, String channel_id, String role_id) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<ChannelPermissions,String> getChannelPermissionsByRole_id(String bot_id, String channel_id, String role_id) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/roles/" + role_id + "/permissions").build();
         Response response = SiriusHttpUtils.getRequest(bot, request);
         String data = response.body().string();

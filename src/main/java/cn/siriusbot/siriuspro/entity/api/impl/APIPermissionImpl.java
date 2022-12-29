@@ -20,7 +20,7 @@ public class APIPermissionImpl implements ApiPermissionApi {
     /**
      * 创建频道Api接口权限，授权链接
      *
-     * @param bot          传入机器人对象
+     * @param bot_id          传入机器人对象ID
      * @param guild_id     频道ID
      * @param channel_id   子频道ID
      * @param api_identify Api权限需求标识对象
@@ -29,8 +29,8 @@ public class APIPermissionImpl implements ApiPermissionApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<ApiPermissionDemand,String> createApiGrantLink(Bot bot, String guild_id, String channel_id, ApiPermissionDemandIdentify api_identify, String desc) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<ApiPermissionDemand,String> createApiGrantLink(String bot_id, String guild_id, String channel_id, ApiPermissionDemandIdentify api_identify, String desc) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl()+"guilds/"+guild_id+"/api_permission/demand").build();
         JSONObject json = new JSONObject();
         MediaType mediaType = MediaType.parse("application/json;text/plain");
@@ -47,14 +47,14 @@ public class APIPermissionImpl implements ApiPermissionApi {
     /**
      * 获取频道可用权限列表
      *
-     * @param bot      传入机器人对象
+     * @param bot_id      传入机器人对象ID
      * @param guild_id 频道ID
      * @return 返回可用Api权限对象列表
      */
     @SneakyThrows
     @Override
-    public Tuple<List<APIPermission>,String> getAPIPermissions(Bot bot, String guild_id) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<List<APIPermission>,String> getAPIPermissions(String bot_id, String guild_id) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl()+"guilds/"+guild_id+"/api_permission").build();
         String data = SiriusHttpUtils.getRequest(bot,request).body().string();
         JSONObject json = JSONObject.parseObject(data);

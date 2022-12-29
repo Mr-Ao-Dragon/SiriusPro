@@ -18,14 +18,14 @@ import java.util.List;
 public class ChannelImpl implements ChannelApi {
     /**
      * 获取子频道列表
-     * @param bot 传入机器人对象
+     * @param bot_id 传入机器人对象ID
      * @param guild_id 频道ID
      * @return 返回存放子频道的容器对象
      */
     @SneakyThrows
     @Override
-    public Tuple<List<Channel>,String> getChannelList(Bot bot, String guild_id) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<List<Channel>,String> getChannelList(String bot_id, String guild_id) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/channels").build();
         Response response = SiriusHttpUtils.getRequest(bot, request);
         String data = response.body().string();
@@ -38,14 +38,14 @@ public class ChannelImpl implements ChannelApi {
 
     /**
      * 获取子频道详情
-     * @param bot 传入机器人对象
+     * @param bot_id 传入机器人对象ID
      * @param channel_id 子频道ID
      * @return 返回子频道对象
      */
     @SneakyThrows
     @Override
-    public Tuple<Channel,String> getChannelInfo(Bot bot, String channel_id) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<Channel,String> getChannelInfo(String bot_id, String channel_id) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id).build();
         Response response = SiriusHttpUtils.getRequest(bot, request);
         String data = response.body().string();
@@ -56,15 +56,15 @@ public class ChannelImpl implements ChannelApi {
 
     /**
      * 创建子频道
-     * @param bot 传入机器人对象
+     * @param bot_id 传入机器人对象ID
      * @param guild_id 频道ID
      * @param channel 子频道对象
      * @return 返回子频道对象
      */
     @SneakyThrows
     @Override
-    public Tuple<Channel,String>createChannel(Bot bot, String guild_id, Channel channel) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<Channel,String>createChannel(String bot_id, String guild_id, Channel channel) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/channels").build();
         RequestBody body = RequestBody.create(mediaType, JSONObject.toJSONString(channel));
@@ -77,15 +77,15 @@ public class ChannelImpl implements ChannelApi {
 
     /**
      * 修改子频道
-     * @param bot 传入机器人对象
+     * @param bot_id 传入机器人对象ID
      * @param channel_id 子频道id
      * @param channel 修改后的子频道对象
      * @return 修改后的子频道对象
      */
     @SneakyThrows
     @Override
-    public Tuple<Channel,String> modifyChannel(Bot bot, String channel_id, Channel channel) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<Channel,String> modifyChannel(String bot_id, String channel_id, Channel channel) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id).build();
         RequestBody body = RequestBody.create(mediaType, JSONObject.toJSONString(channel));
@@ -98,13 +98,13 @@ public class ChannelImpl implements ChannelApi {
 
     /**
      * 删除子频道
-     * @param bot 传入机器人对象
+     * @param bot_id 传入机器人对象ID
      * @param channel_id 子频道ID
      * @return 删除结果
      */
     @Override
-    public Boolean deleteChannel(Bot bot, String channel_id) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Boolean deleteChannel(String bot_id, String channel_id) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id).build();
         Response response = SiriusHttpUtils.deleteRequest(bot, request, null);
         return response.code() == 200;
@@ -112,14 +112,14 @@ public class ChannelImpl implements ChannelApi {
 
     /**
      * 获取当前音视频/直播子频道的在线成员数
-     * @param bot 传入机器人对象
+     * @param bot_id 传入机器人对象ID
      * @param channel_id 子频道ID
      * @return 在线人数
      */
     @SneakyThrows
     @Override
-    public Integer getOnlineMemberNumber(Bot bot, String channel_id) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Integer getOnlineMemberNumber(String bot_id, String channel_id) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl()+"channels/"+channel_id+"/online_nums").build();
         Response response = SiriusHttpUtils.getRequest(bot, request);
         JSONObject json = JSONObject.parseObject(response.body().string());

@@ -32,7 +32,7 @@ public class MessageImpl implements MessageApi {
      * 有关主动消息审核，可以通过 Intents 中审核事件 MESSAGE_AUDIT 返回 MessageAudited 对象获取结果。
      * 如传入event_id和msg_id其中一个，此条消息视为被动消息
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人对象ID
      * @param channel_id 子频道ID
      * @param content    要发送的消息内容
      * @param image_Url  图片Url
@@ -42,8 +42,8 @@ public class MessageImpl implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message,String> sendMessage(Bot bot, String channel_id, String content, String image_Url, String msg_id, String event_id) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<Message,String> sendMessage(String bot_id, String channel_id, String content, String image_Url, String msg_id, String event_id) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/messages").build();
         if (channel_id == null || channel_id == "")
             return null;
@@ -65,15 +65,15 @@ public class MessageImpl implements MessageApi {
     /**
      * 获取指定子频道的指定消息详情
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人对象ID
      * @param channel_id 子频道ID
      * @param message_id 消息ID
      * @return 返回消息对象
      */
     @SneakyThrows
     @Override
-    public Tuple<Message,String> getMessageById(Bot bot, String channel_id, String message_id) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<Message,String> getMessageById(String bot_id, String channel_id, String message_id) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "messages/" + message_id).build();
         Response response = SiriusHttpUtils.getRequest(bot, request);
         String data = response.body().string();
@@ -85,7 +85,7 @@ public class MessageImpl implements MessageApi {
     /**
      * 发送引用消息
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人对象ID
      * @param channel_id 子频道ID
      * @param content    消息内容
      * @param reference  引用消息对象
@@ -93,8 +93,8 @@ public class MessageImpl implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message,String> sendReferenceMessage(Bot bot, String channel_id, String content, MessageReference reference) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<Message,String> sendReferenceMessage(String bot_id, String channel_id, String content, MessageReference reference) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();
@@ -119,7 +119,7 @@ public class MessageImpl implements MessageApi {
      * 消息体中所包含的URL需要报备并通过验证，方可使用。
      * 如传入event_id和msg_id其中一个，此条消息视为被动消息
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人对象ID
      * @param channel_id 子频道ID
      * @param msg_id     消息id
      * @param event_id   事件ID
@@ -128,8 +128,8 @@ public class MessageImpl implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message,String> sendMarkdownMessage(Bot bot, String channel_id, String msg_id, String event_id, MessageMarkdown markdown) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<Message,String> sendMarkdownMessage(String bot_id, String channel_id, String msg_id, String event_id, MessageMarkdown markdown) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();
@@ -153,14 +153,15 @@ public class MessageImpl implements MessageApi {
      * 公域机器人暂不支持申请，仅私域机器人可用，选择私域机器人后默认开通。
      * 注意: 开通后需要先将机器人从频道移除，然后重新添加，方可生效
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人对象ID
      * @param channel_id 子频道ID
      * @param message_id 消息ID
      * @param hidetip    是否隐藏删除消息后的小灰条
      * @return 撤回结果
      */
     @Override
-    public Boolean deleteMessageById(Bot bot, String channel_id, String message_id, boolean hidetip) {
+    public Boolean deleteMessageById(String bot_id, String channel_id, String message_id, boolean hidetip) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "?hidetip=" + hidetip).build();
         Response response = SiriusHttpUtils.deleteRequest(bot, request, null);
         return response.code() == 200;
@@ -174,7 +175,7 @@ public class MessageImpl implements MessageApi {
      * 发送成功之后，会触发一个创建消息的事件。
      * 如传入event_id和msg_id其中一个，此条消息视为被动消息
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人对象ID
      * @param channel_id 子频道ID
      * @param ark        ark消息对象
      * @param msg_id     消息id
@@ -183,8 +184,8 @@ public class MessageImpl implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message,String> sendArkMessage(Bot bot, String channel_id, MessageArk ark, String msg_id, String event_id) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<Message,String> sendArkMessage(String bot_id, String channel_id, MessageArk ark, String msg_id, String event_id) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();
@@ -204,7 +205,7 @@ public class MessageImpl implements MessageApi {
      * 发送embed模板消息
      * 如传入event_id和msg_id其中一个，此条消息视为被动消息
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人对象ID
      * @param channel_id 子频道ID
      * @param embed      embed消息对象
      * @param msg_id     消息id
@@ -213,8 +214,8 @@ public class MessageImpl implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message,String> sendEmbedMessage(Bot bot, String channel_id, MessageEmbed embed, String msg_id, String event_id) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<Message,String> sendEmbedMessage(String bot_id, String channel_id, MessageEmbed embed, String msg_id, String event_id) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();
@@ -233,7 +234,7 @@ public class MessageImpl implements MessageApi {
     /**
      * 发送图文消息
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人对象ID
      * @param channel_id 子频道ID
      * @param content    消息内容
      * @param image_path 本地图片路径
@@ -243,8 +244,8 @@ public class MessageImpl implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message,String> sendImageAndTextMessage(Bot bot, String channel_id, String content, String image_path, String msg_id, String event_id) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<Message,String> sendImageAndTextMessage(String bot_id, String channel_id, String content, String image_path, String msg_id, String event_id) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/messages").build();
 
         MediaType mediaType = MediaType.parse("multipart/form-data");
@@ -264,15 +265,15 @@ public class MessageImpl implements MessageApi {
     /**
      * 发送带按钮的消息
      *
-     * @param bot                   传入机器人对象
+     * @param bot_id                   传入机器人对象ID
      * @param channel_id            子频道ID
      * @param requestCustomKeyboard 自定义按钮请求对象
      * @return 返回消息对象
      */
     @SneakyThrows
     @Override
-    public Tuple<Message,String> sendCustomInLineKeyword(Bot bot, String channel_id, RequestCustomKeyboard requestCustomKeyboard) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<Message,String> sendCustomInLineKeyword(String bot_id, String channel_id, RequestCustomKeyboard requestCustomKeyboard) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/messages").build();
         JSONObject json = new JSONObject();
         MessageKeyboard messageKeyboard = new MessageKeyboard();

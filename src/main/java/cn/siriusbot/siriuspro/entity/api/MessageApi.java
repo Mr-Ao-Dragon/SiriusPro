@@ -26,7 +26,7 @@ public interface MessageApi {
      * 有关主动消息审核，可以通过 Intents 中审核事件 MESSAGE_AUDIT 返回 MessageAudited 对象获取结果。
      * 如传入event_id和msg_id其中一个，此条消息视为被动消息
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人ID
      * @param channel_id 子频道ID
      * @param content    要发送的消息内容
      * @param image_Url  图片Url
@@ -34,28 +34,28 @@ public interface MessageApi {
      * @param event_id   事件ID
      * @return 消息对象
      */
-    public abstract Tuple<Message,String> sendMessage(Bot bot, String channel_id, String content, String image_Url, String msg_id, String event_id);
+    public abstract Tuple<Message,String> sendMessage(String bot_id, String channel_id, String content, String image_Url, String msg_id, String event_id);
 
     /**
      * 获取指定子频道的指定消息详情
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人ID
      * @param channel_id 子频道ID
      * @param message_id 消息ID
      * @return 返回消息对象
      */
-    public abstract Tuple<Message,String> getMessageById(Bot bot, String channel_id, String message_id);
+    public abstract Tuple<Message,String> getMessageById(String bot_id, String channel_id, String message_id);
 
     /**
      * 发送引用消息
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人ID
      * @param channel_id 子频道ID
      * @param content 消息内容
      * @param reference  引用消息对象
      * @return 返回消息对象
      */
-    public abstract Tuple<Message,String> sendReferenceMessage(Bot bot, String channel_id, String content, MessageReference reference);
+    public abstract Tuple<Message,String> sendReferenceMessage(String bot_id, String channel_id, String content, MessageReference reference);
 
     /**
      * 发送markdown消息(富文本)
@@ -65,14 +65,14 @@ public interface MessageApi {
      * 消息体中所包含的URL需要报备并通过验证，方可使用。
      * 如传入event_id和msg_id其中一个，此条消息视为被动消息
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人ID
      * @param channel_id 子频道ID
      * @param msg_id     消息id
      * @param event_id   事件ID
      * @param markdown   markdown对象
      * @return 返回消息对象
      */
-    public abstract Tuple<Message,String> sendMarkdownMessage(Bot bot, String channel_id, String msg_id, String event_id, MessageMarkdown markdown);
+    public abstract Tuple<Message,String> sendMarkdownMessage(String bot_id, String channel_id, String msg_id, String event_id, MessageMarkdown markdown);
 
     /**
      * 用于撤回子频道 channel_id 下的消息 message_id。
@@ -82,13 +82,13 @@ public interface MessageApi {
      * 公域机器人暂不支持申请，仅私域机器人可用，选择私域机器人后默认开通。
      * 注意: 开通后需要先将机器人从频道移除，然后重新添加，方可生效
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人ID
      * @param channel_id 子频道ID
      * @param message_id 消息ID
      * @param hidetip    是否隐藏删除消息后的小灰条
      * @return 撤回结果
      */
-    public abstract Boolean deleteMessageById(Bot bot, String channel_id, String message_id, boolean hidetip);
+    public abstract Boolean deleteMessageById(String bot_id, String channel_id, String message_id, boolean hidetip);
 
     /**
      * 通过指定 ark 字段发送模板消息。
@@ -96,30 +96,30 @@ public interface MessageApi {
      * 调用前需要先申请消息模板，这一步会得到一个模板 id，在请求时填在 ark.template_id 上。
      * 发送成功之后，会触发一个创建消息的事件。
      * 如传入event_id和msg_id其中一个，此条消息视为被动消息
-     * @param bot 传入机器人对象
+     * @param bot_id 传入机器人ID
      * @param channel_id 子频道ID
      * @param ark ark消息对象
      * @param msg_id 消息id
      * @param event_id 事件ID
      * @return 消息对象
      */
-    public abstract Tuple<Message,String> sendArkMessage(Bot bot, String channel_id, MessageArk ark, String msg_id, String event_id);
+    public abstract Tuple<Message,String> sendArkMessage(String bot_id, String channel_id, MessageArk ark, String msg_id, String event_id);
 
     /**
      * 发送embed模板消息
      * 如传入event_id和msg_id其中一个，此条消息视为被动消息
-     * @param bot 传入机器人对象
+     * @param bot_id 传入机器人ID
      * @param channel_id 子频道ID
      * @param embed embed消息对象
      * @param msg_id 消息id
      * @param event_id 事件id
      * @return 消息对象
      */
-    public abstract Tuple<Message,String> sendEmbedMessage(Bot bot, String channel_id, MessageEmbed embed, String msg_id, String event_id);
+    public abstract Tuple<Message,String> sendEmbedMessage(String bot_id, String channel_id, MessageEmbed embed, String msg_id, String event_id);
 
     /**
      * 发送图文消息
-     * @param bot 传入机器人对象
+     * @param bot_id 传入机器人ID
      * @param channel_id 子频道ID
      * @param content 消息内容
      * @param image_path 本地图片路径
@@ -127,14 +127,14 @@ public interface MessageApi {
      * @param event_id 事件ID
      * @return 消息对象
      */
-    public abstract Tuple<Message,String> sendImageAndTextMessage(Bot bot,String channel_id,String content,String image_path,String msg_id,String event_id);
+    public abstract Tuple<Message,String> sendImageAndTextMessage(String bot_id,String channel_id,String content,String image_path,String msg_id,String event_id);
 
     /**
      * 发送自定义按钮模板对象
-     * @param bot 传入机器人对象
+     * @param bot_id 传入机器人ID
      * @param channel_id 子频道ID
      * @param requestCustomKeyboard 自定义按钮请求对象
      * @return 返回消息对象
      */
-    public abstract Tuple<Message,String> sendCustomInLineKeyword(Bot bot, String channel_id, RequestCustomKeyboard requestCustomKeyboard);
+    public abstract Tuple<Message,String> sendCustomInLineKeyword(String bot_id, String channel_id, RequestCustomKeyboard requestCustomKeyboard);
 }

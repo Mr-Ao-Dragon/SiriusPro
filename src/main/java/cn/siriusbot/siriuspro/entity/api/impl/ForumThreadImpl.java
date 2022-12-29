@@ -19,14 +19,14 @@ public class ForumThreadImpl implements ForumApi {
      * 获取指定论坛子频道的帖子列表
      * 仅私域可用
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人对象ID
      * @param channel_id 子频道ID
      * @return 帖子列表对象
      */
     @SneakyThrows
     @Override
-    public Tuple<ThreadList,String> getThreadsByChannelId(Bot bot, String channel_id) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<ThreadList,String> getThreadsByChannelId(String bot_id, String channel_id) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/threads").build();
         String data = SiriusHttpUtils.getRequest(bot, request).body().string();
         ThreadList threadList = JSONObject.parseObject(data, ThreadList.class);
@@ -40,15 +40,15 @@ public class ForumThreadImpl implements ForumApi {
      * 该接口用于获取子频道下的帖子列表。
      * 仅私域可用
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人对象ID
      * @param channel_id 子频道ID
      * @param thread_id  帖子ID
      * @return 帖子详情对象
      */
     @SneakyThrows
     @Override
-    public Tuple<ForumThread,String> getThreadInfo(Bot bot, String channel_id, String thread_id) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<ForumThread,String> getThreadInfo(String bot_id, String channel_id, String thread_id) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/threads/" + thread_id).build();
         String data = SiriusHttpUtils.getRequest(bot, request).body().string();
         JSONObject json = JSONObject.parseObject(data);
@@ -61,7 +61,7 @@ public class ForumThreadImpl implements ForumApi {
     /**
      * 发表帖子
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人对象ID
      * @param channel_id 子频道ID
      * @param title      帖子标题
      * @param content    帖子内容
@@ -70,8 +70,8 @@ public class ForumThreadImpl implements ForumApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<createThread,String> postThread(Bot bot, String channel_id, String title, String content, Integer format) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<createThread,String> postThread(String bot_id, String channel_id, String title, String content, Integer format) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/threads").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();
@@ -89,14 +89,14 @@ public class ForumThreadImpl implements ForumApi {
      * 删除帖子
      * 仅私域可用
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人对象ID
      * @param channel_id 子频道ID
      * @param thread_id  帖子ID
      * @return 操作结果
      */
     @Override
-    public Boolean deleteThread(Bot bot, String channel_id, String thread_id) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Boolean deleteThread(String bot_id, String channel_id, String thread_id) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/threads/" + thread_id).build();
         return SiriusHttpUtils.deleteRequest(bot, request, null).code() == 204;
     }

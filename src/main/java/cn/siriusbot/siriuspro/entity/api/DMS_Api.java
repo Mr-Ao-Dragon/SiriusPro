@@ -20,12 +20,12 @@ public interface DMS_Api {
      * 机器人和用户存在共同频道才能创建私信会话。
      * 创建成功后，返回创建成功的频道 id ，子频道 id 和创建时间。
      *
-     * @param bot             传入机器人对象
+     * @param bot_id             传入机器人ID
      * @param recipient_id    接收者ID
      * @param source_guild_id 源频道ID
      * @return 私信会话对象
      */
-    public abstract Tuple<DMS,String>createDMS(Bot bot, String recipient_id, String source_guild_id);
+    public abstract Tuple<DMS,String>createDMS(String bot_id, String recipient_id, String source_guild_id);
 
     /**
      * 发送普通私信消息
@@ -37,7 +37,7 @@ public interface DMS_Api {
      * 私信场景下，被动消息没有条数限制
      * 传入msg_id或event_id其一，此条消息视为被动消息
      *
-     * @param bot       传入机器人对象
+     * @param bot_id       传入机器人ID
      * @param guild_id  私信场景下的私信会话id
      * @param content   要发送的消息内容
      * @param image_Url 图片Url
@@ -45,7 +45,7 @@ public interface DMS_Api {
      * @param event_id  事件ID
      * @return 消息对象
      */
-    public abstract Tuple<Message,String>  sendMessage(Bot bot, String guild_id, String content, String image_Url, String msg_id, String event_id);
+    public abstract Tuple<Message,String>  sendMessage(String bot_id, String guild_id, String content, String image_Url, String msg_id, String event_id);
 
 
     /**
@@ -58,13 +58,13 @@ public interface DMS_Api {
      * 私信场景下，被动消息没有条数限制
      * 传入msg_id或event_id其一，此条消息视为被动消息
      *
-     * @param bot       传入机器人对象
+     * @param bot_id       传入机器人ID
      * @param guild_id  私信场景下的私信会话ID
      * @param content   消息内容
      * @param reference 引用消息对象
      * @return 返回消息对象
      */
-    public abstract Tuple<Message,String>  sendReferenceMessage(Bot bot, String guild_id, String content, MessageReference reference);
+    public abstract Tuple<Message,String>  sendReferenceMessage(String bot_id, String guild_id, String content, MessageReference reference);
 
     /**
      * 发送markdown消息(富文本)
@@ -81,26 +81,26 @@ public interface DMS_Api {
      * 私信场景下，被动消息没有条数限制
      * 传入msg_id或event_id其一，此条消息视为被动消息
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人ID
      * @param guild_id 私信场景下的私信会话ID
      * @param msg_id     消息id
      * @param event_id   事件ID
      * @param markdown   markdown对象
      * @return 返回消息对象
      */
-    public abstract Tuple<Message,String>  sendMarkdownMessage(Bot bot, String guild_id, String msg_id, String event_id, MessageMarkdown markdown);
+    public abstract Tuple<Message,String>  sendMarkdownMessage(String bot_id, String guild_id, String msg_id, String event_id, MessageMarkdown markdown);
 
     /**
      * 用于撤回机器人发送的，指定私信会话消息。
      *
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人ID
      * @param guild_id 私信场景下的私信会话ID
      * @param message_id 消息ID
      * @param hidetip    是否隐藏删除消息后的小灰条
      * @return 撤回结果
      */
-    public abstract Boolean deleteMessageById(Bot bot, String guild_id, String message_id, boolean hidetip);
+    public abstract Boolean deleteMessageById(String bot_id, String guild_id, String message_id, boolean hidetip);
 
     /**
      * 通过指定 ark 字段发送模板消息。
@@ -109,32 +109,32 @@ public interface DMS_Api {
      * 发送成功之后，会触发一个创建消息的事件。
      * 如传入event_id和msg_id其中一个，此条消息视为被动消息
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人ID
      * @param guild_id 私信场景下私信会话ID
      * @param ark        ark消息对象
      * @param msg_id     消息id
      * @param event_id   事件ID
      * @return 消息对象
      */
-    public abstract Tuple<Message,String>  sendArkMessage(Bot bot, String guild_id, MessageArk ark, String msg_id, String event_id);
+    public abstract Tuple<Message,String>  sendArkMessage(String bot_id, String guild_id, MessageArk ark, String msg_id, String event_id);
 
     /**
      * 发送embed模板消息
      * 如传入event_id和msg_id其中一个，此条消息视为被动消息
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人ID
      * @param guild_id 私信场景下私信会话ID
      * @param embed      embed消息对象
      * @param msg_id     消息id
      * @param event_id   事件id
      * @return 消息对象
      */
-    public abstract Tuple<Message,String>  sendEmbedMessage(Bot bot, String guild_id, MessageEmbed embed, String msg_id, String event_id);
+    public abstract Tuple<Message,String>  sendEmbedMessage(String bot_id, String guild_id, MessageEmbed embed, String msg_id, String event_id);
 
     /**
      * 发送图文消息
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人ID
      * @param guild_id 私信场景下私信会话ID
      * @param content    消息内容
      * @param image_path 本地图片路径
@@ -142,5 +142,5 @@ public interface DMS_Api {
      * @param event_id   事件ID
      * @return 消息对象
      */
-    public abstract Tuple<Message,String> sendImageAndTextMessage(Bot bot, String guild_id, String content, String image_path, String msg_id, String event_id);
+    public abstract Tuple<Message,String> sendImageAndTextMessage(String bot_id, String guild_id, String content, String image_path, String msg_id, String event_id);
 }

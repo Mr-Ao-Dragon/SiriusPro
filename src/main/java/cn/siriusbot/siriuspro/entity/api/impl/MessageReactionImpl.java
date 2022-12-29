@@ -16,7 +16,7 @@ public class MessageReactionImpl implements MessageReactionApi {
     /**
      * 拉取表情表态用户列表
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人对象ID
      * @param channel_id 子频道ID
      * @param message_id 消息ID
      * @param type       表情类型
@@ -27,8 +27,8 @@ public class MessageReactionImpl implements MessageReactionApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<ReactionReply,String> getReactionUsers(Bot bot, String channel_id, String message_id, Integer type, String id, String cookie, Integer limit) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Tuple<ReactionReply,String> getReactionUsers(String bot_id, String channel_id, String message_id, Integer type, String id, String cookie, Integer limit) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request;
         if(cookie==null){
             request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "/reactions/" + type + "/" + id + "?limit=" + limit).build();
@@ -46,7 +46,7 @@ public class MessageReactionImpl implements MessageReactionApi {
     /**
      * 删除机器人对指定消息的表态
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人对象ID
      * @param channel_id 子频道ID
      * @param message_id 消息ID
      * @param type       表情类型，参考EmojiType
@@ -55,8 +55,8 @@ public class MessageReactionImpl implements MessageReactionApi {
      */
     @SneakyThrows
     @Override
-    public Boolean deleteReactionForMessageId(Bot bot, String channel_id, String message_id, Integer type, String id) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Boolean deleteReactionForMessageId(String bot_id, String channel_id, String message_id, Integer type, String id) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "/reactions/" + type + "/" + id).build();
         return SiriusHttpUtils.deleteRequest(bot, request,null).code() == 204;
     }
@@ -64,7 +64,7 @@ public class MessageReactionImpl implements MessageReactionApi {
     /**
      * 发表表情表态
      *
-     * @param bot        传入机器人对象
+     * @param bot_id        传入机器人对象ID
      * @param channel_id 子频道ID
      * @param message_id 消息ID
      * @param type       表情类型，参考EmojiType
@@ -72,8 +72,8 @@ public class MessageReactionImpl implements MessageReactionApi {
      * @return 操作结果
      */
     @Override
-    public Boolean addReaction(Bot bot, String channel_id, String message_id, Integer type, String id) {
-        bot = BotManager.getBotByBotId(bot.getBotId());
+    public Boolean addReaction(String bot_id, String channel_id, String message_id, Integer type, String id) {
+        Bot bot = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "/reactions/" + type + "/" + id).build();
         return SiriusHttpUtils.putRequest(bot, request, RequestBody.create(MediaType.parse("application/json;text/plain"), "")).code() == 204;
     }
