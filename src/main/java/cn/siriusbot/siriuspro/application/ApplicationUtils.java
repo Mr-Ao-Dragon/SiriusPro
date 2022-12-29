@@ -30,7 +30,6 @@ public class ApplicationUtils {
     public void showApp(){
     }
     public static void initAppPath(){
-        System.out.println(appsPath);
         if(!appsPathExist(appsPath)){
             createAppsPath(appsPath);
         }

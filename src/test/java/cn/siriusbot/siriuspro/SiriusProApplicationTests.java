@@ -15,7 +15,4 @@ import java.util.Map;
 @MapperScan("cn.siriusbot.siriuspro.admin")
 class SiriusProApplicationTests {
 
-
-
-
 }
