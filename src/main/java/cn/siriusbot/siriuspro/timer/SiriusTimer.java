@@ -1,12 +1,14 @@
 package cn.siriusbot.siriuspro.timer;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
 public class SiriusTimer extends Timer {

@@ -1,6 +1,6 @@
 package cn.siriusbot.siriuspro.websocket;
 
-import cn.siriusbot.siriuspro.bot.Bot;
+import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.message.MessageManager;
 import com.alibaba.fastjson.JSONObject;
 import org.java_websocket.client.WebSocketClient;
@@ -10,10 +10,10 @@ import org.java_websocket.handshake.ServerHandshake;
 import java.net.URI;
 
 public class SiriusWebSocketClient extends WebSocketClient {
-    Bot bot;
-    public SiriusWebSocketClient(Bot bot, URI serverUri) {
+    SiriusBotClient siriusBotClient;
+    public SiriusWebSocketClient(SiriusBotClient siriusBotClient, URI serverUri) {
         super(serverUri);
-        this.bot = bot;
+        this.siriusBotClient = siriusBotClient;
     }
     public SiriusWebSocketClient(){
 
@@ -26,8 +26,8 @@ public class SiriusWebSocketClient extends WebSocketClient {
     @Override
     public void onMessage(String s) {
         JSONObject json = JSONObject.parseObject(s);
-        json.put("bot_id",bot.getBotId());
-        MessageManager.messageHandle(bot.getBotId(), json.toJSONString());
+        json.put("bot_id", siriusBotClient.getInfo().getBotId());
+        MessageManager.messageHandle(siriusBotClient.getInfo().getBotId(), json.toJSONString());
     }
 
     @Override

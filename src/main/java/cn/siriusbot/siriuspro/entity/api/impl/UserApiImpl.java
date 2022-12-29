@@ -1,6 +1,6 @@
 package cn.siriusbot.siriuspro.entity.api.impl;
 
-import cn.siriusbot.siriuspro.bot.Bot;
+import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.api.UserApi;
 import cn.siriusbot.siriuspro.entity.pojo.Guild;
@@ -23,9 +23,9 @@ public class UserApiImpl implements UserApi {
     @SneakyThrows
     @Override
     public Tuple<User,String> getRobotInfo(String bot_id) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "users/@me").build();
-        Response response = SiriusHttpUtils.getRequest(bot, request);
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "users/@me").build();
+        Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();
         User user = JSONObject.parseObject(data, User.class);
         user.setBot(true);
@@ -47,9 +47,9 @@ public class UserApiImpl implements UserApi {
     @SneakyThrows
     @Override
     public Tuple<List<Guild>,String>  getGuildList(String bot_id, String before, String after, int limit) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl()).build();
-        String path = bot.getOpenUrl() + "users/@me/guilds";
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl()).build();
+        String path = siriusBotClient.getSocket().getOpenUrl() + "users/@me/guilds";
         try {
             if (before != null) {
                 request = request.newBuilder().url(path + "?before=" + before + "&limit=" + limit).build();
@@ -61,7 +61,7 @@ public class UserApiImpl implements UserApi {
         } catch (Exception e) {
             request = request.newBuilder().url(path + "?limit=" + limit).build();
         }
-        Response response = SiriusHttpUtils.getRequest(bot, request);
+        Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();
         List<Guild> guildList = JSONObject.parseObject(data, List.class);
         Tuple<List<Guild>,String> tuple = new Tuple<>();

@@ -1,6 +1,5 @@
 package cn.siriusbot.siriuspro.webapi.pojo;
 
-import cn.siriusbot.siriuspro.bot.Bot;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

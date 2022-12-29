@@ -1,6 +1,5 @@
 package cn.siriusbot.siriuspro.entity.api;
 
-import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.entity.pojo.PinsMessage;
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
 

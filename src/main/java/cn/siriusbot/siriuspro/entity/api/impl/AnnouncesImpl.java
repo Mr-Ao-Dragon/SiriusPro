@@ -1,6 +1,6 @@
 package cn.siriusbot.siriuspro.entity.api.impl;
 
-import cn.siriusbot.siriuspro.bot.Bot;
+import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.api.AnnouncesApi;
 import cn.siriusbot.siriuspro.entity.pojo.announces.Announces;
@@ -13,9 +13,11 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class AnnouncesImpl implements AnnouncesApi {
     /**
      * 创建频道公告
@@ -36,14 +38,14 @@ public class AnnouncesImpl implements AnnouncesApi {
     @SneakyThrows
     @Override
     public Tuple<Announces,String> createGuildAnnounces(String bot_id, String guild_id, String message_id, String channel_id) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/announces").build();
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/announces").build();
         MediaType mediaType = MediaType.parse("application/json;text/plain");
         JSONObject json = new JSONObject();
         json.put("message_id", message_id);
         json.put("channel_id", channel_id);
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.postRequest(bot, request, body);
+        Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
         String data = response.body().string();
         Tuple<Announces,String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Announces.class)).setSecond(data);
@@ -63,9 +65,9 @@ public class AnnouncesImpl implements AnnouncesApi {
      */
     @Override
     public Boolean deleteAnnouncesByGuildId(String bot_id, String guild_id, String message_id) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/announces/" + message_id).build();
-        Response response = SiriusHttpUtils.deleteRequest(bot, request, null);
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/announces/" + message_id).build();
+        Response response = SiriusHttpUtils.deleteRequest(siriusBotClient, request, null);
         return response.code() == 204;
     }
 
@@ -79,14 +81,14 @@ public class AnnouncesImpl implements AnnouncesApi {
     @SneakyThrows
     @Override
     public Tuple<Announces,String> createGuildRecommend_Channels(String bot_id, String guild_id, Integer announces_type, List<RecommendChannel> recommendChannels) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl()+"guilds/"+guild_id+"/announces").build();
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl()+"guilds/"+guild_id+"/announces").build();
         MediaType mediaType = MediaType.parse("application/json;text/plain");
         JSONObject json = new JSONObject();
         json.put("recommend_channels",recommendChannels);
         json.put("announces_type",announces_type);
         RequestBody body = RequestBody.create(mediaType,json.toJSONString());
-        Response response = SiriusHttpUtils.postRequest(bot, request, body);
+        Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
         String data = response.body().string();
         Tuple<Announces,String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Announces.class)).setSecond(data);

@@ -1,6 +1,6 @@
 package cn.siriusbot.siriuspro.entity.api.impl;
 
-import cn.siriusbot.siriuspro.bot.Bot;
+import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.api.ForumApi;
 import cn.siriusbot.siriuspro.entity.pojo.forum.responseObj.ThreadList;
@@ -26,9 +26,9 @@ public class ForumThreadImpl implements ForumApi {
     @SneakyThrows
     @Override
     public Tuple<ThreadList,String> getThreadsByChannelId(String bot_id, String channel_id) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/threads").build();
-        String data = SiriusHttpUtils.getRequest(bot, request).body().string();
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/threads").build();
+        String data = SiriusHttpUtils.getRequest(siriusBotClient, request).body().string();
         ThreadList threadList = JSONObject.parseObject(data, ThreadList.class);
         Tuple<ThreadList,String> tuple = new Tuple<>();
         tuple.setFirst(threadList).setSecond(data);
@@ -48,9 +48,9 @@ public class ForumThreadImpl implements ForumApi {
     @SneakyThrows
     @Override
     public Tuple<ForumThread,String> getThreadInfo(String bot_id, String channel_id, String thread_id) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/threads/" + thread_id).build();
-        String data = SiriusHttpUtils.getRequest(bot, request).body().string();
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/threads/" + thread_id).build();
+        String data = SiriusHttpUtils.getRequest(siriusBotClient, request).body().string();
         JSONObject json = JSONObject.parseObject(data);
         ForumThread forumThread = json.getObject("thread", ForumThread.class);
         Tuple<ForumThread,String> tuple = new Tuple<>();
@@ -71,15 +71,15 @@ public class ForumThreadImpl implements ForumApi {
     @SneakyThrows
     @Override
     public Tuple<createThread,String> postThread(String bot_id, String channel_id, String title, String content, Integer format) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/threads").build();
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/threads").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();
         json.put("title", title);
         json.put("content", content);
         json.put("format", format);
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        String data = SiriusHttpUtils.putRequest(bot, request, body).body().string();
+        String data = SiriusHttpUtils.putRequest(siriusBotClient, request, body).body().string();
         Tuple<createThread,String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, createThread.class)).setSecond(data);
         return tuple;
@@ -96,9 +96,9 @@ public class ForumThreadImpl implements ForumApi {
      */
     @Override
     public Boolean deleteThread(String bot_id, String channel_id, String thread_id) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/threads/" + thread_id).build();
-        return SiriusHttpUtils.deleteRequest(bot, request, null).code() == 204;
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/threads/" + thread_id).build();
+        return SiriusHttpUtils.deleteRequest(siriusBotClient, request, null).code() == 204;
     }
 
 }

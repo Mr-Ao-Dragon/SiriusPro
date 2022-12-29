@@ -1,6 +1,6 @@
 package cn.siriusbot.siriuspro.entity.api.impl;
 
-import cn.siriusbot.siriuspro.bot.Bot;
+import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.api.ApiPermissionApi;
 import cn.siriusbot.siriuspro.entity.pojo.apipermission.APIPermission;
@@ -30,15 +30,15 @@ public class APIPermissionImpl implements ApiPermissionApi {
     @SneakyThrows
     @Override
     public Tuple<ApiPermissionDemand,String> createApiGrantLink(String bot_id, String guild_id, String channel_id, ApiPermissionDemandIdentify api_identify, String desc) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl()+"guilds/"+guild_id+"/api_permission/demand").build();
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl()+"guilds/"+guild_id+"/api_permission/demand").build();
         JSONObject json = new JSONObject();
         MediaType mediaType = MediaType.parse("application/json;text/plain");
         json.put("channel_id",channel_id);
         json.put("api_identify",api_identify);
         json.put("desc",desc);
         RequestBody body = RequestBody.create(mediaType,json.toJSONString());
-        String data = SiriusHttpUtils.postRequest(bot, request, body).body().string();
+        String data = SiriusHttpUtils.postRequest(siriusBotClient, request, body).body().string();
         Tuple<ApiPermissionDemand,String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data,ApiPermissionDemand.class)).setSecond(data);
         return tuple;
@@ -54,9 +54,9 @@ public class APIPermissionImpl implements ApiPermissionApi {
     @SneakyThrows
     @Override
     public Tuple<List<APIPermission>,String> getAPIPermissions(String bot_id, String guild_id) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl()+"guilds/"+guild_id+"/api_permission").build();
-        String data = SiriusHttpUtils.getRequest(bot,request).body().string();
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl()+"guilds/"+guild_id+"/api_permission").build();
+        String data = SiriusHttpUtils.getRequest(siriusBotClient,request).body().string();
         JSONObject json = JSONObject.parseObject(data);
         Tuple<List<APIPermission>,String> tuple = new Tuple<>();
         tuple.setFirst( json.getObject("apis",List.class)).setSecond(data);

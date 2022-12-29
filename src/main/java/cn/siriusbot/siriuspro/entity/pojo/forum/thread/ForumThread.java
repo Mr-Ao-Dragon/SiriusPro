@@ -1,21 +1,8 @@
 package cn.siriusbot.siriuspro.entity.pojo.forum.thread;
 
 
-import cn.siriusbot.siriuspro.bot.Bot;
-import cn.siriusbot.siriuspro.bot.BotManager;
-import cn.siriusbot.siriuspro.entity.api.ForumApi;
-import cn.siriusbot.siriuspro.entity.pojo.forum.responseObj.ThreadList;
-import cn.siriusbot.siriuspro.entity.pojo.forum.responseObj.createThread;
-import cn.siriusbot.siriuspro.entity.temp.Tuple;
-import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
-import com.alibaba.fastjson.JSONObject;
-
 import lombok.Data;
-import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
-import okhttp3.MediaType;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 
 /**
  * 主题对象

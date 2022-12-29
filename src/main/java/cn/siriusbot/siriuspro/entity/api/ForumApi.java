@@ -1,6 +1,5 @@
 package cn.siriusbot.siriuspro.entity.api;
 
-import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.entity.pojo.forum.responseObj.ThreadList;
 import cn.siriusbot.siriuspro.entity.pojo.forum.responseObj.createThread;
 import cn.siriusbot.siriuspro.entity.pojo.forum.thread.ForumThread;

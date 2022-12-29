@@ -1,7 +1,6 @@
 package cn.siriusbot.siriuspro.entity.api;
 
 
-import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.entity.pojo.apipermission.APIPermission;
 import cn.siriusbot.siriuspro.entity.pojo.apipermission.ApiPermissionDemand;
 import cn.siriusbot.siriuspro.entity.pojo.apipermission.ApiPermissionDemandIdentify;

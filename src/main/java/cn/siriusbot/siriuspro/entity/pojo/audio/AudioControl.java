@@ -1,17 +1,7 @@
 package cn.siriusbot.siriuspro.entity.pojo.audio;
 
-import cn.siriusbot.siriuspro.bot.Bot;
-import cn.siriusbot.siriuspro.bot.BotManager;
-import cn.siriusbot.siriuspro.entity.api.AudioApi;
-import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
-import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
-import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
-import okhttp3.MediaType;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 /**
  * 语音对象

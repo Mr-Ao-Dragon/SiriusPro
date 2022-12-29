@@ -1,6 +1,6 @@
 package cn.siriusbot.siriuspro.entity.api.impl;
 
-import cn.siriusbot.siriuspro.bot.Bot;
+import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.api.AudioApi;
 import cn.siriusbot.siriuspro.entity.pojo.audio.AudioControl;
@@ -25,15 +25,15 @@ public class AudioControlImpl implements AudioApi {
     @SneakyThrows
     @Override
     public Boolean audioControl(String bot_id, String channel_id, AudioControl audioControl) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl()+"channels/"+channel_id+"/audio").build();
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl()+"channels/"+channel_id+"/audio").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();
         json.put("audio_url",audioControl.getAudio_url());
         json.put("text",audioControl.getText());
         json.put("status",audioControl.getStatus());
         RequestBody body = RequestBody.create(mediaType,json.toJSONString());
-        Response response = SiriusHttpUtils.postRequest(bot, request, body);
+        Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
         System.out.println(response.body().string());
         return false;
     }
@@ -48,9 +48,9 @@ public class AudioControlImpl implements AudioApi {
     @SneakyThrows
     @Override
     public Boolean singStart(String bot_id, String channel_id) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl()+"channels/"+channel_id+"/mic").build();
-        Response response = SiriusHttpUtils.putRequest(bot, request, RequestBody.create(MediaType.parse("text/plain;application/json"), ""));
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl()+"channels/"+channel_id+"/mic").build();
+        Response response = SiriusHttpUtils.putRequest(siriusBotClient, request, RequestBody.create(MediaType.parse("text/plain;application/json"), ""));
         return  response.code()==200;
     }
 
@@ -64,9 +64,9 @@ public class AudioControlImpl implements AudioApi {
     @SneakyThrows
     @Override
     public Boolean singEnd(String bot_id, String channel_id) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl()+"channels/"+channel_id+"/mic").build();
-        Response response = SiriusHttpUtils.deleteRequest(bot, request,null);
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl()+"channels/"+channel_id+"/mic").build();
+        Response response = SiriusHttpUtils.deleteRequest(siriusBotClient, request,null);
         return  response.code()==200;
     }
 }

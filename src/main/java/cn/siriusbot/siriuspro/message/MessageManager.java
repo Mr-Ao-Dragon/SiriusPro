@@ -2,7 +2,7 @@ package cn.siriusbot.siriuspro.message;
 
 
 import cn.siriusbot.siriuspro.application.ApplicationManager;
-import cn.siriusbot.siriuspro.bot.Bot;
+import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.pojo.User;
 import cn.siriusbot.siriuspro.message.AudioLiveChannelEvent.AudioLiveChannelMemberEvent;
@@ -26,6 +26,7 @@ import com.alibaba.fastjson.JSONObject;
 
 
 import java.util.Date;
+import java.util.Objects;
 
 public class MessageManager {
     /**
@@ -36,7 +37,7 @@ public class MessageManager {
      */
     public static void messageHandle(String botId, String message) {
         System.out.println(message);
-        Bot bot = BotManager.getBotByBotId(botId);
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(botId);
         JSONObject json = JSONObject.parseObject(message);
         int code = json.getInteger("op");
         switch (code) {
@@ -45,13 +46,13 @@ public class MessageManager {
                 messageEventHandle(event, message);
                 break;
             case 10:
-                if (bot.getSession_id() != "" && bot.getSession_id() != null) {
-                    bot.getWebSocketClient().send(WebSocketUtils.getReconnectPack(bot));
+                if (!Objects.equals(siriusBotClient.getSocket().getSession_id(), "") && siriusBotClient.getSocket().getSession_id() != null) {
+                    siriusBotClient.getWebSocketClient().send(WebSocketUtils.getReconnectPack(siriusBotClient));
                     return;
                 }
                 JSONObject dObject = json.getJSONObject("d");
-                bot.setHeartBeat(dObject.getInteger("heartbeat_interval"));
-                bot.getWebSocketClient().send(WebSocketUtils.getAuthPack(bot));
+                siriusBotClient.getSocket().setHeartBeat(dObject.getInteger("heartbeat_interval"));
+                siriusBotClient.getWebSocketClient().send(WebSocketUtils.getAuthPack(siriusBotClient));
                 break;
             case 7:
                 WebSocketUtils.Reconnect(botId);
@@ -70,124 +71,124 @@ public class MessageManager {
     public static void messageEventHandle(String event_Type, String message) {
         JSONObject json = JSONObject.parseObject(message);
         JSONObject dObject = json.getJSONObject("d");
-        Bot bot = BotManager.getBotByBotId(json.getString("bot_id"));
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(json.getString("bot_id"));
         switch (event_Type) {
             /**
              * 初始化事件
              */
             case "READY":
                 JSONObject userObject = dObject.getJSONObject("user");
-                bot.setUser(new User()
+                siriusBotClient.setUser(new User()
                         .setUserName(userObject.getString("username"))
                         .setBot(true)
                         .setId(userObject.getString("id")));
-                bot.setS(json.getInteger("s"))
+                siriusBotClient.getSocket().setS(json.getInteger("s"))
                         .setSession_id(dObject.getString("session_id"))
-                        .setHeartBeatTimer(new SiriusTimer(new HeartBeatTask(bot.getBotId())))
-                        .setSendHeartBeat(new HeartBeatTask(bot.getBotId()));
+                        .setHeartBeatTimer(new SiriusTimer(new HeartBeatTask(siriusBotClient.getInfo().getBotId())))
+                        .setSendHeartBeat(new HeartBeatTask(siriusBotClient.getInfo().getBotId()));
                 //发送心跳包
-                bot.getHeartBeatTimer().start(new Date(), bot.getHeartBeat());
-                int index = BotManager.getIdByBotId(bot.getBotId());
-                BotManager.botVector.put(index, bot);
+                siriusBotClient.getSocket().getHeartBeatTimer().start(new Date(), siriusBotClient.getSocket().getHeartBeat());
+                int index = BotManager.getIdByBotId(siriusBotClient.getInfo().getBotId());
+                BotManager.botVector.put(index, siriusBotClient);
                 break;
             case "RESUMED":
-                WebSocketUtils.Resume(bot.getBotId());
+                WebSocketUtils.Resume(siriusBotClient.getInfo().getBotId());
                 break;
 
             case "GUILD_CREATE":
                 /**
                  * 机器人加入频道事件
                  */
-                ApplicationManager.GuildCreateEventPush(bot.getBotId(),JSONObject.parseObject(message, GuildEventInfo.class));
+                ApplicationManager.GuildCreateEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, GuildEventInfo.class));
                 break;
 
             case "GUILD_UPDATE":
                 /**
                  * 频道信息更改事件
                  */
-                ApplicationManager.GuildUpdateEventPush(bot.getBotId(),JSONObject.parseObject(message, GuildEventInfo.class));
+                ApplicationManager.GuildUpdateEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, GuildEventInfo.class));
                 break;
 
             case "GUILD_DELETE":
                 /**
                  * 频道解散或机器人被移除事件
                  */
-                ApplicationManager.GuildDeleteEventPush(bot.getBotId(),JSONObject.parseObject(message, GuildEventInfo.class));
+                ApplicationManager.GuildDeleteEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, GuildEventInfo.class));
                 break;
             case "CHANNEL_CREATE":
                 /**
                  * 子频道创建事件
                  */
-                ApplicationManager.ChannelCreateEventPush(bot.getBotId(),JSONObject.parseObject(message, ChannelEventInfo.class));
+                ApplicationManager.ChannelCreateEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, ChannelEventInfo.class));
                 break;
             case "CHANNEL_UPDATE":
                 /**
                  * 子频道更新事件
                  */
-                ApplicationManager.ChannelUpdateEventPush(bot.getBotId(),JSONObject.parseObject(message, ChannelEventInfo.class));
+                ApplicationManager.ChannelUpdateEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, ChannelEventInfo.class));
                 break;
             case "CHANNEL_DELETE":
                 /**
                  * 子频道删除事件
                  */
-                ApplicationManager.ChannelDeleteEventPush(bot.getBotId(),JSONObject.parseObject(message, ChannelEventInfo.class));
+                ApplicationManager.ChannelDeleteEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, ChannelEventInfo.class));
                 break;
 
             case "GUILD_MEMBER_ADD":
                 /**
                  * 频道成员加入事件
                  */
-                ApplicationManager.GuildMemberAddEventPush(bot.getBotId(),JSONObject.parseObject(message,GuildMemberCreateEventInfo.class));
+                ApplicationManager.GuildMemberAddEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message,GuildMemberCreateEventInfo.class));
                 break;
             case "GUILD_MEMBER_UPDATE":
                 /**
                  * 频道成员信息更改事件
                  */
-                ApplicationManager.GuildMemberUpdateEventPush(bot.getBotId(),JSONObject.parseObject(message,GuildMemberEventInfo.class));
+                ApplicationManager.GuildMemberUpdateEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message,GuildMemberEventInfo.class));
                 break;
             case "GUILD_MEMBER_REMOVE":
                 /**
                  * 频道成员退出或被移除事件
                  */
-                ApplicationManager.GuildMemberRemoveEventPush(bot.getBotId(),JSONObject.parseObject(message,GuildMemberEventInfo.class));
+                ApplicationManager.GuildMemberRemoveEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message,GuildMemberEventInfo.class));
                 break;
             case "MESSAGE_CREATE":
                 /**
                  * 私域消息被创建事件
                  */
-                ApplicationManager.PrivateMessageCreateEventPush(bot.getBotId(),JSONObject.parseObject(message, PrivateDomainMessageInfo.class));
+                ApplicationManager.PrivateMessageCreateEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, PrivateDomainMessageInfo.class));
                 break;
             case "MESSAGE_DELETE":
                 /**
                  * 私域消息被撤回事件
                  */
-                ApplicationManager.PrivateMessageDeleteEventPush(bot.getBotId(),JSONObject.parseObject(message, PrivateDomainMessageInfo.class));
+                ApplicationManager.PrivateMessageDeleteEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, PrivateDomainMessageInfo.class));
                 break;
 
             case  "MESSAGE_REACTION_ADD":
                 /**
                  * 表情表态添加事件
                  */
-                ApplicationManager.MessageReactionAddEventPush(bot.getBotId(),JSONObject.parseObject(message, ReactionEventInfo.class));
+                ApplicationManager.MessageReactionAddEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, ReactionEventInfo.class));
                 break;
             case "MESSAGE_REACTION_REMOVE":
                 /**
                  * 表情表态移除事件
                  */
-                ApplicationManager.MessageReactionRemoveEventPush(bot.getBotId(),JSONObject.parseObject(message, ReactionEventInfo.class));
+                ApplicationManager.MessageReactionRemoveEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, ReactionEventInfo.class));
                 break;
 
             case "DIRECT_MESSAGE_CREATE":
                 /**
                  * 收到用户私信消息事件
                  */
-                ApplicationManager.DirectMessageCreateEventPush(bot.getBotId(),JSONObject.parseObject(message, DirectMessageEventInfo.class));
+                ApplicationManager.DirectMessageCreateEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, DirectMessageEventInfo.class));
                 break;
             case "DIRECT_MESSAGE_DELETE":
                 /**
                  * 私信消息撤回事件
                  */
-                ApplicationManager.DirectMessageDeleteEventPush(bot.getBotId(),JSONObject.parseObject(message, DirectMessageEventInfo.class));
+                ApplicationManager.DirectMessageDeleteEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, DirectMessageEventInfo.class));
                 break;
 
                 //公域论坛事件
@@ -195,44 +196,44 @@ public class MessageManager {
                 /**
                  * 用户创建主题事件
                  */
-                ApplicationManager.OpenForumThreadCreateEventPush(bot.getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
+                ApplicationManager.OpenForumThreadCreateEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
                 break;
             case "OPEN_FORUM_THREAD_UPDATE":
                 /**
                  * 用户更新主题事件
                  */
-                ApplicationManager.OpenForumThreadUpdateEventPush(bot.getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
+                ApplicationManager.OpenForumThreadUpdateEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
                 break;
             case "OPEN_FORUM_THREAD_DELETE":
                 /**
                  * 用户删除主题事件
                  */
-                ApplicationManager.OpenForumThreadDeleteEventPush(bot.getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
+                ApplicationManager.OpenForumThreadDeleteEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
                 break;
             case "OPEN_FORUM_POST_CREATE":
                 /**
                  * 用户创建帖子事件
                  */
-                ApplicationManager.OpenForumPostCreateEventPush(bot.getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
+                ApplicationManager.OpenForumPostCreateEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
                 break;
             case "OPEN_FORUM_POST_DELETE":
                 /**
                  * 用户删除帖子事件
                  */
-                ApplicationManager.OpenForumPostDeleteEventPush(bot.getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
+                ApplicationManager.OpenForumPostDeleteEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
                 break;
             case "OPEN_FORUM_REPLY_CREATE":
                 /**
                  * 用户回复评论事件
                  */
-                ApplicationManager.OpenForumReplyCreateEventPush(bot.getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
+                ApplicationManager.OpenForumReplyCreateEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
                 break;
 
             case "OPEN_FORUM_REPLY_DELETE":
                 /**
                  * 用户删除评论事件
                  */
-                ApplicationManager.OpenForumReplyDeleteEventPush(bot.getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
+                ApplicationManager.OpenForumReplyDeleteEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
                 break;
 
                 //音视频/直播子频道成员进出事件
@@ -240,21 +241,21 @@ public class MessageManager {
                 /**
                  * 当用户进入音视频/直播子频道事件
                  */
-                ApplicationManager.AudioORLiveChannelMemberEnterEventPush(bot.getBotId(),JSONObject.parseObject(message, AudioLiveChannelMemberEvent.class));
+                ApplicationManager.AudioORLiveChannelMemberEnterEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, AudioLiveChannelMemberEvent.class));
                 break;
 
             case "AUDIO_OR_LIVE_CHANNEL_MEMBER_EXIT":
                 /**
                  * 当用户离开音视频/直播子频道事件
                  */
-                ApplicationManager.AudioORLiveChannelMemberExitEventPush(bot.getBotId(),JSONObject.parseObject(message, AudioLiveChannelMemberEvent.class));
+                ApplicationManager.AudioORLiveChannelMemberExitEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, AudioLiveChannelMemberEvent.class));
                 break;
                 //互动事件，多为按钮等回调事件
             case "INTERACTION_CREATE":
                 /**
                  * 互动消息创建事件
                  */
-                ApplicationManager.InterActonCreateEventPush(bot.getBotId(),JSONObject.parseObject(message, InterActionEvent.class));
+                ApplicationManager.InterActonCreateEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, InterActionEvent.class));
                 break;
 
                 //消息审核事件,一般为发送主动消息
@@ -262,14 +263,14 @@ public class MessageManager {
                 /**
                  * 消息审核通过事件
                  */
-                ApplicationManager.MessageAuditPassEventPush(bot.getBotId(),JSONObject.parseObject(message,AuditMessageEvent.class));
+                ApplicationManager.MessageAuditPassEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message,AuditMessageEvent.class));
                 break;
 
             case "MESSAGE_AUDIT_REJECT":
                 /**
                  * 消息审核不通过事件
                  */
-                ApplicationManager.MessageAuditRejectEventPush(bot.getBotId(),JSONObject.parseObject(message,AuditMessageEvent.class));
+                ApplicationManager.MessageAuditRejectEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message,AuditMessageEvent.class));
                 break;
 
                 //私域论坛事件
@@ -277,49 +278,49 @@ public class MessageManager {
                 /**
                  * 用户创建主题事件
                  */
-                ApplicationManager.ForumThreadCreateEventPush(bot.getBotId(),JSONObject.parseObject(message,ForumEvent.class));
+                ApplicationManager.ForumThreadCreateEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message,ForumEvent.class));
                 break;
             case "FORUM_THREAD_UPDATE":
                 /**
                  * 用户更新主题事件
                  */
-                ApplicationManager.ForumThreadUpdateEventPush(bot.getBotId(),JSONObject.parseObject(message,ForumEvent.class));
+                ApplicationManager.ForumThreadUpdateEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message,ForumEvent.class));
                 break;
             case "FORUM_THREAD_DELETE":
                 /**
                  * 用户删除主题事件
                  */
-                ApplicationManager.ForumThreadDeleteEventPush(bot.getBotId(),JSONObject.parseObject(message,ForumEvent.class));
+                ApplicationManager.ForumThreadDeleteEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message,ForumEvent.class));
                 break;
             case "FORUM_POST_CREATE":
                 /**
                  * 用户创建帖子事件
                  */
-                ApplicationManager.ForumPostCreateEventPush(bot.getBotId(),JSONObject.parseObject(message,ForumEvent.class));
+                ApplicationManager.ForumPostCreateEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message,ForumEvent.class));
                 break;
             case "FORUM_POST_DELETE":
                 /**
                  * 用户删除帖子事件
                  */
-                ApplicationManager.ForumPostDeleteEventPush(bot.getBotId(),JSONObject.parseObject(message,ForumEvent.class));
+                ApplicationManager.ForumPostDeleteEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message,ForumEvent.class));
                 break;
             case "FORUM_REPLY_CREATE":
                 /**
                  * 用户回复评论事件
                  */
-                ApplicationManager.ForumReplyCreateEventPush(bot.getBotId(),JSONObject.parseObject(message,ForumEvent.class));
+                ApplicationManager.ForumReplyCreateEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message,ForumEvent.class));
                 break;
             case "FORUM_REPLY_DELETE":
                 /**
                  * 用户删除评论事件
                  */
-                ApplicationManager.ForumReplyDeleteEventPush(bot.getBotId(),JSONObject.parseObject(message,ForumEvent.class));
+                ApplicationManager.ForumReplyDeleteEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message,ForumEvent.class));
                 break;
             case "FORUM_PUBLISH_AUDIT_RESULT":
                 /**
                  * 用户发表审核通过事件
                  */
-                ApplicationManager.ForumPublishAuditResultEventPush(bot.getBotId(),JSONObject.parseObject(message,ForumEvent.class));
+                ApplicationManager.ForumPublishAuditResultEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message,ForumEvent.class));
                 break;
 
                 //音频事件
@@ -327,38 +328,38 @@ public class MessageManager {
                 /**
                  * 音频开始播放事件
                  */
-                ApplicationManager.AudioStartEventPush(bot.getBotId(),JSONObject.parseObject(message, AudioMessageEvent.class));
+                ApplicationManager.AudioStartEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, AudioMessageEvent.class));
                 break;
             case "AUDIO_FINISH":
                 /**
                  * 音频播放结束事件
                  */
-                ApplicationManager.AudioFinishEventPush(bot.getBotId(),JSONObject.parseObject(message, AudioMessageEvent.class));
+                ApplicationManager.AudioFinishEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, AudioMessageEvent.class));
                 break;
             case "AUDIO_ON_MIC":
                 /**
                  * 机器人上麦事件
                  */
-                ApplicationManager.AudioOnMicEventPush(bot.getBotId(),JSONObject.parseObject(message, AudioMessageEvent.class));
+                ApplicationManager.AudioOnMicEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, AudioMessageEvent.class));
                 break;
             case "AUDIO_OFF_MIC":
                 /**
                  * 音频下麦事件
                  */
-                ApplicationManager.AudioOffMicEventPush(bot.getBotId(),JSONObject.parseObject(message, AudioMessageEvent.class));
+                ApplicationManager.AudioOffMicEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, AudioMessageEvent.class));
                 break;
                 //公域消息事件
             case "AT_MESSAGE_CREATE":
                 /**
                  * 收到@机器人消息事件
                  */
-                ApplicationManager.PublicMessageCreateEventPush(bot.getBotId(),JSONObject.parseObject(message,PublicMessageEvent.class));
+                ApplicationManager.PublicMessageCreateEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message,PublicMessageEvent.class));
                 break;
             case "PUBLIC_MESSAGE_DELETE":
                 /**
                  * 消息删除事件
                  */
-                ApplicationManager.PublicMessageDeleteEventPush(bot.getBotId(),JSONObject.parseObject(message,PublicMessageEvent.class));
+                ApplicationManager.PublicMessageDeleteEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message,PublicMessageEvent.class));
                 break;
         }
     }

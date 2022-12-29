@@ -1,6 +1,6 @@
 package cn.siriusbot.siriuspro.entity.api.impl;
 
-import cn.siriusbot.siriuspro.bot.Bot;
+import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.api.DMS_Api;
 import cn.siriusbot.siriuspro.entity.pojo.DMS;
@@ -32,14 +32,14 @@ public class DMSImpl implements DMS_Api {
     @SneakyThrows
     @Override
     public Tuple<DMS,String> createDMS(String bot_id, String recipient_id, String source_guild_id) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "users/@me/dms").build();
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "users/@me/dms").build();
         MediaType mediaType = MediaType.parse("application/json;text/plain");
         JSONObject json = new JSONObject();
         json.put("recipient_id", recipient_id);
         json.put("source_guild_id", source_guild_id);
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.postRequest(bot, request, body);
+        Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
         String data = response.body().string();
         Tuple<DMS,String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, DMS.class)).setSecond(data);
@@ -68,8 +68,8 @@ public class DMSImpl implements DMS_Api {
     @SneakyThrows
     @Override
     public Tuple<Message,String> sendMessage(String bot_id, String guild_id, String content, String image_Url, String msg_id, String event_id) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "dms/" + guild_id + "/messages").build();
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
         if (guild_id == null || guild_id == "")
             return null;
         MediaType mediaType = MediaType.parse("text/plain;application/json");
@@ -80,7 +80,7 @@ public class DMSImpl implements DMS_Api {
         json.put("msg_id", msg_id);
         json.put("event_id", event_id);
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.postRequest(bot, request, body);
+        Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
         String data = response.body().string();
         Tuple<Message,String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data,Message.class)).setSecond(data);
@@ -107,15 +107,15 @@ public class DMSImpl implements DMS_Api {
     @SneakyThrows
     @Override
     public Tuple<Message,String> sendReferenceMessage(String bot_id, String guild_id, String content, MessageReference reference) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "dms/" + guild_id + "/messages").build();
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();
         json.put("content", content);
         json.put("message_reference", reference);
         json.put("msg_id", reference.getMessage_id());
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.postRequest(bot, request, body);
+        Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
         String data = response.body().string();
         Tuple<Message,String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data,Message.class)).setSecond(data);
@@ -148,15 +148,15 @@ public class DMSImpl implements DMS_Api {
     @SneakyThrows
     @Override
     public Tuple<Message,String>  sendMarkdownMessage(String bot_id, String guild_id, String msg_id, String event_id, MessageMarkdown markdown) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "dms/" + guild_id + "/messages").build();
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();
         json.put("markdown", markdown);
         json.put("msg_id", msg_id);
         json.put("event_id", event_id);
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.postRequest(bot, request, body);
+        Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
         String data = response.body().string();
         Tuple<Message,String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
@@ -176,9 +176,9 @@ public class DMSImpl implements DMS_Api {
     @SneakyThrows
     @Override
     public Boolean deleteMessageById(String bot_id, String guild_id, String message_id, boolean hidetip) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "dms/" + guild_id + "/messages/" + message_id + "?hidetip=" + hidetip).build();
-        Response response = SiriusHttpUtils.deleteRequest(bot, request, null);
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages/" + message_id + "?hidetip=" + hidetip).build();
+        Response response = SiriusHttpUtils.deleteRequest(siriusBotClient, request, null);
         return response.code() == 200;
     }
 
@@ -200,15 +200,15 @@ public class DMSImpl implements DMS_Api {
     @SneakyThrows
     @Override
     public  Tuple<Message,String> sendArkMessage(String bot_id, String guild_id, MessageArk ark, String msg_id, String event_id) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "dms/" + guild_id + "/messages").build();
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();
         json.put("ark", ark);
         json.put("msg_id", msg_id);
         json.put("event_id", event_id);
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.postRequest(bot, request, body);
+        Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
         String data = response.body().string();
         Tuple<Message,String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
@@ -230,15 +230,15 @@ public class DMSImpl implements DMS_Api {
     @SneakyThrows
     @Override
     public Tuple<Message,String> sendEmbedMessage(String bot_id, String guild_id, MessageEmbed embed, String msg_id, String event_id) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "dms/" + guild_id + "/messages").build();
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();
         json.put("embed", embed);
         json.put("msg_id", msg_id);
         json.put("event_id", event_id);
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.postRequest(bot, request, body);
+        Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
         String data = response.body().string();
         Tuple<Message,String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
@@ -260,8 +260,8 @@ public class DMSImpl implements DMS_Api {
     @SneakyThrows
     @Override
     public Tuple<Message,String> sendImageAndTextMessage(String bot_id, String guild_id, String content, String image_path, String msg_id, String event_id) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "dms/" + guild_id + "/messages").build();
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
 
         MediaType mediaType = MediaType.parse("multipart/form-data");
         File file = new File(image_path);
@@ -270,7 +270,7 @@ public class DMSImpl implements DMS_Api {
                 .addFormDataPart("content", content)
                 .addFormDataPart("msg_id", msg_id)
                 .addFormDataPart("file_image", file.getAbsolutePath(), RequestBody.create(mediaType, file)).build();
-        Response response = SiriusHttpUtils.postRequest(bot, request, body, "multipart/form-data");
+        Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body, "multipart/form-data");
         String data = response.body().string();
         Tuple<Message,String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);

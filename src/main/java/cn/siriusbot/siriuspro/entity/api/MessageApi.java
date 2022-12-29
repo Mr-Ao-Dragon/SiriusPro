@@ -1,7 +1,6 @@
 package cn.siriusbot.siriuspro.entity.api;
 
 
-import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.entity.pojo.message.Message;
 import cn.siriusbot.siriuspro.entity.pojo.message.MessageMarkdown;
 import cn.siriusbot.siriuspro.entity.pojo.message.MessageReference;

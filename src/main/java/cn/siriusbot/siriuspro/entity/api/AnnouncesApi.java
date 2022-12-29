@@ -1,7 +1,6 @@
 package cn.siriusbot.siriuspro.entity.api;
 
 
-import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.entity.pojo.announces.Announces;
 import cn.siriusbot.siriuspro.entity.pojo.announces.RecommendChannel;
 import cn.siriusbot.siriuspro.entity.temp.Tuple;

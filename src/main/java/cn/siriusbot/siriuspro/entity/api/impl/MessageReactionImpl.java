@@ -1,6 +1,6 @@
 package cn.siriusbot.siriuspro.entity.api.impl;
 
-import cn.siriusbot.siriuspro.bot.Bot;
+import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.api.MessageReactionApi;
 import cn.siriusbot.siriuspro.entity.pojo.emoji.ReactionReply;
@@ -28,14 +28,14 @@ public class MessageReactionImpl implements MessageReactionApi {
     @SneakyThrows
     @Override
     public Tuple<ReactionReply,String> getReactionUsers(String bot_id, String channel_id, String message_id, Integer type, String id, String cookie, Integer limit) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
         Request request;
         if(cookie==null){
-            request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "/reactions/" + type + "/" + id + "?limit=" + limit).build();
+            request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "/reactions/" + type + "/" + id + "?limit=" + limit).build();
         }else{
-            request   = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "/reactions/" + type + "/" + id + "?cookie=" + cookie + "&limit=" + limit).build();
+            request   = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "/reactions/" + type + "/" + id + "?cookie=" + cookie + "&limit=" + limit).build();
         }
-        String data = SiriusHttpUtils.getRequest(bot, request).body().string();
+        String data = SiriusHttpUtils.getRequest(siriusBotClient, request).body().string();
 
         Tuple<ReactionReply,String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data,ReactionReply.class)).setSecond(data);
@@ -56,9 +56,9 @@ public class MessageReactionImpl implements MessageReactionApi {
     @SneakyThrows
     @Override
     public Boolean deleteReactionForMessageId(String bot_id, String channel_id, String message_id, Integer type, String id) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "/reactions/" + type + "/" + id).build();
-        return SiriusHttpUtils.deleteRequest(bot, request,null).code() == 204;
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "/reactions/" + type + "/" + id).build();
+        return SiriusHttpUtils.deleteRequest(siriusBotClient, request,null).code() == 204;
     }
 
     /**
@@ -73,8 +73,8 @@ public class MessageReactionImpl implements MessageReactionApi {
      */
     @Override
     public Boolean addReaction(String bot_id, String channel_id, String message_id, Integer type, String id) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "/reactions/" + type + "/" + id).build();
-        return SiriusHttpUtils.putRequest(bot, request, RequestBody.create(MediaType.parse("application/json;text/plain"), "")).code() == 204;
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "/reactions/" + type + "/" + id).build();
+        return SiriusHttpUtils.putRequest(siriusBotClient, request, RequestBody.create(MediaType.parse("application/json;text/plain"), "")).code() == 204;
     }
 }

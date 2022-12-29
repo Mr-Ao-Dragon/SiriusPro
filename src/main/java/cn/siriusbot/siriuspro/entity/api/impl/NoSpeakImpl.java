@@ -1,6 +1,6 @@
 package cn.siriusbot.siriuspro.entity.api.impl;
 
-import cn.siriusbot.siriuspro.bot.Bot;
+import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.api.NoSpeakApi;
 import cn.siriusbot.siriuspro.entity.pojo.NoSpeak;
@@ -27,14 +27,14 @@ public class NoSpeakImpl implements NoSpeakApi {
      */
     @Override
     public Boolean noSpeakByUser_id(String bot_id, String guild_id, String user_id, String mute_end_timestamp, String mute_seconds) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/members/" + user_id + "/mute").build();
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/members/" + user_id + "/mute").build();
         JSONObject json = new JSONObject();
         json.put("mute_end_timestamp", mute_end_timestamp);
         json.put("mute_seconds", mute_seconds);
         MediaType mediaType = MediaType.parse("application/json;text/plain");
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.patchRequest(bot, request, body);
+        Response response = SiriusHttpUtils.patchRequest(siriusBotClient, request, body);
         return response.code() == 204;
     }
 
@@ -51,15 +51,15 @@ public class NoSpeakImpl implements NoSpeakApi {
     @SneakyThrows
     @Override
     public Tuple<NoSpeak,String> noSpeakByUser_ids(String bot_id, String guild_id, List<String> user_ids, String mute_end_timestamp, String mute_seconds) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/mute").build();
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/mute").build();
         JSONObject json = new JSONObject();
         MediaType mediaType = MediaType.parse("application/json;text/plain");
         json.put("mute_end_timestamp", mute_end_timestamp);
         json.put("mute_seconds", mute_seconds);
         json.put("user_ids", user_ids);
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.patchRequest(bot, request, body);
+        Response response = SiriusHttpUtils.patchRequest(siriusBotClient, request, body);
         String data = response.body().string();
         Tuple<NoSpeak,String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, NoSpeak.class)).setSecond(data);
@@ -76,14 +76,14 @@ public class NoSpeakImpl implements NoSpeakApi {
      */
     @Override
     public Boolean nodeSpeakAll(String bot_id, String guild_id, String mute_end_timestamp, String mute_seconds) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
         MediaType mediaType = MediaType.parse("application/json;text/plain");
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/mute").build();
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/mute").build();
         JSONObject json = new JSONObject();
         json.put("mute_end_timestamp", mute_end_timestamp);
         json.put("mute_seconds", mute_seconds);
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.patchRequest(bot, request, body);
+        Response response = SiriusHttpUtils.patchRequest(siriusBotClient, request, body);
         return response.code() == 204;
     }
 }

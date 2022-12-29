@@ -1,6 +1,6 @@
 package cn.siriusbot.siriuspro.entity.api.impl;
 
-import cn.siriusbot.siriuspro.bot.Bot;
+import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.api.PinsMessageApi;
 import cn.siriusbot.siriuspro.entity.pojo.PinsMessage;
@@ -25,11 +25,11 @@ public class PinsMessageImpl implements PinsMessageApi {
     @SneakyThrows
     @Override
     public Tuple<PinsMessage, String> addPinsMessage(String bot_id, String channel_id, String message_id) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/pins/" + message_id).build();
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/pins/" + message_id).build();
         MediaType mediaType = MediaType.parse("application/json;text/plain");
         RequestBody body = RequestBody.create(mediaType, "");
-        Response response = SiriusHttpUtils.putRequest(bot, request, body);
+        Response response = SiriusHttpUtils.putRequest(siriusBotClient, request, body);
         String data = response.body().string();
         PinsMessage pinsMessage = JSONObject.parseObject(data, PinsMessage.class);
         Tuple<PinsMessage, String> tuple = new Tuple<>();
@@ -48,10 +48,10 @@ public class PinsMessageImpl implements PinsMessageApi {
     @SneakyThrows
     @Override
     public Tuple<PinsMessage,String> getPinsMessage(String bot_id, String channel_id) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/pins").build();
-        String data = SiriusHttpUtils.getRequest(bot, request).body().string();
-        PinsMessage pinsMessage = JSONObject.parseObject(SiriusHttpUtils.getRequest(bot, request).body().string(), PinsMessage.class);
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/pins").build();
+        String data = SiriusHttpUtils.getRequest(siriusBotClient, request).body().string();
+        PinsMessage pinsMessage = JSONObject.parseObject(SiriusHttpUtils.getRequest(siriusBotClient, request).body().string(), PinsMessage.class);
         Tuple<PinsMessage,String> tuple = new Tuple<>();
         tuple.setFirst(pinsMessage).setSecond(data);
         return tuple;
@@ -68,8 +68,8 @@ public class PinsMessageImpl implements PinsMessageApi {
      */
     @Override
     public Boolean deletePinsMessage(String bot_id, String channel_id, String message_id) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/pins/" + message_id).build();
-        return SiriusHttpUtils.deleteRequest(bot, request, null).code() == 204;
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/pins/" + message_id).build();
+        return SiriusHttpUtils.deleteRequest(siriusBotClient, request, null).code() == 204;
     }
 }

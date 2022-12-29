@@ -1,6 +1,6 @@
 package cn.siriusbot.siriuspro.entity.api.impl;
 
-import cn.siriusbot.siriuspro.bot.Bot;
+import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.api.GuildApi;
 import cn.siriusbot.siriuspro.entity.pojo.Guild;
@@ -20,9 +20,9 @@ public class GuildImpl implements GuildApi {
      */
     @SneakyThrows
     public Tuple<Guild,String> getGuildInfo(String bot_id, String guild_id) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl()+"guilds/"+guild_id).build();
-        Response response = SiriusHttpUtils.getRequest(bot, request);
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl()+"guilds/"+guild_id).build();
+        Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data;
         data = response.body().string();
         Tuple<Guild,String> tuple = new Tuple<>();

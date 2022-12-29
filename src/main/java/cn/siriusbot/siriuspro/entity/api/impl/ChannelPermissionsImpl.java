@@ -1,6 +1,6 @@
 package cn.siriusbot.siriuspro.entity.api.impl;
 
-import cn.siriusbot.siriuspro.bot.Bot;
+import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.api.ChannelPermissionsApi;
 import cn.siriusbot.siriuspro.entity.pojo.ChannelPermissions;
@@ -28,9 +28,9 @@ public class ChannelPermissionsImpl implements ChannelPermissionsApi {
     @SneakyThrows
     @Override
     public Tuple<ChannelPermissions,String> getChannelPermissionsByUser_id(String bot_id, String channel_id, String user_id) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/members/" + user_id + "/permissions").build();
-        Response response = SiriusHttpUtils.getRequest(bot, request);
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/members/" + user_id + "/permissions").build();
+        Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();
         Tuple<ChannelPermissions,String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, ChannelPermissions.class)).setSecond(data);
@@ -54,14 +54,14 @@ public class ChannelPermissionsImpl implements ChannelPermissionsApi {
     @SneakyThrows
     @Override
     public Boolean modifyChannelPermissionsByRole_id(String bot_id, String channel_id, String role_id, String add, String remove) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/roles/" + role_id + "/permissions").build();
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/roles/" + role_id + "/permissions").build();
         MediaType mediaType = MediaType.parse("application/json");
         JSONObject json = new JSONObject();
         json.put("add", add);
         json.put("remove", remove);
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.putRequest(bot, request, body);
+        Response response = SiriusHttpUtils.putRequest(siriusBotClient, request, body);
         return response.code() == 204;
     }
 
@@ -81,14 +81,14 @@ public class ChannelPermissionsImpl implements ChannelPermissionsApi {
      */
     @Override
     public Boolean modifyChannelPermissionsByUser_id(String bot_id, String channel_id, String user_id, String add, String remove) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/members/" + user_id + "/permissions").build();
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/members/" + user_id + "/permissions").build();
         MediaType mediaType = MediaType.parse("application/json");
         JSONObject json = new JSONObject();
         json.put("add", add);
         json.put("remove", remove);
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.putRequest(bot, request, body);
+        Response response = SiriusHttpUtils.putRequest(siriusBotClient, request, body);
         return response.code() == 204;
     }
 
@@ -106,9 +106,9 @@ public class ChannelPermissionsImpl implements ChannelPermissionsApi {
     @SneakyThrows
     @Override
     public Tuple<ChannelPermissions,String> getChannelPermissionsByRole_id(String bot_id, String channel_id, String role_id) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "channels/" + channel_id + "/roles/" + role_id + "/permissions").build();
-        Response response = SiriusHttpUtils.getRequest(bot, request);
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/roles/" + role_id + "/permissions").build();
+        Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();
         Tuple<ChannelPermissions,String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, ChannelPermissions.class)).setSecond(data);

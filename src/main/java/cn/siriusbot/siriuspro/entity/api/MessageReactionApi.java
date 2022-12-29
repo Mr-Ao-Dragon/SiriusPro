@@ -1,7 +1,6 @@
 package cn.siriusbot.siriuspro.entity.api;
 
 
-import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.entity.pojo.emoji.ReactionReply;
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
 

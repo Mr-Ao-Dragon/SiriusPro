@@ -1,6 +1,6 @@
 package cn.siriusbot.siriuspro.entity.api.impl;
 
-import cn.siriusbot.siriuspro.bot.Bot;
+import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.api.MemberApi;
 import cn.siriusbot.siriuspro.entity.pojo.member.Member;
@@ -29,11 +29,11 @@ public class MemberImpl implements MemberApi {
     @SneakyThrows
     @Override
     public Map<List<Member>,Object> getMemberList(String bot_id, String guild_id, String after, int limit) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
         if (after == null)
             after = "0";
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/members?after=" + after + "&limit=" + limit).build();
-        Response response = SiriusHttpUtils.getRequest(bot, request);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/members?after=" + after + "&limit=" + limit).build();
+        Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();
         List<Member> memberList = JSONObject.parseObject(data, List.class);
         Map<List<Member>,Object> map = new HashMap<>();
@@ -53,9 +53,9 @@ public class MemberImpl implements MemberApi {
     @SneakyThrows
     @Override
     public Map<Member,Object> getMemberInfo(String bot_id, String guild_id, String user_id) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/members/" + user_id).build();
-        Response response = SiriusHttpUtils.getRequest(bot, request);
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/members/" + user_id).build();
+        Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();
         Map<Member,Object> map = new HashMap<>();
         map.put(JSONObject.parseObject(data, Member.class),data);
@@ -75,9 +75,9 @@ public class MemberImpl implements MemberApi {
     @SneakyThrows
     @Override
     public Map<MemberQueryLimit,Object> getMemberListByRoleId(String bot_id, String guild_id, String role_id, String start_index, int limit) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/roles/" + role_id + "/members?start_index=" + start_index + "&limit=" + limit).build();
-        Response response = SiriusHttpUtils.getRequest(bot, request);
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/roles/" + role_id + "/members?start_index=" + start_index + "&limit=" + limit).build();
+        Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();
         MemberQueryLimit memberList = JSONObject.parseObject(data,MemberQueryLimit.class);
         Map<MemberQueryLimit,Object> map = new HashMap<>();
@@ -98,14 +98,14 @@ public class MemberImpl implements MemberApi {
     @SneakyThrows
     @Override
     public boolean deleteMemberByUserId(String bot_id, String guild_id, String user_id, boolean add_black, int delete_history_msg_days) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl() + "guilds/" + guild_id + "/members/" + user_id).build();
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/members/" + user_id).build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();
         json.put("add_blacklist", add_black);
         json.put("delete_history_msg_days", delete_history_msg_days);
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.deleteRequest(bot, request, body);
+        Response response = SiriusHttpUtils.deleteRequest(siriusBotClient, request, body);
         return response.code() == 204;
     }
 }

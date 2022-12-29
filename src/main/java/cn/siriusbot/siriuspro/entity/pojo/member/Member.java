@@ -1,19 +1,13 @@
 package cn.siriusbot.siriuspro.entity.pojo.member;
 
-import cn.siriusbot.siriuspro.bot.Bot;
-import cn.siriusbot.siriuspro.bot.BotManager;
-import cn.siriusbot.siriuspro.entity.api.MemberApi;
 import cn.siriusbot.siriuspro.entity.pojo.User;
 
 
 import lombok.Data;
-import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Data
 @Accessors(chain = true)

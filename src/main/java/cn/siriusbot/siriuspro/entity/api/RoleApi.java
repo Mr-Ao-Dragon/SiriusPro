@@ -1,7 +1,6 @@
 package cn.siriusbot.siriuspro.entity.api;
 
 
-import cn.siriusbot.siriuspro.bot.Bot;
 import cn.siriusbot.siriuspro.entity.pojo.Channel;
 import cn.siriusbot.siriuspro.entity.pojo.role.GuildRoleList;
 import cn.siriusbot.siriuspro.entity.pojo.role.NewRole;

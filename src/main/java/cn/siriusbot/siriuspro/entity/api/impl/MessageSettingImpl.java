@@ -1,6 +1,6 @@
 package cn.siriusbot.siriuspro.entity.api.impl;
 
-import cn.siriusbot.siriuspro.bot.Bot;
+import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.api.MessageSettingApi;
 import cn.siriusbot.siriuspro.entity.pojo.MessageSetting;
@@ -23,9 +23,9 @@ public class MessageSettingImpl implements MessageSettingApi {
     @SneakyThrows
     @Override
     public Tuple<MessageSetting,String> getMessageSettingInfo(String bot_id, String guild_id) {
-        Bot bot = BotManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(bot.getOpenUrl()+"guilds/"+guild_id+"/message/setting").build();
-        Response response = SiriusHttpUtils.getRequest(bot, request);
+        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl()+"guilds/"+guild_id+"/message/setting").build();
+        Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         Tuple<MessageSetting,String> tuple = new Tuple<>();
         String data = response.body().string();
         tuple.setFirst(JSONObject.parseObject(data,MessageSetting.class)).setSecond(data);
