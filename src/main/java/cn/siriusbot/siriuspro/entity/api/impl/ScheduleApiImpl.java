@@ -13,8 +13,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 
 import java.util.List;
-
-public class ScheduleApiImpl implements ScheduleApi {
+import org.springframework.stereotype.Component;
+@Component
+public class  ScheduleApiImpl implements ScheduleApi {
 
     /**
      * 获取日程列表

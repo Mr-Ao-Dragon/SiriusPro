@@ -17,8 +17,9 @@ import lombok.SneakyThrows;
 import okhttp3.*;
 
 import java.io.File;
-
-public class MessageImpl implements MessageApi {
+import org.springframework.stereotype.Component;
+@Component
+public class  MessageImpl implements MessageApi {
 
     /**
      * 用于向 channel_id 指定的子频道发送消息。

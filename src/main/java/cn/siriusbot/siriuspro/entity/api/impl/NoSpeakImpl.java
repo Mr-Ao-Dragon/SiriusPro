@@ -14,8 +14,9 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import java.util.List;
-
-public class NoSpeakImpl implements NoSpeakApi {
+import org.springframework.stereotype.Component;
+@Component
+public class  NoSpeakImpl implements NoSpeakApi {
     /**
      * 禁言指定成员
      * @param bot_id 传入机器人对象ID

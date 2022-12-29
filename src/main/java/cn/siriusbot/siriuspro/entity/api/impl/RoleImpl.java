@@ -15,8 +15,9 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
-public class RoleImpl implements RoleApi {
+import org.springframework.stereotype.Component;
+@Component
+public class  RoleImpl implements RoleApi {
     /**
      * 创建频道身份组
      *

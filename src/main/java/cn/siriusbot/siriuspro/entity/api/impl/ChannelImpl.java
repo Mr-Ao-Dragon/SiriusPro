@@ -12,10 +12,13 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-public class ChannelImpl implements ChannelApi {
+import org.springframework.stereotype.Component;
+@Component
+public class  ChannelImpl implements ChannelApi {
     /**
      * 获取子频道列表
      * @param bot_id 传入机器人对象ID

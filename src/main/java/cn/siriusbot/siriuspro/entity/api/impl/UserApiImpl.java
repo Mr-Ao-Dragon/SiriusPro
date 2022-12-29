@@ -12,9 +12,11 @@ import lombok.SneakyThrows;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import java.util.List;
 
-public class UserApiImpl implements UserApi {
+import java.util.List;
+import org.springframework.stereotype.Component;
+@Component
+public class  UserApiImpl implements UserApi {
     /**
      * 获取机器人基本信息
      * @return 返回Bot(机器人)对象
