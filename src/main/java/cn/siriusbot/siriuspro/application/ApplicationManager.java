@@ -1,5 +1,6 @@
 package cn.siriusbot.siriuspro.application;
 
+import cn.siriusbot.siriuspro.bot.BotApi;
 import cn.siriusbot.siriuspro.logger.SiriusLogger;
 import cn.siriusbot.siriuspro.message.AudioLiveChannelEvent.AudioLiveChannelMemberEvent;
 import cn.siriusbot.siriuspro.message.AudioMessageEvent.AudioMessageEvent;
@@ -16,6 +17,8 @@ import cn.siriusbot.siriuspro.message.OpenForumEvent.OpenForumEventInfo;
 import cn.siriusbot.siriuspro.message.PrivateDomainEvent.PrivateDomainMessageInfo;
 import cn.siriusbot.siriuspro.message.PublicMessageEvent.PublicMessageEvent;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.net.URL;
@@ -23,19 +26,26 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Objects;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+
+@Component
 public class ApplicationManager {
+
+    @Autowired
+    BotApi botApi;
+
+
     public static List<SiriusApplication> apps = new ArrayList<>();
 
     /**
      * 加载全部应用
      */
-    @SneakyThrows
-    public static void loadApps() {
+    public void loadApps() {
         File file = new File(ApplicationUtils.appsPath);
-        for (File appFile : file.listFiles()) {
+        for (File appFile : Objects.requireNonNull(file.listFiles())) {
             SiriusApplication app = getAppInstance(appFile);
             if (app != null) {
                 System.out.println(SiriusLogger.getFormatLogString("应用"+"["+app.appInfo().getAppName()+"-"+app.appInfo().getAppAuthor()+"]加载成功！",36,1));
@@ -52,7 +62,7 @@ public class ApplicationManager {
      * @return
      */
     @SneakyThrows
-    public static SiriusApplication getAppInstance(File app) {
+    public SiriusApplication getAppInstance(File app) {
 
         //获取类加载器
         URLClassLoader appClass = new URLClassLoader(new URL[]{new URL("file:" + app.getAbsolutePath())});
@@ -70,12 +80,13 @@ public class ApplicationManager {
                 //判断是否为天狼星应用
                 try {
                     aClass = appClass.loadClass(fileName);
-                    Object application = aClass.newInstance();
-                    if (application instanceof SiriusApplication) {
+                    Object o = aClass.newInstance();
+                    if (o instanceof SiriusApplication application) {
                         System.out.println(fileName);
-                        return  (SiriusApplication) application;
+                        application.SiriusAppInit(botApi);
+                        return  application;
                     }
-                } catch (Throwable e) {
+                } catch (Throwable ignored) {
 
                 }
 

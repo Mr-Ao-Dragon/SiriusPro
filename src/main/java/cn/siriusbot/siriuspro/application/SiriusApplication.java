@@ -1,5 +1,6 @@
 package cn.siriusbot.siriuspro.application;
 
+import cn.siriusbot.siriuspro.bot.BotApi;
 import cn.siriusbot.siriuspro.message.AudioLiveChannelEvent.AudioLiveChannelMemberEvent;
 import cn.siriusbot.siriuspro.message.AudioMessageEvent.AudioMessageEvent;
 import cn.siriusbot.siriuspro.message.AuditMessageEvent.AuditMessageEvent;
@@ -20,6 +21,10 @@ import cn.siriusbot.siriuspro.message.PublicMessageEvent.PublicMessageEvent;
  */
 public interface SiriusApplication {
 
+    /**
+     * 插件初始化
+     */
+    void SiriusAppInit(BotApi api);
 
     /**
      * 应用详情
