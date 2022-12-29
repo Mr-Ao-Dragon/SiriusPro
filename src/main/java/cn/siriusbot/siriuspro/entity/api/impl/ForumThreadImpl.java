@@ -13,8 +13,9 @@ import lombok.SneakyThrows;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-
-public class ForumThreadImpl implements ForumApi {
+import org.springframework.stereotype.Component;
+@Component
+public class  ForumThreadImpl implements ForumApi {
     /**
      * 获取指定论坛子频道的帖子列表
      * 仅私域可用

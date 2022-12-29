@@ -12,8 +12,9 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
-public class ChannelPermissionsImpl implements ChannelPermissionsApi {
+import org.springframework.stereotype.Component;
+@Component
+public class  ChannelPermissionsImpl implements ChannelPermissionsApi {
     /**
      * 获取子频道用户权限
      * 用于获取 子频道channel_id 下用户 user_id 的权限。

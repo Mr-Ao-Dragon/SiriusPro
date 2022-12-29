@@ -17,8 +17,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+
+import org.springframework.stereotype.Component;
 @Component
-public class AnnouncesImpl implements AnnouncesApi {
+public class  AnnouncesImpl implements AnnouncesApi {
     /**
      * 创建频道公告
      * 用于创建频道全局公告，公告类型分为 消息类型的频道公告 和 推荐子频道类型的频道公告 。

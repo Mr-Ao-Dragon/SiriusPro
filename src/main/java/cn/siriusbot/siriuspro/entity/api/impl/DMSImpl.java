@@ -16,8 +16,9 @@ import lombok.SneakyThrows;
 import okhttp3.*;
 
 import java.io.File;
-
-public class DMSImpl implements DMS_Api {
+import org.springframework.stereotype.Component;
+@Component
+public class  DMSImpl implements DMS_Api {
 
     /**
      * 创建私信会话

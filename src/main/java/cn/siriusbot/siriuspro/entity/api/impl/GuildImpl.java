@@ -11,7 +11,9 @@ import lombok.SneakyThrows;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class GuildImpl implements GuildApi {
+import org.springframework.stereotype.Component;
+@Component
+public class  GuildImpl implements GuildApi {
     /**
      * 获取频道详情
      * @param bot_id 传入机器人对象ID

@@ -16,8 +16,9 @@ import okhttp3.Response;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-public class MemberImpl implements MemberApi {
+import org.springframework.stereotype.Component;
+@Component
+public class  MemberImpl implements MemberApi {
     /**
      * 获取频道成员列表
      *

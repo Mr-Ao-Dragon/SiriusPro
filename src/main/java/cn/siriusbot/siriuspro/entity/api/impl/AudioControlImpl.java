@@ -11,8 +11,12 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.springframework.stereotype.Component;
 
-public class AudioControlImpl implements AudioApi {
+
+import org.springframework.stereotype.Component;
+@Component
+public class  AudioControlImpl implements AudioApi {
     /**
      * 音频控制 Api
      * 频接口：仅限音频类机器人才能使用，后续会根据机器人类型自动开通接口权限，现如需调用，需联系平台申请权限。

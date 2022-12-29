@@ -10,8 +10,9 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.SneakyThrows;
 import okhttp3.Request;
 import okhttp3.Response;
-
-public class MessageSettingImpl implements MessageSettingApi {
+import org.springframework.stereotype.Component;
+@Component
+public class  MessageSettingImpl implements MessageSettingApi {
     /**
      * 获取频道消息频率设置信息
      * 用于获取机器人在频道 guild_id 内的消息频率设置。

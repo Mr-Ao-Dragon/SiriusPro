@@ -11,8 +11,9 @@ import lombok.SneakyThrows;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-
-public class MessageReactionImpl implements MessageReactionApi {
+import org.springframework.stereotype.Component;
+@Component
+public class  MessageReactionImpl implements MessageReactionApi {
     /**
      * 拉取表情表态用户列表
      *

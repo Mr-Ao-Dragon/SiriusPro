@@ -13,10 +13,14 @@ import lombok.SneakyThrows;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-public class APIPermissionImpl implements ApiPermissionApi {
+
+import org.springframework.stereotype.Component;
+@Component
+public class  APIPermissionImpl implements ApiPermissionApi {
     /**
      * 创建频道Api接口权限，授权链接
      *

@@ -12,8 +12,9 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
-public class PinsMessageImpl implements PinsMessageApi {
+import org.springframework.stereotype.Component;
+@Component
+public class  PinsMessageImpl implements PinsMessageApi {
     /**
      * 添加精华消息
      *
