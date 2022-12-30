@@ -6,6 +6,7 @@ import cn.siriusbot.siriuspro.entity.api.AnnouncesApi;
 import cn.siriusbot.siriuspro.entity.pojo.announces.Announces;
 import cn.siriusbot.siriuspro.entity.pojo.announces.RecommendChannel;
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
+import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
 import lombok.SneakyThrows;

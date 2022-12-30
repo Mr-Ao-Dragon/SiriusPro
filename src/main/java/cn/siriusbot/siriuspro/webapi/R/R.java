@@ -18,7 +18,7 @@ public class R {
     /**
      * 请求状态码
      */
-    String code = "200";
+    int code = 200;
 
     /**
      * 请求结果
