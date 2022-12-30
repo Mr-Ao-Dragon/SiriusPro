@@ -1,6 +1,7 @@
 package cn.siriusbot.siriuspro;
 
 import cn.siriusbot.siriuspro.admin.dao.RobotMapper;
+import cn.siriusbot.siriuspro.bot.BotApi;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import com.alibaba.fastjson.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -14,5 +15,8 @@ import java.util.Map;
 @SpringBootTest
 @MapperScan("cn.siriusbot.siriuspro.admin")
 class SiriusProApplicationTests {
+
+    @Autowired
+    RobotMapper robotMapper;
 
 }

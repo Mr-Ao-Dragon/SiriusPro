@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@MapperScan("cn.siriusbot.siriuspro.admin")
+@MapperScan("cn.siriusbot.siriuspro.admin.dao")
 public class SiriusProApplication {
 
     public static void main(String[] args) {

@@ -40,10 +40,4 @@ public class DataSourceConfig {
         return dataSourceBuilder.build();
     }
 
-    @Bean
-    public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
-        MybatisSqlSessionFactoryBean factoryBean = new MybatisSqlSessionFactoryBean();
-        factoryBean.setDataSource(dataSource);
-        return factoryBean.getObject();
-    }
 }
