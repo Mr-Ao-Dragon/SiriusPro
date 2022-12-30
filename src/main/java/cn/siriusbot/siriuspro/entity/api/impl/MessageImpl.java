@@ -46,7 +46,7 @@ public class  MessageImpl implements MessageApi {
     public Tuple<Message,String> sendMessage(String bot_id, String channel_id, String content, String image_Url, String msg_id, String event_id) {
         SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages").build();
-        if (channel_id == null || channel_id == "")
+        if (channel_id == null || channel_id.equals(""))
             return null;
         MediaType mediaType = MediaType.parse("text/plain;application/json");
 

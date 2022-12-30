@@ -1,58 +1,51 @@
-package cn.siriusbot.siriuspro.message.DirectMessageEvent;
+package cn.siriusbot.siriuspro.message.PublicMessageEvent;
+
 
 import cn.siriusbot.siriuspro.entity.Op_User;
 import cn.siriusbot.siriuspro.entity.pojo.User;
+import cn.siriusbot.siriuspro.entity.pojo.member.Member;
 import cn.siriusbot.siriuspro.entity.pojo.message.Message;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.lang.reflect.Member;
+import java.util.List;
 
 /**
- * 私信消息事件详情对象
+ * 事件详情对象
  */
 @Data
 @Accessors(chain = true)
-public class DirectMessageDObject {
+public class PublicMessageEventDObject {
+
     /**
-     * 消息对象
+     * 被撤回的消息对象
      */
     private Message message;
 
     /**
-     * 操作人信息
+     * 操作人对象
      */
     private Op_User op_user;
 
     /**
-     * 私信来源频道ID
+     * 子频道消息排序
      */
-    private String src_guild_id;
+    private String seq_in_channel;
 
     /**
-     *  在子频道的消息排序
-     */
-     private String seq_in_channel;
-
-    /**
-     * 消息创建者
+     * 发送人用户信息
      */
     private User author;
 
     /**
-     * 私信会话ID
+     * 消息中被@的人
      */
-    private String guild_id;
+    private List<User> mentions;
 
     /**
-     * 成员对象
+     * 发送人成员信息
      */
     private Member member;
-
-    /**
-     * 是否为私信消息
-     */
-    private Boolean direct_message;
 
     /**
      * 消息ID
@@ -60,7 +53,7 @@ public class DirectMessageDObject {
     private String id;
 
     /**
-     * 私信会话关联的子频道ID
+     * 子频道ID
      */
     private String channel_id;
 
@@ -75,7 +68,7 @@ public class DirectMessageDObject {
     private Integer seq;
 
     /**
-     * 消息创建时间戳
+     * 消息创建时间
      */
     private String timestamp;
 }

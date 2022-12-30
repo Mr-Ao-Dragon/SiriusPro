@@ -1,4 +1,5 @@
-package cn.siriusbot.siriuspro.message.DirectMessageEvent;
+package cn.siriusbot.siriuspro.message.PrivateDomainEvent;
+
 
 import cn.siriusbot.siriuspro.entity.Op_User;
 import cn.siriusbot.siriuspro.entity.pojo.User;
@@ -9,58 +10,38 @@ import lombok.experimental.Accessors;
 import java.lang.reflect.Member;
 
 /**
- * 私信消息事件详情对象
+ * 私域D字段消息对象
  */
 @Data
 @Accessors(chain = true)
-public class DirectMessageDObject {
+public class PrivateDObject {
     /**
-     * 消息对象
+     * 子频道下消息排序
      */
-    private Message message;
+    private String seq_in_channel;
 
     /**
-     * 操作人信息
-     */
-    private Op_User op_user;
-
-    /**
-     * 私信来源频道ID
-     */
-    private String src_guild_id;
-
-    /**
-     *  在子频道的消息排序
-     */
-     private String seq_in_channel;
-
-    /**
-     * 消息创建者
+     * 操作人用户信息
      */
     private User author;
 
     /**
-     * 私信会话ID
+     * 频道ID
      */
     private String guild_id;
 
     /**
-     * 成员对象
+     * 操作人成员信息
      */
     private Member member;
 
     /**
-     * 是否为私信消息
-     */
-    private Boolean direct_message;
-
-    /**
-     * 消息ID
+     * 消息id
      */
     private String id;
 
     /**
-     * 私信会话关联的子频道ID
+     * 子频道ID
      */
     private String channel_id;
 
@@ -70,12 +51,22 @@ public class DirectMessageDObject {
     private String content;
 
     /**
-     * 消息排序
+     * 子频道下,消息排序
      */
     private Integer seq;
 
     /**
-     * 消息创建时间戳
+     * 事件时间戳
      */
     private String timestamp;
+
+    /**
+     * 被操作的消息对象
+     */
+    private Message message;
+
+    /**
+     * 操作人对象
+     */
+    private Op_User op_user;
 }

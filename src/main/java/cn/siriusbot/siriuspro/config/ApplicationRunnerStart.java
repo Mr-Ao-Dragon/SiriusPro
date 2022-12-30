@@ -28,7 +28,7 @@ public class ApplicationRunnerStart implements ApplicationRunner {
         manager.loadApps();
 
 
-        SiriusBotClient siriusBotClient = new SiriusBotClient("102004321", "VwUd3zkSBZIbLlWZOXNlhrBsZDCtn6Dn", BotToken.botType.PUBLIC_TYPE, false);
+        SiriusBotClient siriusBotClient = new SiriusBotClient("102035548", "mXpN8ABhF5CDxae9QmhWuvWB9Pb2bokf", BotToken.botType.PRIVATE_TYPE, false);
         BotManager.AuthBot(siriusBotClient);
         BotManager.loginBot(siriusBotClient.getInfo().getBotId());
     }

@@ -36,8 +36,8 @@ public class SiriusBotClient implements BotClient{
         this.token = new BotToken()
                 .setBotId(botId)
                 .setToken(token)
-                .setBotId(botId)
-                .setBotType(botType);
+                .setBotType(botType)
+                .setSandBox(sandBox);
     }
 
     @Override
