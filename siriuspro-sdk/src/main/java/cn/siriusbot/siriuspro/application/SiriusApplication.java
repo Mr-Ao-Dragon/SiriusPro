@@ -21,6 +21,10 @@ import cn.siriusbot.siriuspro.message.PublicMessageEvent.PublicMessageEvent;
  */
 public interface SiriusApplication {
 
+    default int versions(){
+        return 1;   // 版本号
+    }
+
     /**
      * 插件初始化
      */
