@@ -17,6 +17,7 @@ import cn.siriusbot.siriuspro.message.OpenForumEvent.OpenForumEventInfo;
 import cn.siriusbot.siriuspro.message.PrivateDomainEvent.PrivateDomainMessageInfo;
 import cn.siriusbot.siriuspro.message.PublicMessageEvent.PublicMessageEvent;
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +33,7 @@ import java.util.jar.JarFile;
 
 
 @Component
+@Log4j2
 public class ApplicationManager {
 
     @Autowired
@@ -63,9 +65,10 @@ public class ApplicationManager {
      */
     @SneakyThrows
     public SiriusApplication getAppInstance(File app) {
-
+        //获取当前线程类加载器
+        ClassLoader parent = Thread.currentThread().getContextClassLoader();  // 启动类加载器
         //获取类加载器
-        URLClassLoader appClass = new URLClassLoader(new URL[]{new URL("file:" + app.getAbsolutePath())});
+        URLClassLoader appClass = new URLClassLoader(new URL[]{new URL("file:" + app.getAbsolutePath())}, parent);
 
         JarFile jarFile = new JarFile(app.getAbsolutePath());
         Enumeration<JarEntry> entries = jarFile.entries();
@@ -86,8 +89,8 @@ public class ApplicationManager {
                         application.SiriusAppInit(botApi);
                         return  application;
                     }
-                } catch (Throwable ignored) {
-
+                } catch (Throwable e) {
+                    e.printStackTrace();
                 }
 
             }
