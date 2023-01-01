@@ -1,8 +1,10 @@
 package cn.siriusbot.siriuspro.websocket;
 
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
@@ -84,9 +86,22 @@ public class WebSocketServer {
         }
     }
 
+
+    public static void sendAll(String message) {
+        for (String s : webSocketMap.keySet()) {
+            try {
+                webSocketMap.get(s).sendMessage(message);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+
     /**
      * 实现服务器主动推送-string
      */
+    @Async
     public void sendMessage(String message) throws IOException {
         this.session.getBasicRemote().sendText(message);
     }
