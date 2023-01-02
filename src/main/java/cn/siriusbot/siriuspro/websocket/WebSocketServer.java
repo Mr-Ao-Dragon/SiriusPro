@@ -4,9 +4,9 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
@@ -31,6 +31,15 @@ public class WebSocketServer {
      */
     private String userId;
 
+    @Autowired
+    WebSocketServerPoll poll;
+
+    private static WebSocketServerPoll staticPoll = null;
+
+    public WebSocketServer() {
+        WebSocketServer.staticPoll = poll;
+    }
+
     @OnOpen
     public void onOpen(Session session, @PathParam("userId") String userId) {
         this.session = session;
@@ -41,7 +50,7 @@ public class WebSocketServer {
             WebSocketServer webSocketServer = webSocketMap.get(userId);
             webSocketServer.onClose();
         }
-        webSocketMap.put(userId, this);
+        poll.put(userId, this);
         log.info("用户登录:" + userId);
     }
 
@@ -54,7 +63,7 @@ public class WebSocketServer {
             try {
                 // 踢掉已经连接的人
                 this.session.close();
-                webSocketMap.remove(userId);
+                poll.remove(userId);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -88,20 +97,18 @@ public class WebSocketServer {
 
 
     public static void sendAll(String message) {
-        for (String s : webSocketMap.keySet()) {
-            try {
-                webSocketMap.get(s).sendMessage(message);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        if (staticPoll != null){
+            staticPoll.sendAll(message);
         }
     }
+
+
+
 
 
     /**
      * 实现服务器主动推送-string
      */
-    @Async
     public void sendMessage(String message) throws IOException {
         this.session.getBasicRemote().sendText(message);
     }
