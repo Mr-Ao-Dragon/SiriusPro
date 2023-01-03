@@ -1,5 +1,6 @@
 package cn.siriusbot.siriuspro.websocket;
 
+import cn.siriusbot.siriuspro.uitls.AppContextUtil;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.slf4j.Logger;
@@ -7,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
@@ -19,10 +22,6 @@ import java.util.concurrent.ConcurrentMap;
 @Log4j2
 public class WebSocketServer {
     /**
-     * concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。
-     */
-    private static final ConcurrentMap<String, WebSocketServer> webSocketMap = new ConcurrentHashMap<>();
-    /**
      * 与某个客户端的连接会话，需要通过它来给客户端发送数据
      */
     private Session session;
@@ -31,23 +30,20 @@ public class WebSocketServer {
      */
     private String userId;
 
-    @Autowired
     WebSocketServerPoll poll;
 
-    private static WebSocketServerPoll staticPoll = null;
 
-    public WebSocketServer() {
-        WebSocketServer.staticPoll = poll;
+    public WebSocketServer () {
+        this.poll = AppContextUtil.getBean(WebSocketServerPoll.class);
     }
 
     @OnOpen
     public void onOpen(Session session, @PathParam("userId") String userId) {
         this.session = session;
         this.userId = userId;
-
-        if (webSocketMap.containsKey(userId)) {
+        if (poll.getWebSocketMap().containsKey(userId)) {
             // 重新连接,踢掉上次的连接信息
-            WebSocketServer webSocketServer = webSocketMap.get(userId);
+            WebSocketServer webSocketServer = poll.getWebSocketMap().get(userId);
             webSocketServer.onClose();
         }
         poll.put(userId, this);
@@ -59,7 +55,7 @@ public class WebSocketServer {
      */
     @OnClose
     public void onClose() {
-        if (webSocketMap.containsKey(userId)) {
+        if (poll.getWebSocketMap().containsKey(userId)) {
             try {
                 // 踢掉已经连接的人
                 this.session.close();
@@ -86,20 +82,15 @@ public class WebSocketServer {
      */
     @OnError
     public void onError(Throwable error) {
-        try {
-            String errorMsg = "用户错误:" + userId + ",原因:" + error.getMessage();
-            sendMessage(errorMsg);
-            log.error(errorMsg);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String errorMsg = "用户错误:" + userId + ",原因:" + error.getMessage();
+        //sendMessage(errorMsg);
+        log.error(errorMsg);
     }
 
 
     public static void sendAll(String message) {
-        if (staticPoll != null){
-            staticPoll.sendAll(message);
-        }
+        WebSocketServerPoll staticPoll = AppContextUtil.getBean(WebSocketServerPoll.class);
+        staticPoll.sendAll(message);
     }
 
 
@@ -118,19 +109,6 @@ public class WebSocketServer {
      */
     public void sendMessage(Object message) throws EncodeException, IOException {
         this.session.getBasicRemote().sendObject(message);
-    }
-
-    /**
-     * 发送自定义消息
-     */
-    public static String sendInfo(String userId, String message) throws IOException {
-        if (webSocketMap.containsKey(userId)) {
-            webSocketMap.get(userId).sendMessage(message);
-            return "发送成功";
-        }
-        String errorMsg = "用户" + userId + ",不在线！";
-        log.info(errorMsg);
-        return errorMsg;
     }
 
 }

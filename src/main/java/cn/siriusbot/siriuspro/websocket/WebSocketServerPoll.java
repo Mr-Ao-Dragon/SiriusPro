@@ -29,4 +29,8 @@ public class WebSocketServerPoll {
             }
         }
     }
+
+    public ConcurrentMap<String, WebSocketServer> getWebSocketMap() {
+        return webSocketMap;
+    }
 }
