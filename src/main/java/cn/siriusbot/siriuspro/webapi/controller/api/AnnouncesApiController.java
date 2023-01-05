@@ -6,11 +6,16 @@ import cn.siriusbot.siriuspro.entity.pojo.announces.RecommendChannel;
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.webapi.R.R;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
+/**
+ * 公告Api
+ */
 @RestController
 @RequestMapping("/api/announces")
 public class AnnouncesApiController {
@@ -28,21 +33,24 @@ public class AnnouncesApiController {
      * 只有子频道权限为全体成员可见才可设置为推荐子频道。
      * 删除推荐子频道类型的频道公告请使用 删除频道公告,并将 message_id 设置为 all。
      *
-     * @param bot_id               传入机器人对象ID
-     * @param guild_id          频道ID
-     * @param message_id        消息ID
-     * @param channel_id        子频道ID
+     * @param  json 请求体
      * @return 返回公告对象
      */
     @PostMapping("/create-guild-announces/{bot_id}")
-    public R createGuildAnnounces( @PathVariable("bot_id") String bot_id, @RequestParam("guild_id") String guild_id, @RequestParam("message_id") String message_id, @RequestParam("channel_id") String channel_id) {
+    @ResponseBody
+    public R createGuildAnnounces(@PathVariable String bot_id,@RequestBody JSONObject json) {
         try {
+            String guild_id = json.getString("guild_id");
+            String message_id = json.getString("message_id");
+            String channel_id = json.getString("channel_id");
             Tuple<Announces, String> reply = announcesApi.createGuildAnnounces(bot_id, guild_id, message_id, channel_id);
             return new R()
                     .setData(reply);
         } catch (MsgException e) {
+            e.printStackTrace();
             return e.getR();
         } catch (Exception e) {
+            e.printStackTrace();
             return new R()
                     .setCode(500)
                     .setMsg("error");
@@ -63,7 +71,7 @@ public class AnnouncesApiController {
      */
 
     @DeleteMapping("/delete-guild-announces/{bot_id}")
-    public R deleteGuildAnnounces(@PathVariable("bot_id")String bot_id, String guild_id, String message_id){
+    public R deleteGuildAnnounces(@PathVariable("bot_id")String bot_id,String guild_id, @RequestParam("message_id") String message_id){
         try {
             return new R()
                     .setData(announcesApi.deleteAnnouncesByGuildId(bot_id,guild_id,message_id).booleanValue());
@@ -76,8 +84,28 @@ public class AnnouncesApiController {
         }
     }
 
+    /**
+     * 创建频道推荐子频道列表
+     * @param bot_id 传入机器人ID
+     * @param json 请求体对象
+     * @return 返回公告对象
+     */
     @PostMapping("/create-guild-recommend-channels/{bot_id}")
-    public R createGuildRecommendChannels(@PathVariable("bot_id") String bot_id, String guild_id, Integer announces_type, List<RecommendChannel> recommendChannels){
-    return null;
+    public R createGuildRecommendChannels(@PathVariable("bot_id") String bot_id, @RequestBody JSONObject json){
+        try {
+            String guild_id = json.getString("guild_id");
+            Integer announces_type = json.getInteger("announces_type");
+            List<RecommendChannel> recommendChannels = json.getObject("recommend_channels",List.class);
+            return new R()
+                    .setData(announcesApi.createGuildRecommend_Channels(bot_id,guild_id,announces_type,recommendChannels));
+        } catch (MsgException e) {
+            return e.getR();
+        } catch (Exception e) {
+            return new R()
+                    .setCode(500)
+                    .setMsg("error");
+        }
     }
+
+
 }

@@ -1,21 +1,13 @@
 package cn.siriusbot.siriuspro.websocket;
 
 import cn.siriusbot.siriuspro.uitls.AppContextUtil;
-import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+
 
 @Component
 @ServerEndpoint(value = "/websocketServer/{userId}")

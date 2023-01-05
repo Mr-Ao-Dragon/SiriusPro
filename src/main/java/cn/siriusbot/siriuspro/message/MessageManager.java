@@ -173,6 +173,7 @@ public class MessageManager {
                 /**
                  * 私域消息被撤回事件
                  */
+                WebSocketServer.sendAll(message);
                 ApplicationManager.PrivateMessageDeleteEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, PrivateDomainMessageInfo.class));
                 break;
 
@@ -209,49 +210,49 @@ public class MessageManager {
                 //公域论坛事件
             case "OPEN_FORUM_THREAD_CREATE":
                 /**
-                 * 用户创建主题事件
+                 * 公域_用户创建主题事件
                  */
                 WebSocketServer.sendAll(message);
                 ApplicationManager.OpenForumThreadCreateEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
                 break;
             case "OPEN_FORUM_THREAD_UPDATE":
                 /**
-                 * 用户更新主题事件
+                 * 公域_用户更新主题事件
                  */
                 WebSocketServer.sendAll(message);
                 ApplicationManager.OpenForumThreadUpdateEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
                 break;
             case "OPEN_FORUM_THREAD_DELETE":
                 /**
-                 * 用户删除主题事件
+                 * 公域_用户删除主题事件
                  */
                 WebSocketServer.sendAll(message);
                 ApplicationManager.OpenForumThreadDeleteEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
                 break;
             case "OPEN_FORUM_POST_CREATE":
                 /**
-                 * 用户创建帖子事件
+                 * 公域_用户创建帖子事件
                  */
                 WebSocketServer.sendAll(message);
                 ApplicationManager.OpenForumPostCreateEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
                 break;
             case "OPEN_FORUM_POST_DELETE":
                 /**
-                 * 用户删除帖子事件
+                 * 公域_用户删除帖子事件
                  */
                 WebSocketServer.sendAll(message);
                 ApplicationManager.OpenForumPostDeleteEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
                 break;
             case "OPEN_FORUM_REPLY_CREATE":
                 /**
-                 * 用户回复评论事件
+                 * 公域_用户回复评论事件
                  */WebSocketServer.sendAll(message);
                 ApplicationManager.OpenForumReplyCreateEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));
                 break;
 
             case "OPEN_FORUM_REPLY_DELETE":
                 /**
-                 * 用户删除评论事件
+                 * 公域_用户删除评论事件
                  */
                 WebSocketServer.sendAll(message);
                 ApplicationManager.OpenForumReplyDeleteEventPush(siriusBotClient.getInfo().getBotId(),JSONObject.parseObject(message, OpenForumEventInfo.class));

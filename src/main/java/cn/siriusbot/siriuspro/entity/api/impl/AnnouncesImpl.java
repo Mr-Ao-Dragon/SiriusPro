@@ -66,11 +66,13 @@ public class  AnnouncesImpl implements AnnouncesApi {
      * @param message_id 消息ID
      * @return 返回删除结果
      */
+    @SneakyThrows
     @Override
     public Boolean deleteAnnouncesByGuildId(String bot_id, String guild_id, String message_id) {
         SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/announces/" + message_id).build();
         Response response = SiriusHttpUtils.deleteRequest(siriusBotClient, request, null);
+        System.out.println(response.body().string());
         return response.code() == 204;
     }
 

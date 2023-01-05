@@ -4,6 +4,7 @@ package cn.siriusbot.siriuspro.entity.api;
 import cn.siriusbot.siriuspro.entity.pojo.announces.Announces;
 import cn.siriusbot.siriuspro.entity.pojo.announces.RecommendChannel;
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -41,7 +42,7 @@ public interface AnnouncesApi {
      * @param message_id 消息ID
      * @return 返回删除结果
      */
-    public abstract Boolean deleteAnnouncesByGuildId(String bot_id, String guild_id, String message_id);
+    public abstract Boolean deleteAnnouncesByGuildId(String bot_id, String guild_id,@RequestParam("message_id") String message_id);
 
     /**
      * 创建频道推荐子频道列表

@@ -38,8 +38,7 @@ public class  AudioControlImpl implements AudioApi {
         json.put("status",audioControl.getStatus());
         RequestBody body = RequestBody.create(mediaType,json.toJSONString());
         Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
-        System.out.println(response.body().string());
-        return false;
+        return response.code()==200;
     }
 
     /**

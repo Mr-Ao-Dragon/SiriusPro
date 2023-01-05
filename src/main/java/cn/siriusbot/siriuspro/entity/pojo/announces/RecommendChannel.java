@@ -12,7 +12,7 @@ public class RecommendChannel {
     /**
      *子频道id
      */
-    private String channel_id;
+    String channel_id;
 
     /**
      * 推荐语
