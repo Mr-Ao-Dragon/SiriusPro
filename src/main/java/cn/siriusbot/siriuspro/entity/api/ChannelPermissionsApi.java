@@ -50,7 +50,7 @@ public interface ChannelPermissionsApi {
      * @param remove     移除的权限
      * @return 返回修改结果
      */
-    public abstract Boolean modifyChannelPermissionsByUser_id(String bot_id, String channel_id, String user_id, String add, String remove);
+    public abstract Boolean modifyChannelPermissionsByUser_id(String bot_id, String channel_id,String user_id, String add, String remove);
 
     /**
      * 获取指定身份组在指定子频道的权限

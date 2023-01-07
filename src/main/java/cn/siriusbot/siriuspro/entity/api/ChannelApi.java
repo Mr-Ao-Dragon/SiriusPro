@@ -2,6 +2,7 @@ package cn.siriusbot.siriuspro.entity.api;
 
 import cn.siriusbot.siriuspro.entity.pojo.Channel;
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
 
