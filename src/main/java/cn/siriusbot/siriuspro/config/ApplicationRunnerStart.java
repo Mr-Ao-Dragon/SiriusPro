@@ -24,9 +24,9 @@ public class ApplicationRunnerStart implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         // 项目初始化
+        Sirius.SiriusInit();
         log.info("框架初始化中...");
         manager.loadApps();
-
 
         SiriusBotClient siriusBotClient = new SiriusBotClient("102003612", "u0vDKGGUPaqYyfx65tC0FaZru9DJQ7VH", BotToken.botType.PUBLIC_TYPE, false);
         BotManager.AuthBot(siriusBotClient);

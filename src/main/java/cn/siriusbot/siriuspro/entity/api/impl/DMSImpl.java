@@ -12,27 +12,30 @@ import cn.siriusbot.siriuspro.entity.pojo.message.embed.MessageEmbed;
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import okhttp3.*;
 
 import java.io.File;
+
 import org.springframework.stereotype.Component;
+
 @Component
-public class  DMSImpl implements DMS_Api {
+public class DMSImpl implements DMS_Api {
 
     /**
      * 创建私信会话
      * 机器人和用户存在共同频道才能创建私信会话。
      * 创建成功后，返回创建成功的频道 id ，子频道 id 和创建时间。
      *
-     * @param bot_id             传入机器人对象ID
+     * @param bot_id          传入机器人对象ID
      * @param recipient_id    接收者ID
      * @param source_guild_id 源频道ID
      * @return 私信会话对象
      */
     @SneakyThrows
     @Override
-    public Tuple<DMS,String> createDMS(String bot_id, String recipient_id, String source_guild_id) {
+    public Tuple<DMS, String> createDMS(String bot_id, String recipient_id, String source_guild_id) {
         SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "users/@me/dms").build();
         MediaType mediaType = MediaType.parse("application/json;text/plain");
@@ -42,7 +45,7 @@ public class  DMSImpl implements DMS_Api {
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
         String data = response.body().string();
-        Tuple<DMS,String> tuple = new Tuple<>();
+        Tuple<DMS, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, DMS.class)).setSecond(data);
         return tuple;
     }
@@ -58,7 +61,7 @@ public class  DMSImpl implements DMS_Api {
      * 私信场景下，被动消息没有条数限制
      * 传入msg_id或event_id其一，此条消息视为被动消息
      *
-     * @param bot_id       传入机器人对象ID
+     * @param bot_id    传入机器人对象ID
      * @param guild_id  私信场景下的私信会话id
      * @param content   要发送的消息内容
      * @param image_Url 图片Url
@@ -68,7 +71,7 @@ public class  DMSImpl implements DMS_Api {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message,String> sendMessage(String bot_id, String guild_id, String content, String image_Url, String msg_id, String event_id) {
+    public Tuple<Message, String> sendMessage(String bot_id, String guild_id, String content, String image_Url, String msg_id, String event_id) {
         SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
         if (guild_id == null || guild_id == "")
@@ -83,8 +86,8 @@ public class  DMSImpl implements DMS_Api {
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
         String data = response.body().string();
-        Tuple<Message,String> tuple = new Tuple<>();
-        tuple.setFirst(JSONObject.parseObject(data,Message.class)).setSecond(data);
+        Tuple<Message, String> tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
         return tuple;
     }
 
@@ -99,7 +102,7 @@ public class  DMSImpl implements DMS_Api {
      * 私信场景下，被动消息没有条数限制
      * 传入msg_id或event_id其一，此条消息视为被动消息
      *
-     * @param bot_id       传入机器人对象ID
+     * @param bot_id    传入机器人对象ID
      * @param guild_id  私信场景下的私信会话ID
      * @param content   消息内容
      * @param reference 引用消息对象
@@ -107,7 +110,7 @@ public class  DMSImpl implements DMS_Api {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message,String> sendReferenceMessage(String bot_id, String guild_id, String content, MessageReference reference) {
+    public Tuple<Message, String> sendReferenceMessage(String bot_id, String guild_id, String content, MessageReference reference) {
         SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
@@ -118,8 +121,8 @@ public class  DMSImpl implements DMS_Api {
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
         String data = response.body().string();
-        Tuple<Message,String> tuple = new Tuple<>();
-        tuple.setFirst(JSONObject.parseObject(data,Message.class)).setSecond(data);
+        Tuple<Message, String> tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
         return tuple;
     }
 
@@ -139,7 +142,7 @@ public class  DMSImpl implements DMS_Api {
      * 私信场景下，被动消息没有条数限制
      * 传入msg_id或event_id其一，此条消息视为被动消息
      *
-     * @param bot_id      传入机器人对象ID
+     * @param bot_id   传入机器人对象ID
      * @param guild_id 私信场景下的私信会话ID
      * @param msg_id   消息id
      * @param event_id 事件ID
@@ -148,7 +151,7 @@ public class  DMSImpl implements DMS_Api {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message,String>  sendMarkdownMessage(String bot_id, String guild_id, String msg_id, String event_id, MessageMarkdown markdown) {
+    public Tuple<Message, String> sendMarkdownMessage(String bot_id, String guild_id, String msg_id, String event_id, MessageMarkdown markdown) {
         SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
@@ -159,7 +162,7 @@ public class  DMSImpl implements DMS_Api {
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
         String data = response.body().string();
-        Tuple<Message,String> tuple = new Tuple<>();
+        Tuple<Message, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
         return tuple;
     }
@@ -168,7 +171,7 @@ public class  DMSImpl implements DMS_Api {
     /**
      * 用于撤回机器人发送的，指定私信会话消息。
      *
-     * @param bot_id        传入机器人对象ID
+     * @param bot_id     传入机器人对象ID
      * @param guild_id   私信场景下的私信会话ID
      * @param message_id 消息ID
      * @param hidetip    是否隐藏删除消息后的小灰条
@@ -191,7 +194,7 @@ public class  DMSImpl implements DMS_Api {
      * 发送成功之后，会触发一个创建消息的事件。
      * 如传入event_id和msg_id其中一个，此条消息视为被动消息
      *
-     * @param bot_id      传入机器人对象ID
+     * @param bot_id   传入机器人对象ID
      * @param guild_id 私信场景下私信会话ID
      * @param ark      ark消息对象
      * @param msg_id   消息id
@@ -200,7 +203,7 @@ public class  DMSImpl implements DMS_Api {
      */
     @SneakyThrows
     @Override
-    public  Tuple<Message,String> sendArkMessage(String bot_id, String guild_id, MessageArk ark, String msg_id, String event_id) {
+    public Tuple<Message, String> sendArkMessage(String bot_id, String guild_id, MessageArk ark, String msg_id, String event_id) {
         SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
@@ -211,7 +214,7 @@ public class  DMSImpl implements DMS_Api {
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
         String data = response.body().string();
-        Tuple<Message,String> tuple = new Tuple<>();
+        Tuple<Message, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
         return tuple;
     }
@@ -221,7 +224,7 @@ public class  DMSImpl implements DMS_Api {
      * 发送embed模板消息
      * 如传入event_id和msg_id其中一个，此条消息视为被动消息
      *
-     * @param bot_id      传入机器人对象ID
+     * @param bot_id   传入机器人对象ID
      * @param guild_id 私信场景下私信会话ID
      * @param embed    embed消息对象
      * @param msg_id   消息id
@@ -230,7 +233,7 @@ public class  DMSImpl implements DMS_Api {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message,String> sendEmbedMessage(String bot_id, String guild_id, MessageEmbed embed, String msg_id, String event_id) {
+    public Tuple<Message, String> sendEmbedMessage(String bot_id, String guild_id, MessageEmbed embed, String msg_id, String event_id) {
         SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
@@ -241,7 +244,7 @@ public class  DMSImpl implements DMS_Api {
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
         String data = response.body().string();
-        Tuple<Message,String> tuple = new Tuple<>();
+        Tuple<Message, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
         return tuple;
     }
@@ -250,7 +253,7 @@ public class  DMSImpl implements DMS_Api {
     /**
      * 发送图文消息
      *
-     * @param bot_id        传入机器人对象ID
+     * @param bot_id     传入机器人对象ID
      * @param guild_id   私信场景下私信会话ID
      * @param content    消息内容
      * @param image_path 本地图片路径
@@ -260,20 +263,26 @@ public class  DMSImpl implements DMS_Api {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message,String> sendImageAndTextMessage(String bot_id, String guild_id, String content, String image_path, String msg_id, String event_id) {
+    public Tuple<Message, String> sendImageAndTextMessage(String bot_id, String guild_id, String content, String image_path, String msg_id, String event_id) {
         SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
 
         MediaType mediaType = MediaType.parse("multipart/form-data");
         File file = new File(image_path);
-        RequestBody body = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("content", content)
-                .addFormDataPart("msg_id", msg_id)
-                .addFormDataPart("file_image", file.getAbsolutePath(), RequestBody.create(mediaType, file)).build();
+        MultipartBody.Builder builder = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM);
+        if (content != null)
+            builder.addFormDataPart("content", content);
+        if (msg_id != null)
+            builder.addFormDataPart("msg_id", msg_id);
+        if (image_path != null)
+            builder.addFormDataPart("file_image", file.getAbsolutePath(), RequestBody.create(mediaType, file));
+        if (event_id != null)
+            builder.addFormDataPart("event_id", event_id);
+        MultipartBody body = builder.build();
         Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body, "multipart/form-data");
         String data = response.body().string();
-        Tuple<Message,String> tuple = new Tuple<>();
+        Tuple<Message, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
         return tuple;
     }

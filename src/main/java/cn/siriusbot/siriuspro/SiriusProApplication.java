@@ -17,7 +17,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 public class SiriusProApplication {
 
     public static void main(String[] args) {
-        Sirius.SiriusInit();
         SpringApplication.run(SiriusProApplication.class, args);
     }
 

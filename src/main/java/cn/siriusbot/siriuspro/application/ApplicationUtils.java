@@ -7,8 +7,21 @@ import java.io.File;
  */
 public class ApplicationUtils {
 
+    /**
+     * 应用目录
+     */
     public static String appsPath = new File(new File("").getAbsolutePath()+"\\apps").getAbsolutePath();
+
+    /**
+     * 配置目录
+     */
     public static String confPath = new File(new File("").getAbsolutePath()+"\\conf").getAbsolutePath();
+
+    /**
+     * 图片缓存目录
+     */
+
+    public static String imgCachePath = new File(new File("").getAbsolutePath()+"\\imgCache").getAbsolutePath();
     /**
      * 应用目录是否存在
      * @return
@@ -35,6 +48,9 @@ public class ApplicationUtils {
         }
         if(!appsPathExist(confPath)){
             createAppsPath(confPath);
+        }
+        if(!appsPathExist(imgCachePath)){
+            createAppsPath(imgCachePath);
         }
     }
 }
