@@ -224,10 +224,13 @@ public class DirectApiController {
      */
     @SneakyThrows
     @PostMapping("/send-image-text/{bot_id}")
-    public R sendImageAndText(@PathVariable String bot_id, @Nullable @RequestParam MultipartFile file,@RequestParam String guild_id, @Nullable @RequestParam String content, @Nullable @RequestParam String msg_id, @Nullable @RequestParam String event_id) {
+    public R sendImageAndText(@PathVariable String bot_id, @Nullable @RequestParam MultipartFile file, @RequestParam String guild_id, @Nullable @RequestParam String content, @Nullable @RequestParam String msg_id, @Nullable @RequestParam String event_id) {
         try {
-            String imgPath = ApplicationUtils.imgCachePath + "/" + UUID.randomUUID().toString() + ".png";
-            file.transferTo(new File(imgPath));
+            String imgPath = null;
+            if (file != null) {
+                imgPath = ApplicationUtils.imgCachePath + "/" + UUID.randomUUID().toString() + ".png";
+                file.transferTo(new File(imgPath));
+            }
             return new R().setData(dmsApi.sendImageAndTextMessage(bot_id, guild_id, content, imgPath, msg_id, event_id));
         } catch (MsgException e) {
             return e.getR();

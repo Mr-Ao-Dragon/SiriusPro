@@ -17,12 +17,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class  ForumThreadImpl implements ForumApi {
     /**
-     * 获取指定论坛子频道的帖子列表
+     * 获取指定论坛子频道帖子详情
      * 仅私域可用
      *
-     * @param bot_id        传入机器人对象ID
+     * @param bot_id        传入机器人ID
      * @param channel_id 子频道ID
-     * @return 帖子列表对象
+     * @return 帖子详情对象
      */
     @SneakyThrows
     @Override

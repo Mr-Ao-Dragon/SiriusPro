@@ -268,17 +268,19 @@ public class DMSImpl implements DMS_Api {
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
 
         MediaType mediaType = MediaType.parse("multipart/form-data");
-        File file = new File(image_path);
         MultipartBody.Builder builder = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM);
         if (content != null)
             builder.addFormDataPart("content", content);
         if (msg_id != null)
             builder.addFormDataPart("msg_id", msg_id);
-        if (image_path != null)
+        if (image_path != null) {
+            File file = new File(image_path);
             builder.addFormDataPart("file_image", file.getAbsolutePath(), RequestBody.create(mediaType, file));
+        }
         if (event_id != null)
             builder.addFormDataPart("event_id", event_id);
+
         MultipartBody body = builder.build();
         Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body, "multipart/form-data");
         String data = response.body().string();
