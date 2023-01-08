@@ -5,6 +5,7 @@ import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.entity.api.MemberApi;
 import cn.siriusbot.siriuspro.entity.pojo.member.Member;
 import cn.siriusbot.siriuspro.entity.pojo.member.MemberQueryLimit;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
 import lombok.SneakyThrows;
@@ -29,7 +30,7 @@ public class  MemberImpl implements MemberApi {
      */
     @SneakyThrows
     @Override
-    public Map<List<Member>,Object> getMemberList(String bot_id, String guild_id, String after, int limit) {
+    public Tuple<List<Member>,String> getMemberList(String bot_id, String guild_id, String after, int limit) {
         SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
         if (after == null)
             after = "0";
@@ -37,9 +38,9 @@ public class  MemberImpl implements MemberApi {
         Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();
         List<Member> memberList = JSONObject.parseObject(data, List.class);
-        Map<List<Member>,Object> map = new HashMap<>();
-        map.put(memberList,data);
-        return map;
+        Tuple<List<Member>,String> tuple = new Tuple<>();
+        tuple.setFirst(memberList).setSecond(data);
+        return tuple;
     }
 
 
@@ -53,14 +54,14 @@ public class  MemberImpl implements MemberApi {
      */
     @SneakyThrows
     @Override
-    public Map<Member,Object> getMemberInfo(String bot_id, String guild_id, String user_id) {
+    public Tuple<Member,String> getMemberInfo(String bot_id, String guild_id, String user_id) {
         SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/members/" + user_id).build();
         Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();
-        Map<Member,Object> map = new HashMap<>();
-        map.put(JSONObject.parseObject(data, Member.class),data);
-        return map;
+        Tuple<Member,String> tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, Member.class)).setSecond(data);
+        return tuple;
     }
 
     /**
@@ -75,15 +76,15 @@ public class  MemberImpl implements MemberApi {
      */
     @SneakyThrows
     @Override
-    public Map<MemberQueryLimit,Object> getMemberListByRoleId(String bot_id, String guild_id, String role_id, String start_index, int limit) {
+    public Tuple<MemberQueryLimit,String> getMemberListByRoleId(String bot_id, String guild_id, String role_id, String start_index, int limit) {
         SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/roles/" + role_id + "/members?start_index=" + start_index + "&limit=" + limit).build();
         Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();
         MemberQueryLimit memberList = JSONObject.parseObject(data,MemberQueryLimit.class);
-        Map<MemberQueryLimit,Object> map = new HashMap<>();
-        map.put(memberList,data);
-        return map;
+        Tuple<MemberQueryLimit,String> tuple = new Tuple<>();
+        tuple.setFirst(memberList).setSecond(data);
+        return tuple;
     }
 
     /**

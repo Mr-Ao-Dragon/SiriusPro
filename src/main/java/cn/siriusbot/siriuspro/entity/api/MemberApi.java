@@ -3,6 +3,7 @@ package cn.siriusbot.siriuspro.entity.api;
 
 import cn.siriusbot.siriuspro.entity.pojo.member.Member;
 import cn.siriusbot.siriuspro.entity.pojo.member.MemberQueryLimit;
+import cn.siriusbot.siriuspro.entity.temp.Tuple;
 
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,7 @@ public interface MemberApi {
      * @return 返回成员列表 分页大小，1-400，默认是 1。成员较多的频道尽量使用较大的limit值，以减少请求数
      *
      */
-    public abstract Map<List<Member>,Object> getMemberList(String bot_id, String guild_id, String after, int limit);
+    public abstract Tuple<List<Member>,String> getMemberList(String bot_id, String guild_id, String after, int limit);
 
     /**
      * 获取成员详情
@@ -29,7 +30,7 @@ public interface MemberApi {
      * @param user_id 用户ID
      * @return 返回成员对象
      */
-    public abstract Map<Member,Object> getMemberInfo(String bot_id, String guild_id,String user_id);
+    public abstract Tuple<Member,String> getMemberInfo(String bot_id, String guild_id,String user_id);
 
     /**
      * 获取拥有此身份组的成员列表
@@ -39,7 +40,7 @@ public interface MemberApi {
      * @param start_index 上一次返回包中的next，第一次请求填0，默认0
      * @return 返回持有指定身份组ID的成员列表
      */
-    public abstract Map<MemberQueryLimit,Object> getMemberListByRoleId(String bot_id, String guild_id, String role_id, String start_index, int limit);
+    public abstract Tuple<MemberQueryLimit,String> getMemberListByRoleId(String bot_id, String guild_id, String role_id, String start_index, int limit);
 
     /**
      * 将指定成员从频道内移除
