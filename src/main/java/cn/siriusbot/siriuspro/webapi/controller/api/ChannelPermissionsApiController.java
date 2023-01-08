@@ -4,6 +4,7 @@ import cn.siriusbot.siriuspro.entity.api.ChannelPermissionsApi;
 import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.webapi.R.R;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -54,10 +55,10 @@ public class ChannelPermissionsApiController {
      * @param remove     移除的权限
      * @return 返回修改结果
      */
-    @PutMapping("/modify-user-channel-permissions/{bot_id}/{channel_id}/user_id/{add}/{remove}")
-    public R modifyUserChannelPermissions(@PathVariable String bot_id, @PathVariable String channel_id, @PathVariable String user_id, @PathVariable String add, @PathVariable String remove) {
+    @PutMapping("/modify-user-channel-permissions/{bot_id}/{channel_id}/{user_id}")
+    public R modifyUserChannelPermissions(@PathVariable String bot_id, @PathVariable String channel_id, @PathVariable String user_id, @RequestParam @Nullable String add, @RequestParam @Nullable String remove) {
         try {
-            return new R().setData(channelPermissionsApi.modifyChannelPermissionsByUser_id(bot_id, channel_id, user_id, add, remove));
+            return new R().setData(channelPermissionsApi.modifyChannelPermissionsByUser_id(bot_id, channel_id, user_id, add, remove).booleanValue());
         } catch (MsgException e) {
             return e.getR();
         } catch (Exception e) {
@@ -100,8 +101,8 @@ public class ChannelPermissionsApiController {
      * @param remove     要移除的权限
      * @return 修改结果
      */
-    @PutMapping("/modify-role-channel-permissions/{bot_id}/{channel_id}/{role_id}/{add}/{remove}")
-    public R modifyRoleChannelPermissions(@PathVariable String bot_id, @PathVariable String channel_id, @PathVariable String role_id, @PathVariable String add, @PathVariable String remove) {
+    @PutMapping("/modify-role-channel-permissions/{bot_id}/{channel_id}/{role_id}")
+    public R modifyRoleChannelPermissions(@PathVariable String bot_id, @PathVariable String channel_id, @PathVariable String role_id, @RequestParam @Nullable String add, @RequestParam @Nullable String remove) {
         try {
             return new R().setData(channelPermissionsApi.modifyChannelPermissionsByRole_id(bot_id, channel_id, role_id, add, remove));
         } catch (MsgException e) {

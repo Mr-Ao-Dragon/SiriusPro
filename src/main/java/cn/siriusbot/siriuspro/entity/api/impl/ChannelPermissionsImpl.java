@@ -80,9 +80,11 @@ public class  ChannelPermissionsImpl implements ChannelPermissionsApi {
      * @param remove     移除的权限
      * @return 返回修改结果
      */
+    @SneakyThrows
     @Override
     public Boolean modifyChannelPermissionsByUser_id(String bot_id, String channel_id, String user_id, String add, String remove) {
         SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        System.out.println(add+remove);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/members/" + user_id + "/permissions").build();
         MediaType mediaType = MediaType.parse("application/json");
         JSONObject json = new JSONObject();
@@ -90,6 +92,7 @@ public class  ChannelPermissionsImpl implements ChannelPermissionsApi {
         json.put("remove", remove);
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         Response response = SiriusHttpUtils.putRequest(siriusBotClient, request, body);
+        System.out.println(response.body().string());
         return response.code() == 204;
     }
 
