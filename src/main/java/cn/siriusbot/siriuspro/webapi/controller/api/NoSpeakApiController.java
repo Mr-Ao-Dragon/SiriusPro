@@ -33,7 +33,7 @@ public class NoSpeakApiController {
     @PatchMapping("/no-speak/{bot_id}/{guild_id}/{user_id}")
     public R noSpeakByUser_id(@PathVariable String bot_id, @PathVariable String guild_id, @PathVariable String user_id, @Nullable @RequestParam String mute_end_timestamp, @Nullable @RequestParam String mute_seconds) {
         try {
-            return new R().setData(noSpeakApi.noSpeakByUser_id(bot_id, guild_id, user_id, mute_end_timestamp, mute_seconds));
+            return new R().setData(noSpeakApi.noSpeakByUser_id(bot_id, guild_id, user_id, mute_end_timestamp, mute_seconds).booleanValue());
         } catch (MsgException e) {
             return e.getR();
         } catch (Exception e) {
@@ -73,7 +73,7 @@ public class NoSpeakApiController {
     @PatchMapping("/no-speak-all/{bot_id}/{guild_id}")
     public R nodeSpeakAll(@PathVariable String bot_id, @PathVariable String guild_id, @RequestParam String mute_end_timestamp, @RequestParam String mute_seconds) {
         try {
-            return new R().setData(noSpeakApi.nodeSpeakAll(bot_id, guild_id, mute_end_timestamp, mute_seconds));
+            return new R().setData(noSpeakApi.nodeSpeakAll(bot_id, guild_id, mute_end_timestamp, mute_seconds).booleanValue());
         } catch (MsgException e) {
             return e.getR();
         } catch (Exception e) {

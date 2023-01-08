@@ -63,7 +63,7 @@ public class PinsMessageApiController {
     @DeleteMapping("/deletePinsMessage/{bot_id}/{channel_id}")
     public R deletePinsMessage(@PathVariable String bot_id,@PathVariable String channel_id,@RequestParam String message_id){
         try {
-            return new R().setData(pinsMessageApi.deletePinsMessage(bot_id, channel_id, message_id));
+            return new R().setData(pinsMessageApi.deletePinsMessage(bot_id, channel_id, message_id).booleanValue());
         }
         catch (MsgException e){
             return e.getR();
