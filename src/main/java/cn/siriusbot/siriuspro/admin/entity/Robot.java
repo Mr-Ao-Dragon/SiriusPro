@@ -30,5 +30,5 @@ public class Robot {
     /**
      * 自动登录
      */
-    Boolean autoLogon;
+    Boolean autoLogin;
 }

@@ -102,8 +102,7 @@ public class MessageManager {
                         .setSendHeartBeat(new HeartBeatTask(siriusBotClient.getInfo().getBotId()));
                 //发送心跳包
                 siriusBotClient.getSocket().getHeartBeatTimer().start(new Date(), siriusBotClient.getSocket().getHeartBeat());
-                int index = botManager.getIdByBotId(siriusBotClient.getInfo().getBotId());
-                botManager.botVector.put(index, siriusBotClient);
+                botManager.update(siriusBotClient);
                 break;
             case "RESUMED":
                 WebSocketUtils.Resume(siriusBotClient.getInfo().getBotId());

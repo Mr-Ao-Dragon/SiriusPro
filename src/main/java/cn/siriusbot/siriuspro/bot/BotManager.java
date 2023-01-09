@@ -1,8 +1,10 @@
 package cn.siriusbot.siriuspro.bot;
 
+import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import cn.siriusbot.siriuspro.websocket.SiriusWebSocketClient;
 import com.alibaba.fastjson.JSONObject;
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -13,6 +15,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -25,7 +28,7 @@ public class BotManager {
     /**
      * Bot客户端池
      */
-    public Map<Integer, SiriusBotClient> botVector = new ConcurrentHashMap<>();
+    private final Map<String, SiriusBotClient> botVector = new ConcurrentHashMap<>();
 
     /**
      * 验证Bot
@@ -34,7 +37,7 @@ public class BotManager {
      * @return 成功返回true，失败返回false
      */
     @SneakyThrows
-    public boolean AuthBot(SiriusBotClient siriusBotClient) throws URISyntaxException {
+    public boolean AuthBot(SiriusBotClient siriusBotClient){
 
         if (!this.botExist(siriusBotClient.getInfo().getBotId()))
             this.addBot(siriusBotClient);
@@ -49,7 +52,7 @@ public class BotManager {
         Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         JSONObject json;
         try {
-            json = JSONObject.parseObject(response.body().string());
+            json = JSONObject.parseObject(Objects.requireNonNull(response.body()).string());
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -69,7 +72,7 @@ public class BotManager {
      *
      * @return
      */
-    public Integer getBotCount() {
+    public int getBotCount() {
         return botVector.size();
     }
 
@@ -80,17 +83,10 @@ public class BotManager {
      * @return 有则返回Bot对象，否则返回null
      */
     public SiriusBotClient getBotByBotId(String botId) {
-        Set<Integer> keys = botVector.keySet();
-        for (Integer key : keys) {
-            SiriusBotClient siriusBotClient = botVector.get(key);
-            if (siriusBotClient == null) {
-                throw new RuntimeException("找不到BotId对应的机器人");
-            }
-            if (siriusBotClient.getInfo().getBotId().equals(botId)) {
-                return siriusBotClient;
-            }
+        if (!botVector.containsKey(botId)){
+            throw new RuntimeException("找不到BotId对应的机器人");
         }
-        throw new RuntimeException("找不到BotId对应的机器人");
+        return botVector.get(botId);
     }
 
     /**
@@ -100,26 +96,29 @@ public class BotManager {
      * @return 存在返回true，不存在返回false
      */
     public boolean botExist(String botId) {
-        Set<Integer> keys = botVector.keySet();
-        for (Integer key : keys) {
-            if (botVector.get(key).getInfo().getBotId().equals(botId)) {
-                return true;
-            }
-        }
-        return false;
+        return botVector.containsKey(botId);
     }
 
     /**
      * 登录指定机器人
      *
      * @param botId 机器人ID
-     * @return 登录结果，成功返回true,失败返回false;
      */
     public void loginBot(String botId) {
         SiriusBotClient siriusBotClient = getBotByBotId(botId);
-        if (siriusBotClient == null)
-            return;
         siriusBotClient.getWebSocketClient().connect();
+    }
+
+
+    /**
+     * 登出指定机器人
+     *
+     * @param botId 机器人ID
+     */
+    public void logoutBot(String botId) {
+        SiriusBotClient siriusBotClient = getBotByBotId(botId);
+        siriusBotClient.getWebSocketClient().close();
+        botVector.remove(botId);
     }
 
     /**
@@ -127,36 +126,27 @@ public class BotManager {
      *
      * @param siriusBotClient 传入机器人对象
      */
-    public String addBot(SiriusBotClient siriusBotClient) {
+    public void addBot(SiriusBotClient siriusBotClient) {
         if (botExist(siriusBotClient.getInfo().getBotId())) {
-            return "机器人已存在！";
+            throw new MsgException(90001, "机器人已存在！");
         }
-        botVector.put(botVector.size() + 1, siriusBotClient);
-        return "Id:" + siriusBotClient.getInfo().getBotId() + "添加成功！";
+        botVector.put(siriusBotClient.getInfo().getBotId(), siriusBotClient);
     }
 
-    /**
-     * 根据BotID返回索引
-     *
-     * @param botId 机器人ID
-     * @return 找到返回索引，未找到返回-1
-     */
-    public int getIdByBotId(String botId) {
-        Set<Integer> keys = botVector.keySet();
-        for (Integer key : keys) {
-            if (botVector.get(key).getInfo().getBotId().equals(botId)) {
-                return key;
-            }
+    public void update(@NonNull SiriusBotClient siriusBotClient){
+        if (!botVector.containsKey(siriusBotClient.getInfo().getBotId())){
+            throw new MsgException(90002, "机器人不存在！");
         }
-        return -1;
+        botVector.put(siriusBotClient.getInfo().getBotId(), siriusBotClient);
     }
+
 
     /**
      * 获取机器人列表
      *
      * @return 机器人列表
      */
-    public Map<Integer, SiriusBotClient> getAllBot() {
+    public Map<String, SiriusBotClient> getAllBot() {
         return botVector;
     }
 }

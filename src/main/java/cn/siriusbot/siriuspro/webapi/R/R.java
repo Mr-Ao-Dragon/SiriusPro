@@ -18,10 +18,15 @@ public class R {
     /**
      * 请求状态码
      */
-    int code = 200;
+    int code = 0;
 
     /**
      * 请求结果
      */
     String msg = "success";
+
+    /**
+     * 错误信息
+     */
+    String error;
 }
