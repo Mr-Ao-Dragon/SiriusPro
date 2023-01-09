@@ -6,6 +6,7 @@ import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.webapi.R.R;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public class ScheduleApiController {
      * @return 返回日程列表
      */
     @GetMapping("/get-schedules/{bot_id}/{channel_id}")
-    public R getScheduleListByChannel_id(@PathVariable String bot_id, @PathVariable String channel_id, @RequestParam String since) {
+    public R getScheduleListByChannel_id(@PathVariable String bot_id, @PathVariable String channel_id, @Nullable @RequestParam String since) {
         try {
             return new R().setData(scheduleApi.getScheduleListByChannel_id(bot_id, channel_id, since));
         } catch (MsgException e) {
@@ -107,7 +108,7 @@ public class ScheduleApiController {
      * @param schedule    修改后的日程对象，不带id
      * @return 返回日程对象
      */
-    @PatchMapping("/{bot_id}/{schedule_id}")
+    @PatchMapping("/modify-schedule/{bot_id}/{channel_id}/{schedule_id}")
     public R modifySchedule(@PathVariable String bot_id, @PathVariable String channel_id, @PathVariable String schedule_id, @RequestBody Schedule schedule) {
         try {
             return new R().setData(scheduleApi.modifySchedule(bot_id, channel_id, schedule_id, schedule));

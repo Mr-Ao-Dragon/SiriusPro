@@ -1,10 +1,10 @@
 package cn.siriusbot.siriuspro.entity.pojo;
 
 
+import cn.siriusbot.siriuspro.entity.pojo.member.Member;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.lang.reflect.Member;
 
 /**
  * 日程对象

@@ -105,7 +105,7 @@ public class  ScheduleApiImpl implements ScheduleApi {
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         String data = SiriusHttpUtils.postRequest(siriusBotClient, request, body).body().string();
-        Schedule sc = JSONObject.parseObject(SiriusHttpUtils.postRequest(siriusBotClient, request, body).body().string(), Schedule.class);
+        Schedule sc = JSONObject.parseObject(data, Schedule.class);
         Tuple<Schedule,String> tuple = new Tuple<>();
         tuple.setFirst(schedule).setSecond(data);
         return tuple;
