@@ -1,47 +1,49 @@
 package cn.siriusbot.siriuspro.config.aop;
 
 
+import cn.siriusbot.siriuspro.admin.entity.Admin;
+import cn.siriusbot.siriuspro.config.Constant;
+import cn.siriusbot.siriuspro.error.MsgException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.aop.aspectj.AspectJExpressionPointcut;
-import org.springframework.aop.support.DefaultPointcutAdvisor;
-import org.springframework.aop.support.annotation.AnnotationMatchingPointcut;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 @Aspect
 @Component
 public class PowerAspect {
 
-    @Pointcut("@annotation(cn.siriusbot.siriuspro.config.aop.ServiceInterceptor)")
+    @Pointcut("@annotation(cn.siriusbot.siriuspro.config.aop.PowerInterceptor)")
     public void fun(){}
 
     @Around("fun()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable{
-        System.out.println(joinPoint);
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Method method = methodSignature.getMethod();
-
-        Object result = null;
-        long startTime = System.currentTimeMillis();
-        try {
-            result = joinPoint.proceed();
-        }catch (Throwable e){
-            e.fillInStackTrace();
-            throw e;
+        PowerInterceptor annotation = method.getAnnotation(PowerInterceptor.class);
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        if (requestAttributes != null){
+            HttpSession session = ((ServletRequestAttributes) requestAttributes).getRequest().getSession();
+            System.out.println(session);
+            Admin admin = (Admin) session.getAttribute(Constant.SESSION_ADMIN);
+            if (admin == null){
+                throw new MsgException(90002, "未登录，无权限使用!");
+            }
+            if (admin.getPower() > annotation.power()){
+                throw new MsgException(90002, "当前用户无权限使用!");
+            }
+            return joinPoint.proceed();
         }
-        finally {
-            long spendTime = (System.currentTimeMillis() - startTime);
-            System.out.println(method.getDeclaringClass().getName()+"."+method.getName()+"执行耗时："+spendTime+"ms");
-        }
-
-        return result;
+        throw new MsgException(90003, "权限授权异常，请联系管理员!");
     }
 
 }

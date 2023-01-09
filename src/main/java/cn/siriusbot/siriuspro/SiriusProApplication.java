@@ -15,7 +15,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 @MapperScan("cn.siriusbot.siriuspro.admin.dao")
 @EnableAsync
-@EnableAspectJAutoProxy(exposeProxy = true)
 public class SiriusProApplication {
 
     public static void main(String[] args) {

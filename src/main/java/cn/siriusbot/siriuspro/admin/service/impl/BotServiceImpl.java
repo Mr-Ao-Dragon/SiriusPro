@@ -7,7 +7,7 @@ import cn.siriusbot.siriuspro.bot.BotClient;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.bot.BotToken;
 import cn.siriusbot.siriuspro.bot.SiriusBotClient;
-import cn.siriusbot.siriuspro.config.aop.ServiceInterceptor;
+import cn.siriusbot.siriuspro.config.aop.PowerInterceptor;
 import cn.siriusbot.siriuspro.error.MsgException;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -78,11 +78,9 @@ public class BotServiceImpl implements BotService {
      *
      * @param robot 机器人信息
      */
-    @Override
-    @ServiceInterceptor
-    public void loginBot(Robot robot) {
+    private void loginBot(Robot robot) {
         verificationInfo(robot);
-        BotToken token = robotToBotToken(robot);
+        BotToken token = this.robotToBotToken(robot);
         SiriusBotClient siriusBotClient = new SiriusBotClient(token);
         botManager.addBot(siriusBotClient);
         if (!botManager.AuthBot(siriusBotClient)){
@@ -97,6 +95,7 @@ public class BotServiceImpl implements BotService {
      * @param botId 机器人ID
      */
     @Override
+    @PowerInterceptor(power = 1)
     public void loginBotByBotId(String botId) {
         LambdaQueryWrapper<Robot> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Robot::getBotId, botId);

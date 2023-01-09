@@ -25,12 +25,6 @@ public interface BotService {
     void delBotByBotId(String botId);
 
     /**
-     * 登录机器人
-     * @param robot 机器人信息
-     */
-    void loginBot(Robot robot);
-
-    /**
      * 根据机器人ID登录机器人
      * @param botId 机器人ID
      */

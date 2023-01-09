@@ -36,7 +36,7 @@ public class AdminServiceImpl implements AdminService {
         if (admin == null) {
             throw new MsgException(20103, "管理员账户不存在！");
         }
-        if (admin.getPasswd().equals(passwd)){
+        if (!admin.getPasswd().equals(passwd)){
             throw new MsgException(20104, "密码错误！");
         }
         return admin;
