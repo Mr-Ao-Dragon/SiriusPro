@@ -5,6 +5,7 @@ import cn.siriusbot.siriuspro.entity.api.MessageReactionApi;
 import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.webapi.R.R;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -31,8 +32,10 @@ public class MessageReactionApiController {
      * @return 拉取表情表态响应对象
      */
     @GetMapping("/get-reaction-users/{bot_id}/{channel_id}")
-    public R getReactionUsers(@PathVariable String bot_id, @PathVariable String channel_id, @RequestParam String message_id, @RequestParam Integer type, @RequestParam String id, @RequestParam String cookie, @RequestParam Integer limit) {
+    public R getReactionUsers(@PathVariable String bot_id, @PathVariable String channel_id, @RequestParam String message_id, @RequestParam Integer type, @RequestParam String id, @Nullable @RequestParam String cookie, @Nullable @RequestParam Integer limit) {
         try {
+            if(limit==null)
+                limit=20;
             return new R().setData(messageReactionApi.getReactionUsers(bot_id, channel_id, message_id, type, id, cookie, limit));
         } catch (MsgException e) {
             return e.getR();
@@ -73,7 +76,7 @@ public class MessageReactionApiController {
      * @param id         表情ID，参考Emoji列表
      * @return 操作结果
      */
-    @PutMapping("/{bot_id}/{channel_id}")
+    @PutMapping("/add-reaction/{bot_id}/{channel_id}")
     public R addReaction(@PathVariable String bot_id, @PathVariable String channel_id, @RequestParam String message_id, @RequestParam Integer type, @RequestParam String id) {
         try {
             return new R().setData(messageReactionApi.addReaction(bot_id, channel_id, message_id, type, id));

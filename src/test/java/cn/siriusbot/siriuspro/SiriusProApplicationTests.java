@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @SpringBootTest
-@MapperScan("cn.siriusbot.siriuspro.admin")
 class SiriusProApplicationTests {
 
     @Autowired

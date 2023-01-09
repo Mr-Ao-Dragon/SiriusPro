@@ -4,13 +4,20 @@ package cn.siriusbot.siriuspro.message;
 import cn.siriusbot.siriuspro.application.ApplicationManager;
 import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.BotManager;
+import cn.siriusbot.siriuspro.entity.api.MessageApi;
 import cn.siriusbot.siriuspro.entity.api.impl.DMSImpl;
 import cn.siriusbot.siriuspro.entity.api.impl.MessageImpl;
 import cn.siriusbot.siriuspro.entity.pojo.User;
+import cn.siriusbot.siriuspro.entity.pojo.message.Message;
+import cn.siriusbot.siriuspro.entity.pojo.message.MessageKeyboard;
+import cn.siriusbot.siriuspro.entity.pojo.message.MessageMarkdown;
+import cn.siriusbot.siriuspro.entity.pojo.message.MessageMarkdownParams;
 import cn.siriusbot.siriuspro.entity.pojo.message.ark.MessageArk;
 import cn.siriusbot.siriuspro.entity.pojo.message.ark.TextAndLinkObject;
 import cn.siriusbot.siriuspro.entity.pojo.message.embed.MessageEmbed;
 import cn.siriusbot.siriuspro.entity.pojo.message.embed.MessageEmbedField;
+import cn.siriusbot.siriuspro.entity.pojo.message.keyboard.*;
+import cn.siriusbot.siriuspro.entity.pojo.message.requestPack.RequestCustomKeyboard;
 import cn.siriusbot.siriuspro.message.AudioLiveChannelEvent.AudioLiveChannelMemberEvent;
 import cn.siriusbot.siriuspro.message.AudioMessageEvent.AudioMessageEvent;
 import cn.siriusbot.siriuspro.message.AuditMessageEvent.AuditMessageEvent;
@@ -40,7 +47,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class MessageManager {
-    
+
     /**
      * 机器人数据处理
      *
