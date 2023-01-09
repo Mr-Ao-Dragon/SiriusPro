@@ -18,6 +18,7 @@ public interface MemberApi {
      * @param bot_id 传入机器人ID
      * @param guild_id 频道ID
      * @param after 上一次回包中最后一个member的user id， 如果是第一次请求填 0，默认为 0
+     * @param limit 查询条数
      * @return 返回成员列表 分页大小，1-400，默认是 1。成员较多的频道尽量使用较大的limit值，以减少请求数
      *
      */
