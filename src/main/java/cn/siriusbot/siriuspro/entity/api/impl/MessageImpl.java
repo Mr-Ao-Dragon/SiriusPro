@@ -20,8 +20,9 @@ import java.io.File;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 @Component
-public class  MessageImpl implements MessageApi {
+public class MessageImpl implements MessageApi {
 
     @Autowired
     BotManager botManager;
@@ -38,7 +39,7 @@ public class  MessageImpl implements MessageApi {
      * 有关主动消息审核，可以通过 Intents 中审核事件 MESSAGE_AUDIT 返回 MessageAudited 对象获取结果。
      * 如传入event_id和msg_id其中一个，此条消息视为被动消息
      *
-     * @param bot_id        传入机器人对象ID
+     * @param bot_id     传入机器人对象ID
      * @param channel_id 子频道ID
      * @param content    要发送的消息内容
      * @param image_Url  图片Url
@@ -48,7 +49,7 @@ public class  MessageImpl implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message,String> sendMessage(String bot_id, String channel_id, String content, String image_Url, String msg_id, String event_id) {
+    public Tuple<Message, String> sendMessage(String bot_id, String channel_id, String content, String image_Url, String msg_id, String event_id) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages").build();
         if (channel_id == null || channel_id.equals(""))
@@ -63,7 +64,7 @@ public class  MessageImpl implements MessageApi {
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
         String data = response.body().string();
-        Tuple<Message,String>tuple = new Tuple<>();
+        Tuple<Message, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
         return tuple;
     }
@@ -71,28 +72,28 @@ public class  MessageImpl implements MessageApi {
     /**
      * 获取指定子频道的指定消息详情
      *
-     * @param bot_id        传入机器人对象ID
+     * @param bot_id     传入机器人对象ID
      * @param channel_id 子频道ID
      * @param message_id 消息ID
      * @return 返回消息对象
      */
     @SneakyThrows
     @Override
-    public Tuple<Message,String> getMessageById(String bot_id, String channel_id, String message_id) {
+    public Tuple<Message, String> getMessageById(String bot_id, String channel_id, String message_id) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id).build();
         Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();
-        Tuple<Message,String>tuple = new Tuple<>();
+        Tuple<Message, String> tuple = new Tuple<>();
         JSONObject json = JSONObject.parseObject(data);
-        tuple.setFirst(json.getObject("message",Message.class)).setSecond(data);
+        tuple.setFirst(json.getObject("message", Message.class)).setSecond(data);
         return tuple;
     }
 
     /**
      * 发送引用消息
      *
-     * @param bot_id        传入机器人对象ID
+     * @param bot_id     传入机器人对象ID
      * @param channel_id 子频道ID
      * @param content    消息内容
      * @param reference  引用消息对象
@@ -100,7 +101,7 @@ public class  MessageImpl implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message,String> sendReferenceMessage(String bot_id, String channel_id, String content, MessageReference reference) {
+    public Tuple<Message, String> sendReferenceMessage(String bot_id, String channel_id, String content, MessageReference reference) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
@@ -111,7 +112,7 @@ public class  MessageImpl implements MessageApi {
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
         String data = response.body().string();
-        Tuple<Message,String>tuple = new Tuple<>();
+        Tuple<Message, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
         return tuple;
 
@@ -126,7 +127,7 @@ public class  MessageImpl implements MessageApi {
      * 消息体中所包含的URL需要报备并通过验证，方可使用。
      * 如传入event_id和msg_id其中一个，此条消息视为被动消息
      *
-     * @param bot_id        传入机器人对象ID
+     * @param bot_id     传入机器人对象ID
      * @param channel_id 子频道ID
      * @param msg_id     消息id
      * @param event_id   事件ID
@@ -135,7 +136,7 @@ public class  MessageImpl implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message,String> sendMarkdownMessage(String bot_id, String channel_id, String msg_id, String event_id, MessageMarkdown markdown) {
+    public Tuple<Message, String> sendMarkdownMessage(String bot_id, String channel_id, String msg_id, String event_id, MessageMarkdown markdown) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
@@ -146,7 +147,7 @@ public class  MessageImpl implements MessageApi {
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
         String data = response.body().string();
-        Tuple<Message,String>tuple = new Tuple<>();
+        Tuple<Message, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
         return tuple;
     }
@@ -160,7 +161,7 @@ public class  MessageImpl implements MessageApi {
      * 公域机器人暂不支持申请，仅私域机器人可用，选择私域机器人后默认开通。
      * 注意: 开通后需要先将机器人从频道移除，然后重新添加，方可生效
      *
-     * @param bot_id        传入机器人对象ID
+     * @param bot_id     传入机器人对象ID
      * @param channel_id 子频道ID
      * @param message_id 消息ID
      * @param hidetip    是否隐藏删除消息后的小灰条
@@ -182,7 +183,7 @@ public class  MessageImpl implements MessageApi {
      * 发送成功之后，会触发一个创建消息的事件。
      * 如传入event_id和msg_id其中一个，此条消息视为被动消息
      *
-     * @param bot_id        传入机器人对象ID
+     * @param bot_id     传入机器人对象ID
      * @param channel_id 子频道ID
      * @param ark        ark消息对象
      * @param msg_id     消息id
@@ -191,7 +192,7 @@ public class  MessageImpl implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message,String> sendArkMessage(String bot_id, String channel_id, MessageArk ark, String msg_id, String event_id) {
+    public Tuple<Message, String> sendArkMessage(String bot_id, String channel_id, MessageArk ark, String msg_id, String event_id) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
@@ -202,7 +203,7 @@ public class  MessageImpl implements MessageApi {
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
         String data = response.body().string();
-        Tuple<Message,String>tuple = new Tuple<>();
+        Tuple<Message, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
         return tuple;
     }
@@ -212,7 +213,7 @@ public class  MessageImpl implements MessageApi {
      * 发送embed模板消息
      * 如传入event_id和msg_id其中一个，此条消息视为被动消息
      *
-     * @param bot_id        传入机器人对象ID
+     * @param bot_id     传入机器人对象ID
      * @param channel_id 子频道ID
      * @param embed      embed消息对象
      * @param msg_id     消息id
@@ -221,7 +222,7 @@ public class  MessageImpl implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message,String> sendEmbedMessage(String bot_id, String channel_id, MessageEmbed embed, String msg_id, String event_id) {
+    public Tuple<Message, String> sendEmbedMessage(String bot_id, String channel_id, MessageEmbed embed, String msg_id, String event_id) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
@@ -232,7 +233,7 @@ public class  MessageImpl implements MessageApi {
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
         String data = response.body().string();
-        Tuple<Message,String>tuple = new Tuple<>();
+        Tuple<Message, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
         return tuple;
     }
@@ -241,7 +242,7 @@ public class  MessageImpl implements MessageApi {
     /**
      * 发送图文消息
      *
-     * @param bot_id        传入机器人对象ID
+     * @param bot_id     传入机器人对象ID
      * @param channel_id 子频道ID
      * @param content    消息内容
      * @param image_path 本地图片路径
@@ -251,20 +252,28 @@ public class  MessageImpl implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message,String> sendImageAndTextMessage(String bot_id, String channel_id, String content, String image_path, String msg_id, String event_id) {
+    public Tuple<Message, String> sendImageAndTextMessage(String bot_id, String channel_id, String content, String image_path, String msg_id, String event_id) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages").build();
 
         MediaType mediaType = MediaType.parse("multipart/form-data");
-        File file = new File(image_path);
-        RequestBody body = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("content", content)
-                .addFormDataPart("msg_id", msg_id)
-                .addFormDataPart("file_image", file.getAbsolutePath(), RequestBody.create(mediaType, file)).build();
+        MultipartBody.Builder builder = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM);
+        if (content != null)
+            builder.addFormDataPart("content", content);
+        if (msg_id != null)
+            builder.addFormDataPart("msg_id", msg_id);
+        if (image_path != null) {
+            File file = new File(image_path);
+            builder.addFormDataPart("file_image", file.getAbsolutePath(), RequestBody.create(mediaType, file));
+        }
+        if (event_id != null)
+            builder.addFormDataPart("event_id", event_id);
+
+        MultipartBody body = builder.build();
         Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body, "multipart/form-data");
         String data = response.body().string();
-        Tuple<Message,String>tuple = new Tuple<>();
+        Tuple<Message, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
         return tuple;
     }
@@ -272,14 +281,14 @@ public class  MessageImpl implements MessageApi {
     /**
      * 发送带按钮的消息
      *
-     * @param bot_id                   传入机器人对象ID
+     * @param bot_id                传入机器人对象ID
      * @param channel_id            子频道ID
      * @param requestCustomKeyboard 自定义按钮请求对象
      * @return 返回消息对象
      */
     @SneakyThrows
     @Override
-    public Tuple<Message,String> sendCustomInLineKeyword(String bot_id, String channel_id, RequestCustomKeyboard requestCustomKeyboard) {
+    public Tuple<Message, String> sendCustomInLineKeyword(String bot_id, String channel_id, RequestCustomKeyboard requestCustomKeyboard) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages").build();
         JSONObject json = new JSONObject();
@@ -290,7 +299,7 @@ public class  MessageImpl implements MessageApi {
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
         String data = response.body().string();
-        Tuple<Message,String>tuple = new Tuple<>();
+        Tuple<Message, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
         return tuple;
     }

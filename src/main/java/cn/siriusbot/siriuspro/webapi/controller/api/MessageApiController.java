@@ -187,7 +187,7 @@ public class MessageApiController {
      * @return 消息对象
      */
     @PostMapping("/sendEmbed/{bot_id}/{channel_id}")
-    public R sendEmbedMessage(String bot_id, String channel_id, @RequestBody JSONObject json) {
+    public R sendEmbedMessage(@PathVariable String bot_id, @PathVariable String channel_id, @RequestBody JSONObject json) {
         try {
             MessageEmbed embed = json.getObject("embed", MessageEmbed.class);
             String msg_id = json.getString("msg_id");
@@ -212,7 +212,7 @@ public class MessageApiController {
      * @return 消息对象
      */
     @PostMapping("/send-image-text/{bot_id}/{channel_id}")
-    public R sendImageAndTextMessage(@PathVariable String bot_id, @RequestParam String channel_id, @Nullable @RequestParam MultipartFile file, @Nullable @RequestParam String content, @Nullable @RequestParam String msg_id, @Nullable @RequestParam String event_id) {
+    public R sendImageAndTextMessage(@PathVariable String bot_id, @PathVariable String channel_id, @Nullable @RequestParam MultipartFile file, @Nullable @RequestParam String content, @Nullable @RequestParam String msg_id, @Nullable @RequestParam String event_id) {
         try {
             String imgPath = null;
             if (file != null) {
@@ -237,7 +237,7 @@ public class MessageApiController {
      * @return 返回消息对象
      */
     @PostMapping("/send-custom-inline-keyword/{bot_id}/{channel_id}")
-    public R sendCustomInLineKeyword(String bot_id, String channel_id, @RequestBody RequestCustomKeyboard requestCustomKeyboard) {
+    public R sendCustomInLineKeyword(@PathVariable String bot_id, @PathVariable String channel_id, @RequestBody RequestCustomKeyboard requestCustomKeyboard) {
         try {
             return new R().setData(messageApi.sendCustomInLineKeyword(bot_id, channel_id, requestCustomKeyboard));
         } catch (MsgException e) {
