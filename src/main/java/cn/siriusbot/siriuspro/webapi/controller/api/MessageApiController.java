@@ -2,13 +2,11 @@ package cn.siriusbot.siriuspro.webapi.controller.api;
 
 import cn.siriusbot.siriuspro.application.ApplicationUtils;
 import cn.siriusbot.siriuspro.entity.api.MessageApi;
-import cn.siriusbot.siriuspro.entity.pojo.message.Message;
 import cn.siriusbot.siriuspro.entity.pojo.message.MessageMarkdown;
 import cn.siriusbot.siriuspro.entity.pojo.message.MessageReference;
 import cn.siriusbot.siriuspro.entity.pojo.message.ark.MessageArk;
 import cn.siriusbot.siriuspro.entity.pojo.message.embed.MessageEmbed;
 import cn.siriusbot.siriuspro.entity.pojo.message.requestPack.RequestCustomKeyboard;
-import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.webapi.R.R;
 import com.alibaba.fastjson.JSONObject;
@@ -166,7 +164,7 @@ public class MessageApiController {
      * @return 消息对象
      */
     @PostMapping("/sendArk/{bot_id}/{channel_id}")
-    public R sendArkMessage(@PathVariable String bot_id,@PathVariable String channel_id, @RequestBody JSONObject json) {
+    public R sendArkMessage(@PathVariable String bot_id, @PathVariable String channel_id, @RequestBody JSONObject json) {
         try {
             MessageArk ark = json.getObject("ark", MessageArk.class);
             String msg_id = json.getString("msg_id");
@@ -214,7 +212,7 @@ public class MessageApiController {
      * @return 消息对象
      */
     @PostMapping("/send-image-text/{bot_id}/{channel_id}")
-    public R sendImageAndTextMessage(@PathVariable String bot_id,@RequestParam String channel_id, @Nullable @RequestParam MultipartFile file, @Nullable @RequestParam String content, @Nullable @RequestParam String msg_id, @Nullable @RequestParam String event_id) {
+    public R sendImageAndTextMessage(@PathVariable String bot_id, @RequestParam String channel_id, @Nullable @RequestParam MultipartFile file, @Nullable @RequestParam String content, @Nullable @RequestParam String msg_id, @Nullable @RequestParam String event_id) {
         try {
             String imgPath = null;
             if (file != null) {
