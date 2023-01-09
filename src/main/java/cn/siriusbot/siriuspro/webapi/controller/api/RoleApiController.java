@@ -77,7 +77,7 @@ public class RoleApiController {
     @PutMapping("/create-role-member/{bot_id}/{guild_id}/{user_id}/{role_id}")
     public R createRoleMemberInGuild(@PathVariable String bot_id, @PathVariable String guild_id, @PathVariable String user_id, @PathVariable String role_id, @RequestBody Channel channel) {
         try {
-            return new R().setData(roleApi.createRoleMemberInGuild(bot_id, guild_id, user_id, role_id, channel).booleanValue());
+            return new R().setData(roleApi.createRoleMemberInGuild(bot_id,guild_id,user_id,role_id,channel).booleanValue());
         } catch (MsgException e) {
             return e.getR();
         } catch (Exception e) {

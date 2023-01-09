@@ -87,10 +87,15 @@ public class  RoleImpl implements RoleApi {
     @Override
     public Boolean createRoleMemberInGuild(String bot_id, String guild_id, String user_id, String role_id, Channel channel) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
+        System.out.println(guild_id);
+        System.out.println(user_id);
+        System.out.println(role_id);
+        System.out.println(channel.id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/members/" + user_id + "/roles/" + role_id).build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         RequestBody body = RequestBody.create(mediaType, JSONObject.toJSONString(channel));
         Response response = SiriusHttpUtils.putRequest(siriusBotClient, request, body);
+        System.out.println(response.body().string());
         return response.code() == 204;
     }
 
@@ -154,7 +159,7 @@ public class  RoleImpl implements RoleApi {
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/roles").build();
         Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();
-        GuildRoleList guildRoleList = JSONObject.parseObject(response.body().string(), GuildRoleList.class);
+        GuildRoleList guildRoleList = JSONObject.parseObject(data, GuildRoleList.class);
         Tuple<GuildRoleList,String> tuple =new Tuple<>();
         tuple.setFirst(guildRoleList).setSecond(data);
         return tuple;

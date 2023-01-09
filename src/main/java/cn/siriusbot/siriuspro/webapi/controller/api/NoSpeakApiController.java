@@ -46,6 +46,7 @@ public class NoSpeakApiController {
      *
      * @param bot_id   传入机器人ID
      * @param guild_id 频道ID
+     * @param json     请求体对象
      * @return 返回禁言成员对象
      */
     @PatchMapping("/no-speak-users/{bot_id}/{guild_id}")
@@ -71,7 +72,7 @@ public class NoSpeakApiController {
      * @return 返回禁言结果
      */
     @PatchMapping("/no-speak-all/{bot_id}/{guild_id}")
-    public R nodeSpeakAll(@PathVariable String bot_id, @PathVariable String guild_id, @RequestParam String mute_end_timestamp, @RequestParam String mute_seconds) {
+    public R nodeSpeakAll(@PathVariable String bot_id, @PathVariable String guild_id, @Nullable @RequestParam String mute_end_timestamp,@Nullable @RequestParam String mute_seconds) {
         try {
             return new R().setData(noSpeakApi.nodeSpeakAll(bot_id, guild_id, mute_end_timestamp, mute_seconds).booleanValue());
         } catch (MsgException e) {
