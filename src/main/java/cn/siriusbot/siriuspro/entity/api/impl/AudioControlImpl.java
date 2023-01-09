@@ -11,12 +11,17 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
 import org.springframework.stereotype.Component;
 @Component
 public class  AudioControlImpl implements AudioApi {
+
+    @Autowired
+    BotManager botManager;
+
     /**
      * 音频控制 Api
      * 频接口：仅限音频类机器人才能使用，后续会根据机器人类型自动开通接口权限，现如需调用，需联系平台申请权限。
@@ -29,7 +34,7 @@ public class  AudioControlImpl implements AudioApi {
     @SneakyThrows
     @Override
     public Boolean audioControl(String bot_id, String channel_id, AudioControl audioControl) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl()+"channels/"+channel_id+"/audio").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();
@@ -51,7 +56,7 @@ public class  AudioControlImpl implements AudioApi {
     @SneakyThrows
     @Override
     public Boolean singStart(String bot_id, String channel_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl()+"channels/"+channel_id+"/mic").build();
         Response response = SiriusHttpUtils.putRequest(siriusBotClient, request, RequestBody.create(MediaType.parse("text/plain;application/json"), ""));
         return  response.code()==200;
@@ -67,7 +72,7 @@ public class  AudioControlImpl implements AudioApi {
     @SneakyThrows
     @Override
     public Boolean singEnd(String bot_id, String channel_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl()+"channels/"+channel_id+"/mic").build();
         Response response = SiriusHttpUtils.deleteRequest(siriusBotClient, request,null);
         return  response.code()==200;

@@ -12,9 +12,14 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 @Component
 public class  PinsMessageImpl implements PinsMessageApi {
+
+    @Autowired
+    BotManager botManager;
+    
     /**
      * 添加精华消息
      *
@@ -26,7 +31,7 @@ public class  PinsMessageImpl implements PinsMessageApi {
     @SneakyThrows
     @Override
     public Tuple<PinsMessage, String> addPinsMessage(String bot_id, String channel_id, String message_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/pins/" + message_id).build();
         MediaType mediaType = MediaType.parse("application/json;text/plain");
         RequestBody body = RequestBody.create(mediaType, "");
@@ -49,7 +54,7 @@ public class  PinsMessageImpl implements PinsMessageApi {
     @SneakyThrows
     @Override
     public Tuple<PinsMessage,String> getPinsMessage(String bot_id, String channel_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/pins").build();
         String data = SiriusHttpUtils.getRequest(siriusBotClient, request).body().string();
         PinsMessage pinsMessage = JSONObject.parseObject(SiriusHttpUtils.getRequest(siriusBotClient, request).body().string(), PinsMessage.class);
@@ -69,7 +74,7 @@ public class  PinsMessageImpl implements PinsMessageApi {
      */
     @Override
     public Boolean deletePinsMessage(String bot_id, String channel_id, String message_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/pins/" + message_id).build();
         return SiriusHttpUtils.deleteRequest(siriusBotClient, request, null).code() == 204;
     }

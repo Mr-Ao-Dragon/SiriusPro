@@ -20,6 +20,9 @@ public class ApplicationRunnerStart implements ApplicationRunner {
     @Autowired
     ApplicationManager manager;
 
+    @Autowired
+    BotManager botManager;
+
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -29,8 +32,8 @@ public class ApplicationRunnerStart implements ApplicationRunner {
         manager.loadApps();
 
         SiriusBotClient siriusBotClient = new SiriusBotClient("102003612", "u0vDKGGUPaqYyfx65tC0FaZru9DJQ7VH", BotToken.botType.PUBLIC_TYPE, false);
-        BotManager.AuthBot(siriusBotClient);
-        BotManager.loginBot(siriusBotClient.getInfo().getBotId());
+        botManager.AuthBot(siriusBotClient);
+        botManager.loginBot(siriusBotClient.getInfo().getBotId());
 
 //        SiriusBotClient siriusBotClient2 = new SiriusBotClient("102007895", "vWFp0pHlCDur8yhum8A8JI5t41Gdkkp9", BotToken.botType.PUBLIC_TYPE, false);
 //        BotManager.AuthBot(siriusBotClient2);

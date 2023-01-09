@@ -18,10 +18,14 @@ import okhttp3.*;
 
 import java.io.File;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class DMSImpl implements DMS_Api {
+
+    @Autowired
+    BotManager botManager;
 
     /**
      * 创建私信会话
@@ -36,7 +40,7 @@ public class DMSImpl implements DMS_Api {
     @SneakyThrows
     @Override
     public Tuple<DMS, String> createDMS(String bot_id, String recipient_id, String source_guild_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "users/@me/dms").build();
         MediaType mediaType = MediaType.parse("application/json;text/plain");
         JSONObject json = new JSONObject();
@@ -72,7 +76,7 @@ public class DMSImpl implements DMS_Api {
     @SneakyThrows
     @Override
     public Tuple<Message, String> sendMessage(String bot_id, String guild_id, String content, String image_Url, String msg_id, String event_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
         if (guild_id == null || guild_id == "")
             return null;
@@ -111,7 +115,7 @@ public class DMSImpl implements DMS_Api {
     @SneakyThrows
     @Override
     public Tuple<Message, String> sendReferenceMessage(String bot_id, String guild_id, String content, MessageReference reference) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();
@@ -151,7 +155,7 @@ public class DMSImpl implements DMS_Api {
     @SneakyThrows
     @Override
     public Tuple<Message, String> sendMarkdownMessage(String bot_id, String guild_id, String msg_id, String event_id, MessageMarkdown markdown) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();
@@ -179,7 +183,7 @@ public class DMSImpl implements DMS_Api {
     @SneakyThrows
     @Override
     public Boolean deleteMessageById(String bot_id, String guild_id, String message_id, boolean hidetip) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages/" + message_id + "?hidetip=" + hidetip).build();
         Response response = SiriusHttpUtils.deleteRequest(siriusBotClient, request, null);
         return response.code() == 200;
@@ -203,7 +207,7 @@ public class DMSImpl implements DMS_Api {
     @SneakyThrows
     @Override
     public Tuple<Message, String> sendArkMessage(String bot_id, String guild_id, MessageArk ark, String msg_id, String event_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();
@@ -233,7 +237,7 @@ public class DMSImpl implements DMS_Api {
     @SneakyThrows
     @Override
     public Tuple<Message, String> sendEmbedMessage(String bot_id, String guild_id, MessageEmbed embed, String msg_id, String event_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();
@@ -263,7 +267,7 @@ public class DMSImpl implements DMS_Api {
     @SneakyThrows
     @Override
     public Tuple<Message, String> sendImageAndTextMessage(String bot_id, String guild_id, String content, String image_path, String msg_id, String event_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
 
         MediaType mediaType = MediaType.parse("multipart/form-data");

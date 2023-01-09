@@ -12,9 +12,14 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 @Component
 public class  ChannelPermissionsImpl implements ChannelPermissionsApi {
+
+    @Autowired
+    BotManager botManager;
+
     /**
      * 获取子频道用户权限
      * 用于获取 子频道channel_id 下用户 user_id 的权限。
@@ -29,7 +34,7 @@ public class  ChannelPermissionsImpl implements ChannelPermissionsApi {
     @SneakyThrows
     @Override
     public Tuple<ChannelPermissions,String> getChannelPermissionsByUser_id(String bot_id, String channel_id, String user_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/members/" + user_id + "/permissions").build();
         Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();
@@ -55,7 +60,7 @@ public class  ChannelPermissionsImpl implements ChannelPermissionsApi {
     @SneakyThrows
     @Override
     public Boolean modifyChannelPermissionsByRole_id(String bot_id, String channel_id, String role_id, String add, String remove) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/roles/" + role_id + "/permissions").build();
         MediaType mediaType = MediaType.parse("application/json");
         JSONObject json = new JSONObject();
@@ -83,7 +88,7 @@ public class  ChannelPermissionsImpl implements ChannelPermissionsApi {
     @SneakyThrows
     @Override
     public Boolean modifyChannelPermissionsByUser_id(String bot_id, String channel_id, String user_id, String add, String remove) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         System.out.println(add+remove);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/members/" + user_id + "/permissions").build();
         MediaType mediaType = MediaType.parse("application/json");
@@ -110,7 +115,7 @@ public class  ChannelPermissionsImpl implements ChannelPermissionsApi {
     @SneakyThrows
     @Override
     public Tuple<ChannelPermissions,String> getChannelPermissionsByRole_id(String bot_id, String channel_id, String role_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/roles/" + role_id + "/permissions").build();
         Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();

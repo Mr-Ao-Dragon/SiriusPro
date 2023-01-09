@@ -13,9 +13,14 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 @Component
 public class  ScheduleApiImpl implements ScheduleApi {
+
+    @Autowired
+    BotManager botManager;
 
     /**
      * 获取日程列表
@@ -30,7 +35,7 @@ public class  ScheduleApiImpl implements ScheduleApi {
     @SneakyThrows
     @Override
     public Tuple<List<Schedule>, String> getScheduleListByChannel_id(String bot_id, String channel_id, String since) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request;
         if (since != null) {
             request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/schedules?since=" + since).build();
@@ -57,7 +62,7 @@ public class  ScheduleApiImpl implements ScheduleApi {
     @SneakyThrows
     @Override
     public Tuple<Schedule, String> getScheduleInfo(String bot_id, String channel_id, String schedule_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/schedules/" + schedule_id).build();
         String data = SiriusHttpUtils.getRequest(siriusBotClient, request).body().string();
         Tuple<Schedule, String> tuple = new Tuple<>();
@@ -76,7 +81,7 @@ public class  ScheduleApiImpl implements ScheduleApi {
      */
     @Override
     public Boolean deleteSchedule(String bot_id, String channel_id, String schedule_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/schedules/" + schedule_id).build();
         return SiriusHttpUtils.deleteRequest(siriusBotClient, request, null).code() == 204;
     }
@@ -93,7 +98,7 @@ public class  ScheduleApiImpl implements ScheduleApi {
     @SneakyThrows
     @Override
     public Tuple<Schedule,String> createSchedule(String bot_id, String channel_id, Schedule schedule) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/schedules").build();
         JSONObject json = new JSONObject();
         json.put("schedule", schedule);
@@ -119,7 +124,7 @@ public class  ScheduleApiImpl implements ScheduleApi {
     @SneakyThrows
     @Override
     public Tuple<Schedule,String> modifySchedule(String bot_id, String channel_id, String schedule_id, Schedule schedule) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/schedules/" + schedule_id).build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();

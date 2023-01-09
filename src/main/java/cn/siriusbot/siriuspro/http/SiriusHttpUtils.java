@@ -3,6 +3,7 @@ package cn.siriusbot.siriuspro.http;
 
 import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.BotManager;
+import cn.siriusbot.siriuspro.uitls.AppContextUtil;
 import okhttp3.*;
 
 
@@ -27,7 +28,7 @@ public class SiriusHttpUtils extends OkHttpClient {
         try {
             response = siriusBotClient.getHttpClient().newCall(build).execute();
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
             return response;
         }
         return response;
@@ -53,7 +54,7 @@ public class SiriusHttpUtils extends OkHttpClient {
         try {
             response = siriusBotClient.getHttpClient().newCall(build).execute();
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
             return response;
         }
         return response;
@@ -117,7 +118,8 @@ public class SiriusHttpUtils extends OkHttpClient {
      * @return 返回响应对象
      */
     public static Response deleteRequest(SiriusBotClient siriusBotClient, Request request, RequestBody data) {
-        siriusBotClient = BotManager.getBotByBotId(siriusBotClient.getInfo().getBotId());
+        BotManager botManager = AppContextUtil.getBean(BotManager.class);
+        siriusBotClient = botManager.getBotByBotId(siriusBotClient.getInfo().getBotId());
         if (data == null) {
             request = request.newBuilder()
                     .addHeader("Authorization", "Bot " + siriusBotClient.getInfo().getBotId() + "." + siriusBotClient.getInfo().getToken())
@@ -149,7 +151,8 @@ public class SiriusHttpUtils extends OkHttpClient {
      * @return 返回响应对象
      */
     public static Response putRequest(SiriusBotClient siriusBotClient, Request request, RequestBody data) {
-        siriusBotClient = BotManager.getBotByBotId(siriusBotClient.getInfo().getBotId());
+        BotManager botManager = AppContextUtil.getBean(BotManager.class);
+        siriusBotClient = botManager.getBotByBotId(siriusBotClient.getInfo().getBotId());
         request = request.newBuilder()
                 .addHeader("Authorization", "Bot " + siriusBotClient.getInfo().getBotId() + "." + siriusBotClient.getInfo().getToken())
                 .addHeader("Content-Type", "application/json")

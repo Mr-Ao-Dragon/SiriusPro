@@ -13,6 +13,7 @@ import lombok.SneakyThrows;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,6 +22,10 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 @Component
 public class  APIPermissionImpl implements ApiPermissionApi {
+
+    @Autowired
+    BotManager botManager;
+
     /**
      * 创建频道Api接口权限，授权链接
      *
@@ -34,7 +39,7 @@ public class  APIPermissionImpl implements ApiPermissionApi {
     @SneakyThrows
     @Override
     public Tuple<ApiPermissionDemand,String> createApiGrantLink(String bot_id, String guild_id, String channel_id, ApiPermissionDemandIdentify api_identify, String desc) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl()+"guilds/"+guild_id+"/api_permission/demand").build();
         JSONObject json = new JSONObject();
         MediaType mediaType = MediaType.parse("application/json;text/plain");
@@ -58,7 +63,7 @@ public class  APIPermissionImpl implements ApiPermissionApi {
     @SneakyThrows
     @Override
     public Tuple<List<APIPermission>,String> getAPIPermissions(String bot_id, String guild_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl()+"guilds/"+guild_id+"/api_permission").build();
         String data = SiriusHttpUtils.getRequest(siriusBotClient,request).body().string();
         JSONObject json = JSONObject.parseObject(data);

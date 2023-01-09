@@ -12,6 +12,7 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,6 +20,10 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 @Component
 public class  ChannelImpl implements ChannelApi {
+
+    @Autowired
+    BotManager botManager;
+
     /**
      * 获取子频道列表
      * @param bot_id 传入机器人对象ID
@@ -28,7 +33,7 @@ public class  ChannelImpl implements ChannelApi {
     @SneakyThrows
     @Override
     public Tuple<List<Channel>,String> getChannelList(String bot_id, String guild_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/channels").build();
         Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();
@@ -48,7 +53,7 @@ public class  ChannelImpl implements ChannelApi {
     @SneakyThrows
     @Override
     public Tuple<Channel,String> getChannelInfo(String bot_id, String channel_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id).build();
         Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();
@@ -67,7 +72,7 @@ public class  ChannelImpl implements ChannelApi {
     @SneakyThrows
     @Override
     public Tuple<Channel,String>createChannel(String bot_id, String guild_id, Channel channel) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/channels").build();
         RequestBody body = RequestBody.create(mediaType, JSONObject.toJSONString(channel));
@@ -88,7 +93,7 @@ public class  ChannelImpl implements ChannelApi {
     @SneakyThrows
     @Override
     public Tuple<Channel,String> modifyChannel(String bot_id, String channel_id, Channel channel) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id).build();
         RequestBody body = RequestBody.create(mediaType, JSONObject.toJSONString(channel));
@@ -107,7 +112,7 @@ public class  ChannelImpl implements ChannelApi {
      */
     @Override
     public Boolean deleteChannel(String bot_id, String channel_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id).build();
         Response response = SiriusHttpUtils.deleteRequest(siriusBotClient, request, null);
         return response.code() == 200;
@@ -122,7 +127,7 @@ public class  ChannelImpl implements ChannelApi {
     @SneakyThrows
     @Override
     public Integer getOnlineMemberNumber(String bot_id, String channel_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl()+"channels/"+channel_id+"/online_nums").build();
         Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         JSONObject json = JSONObject.parseObject(response.body().string());

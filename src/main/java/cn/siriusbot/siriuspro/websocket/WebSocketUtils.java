@@ -4,6 +4,7 @@ import cn.siriusbot.siriuspro.bot.BotToken;
 import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.task.HeartBeatTask;
+import cn.siriusbot.siriuspro.uitls.AppContextUtil;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.Date;
@@ -66,7 +67,8 @@ public class WebSocketUtils {
      * @param botId 传入机器人ID
      */
     public static void Reconnect(String botId) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(botId);
+        BotManager botManager = AppContextUtil.getBean(BotManager.class);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(botId);
         siriusBotClient.getSocket().getHeartBeatTimer().pause();
         siriusBotClient.setWebSocketClient(new SiriusWebSocketClient(siriusBotClient, siriusBotClient.getSocket().getWebSocketUri()));
         siriusBotClient.getWebSocketClient().connect();
@@ -78,7 +80,8 @@ public class WebSocketUtils {
      * @param botId 传入机器人ID
      */
     public static void Resume(String botId) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(botId);
+        BotManager botManager = AppContextUtil.getBean(BotManager.class);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(botId);
         siriusBotClient.getSocket().getHeartBeatTimer().resume(new Date(), new HeartBeatTask(siriusBotClient.getInfo().getBotId()));
     }
 }

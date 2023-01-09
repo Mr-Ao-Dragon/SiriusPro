@@ -17,9 +17,15 @@ import okhttp3.Response;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 @Component
 public class  MemberImpl implements MemberApi {
+
+    @Autowired
+    BotManager botManager;
+
     /**
      * 获取频道成员列表
      *
@@ -31,7 +37,7 @@ public class  MemberImpl implements MemberApi {
     @SneakyThrows
     @Override
     public Tuple<List<Member>,String> getMemberList(String bot_id, String guild_id, String after, int limit) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         if (after == null)
             after = "0";
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/members?after=" + after + "&limit=" + limit).build();
@@ -55,7 +61,7 @@ public class  MemberImpl implements MemberApi {
     @SneakyThrows
     @Override
     public Tuple<Member,String> getMemberInfo(String bot_id, String guild_id, String user_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/members/" + user_id).build();
         Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();
@@ -77,7 +83,7 @@ public class  MemberImpl implements MemberApi {
     @SneakyThrows
     @Override
     public Tuple<MemberQueryLimit,String> getMemberListByRoleId(String bot_id, String guild_id, String role_id, String start_index, int limit) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/roles/" + role_id + "/members?start_index=" + start_index + "&limit=" + limit).build();
         Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();
@@ -100,7 +106,7 @@ public class  MemberImpl implements MemberApi {
     @SneakyThrows
     @Override
     public boolean deleteMemberByUserId(String bot_id, String guild_id, String user_id, boolean add_black, int delete_history_msg_days) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/members/" + user_id).build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();

@@ -14,6 +14,7 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -22,6 +23,10 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 @Component
 public class  AnnouncesImpl implements AnnouncesApi {
+
+    @Autowired
+    BotManager botManager;
+    
     /**
      * 创建频道公告
      * 用于创建频道全局公告，公告类型分为 消息类型的频道公告 和 推荐子频道类型的频道公告 。
@@ -41,7 +46,7 @@ public class  AnnouncesImpl implements AnnouncesApi {
     @SneakyThrows
     @Override
     public Tuple<Announces,String> createGuildAnnounces(String bot_id, String guild_id, String message_id, String channel_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/announces").build();
         MediaType mediaType = MediaType.parse("application/json;text/plain");
         JSONObject json = new JSONObject();
@@ -69,7 +74,7 @@ public class  AnnouncesImpl implements AnnouncesApi {
     @SneakyThrows
     @Override
     public Boolean deleteAnnouncesByGuildId(String bot_id, String guild_id, String message_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/announces/" + message_id).build();
         Response response = SiriusHttpUtils.deleteRequest(siriusBotClient, request, null);
         System.out.println(response.body().string());
@@ -86,7 +91,7 @@ public class  AnnouncesImpl implements AnnouncesApi {
     @SneakyThrows
     @Override
     public Tuple<Announces,String> createGuildRecommend_Channels(String bot_id, String guild_id, Integer announces_type, List<RecommendChannel> recommendChannels) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl()+"guilds/"+guild_id+"/announces").build();
         MediaType mediaType = MediaType.parse("application/json;text/plain");
         JSONObject json = new JSONObject();

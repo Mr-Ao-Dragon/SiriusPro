@@ -14,9 +14,15 @@ import okhttp3.Response;
 
 
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 @Component
 public class  UserApiImpl implements UserApi {
+
+    @Autowired
+    BotManager botManager;
+    
     /**
      * 获取机器人基本信息
      * @return 返回Bot(机器人)对象
@@ -25,7 +31,7 @@ public class  UserApiImpl implements UserApi {
     @SneakyThrows
     @Override
     public Tuple<User,String> getRobotInfo(String bot_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "users/@me").build();
         Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();
@@ -49,7 +55,7 @@ public class  UserApiImpl implements UserApi {
     @SneakyThrows
     @Override
     public Tuple<List<Guild>,String>  getGuildList(String bot_id, String before, String after, int limit) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl()).build();
         String path = siriusBotClient.getSocket().getOpenUrl() + "users/@me/guilds";
         try {

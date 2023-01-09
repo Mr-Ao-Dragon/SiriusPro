@@ -14,9 +14,15 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 @Component
 public class  NoSpeakImpl implements NoSpeakApi {
+
+    @Autowired
+    BotManager botManager;
+
     /**
      * 禁言指定成员
      * @param bot_id 传入机器人对象ID
@@ -28,7 +34,7 @@ public class  NoSpeakImpl implements NoSpeakApi {
      */
     @Override
     public Boolean noSpeakByUser_id(String bot_id, String guild_id, String user_id, String mute_end_timestamp, String mute_seconds) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/members/" + user_id + "/mute").build();
         JSONObject json = new JSONObject();
         json.put("mute_end_timestamp", mute_end_timestamp);
@@ -52,7 +58,7 @@ public class  NoSpeakImpl implements NoSpeakApi {
     @SneakyThrows
     @Override
     public Tuple<NoSpeak,String> noSpeakByUser_ids(String bot_id, String guild_id, List<String> user_ids, String mute_end_timestamp, String mute_seconds) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/mute").build();
         JSONObject json = new JSONObject();
         MediaType mediaType = MediaType.parse("application/json;text/plain");
@@ -77,7 +83,7 @@ public class  NoSpeakImpl implements NoSpeakApi {
      */
     @Override
     public Boolean nodeSpeakAll(String bot_id, String guild_id, String mute_end_timestamp, String mute_seconds) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         MediaType mediaType = MediaType.parse("application/json;text/plain");
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/mute").build();
         JSONObject json = new JSONObject();

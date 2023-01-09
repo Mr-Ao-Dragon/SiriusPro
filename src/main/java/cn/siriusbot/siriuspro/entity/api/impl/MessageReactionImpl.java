@@ -11,9 +11,14 @@ import lombok.SneakyThrows;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 @Component
 public class  MessageReactionImpl implements MessageReactionApi {
+
+    @Autowired
+    BotManager botManager;
+
     /**
      * 拉取表情表态用户列表
      *
@@ -29,7 +34,7 @@ public class  MessageReactionImpl implements MessageReactionApi {
     @SneakyThrows
     @Override
     public Tuple<ReactionReply,String> getReactionUsers(String bot_id, String channel_id, String message_id, Integer type, String id, String cookie, Integer limit) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request;
         if(cookie==null){
             request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "/reactions/" + type + "/" + id + "?limit=" + limit).build();
@@ -57,7 +62,7 @@ public class  MessageReactionImpl implements MessageReactionApi {
     @SneakyThrows
     @Override
     public Boolean deleteReactionForMessageId(String bot_id, String channel_id, String message_id, Integer type, String id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "/reactions/" + type + "/" + id).build();
         return SiriusHttpUtils.deleteRequest(siriusBotClient, request,null).code() == 204;
     }
@@ -74,7 +79,7 @@ public class  MessageReactionImpl implements MessageReactionApi {
      */
     @Override
     public Boolean addReaction(String bot_id, String channel_id, String message_id, Integer type, String id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "/reactions/" + type + "/" + id).build();
         return SiriusHttpUtils.putRequest(siriusBotClient, request, RequestBody.create(MediaType.parse("application/json;text/plain"), "")).code() == 204;
     }

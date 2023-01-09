@@ -10,9 +10,14 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.SneakyThrows;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 @Component
 public class  MessageSettingImpl implements MessageSettingApi {
+
+    @Autowired
+    BotManager botManager;
+
     /**
      * 获取频道消息频率设置信息
      * 用于获取机器人在频道 guild_id 内的消息频率设置。
@@ -24,7 +29,7 @@ public class  MessageSettingImpl implements MessageSettingApi {
     @SneakyThrows
     @Override
     public Tuple<MessageSetting,String> getMessageSettingInfo(String bot_id, String guild_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl()+"guilds/"+guild_id+"/message/setting").build();
         Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         Tuple<MessageSetting,String> tuple = new Tuple<>();

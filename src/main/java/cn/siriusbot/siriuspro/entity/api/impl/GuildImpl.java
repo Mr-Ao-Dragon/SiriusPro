@@ -11,9 +11,14 @@ import lombok.SneakyThrows;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 @Component
 public class  GuildImpl implements GuildApi {
+
+    @Autowired
+    BotManager botManager;
+
     /**
      * 获取频道详情
      * @param bot_id 传入机器人对象ID
@@ -22,7 +27,7 @@ public class  GuildImpl implements GuildApi {
      */
     @SneakyThrows
     public Tuple<Guild,String> getGuildInfo(String bot_id, String guild_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl()+"guilds/"+guild_id).build();
         Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data;

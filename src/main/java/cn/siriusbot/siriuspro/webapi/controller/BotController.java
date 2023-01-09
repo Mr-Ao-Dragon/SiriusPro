@@ -20,6 +20,9 @@ import java.util.Set;
 @RestController
 public class BotController {
 
+    @Autowired
+    BotManager botManager;
+
     /**
      *  添加机器人
      * @param botTemp 机器人模板对象
@@ -36,7 +39,7 @@ public class BotController {
                 bot.setBotType(BotToken.botType.PRIVATE_TYPE);
             }
             bot.setSandBox(botTemp.isSandBox());
-        return new R().setData(BotManager.addBot(new SiriusBotClient(bot)));
+        return new R().setData(botManager.addBot(new SiriusBotClient(bot)));
     }
 
     /**
@@ -46,7 +49,7 @@ public class BotController {
     @GetMapping("/bot/getAll")
     public R getAllBot(){
         List<BotInfo> list = new ArrayList<>();
-        Map<Integer, SiriusBotClient> botMap = BotManager.getAllBot();
+        Map<Integer, SiriusBotClient> botMap = botManager.getAllBot();
         Set<Integer> keys = botMap.keySet();
         for (Integer key : keys) {
             SiriusBotClient siriusBotClient = botMap.get(key);
@@ -55,19 +58,6 @@ public class BotController {
             list.add(botInfo);
         }
         return new R().setData(JSONObject.toJSONString(list));
-    }
-
-
-    @Autowired
-    RobotMapper robotMapper;
-
-    @GetMapping("/bot/test")
-    public void test(){
-        robotMapper.insert(
-                new Robot()
-                        .setBot_id("102004321")
-                        .setToken("VwUd3zkSBZIbLlWZOXNlhrBsZDCtn6Dn")
-        );
     }
 
 }

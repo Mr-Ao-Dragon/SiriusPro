@@ -27,9 +27,11 @@ import cn.siriusbot.siriuspro.message.PrivateDomainEvent.PrivateDomainMessageInf
 import cn.siriusbot.siriuspro.message.PublicMessageEvent.PublicMessageEvent;
 import cn.siriusbot.siriuspro.task.HeartBeatTask;
 import cn.siriusbot.siriuspro.timer.SiriusTimer;
+import cn.siriusbot.siriuspro.uitls.AppContextUtil;
 import cn.siriusbot.siriuspro.websocket.WebSocketServer;
 import cn.siriusbot.siriuspro.websocket.WebSocketUtils;
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 import java.util.ArrayList;
@@ -38,6 +40,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class MessageManager {
+    
     /**
      * 机器人数据处理
      *
@@ -45,8 +48,9 @@ public class MessageManager {
      * @param message 原始数据
      */
     public static void messageHandle(String botId, String message) {
+        BotManager botManager = AppContextUtil.getBean(BotManager.class);
         System.out.println(message);
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(botId);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(botId);
         JSONObject json = JSONObject.parseObject(message);
         int code = json.getInteger("op");
         switch (code) {
@@ -78,9 +82,10 @@ public class MessageManager {
      * @param message    消息内容
      */
     public static void messageEventHandle(String event_Type, String message) {
+        BotManager botManager = AppContextUtil.getBean(BotManager.class);
         JSONObject json = JSONObject.parseObject(message);
         JSONObject dObject = json.getJSONObject("d");
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(json.getString("bot_id"));
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(json.getString("bot_id"));
         switch (event_Type) {
             /**
              * 初始化事件
@@ -97,8 +102,8 @@ public class MessageManager {
                         .setSendHeartBeat(new HeartBeatTask(siriusBotClient.getInfo().getBotId()));
                 //发送心跳包
                 siriusBotClient.getSocket().getHeartBeatTimer().start(new Date(), siriusBotClient.getSocket().getHeartBeat());
-                int index = BotManager.getIdByBotId(siriusBotClient.getInfo().getBotId());
-                BotManager.botVector.put(index, siriusBotClient);
+                int index = botManager.getIdByBotId(siriusBotClient.getInfo().getBotId());
+                botManager.botVector.put(index, siriusBotClient);
                 break;
             case "RESUMED":
                 WebSocketUtils.Resume(siriusBotClient.getInfo().getBotId());

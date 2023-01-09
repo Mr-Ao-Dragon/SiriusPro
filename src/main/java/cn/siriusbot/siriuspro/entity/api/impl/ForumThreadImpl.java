@@ -13,9 +13,14 @@ import lombok.SneakyThrows;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 @Component
 public class  ForumThreadImpl implements ForumApi {
+
+    @Autowired
+    BotManager botManager;
+
     /**
      * 获取指定论坛子频道帖子列表
      * 仅私域可用
@@ -27,7 +32,7 @@ public class  ForumThreadImpl implements ForumApi {
     @SneakyThrows
     @Override
     public Tuple<ThreadList,String> getThreadsByChannelId(String bot_id, String channel_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/threads").build();
         String data = SiriusHttpUtils.getRequest(siriusBotClient, request).body().string();
         ThreadList threadList = JSONObject.parseObject(data, ThreadList.class);
@@ -48,7 +53,7 @@ public class  ForumThreadImpl implements ForumApi {
     @SneakyThrows
     @Override
     public Tuple<ForumThread,String> getThreadInfo(String bot_id, String channel_id, String thread_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/threads/" + thread_id).build();
         String data = SiriusHttpUtils.getRequest(siriusBotClient, request).body().string();
         JSONObject json = JSONObject.parseObject(data);
@@ -71,7 +76,7 @@ public class  ForumThreadImpl implements ForumApi {
     @SneakyThrows
     @Override
     public Tuple<createThread,String> postThread(String bot_id, String channel_id, String title, String content, Integer format) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/threads").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();
@@ -96,7 +101,7 @@ public class  ForumThreadImpl implements ForumApi {
      */
     @Override
     public Boolean deleteThread(String bot_id, String channel_id, String thread_id) {
-        SiriusBotClient siriusBotClient = BotManager.getBotByBotId(bot_id);
+        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/threads/" + thread_id).build();
         return SiriusHttpUtils.deleteRequest(siriusBotClient, request, null).code() == 204;
     }
