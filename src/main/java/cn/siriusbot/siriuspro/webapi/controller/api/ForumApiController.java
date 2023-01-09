@@ -18,12 +18,12 @@ public class ForumApiController {
     ForumApi forumApi;
 
     /**
-     * 获取指定论坛子频道的帖子列表
+     * 获取指定论坛子频道帖子列表
      * 仅私域可用
      *
-     * @param bot_id     传入机器人ID
+     * @param bot_id        传入机器人ID
      * @param channel_id 子频道ID
-     * @return 帖子列表对象
+     * @return 帖子详情对象
      */
     @GetMapping("/get-threads/{bot_id}/{channel_id}")
     public R getThreads(@PathVariable String bot_id, @PathVariable String channel_id) {
@@ -37,11 +37,10 @@ public class ForumApiController {
     }
 
     /**
-     * 获取子频道帖子列表
-     * 该接口用于获取子频道下的帖子列表。
+     * 获取子频道帖子详情
      * 仅私域可用
      *
-     * @param bot_id     传入机器人ID
+     * @param bot_id        传入机器人对象ID
      * @param channel_id 子频道ID
      * @param thread_id  帖子ID
      * @return 帖子详情对象
@@ -88,10 +87,10 @@ public class ForumApiController {
      * @param thread_id  帖子ID
      * @return 操作结果
      */
-    @DeleteMapping("delete-thread/{bot_id}/{channel_id}/{thread_id}")
+    @DeleteMapping("/delete-thread/{bot_id}/{channel_id}/{thread_id}")
     public R deleteThread(@PathVariable String bot_id, @PathVariable String channel_id, @PathVariable String thread_id) {
         try {
-            return new R().setData(forumApi.deleteThread(bot_id, channel_id, thread_id));
+            return new R().setData(forumApi.deleteThread(bot_id, channel_id, thread_id).booleanValue());
         } catch (MsgException e) {
             return e.getR();
         } catch (Exception e) {
