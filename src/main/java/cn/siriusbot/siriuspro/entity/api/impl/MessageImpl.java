@@ -80,11 +80,12 @@ public class  MessageImpl implements MessageApi {
     @Override
     public Tuple<Message,String> getMessageById(String bot_id, String channel_id, String message_id) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "messages/" + message_id).build();
+        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id).build();
         Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();
         Tuple<Message,String>tuple = new Tuple<>();
-        tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
+        JSONObject json = JSONObject.parseObject(data);
+        tuple.setFirst(json.getObject("message",Message.class)).setSecond(data);
         return tuple;
     }
 

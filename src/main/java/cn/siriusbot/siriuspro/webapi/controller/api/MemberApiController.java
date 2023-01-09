@@ -24,12 +24,12 @@ public class MemberApiController {
 
     /**
      * 获取频道成员列表
-     * @param bot_id 传入机器人ID
-     * @param guild_id 频道ID
-     * @param after 上一次回包中最后一个member的user id， 如果是第一次请求填 0，默认为 0
-     * @param limit 查询条数
-     * @return 返回成员列表 分页大小，1-400，默认是 1。成员较多的频道尽量使用较大的limit值，以减少请求数
      *
+     * @param bot_id   传入机器人ID
+     * @param guild_id 频道ID
+     * @param after    上一次回包中最后一个member的user id， 如果是第一次请求填 0，默认为 0
+     * @param limit    查询条数
+     * @return 返回成员列表 分页大小，1-400，默认是 1。成员较多的频道尽量使用较大的limit值，以减少请求数
      */
     @GetMapping("/get-members/{bot_id}/{guild_id}")
     public R getMemberList(@PathVariable String bot_id, @PathVariable String guild_id, @RequestParam @Nullable String after, @RequestParam @Nullable Integer limit) {
@@ -73,10 +73,10 @@ public class MemberApiController {
     @GetMapping("/get-role-member/{bot_id}/{guild_id}/{role_id}")
     public R getMemberListByRoleId(@PathVariable String bot_id, @PathVariable String guild_id, @PathVariable String role_id, @Nullable @RequestParam String start_index, @Nullable @RequestParam Integer limit) {
         try {
-            if (start_index==null)
-                start_index="0";
-            if(limit==null)
-                limit=0;
+            if (start_index == null)
+                start_index = "0";
+            if (limit == null)
+                limit = 0;
 
             return new R().setData(memberApi.getMemberListByRoleId(bot_id, guild_id, role_id, start_index, limit));
         } catch (MsgException e) {
@@ -98,12 +98,12 @@ public class MemberApiController {
      * @return 移除结果
      */
     @DeleteMapping("/delete-member/{bot_id}/{guild_id}/{user_id}")
-    public R deleteMemberByUserId(@PathVariable String bot_id, @PathVariable String guild_id, @PathVariable String user_id, @RequestParam @Nullable Boolean add_black,@Nullable @RequestParam Integer delete_history_msg_days) {
+    public R deleteMemberByUserId(@PathVariable String bot_id, @PathVariable String guild_id, @PathVariable String user_id, @RequestParam @Nullable Boolean add_black, @Nullable @RequestParam Integer delete_history_msg_days) {
         try {
-            if(add_black==null)
-                add_black=true;
-            if(delete_history_msg_days==null)
-                delete_history_msg_days=-1;
+            if (add_black == null)
+                add_black = false;
+            if (delete_history_msg_days == null)
+                delete_history_msg_days = -1;
 
             return new R().setData(memberApi.deleteMemberByUserId(bot_id, guild_id, user_id, add_black, delete_history_msg_days));
         } catch (MsgException e) {
