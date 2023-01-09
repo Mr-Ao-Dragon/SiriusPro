@@ -11,21 +11,20 @@ import cn.siriusbot.siriuspro.entity.temp.Tuple;
 public interface ForumApi {
 
     /**
-     * 获取指定论坛子频道的帖子列表
+     * 获取指定论坛子频道帖子列表
      * 仅私域可用
      *
      * @param bot_id        传入机器人ID
      * @param channel_id 子频道ID
-     * @return 帖子列表对象
+     * @return 帖子详情对象
      */
     public abstract Tuple<ThreadList,String> getThreadsByChannelId(String bot_id, String channel_id);
 
     /**
-     * 获取子频道详情
-     * 该接口用于获取子频道下的帖子列表。
+     * 获取子频道帖子详情
      * 仅私域可用
      *
-     * @param bot_id        传入机器人ID
+     * @param bot_id        传入机器人对象ID
      * @param channel_id 子频道ID
      * @param thread_id  帖子ID
      * @return 帖子详情对象

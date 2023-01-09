@@ -125,7 +125,6 @@ public class DirectApiController {
      * 私信场景下，每个机器人每天累计可以发 200 条主动消息。
      * 私信场景下，被动消息没有条数限制
      * 传入msg_id或event_id其一，此条消息视为被动消息
-     *
      * @param bot_id 传入机器人ID
      * @return 返回消息对象
      */

@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class  ForumThreadImpl implements ForumApi {
     /**
-     * 获取指定论坛子频道帖子详情
+     * 获取指定论坛子频道帖子列表
      * 仅私域可用
      *
      * @param bot_id        传入机器人ID
@@ -37,8 +37,7 @@ public class  ForumThreadImpl implements ForumApi {
     }
 
     /**
-     * 获取子频道详情
-     * 该接口用于获取子频道下的帖子列表。
+     * 获取子频道帖子详情
      * 仅私域可用
      *
      * @param bot_id        传入机器人对象ID

@@ -133,7 +133,6 @@ public class DMSImpl implements DMS_Api {
      * 调用前开发者需要先在“QQ开放平台-机器人-发布设置-消息模板”入口为对应机器人创建申请Markdown消息模板，得到模板 id ，在请求时填在对应的 markdown.template_id 上。
      * 模板参数暂不支持数组。
      * 消息体中所包含的URL需要报备并通过验证，方可使用。
-     * <p>
      * 用于向 guild_id 指定的私信会话发送Markdown富文本私信消息。
      * 被动回复消息有效期为 5 分钟。超时会报错。
      * 私信的 guild_id 在创建私信会话时以及私信消息事件中获取。
