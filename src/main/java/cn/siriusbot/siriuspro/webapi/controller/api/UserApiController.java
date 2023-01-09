@@ -47,10 +47,13 @@ public class UserApiController {
     @GetMapping("/get-guilds/{bot_id}")
     public R getGuildList(@PathVariable String bot_id, @RequestParam @Nullable String before, @Nullable String after, @Nullable Integer limit) {
         try {
+            if(limit==null)
+                limit=100;
             return new R().setData(userApi.getGuildList(bot_id, before, after, limit));
         } catch (MsgException e) {
             return e.getR();
         } catch (Exception e) {
+            e.printStackTrace();
             return new R().setMsg("error").setCode(500);
         }
     }

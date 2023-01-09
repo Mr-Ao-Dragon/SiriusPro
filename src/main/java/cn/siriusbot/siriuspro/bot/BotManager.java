@@ -117,6 +117,8 @@ public class BotManager {
      */
     public void logoutBot(String botId) {
         SiriusBotClient siriusBotClient = getBotByBotId(botId);
+        siriusBotClient.getSocket().getHeartBeatTimer().cancel();
+        siriusBotClient.getSocket().getSendHeartBeat().cancel();
         siriusBotClient.getWebSocketClient().close();
         botVector.remove(botId);
     }
