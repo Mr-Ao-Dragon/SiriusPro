@@ -1,6 +1,10 @@
 package cn.siriusbot.siriuspro.websocket;
 
 import cn.siriusbot.siriuspro.uitls.AppContextUtil;
+import cn.siriusbot.siriuspro.websocket.messagequeue.ClientObserver;
+import cn.siriusbot.siriuspro.websocket.messagequeue.ClientSubject;
+import cn.siriusbot.siriuspro.websocket.messagequeue.ClientTask;
+import cn.siriusbot.siriuspro.websocket.messagequeue.MsgQueue;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 import javax.websocket.*;
@@ -12,7 +16,7 @@ import java.io.IOException;
 @Component
 @ServerEndpoint(value = "/websocketServer/{userId}")
 @Log4j2
-public class WebSocketServer {
+public class WebSocketServer implements ClientObserver {
     /**
      * 与某个客户端的连接会话，需要通过它来给客户端发送数据
      */
@@ -24,9 +28,12 @@ public class WebSocketServer {
 
     WebSocketServerPoll poll;
 
+    ClientSubject clientSubject;
+
 
     public WebSocketServer () {
         this.poll = AppContextUtil.getBean(WebSocketServerPoll.class);
+        this.clientSubject = AppContextUtil.getBean(ClientSubject.class);
     }
 
     @OnOpen
@@ -39,6 +46,7 @@ public class WebSocketServer {
             webSocketServer.onClose();
         }
         poll.put(userId, this);
+        clientSubject.add(this);
         log.info("用户登录:" + userId);
     }
 
@@ -52,6 +60,7 @@ public class WebSocketServer {
                 // 踢掉已经连接的人
                 this.session.close();
                 poll.remove(userId);
+                clientSubject.remove(this);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -81,8 +90,15 @@ public class WebSocketServer {
 
 
     public static void sendAll(String message) {
-        WebSocketServerPoll staticPoll = AppContextUtil.getBean(WebSocketServerPoll.class);
-        staticPoll.sendAll(message);
+        //WebSocketServerPoll staticPoll = AppContextUtil.getBean(WebSocketServerPoll.class);
+        //staticPoll.sendAll(message);
+        ClientSubject poll = AppContextUtil.getBean(ClientSubject.class);
+        MsgQueue queue = AppContextUtil.getBean(MsgQueue.class);
+        ClientTask[] taskList = poll.getTaskList(message);
+        for (ClientTask task : taskList){
+            queue.push(task);
+        }
+
     }
 
 
@@ -103,4 +119,13 @@ public class WebSocketServer {
         this.session.getBasicRemote().sendObject(message);
     }
 
+    /**
+     * 发送消息到客户端
+     *
+     * @param s 数据内容
+     */
+    @Override
+    public void sendMsg(String s) throws Exception {
+        this.session.getBasicRemote().sendText(s);
+    }
 }

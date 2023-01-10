@@ -353,7 +353,7 @@ public class ApplicationManager {
     @SneakyThrows
     public static void OpenForumReplyCreateEventPush(String botId, OpenForumEventInfo event){
         for (SiriusApplication app : apps) {
-            app.appInfo().getMethods().get(" open_forum_reply_create_event").invoke(app,botId,event);
+            app.appInfo().getMethods().get("open_forum_reply_create_event").invoke(app,botId,event);
         }
     }
 
