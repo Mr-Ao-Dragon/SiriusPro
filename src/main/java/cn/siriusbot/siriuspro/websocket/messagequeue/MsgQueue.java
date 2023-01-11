@@ -19,7 +19,12 @@ public class MsgQueue {
      */
     public void push(ClientTask task) {
         tasks.add(task);
-        this.startTask();
+        synchronized (MsgQueue.class) {
+            if (resourceNumber == 0) {
+                resourceNumber++;
+                this.startTask();
+            }
+        }
     }
 
     /**
@@ -27,13 +32,6 @@ public class MsgQueue {
      */
     @Async
     void startTask() {
-        synchronized (this) {
-            if (resourceNumber == 0) {
-                resourceNumber++;
-            } else {
-                return;
-            }
-        }
         // 消费直到队列为空
         while (!tasks.isEmpty()) {
             ClientTask poll = tasks.poll();
@@ -49,7 +47,7 @@ public class MsgQueue {
 
             }
         }
-        synchronized (this) {
+        synchronized (MsgQueue.class) {
             resourceNumber--;
         }
     }
