@@ -41,7 +41,12 @@ public class MsgQueue {
                 poll.getObserver().sendMsg(poll.getMsg());  // 发送数据
             } catch (Exception e) {
                 log.error(e);
-                this.push(poll);
+                poll.setRetry(poll.getRetry() + 1);
+                if (poll.getRetry() < 6){
+                    // 最多重发5次
+                    this.push(poll);
+                }
+
             }
         }
         synchronized (this) {

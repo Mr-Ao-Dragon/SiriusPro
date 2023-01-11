@@ -8,4 +8,9 @@ import lombok.experimental.Accessors;
 public class ClientTask {
     ClientObserver observer;
     String msg;
+
+    /**
+     * 重发次数
+     */
+    int retry;
 }
