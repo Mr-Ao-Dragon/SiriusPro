@@ -7,6 +7,7 @@ import cn.siriusbot.siriuspro.entity.pojo.PinsMessage;
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
+import com.vdurmont.emoji.EmojiParser;
 import lombok.SneakyThrows;
 import okhttp3.MediaType;
 import okhttp3.Request;
@@ -37,6 +38,7 @@ public class  PinsMessageImpl implements PinsMessageApi {
         RequestBody body = RequestBody.create(mediaType, "");
         Response response = SiriusHttpUtils.putRequest(siriusBotClient, request, body);
         String data = response.body().string();
+        data = EmojiParser.parseToUnicode(data);
         PinsMessage pinsMessage = JSONObject.parseObject(data, PinsMessage.class);
         Tuple<PinsMessage, String> tuple = new Tuple<>();
         tuple.setFirst(pinsMessage).setSecond(data);
@@ -57,6 +59,7 @@ public class  PinsMessageImpl implements PinsMessageApi {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/pins").build();
         String data = SiriusHttpUtils.getRequest(siriusBotClient, request).body().string();
+        data = EmojiParser.parseToUnicode(data);
         PinsMessage pinsMessage = JSONObject.parseObject(SiriusHttpUtils.getRequest(siriusBotClient, request).body().string(), PinsMessage.class);
         Tuple<PinsMessage,String> tuple = new Tuple<>();
         tuple.setFirst(pinsMessage).setSecond(data);

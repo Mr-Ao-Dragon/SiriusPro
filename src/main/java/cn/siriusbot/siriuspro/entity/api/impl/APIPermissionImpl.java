@@ -9,6 +9,7 @@ import cn.siriusbot.siriuspro.entity.pojo.apipermission.ApiPermissionDemandIdent
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
+import com.vdurmont.emoji.EmojiParser;
 import lombok.SneakyThrows;
 import okhttp3.MediaType;
 import okhttp3.Request;
@@ -40,6 +41,7 @@ public class  APIPermissionImpl implements ApiPermissionApi {
     @Override
     public Tuple<ApiPermissionDemand,String> createApiGrantLink(String bot_id, String guild_id, String channel_id, ApiPermissionDemandIdentify api_identify, String desc) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
+        desc = EmojiParser.parseToUnicode(desc);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl()+"guilds/"+guild_id+"/api_permission/demand").build();
         JSONObject json = new JSONObject();
         MediaType mediaType = MediaType.parse("application/json;text/plain");
@@ -48,6 +50,7 @@ public class  APIPermissionImpl implements ApiPermissionApi {
         json.put("desc",desc);
         RequestBody body = RequestBody.create(mediaType,json.toJSONString());
         String data = SiriusHttpUtils.postRequest(siriusBotClient, request, body).body().string();
+        data = EmojiParser.parseToUnicode(data);
         Tuple<ApiPermissionDemand,String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data,ApiPermissionDemand.class)).setSecond(data);
         return tuple;

@@ -16,7 +16,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @MapperScan("cn.siriusbot.siriuspro.admin.dao")
 @EnableAsync
 public class SiriusProApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(SiriusProApplication.class, args);
     }

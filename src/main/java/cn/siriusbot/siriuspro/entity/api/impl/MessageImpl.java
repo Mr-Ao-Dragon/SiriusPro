@@ -87,6 +87,7 @@ public class MessageImpl implements MessageApi {
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id).build();
         Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();
+        data = EmojiParser.parseToUnicode(data);
         Tuple<Message, String> tuple = new Tuple<>();
         JSONObject json = JSONObject.parseObject(data);
         tuple.setFirst(json.getObject("message", Message.class)).setSecond(data);
@@ -106,6 +107,7 @@ public class MessageImpl implements MessageApi {
     @Override
     public Tuple<Message, String> sendReferenceMessage(String bot_id, String channel_id, String content, MessageReference reference) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
+        content = EmojiParser.parseToUnicode(content);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();
@@ -141,6 +143,7 @@ public class MessageImpl implements MessageApi {
     @Override
     public Tuple<Message, String> sendMarkdownMessage(String bot_id, String channel_id, String msg_id, String event_id, MessageMarkdown markdown) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
+        markdown.setContent(EmojiParser.parseToUnicode(markdown.getContent()));
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();
@@ -227,6 +230,9 @@ public class MessageImpl implements MessageApi {
     @Override
     public Tuple<Message, String> sendEmbedMessage(String bot_id, String channel_id, MessageEmbed embed, String msg_id, String event_id) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
+        for (int i = 0; i < embed.getFields().size(); i++) {
+            embed.getFields().get(i).setName(EmojiParser.parseToUnicode(embed.getFields().get(i).getName()));
+        }
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();
@@ -258,7 +264,7 @@ public class MessageImpl implements MessageApi {
     public Tuple<Message, String> sendImageAndTextMessage(String bot_id, String channel_id, String content, String image_path, String msg_id, String event_id) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages").build();
-
+        content = EmojiParser.parseToUnicode(content);
         MediaType mediaType = MediaType.parse("multipart/form-data");
         MultipartBody.Builder builder = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM);
@@ -293,6 +299,7 @@ public class MessageImpl implements MessageApi {
     @Override
     public Tuple<Message, String> sendCustomInLineKeyword(String bot_id, String channel_id, RequestCustomKeyboard requestCustomKeyboard) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
+        requestCustomKeyboard.getMarkdown().setContent(EmojiParser.parseToUnicode(requestCustomKeyboard.getMarkdown().getContent()));
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages").build();
         JSONObject json = new JSONObject();
         MessageKeyboard messageKeyboard = new MessageKeyboard();

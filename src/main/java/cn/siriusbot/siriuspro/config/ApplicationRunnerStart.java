@@ -31,7 +31,7 @@ public class ApplicationRunnerStart implements ApplicationRunner {
         log.info("框架初始化中...");
         manager.loadApps();
 
-        SiriusBotClient siriusBotClient = new SiriusBotClient("101990484", "vPavLsOHhJT90lUgo8SwAavbalnFzJMN", BotToken.botType.PUBLIC_TYPE, false);
+        SiriusBotClient siriusBotClient = new SiriusBotClient("101990484", "vPavLsOHhJT90lUgo8SwAavbalnFzJMN", BotToken.botType.PUBLIC_TYPE, true);
         botManager.AuthBot(siriusBotClient);
         botManager.loginBot(siriusBotClient.getInfo().getBotId());
 

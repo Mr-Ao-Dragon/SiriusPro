@@ -7,6 +7,7 @@ import cn.siriusbot.siriuspro.entity.pojo.Guild;
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
+import com.vdurmont.emoji.EmojiParser;
 import lombok.SneakyThrows;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -32,6 +33,7 @@ public class  GuildImpl implements GuildApi {
         Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data;
         data = response.body().string();
+        data = EmojiParser.parseToUnicode(data);
         Tuple<Guild,String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data,Guild.class)).setSecond(data);
         return tuple;

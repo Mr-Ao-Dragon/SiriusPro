@@ -12,6 +12,7 @@ import cn.siriusbot.siriuspro.entity.pojo.message.embed.MessageEmbed;
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
+import com.vdurmont.emoji.EmojiParser;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import okhttp3.*;
@@ -20,6 +21,7 @@ import java.io.File;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 @Component
 public class DMSImpl implements DMS_Api {
@@ -77,6 +79,7 @@ public class DMSImpl implements DMS_Api {
     @Override
     public Tuple<Message, String> sendMessage(String bot_id, String guild_id, String content, String image_Url, String msg_id, String event_id) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
+        content = EmojiParser.parseToUnicode(content);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
         if (guild_id == null || guild_id == "")
             return null;
@@ -90,6 +93,7 @@ public class DMSImpl implements DMS_Api {
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
         String data = response.body().string();
+        data = EmojiParser.parseToUnicode(data);
         Tuple<Message, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
         return tuple;
@@ -116,6 +120,7 @@ public class DMSImpl implements DMS_Api {
     @Override
     public Tuple<Message, String> sendReferenceMessage(String bot_id, String guild_id, String content, MessageReference reference) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
+        content = EmojiParser.parseToUnicode(content);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();
@@ -125,6 +130,7 @@ public class DMSImpl implements DMS_Api {
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
         String data = response.body().string();
+        data = EmojiParser.parseToUnicode(data);
         Tuple<Message, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
         return tuple;
@@ -156,6 +162,7 @@ public class DMSImpl implements DMS_Api {
     @Override
     public Tuple<Message, String> sendMarkdownMessage(String bot_id, String guild_id, String msg_id, String event_id, MessageMarkdown markdown) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
+        markdown.setContent(EmojiParser.parseToUnicode(markdown.getContent()));
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();
@@ -165,6 +172,7 @@ public class DMSImpl implements DMS_Api {
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
         String data = response.body().string();
+        data = EmojiParser.parseToUnicode(data);
         Tuple<Message, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
         return tuple;
@@ -217,6 +225,7 @@ public class DMSImpl implements DMS_Api {
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
         String data = response.body().string();
+        data = EmojiParser.parseToUnicode(data);
         Tuple<Message, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
         return tuple;
@@ -238,6 +247,10 @@ public class DMSImpl implements DMS_Api {
     @Override
     public Tuple<Message, String> sendEmbedMessage(String bot_id, String guild_id, MessageEmbed embed, String msg_id, String event_id) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
+        for (int i = 0; i < embed.getFields().size(); i++) {
+            embed.getFields().get(i).setName(EmojiParser.parseToUnicode(embed.getFields().get(i).getName()));
+        }
+
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();
@@ -269,7 +282,7 @@ public class DMSImpl implements DMS_Api {
     public Tuple<Message, String> sendImageAndTextMessage(String bot_id, String guild_id, String content, String image_path, String msg_id, String event_id) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
-
+        content = EmojiParser.parseToUnicode(content);
         MediaType mediaType = MediaType.parse("multipart/form-data");
         MultipartBody.Builder builder = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM);
