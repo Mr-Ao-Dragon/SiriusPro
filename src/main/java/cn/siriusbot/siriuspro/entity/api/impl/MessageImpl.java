@@ -13,6 +13,7 @@ import cn.siriusbot.siriuspro.entity.pojo.message.requestPack.RequestCustomKeybo
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
+import com.vdurmont.emoji.EmojiParser;
 import lombok.SneakyThrows;
 import okhttp3.*;
 
@@ -54,6 +55,8 @@ public class MessageImpl implements MessageApi {
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages").build();
         if (channel_id == null || channel_id.equals(""))
             return null;
+
+        content = EmojiParser.parseToUnicode(content);
         MediaType mediaType = MediaType.parse("text/plain;application/json");
 
         JSONObject json = new JSONObject();

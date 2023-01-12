@@ -5,6 +5,7 @@ import cn.siriusbot.siriuspro.websocket.messagequeue.ClientObserver;
 import cn.siriusbot.siriuspro.websocket.messagequeue.ClientSubject;
 import cn.siriusbot.siriuspro.websocket.messagequeue.ClientTask;
 import cn.siriusbot.siriuspro.websocket.messagequeue.MsgQueue;
+import com.vdurmont.emoji.EmojiParser;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 import javax.websocket.*;
@@ -34,6 +35,8 @@ public class WebSocketServer implements ClientObserver {
     public WebSocketServer () {
         this.poll = AppContextUtil.getBean(WebSocketServerPoll.class);
         this.clientSubject = AppContextUtil.getBean(ClientSubject.class);
+        WebSocketServer.staticPoll = AppContextUtil.getBean(ClientSubject.class);
+        WebSocketServer.staticQueue = AppContextUtil.getBean(MsgQueue.class);
     }
 
     @OnOpen
@@ -89,15 +92,20 @@ public class WebSocketServer implements ClientObserver {
     }
 
 
+    /**
+     * 静态推送入口
+     */
+    private static ClientSubject staticPoll;
+    private static MsgQueue staticQueue;
     public static void sendAll(String message) {
-        //WebSocketServerPoll staticPoll = AppContextUtil.getBean(WebSocketServerPoll.class);
-        //staticPoll.sendAll(message);
-        ClientSubject poll = AppContextUtil.getBean(ClientSubject.class);
-        MsgQueue queue = AppContextUtil.getBean(MsgQueue.class);
-        ClientTask[] taskList = poll.getTaskList(message);
-        for (ClientTask task : taskList){
-            queue.push(task);
+        if (staticPoll != null && staticQueue != null){
+            message = EmojiParser.parseToAliases(message);
+            ClientTask[] taskList = staticPoll.getTaskList(message);
+            for (ClientTask task : taskList){
+                staticQueue.push(task);
+            }
         }
+
 
     }
 
