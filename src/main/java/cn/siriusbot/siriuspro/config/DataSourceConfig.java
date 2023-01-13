@@ -1,12 +1,7 @@
 package cn.siriusbot.siriuspro.config;
 
-import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
-import com.zaxxer.hikari.HikariDataSource;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -14,10 +9,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 import javax.sql.DataSource;
+import java.util.Map;
 
 @Configuration
 @ComponentScan
 @PropertySource(value="file:${user.dir}/conf/database.properties",ignoreResourceNotFound = true)
+@Log4j2
 public class DataSourceConfig {
 
     @Value("${jdbc.driver}")
