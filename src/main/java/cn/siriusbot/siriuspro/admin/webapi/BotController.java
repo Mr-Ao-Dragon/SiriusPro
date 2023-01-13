@@ -3,6 +3,7 @@ package cn.siriusbot.siriuspro.admin.webapi;
 import cn.siriusbot.siriuspro.admin.entity.Robot;
 import cn.siriusbot.siriuspro.admin.service.BotService;
 import cn.siriusbot.siriuspro.bot.BotClient;
+import cn.siriusbot.siriuspro.config.aop.PowerInterceptor;
 import cn.siriusbot.siriuspro.webapi.R.R;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@PowerInterceptor(power = 0)
 @RequestMapping("/api/bot")
 public class BotController {
     @Autowired
     BotService botService;
+
 
     @RequestMapping("/add")
     public R addBot(
@@ -56,7 +59,7 @@ public class BotController {
     public R getOnlineAll() {
         List<BotClient> botClients = botService.queryBotClientAll();
         List<JSONObject> list = new ArrayList<>();
-        for (BotClient client : botClients){
+        for (BotClient client : botClients) {
             JSONObject bean = (JSONObject) JSONObject.toJSON(client.getInfo());
             bean.put("s", client.getSocket().getS());
             list.add(bean);
@@ -83,10 +86,10 @@ public class BotController {
             @RequestParam(value = "size", required = false) Integer size
 
     ) {
-        if (page == null || page < 0){
+        if (page == null || page < 0) {
             page = 0;
         }
-        if (size == null || size < 1){
+        if (size == null || size < 1) {
             size = 1000;
         }
         List<Robot> robots = botService.queryRobotAll(page, size);
