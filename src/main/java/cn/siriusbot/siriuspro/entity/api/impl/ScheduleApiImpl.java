@@ -7,6 +7,7 @@ import cn.siriusbot.siriuspro.entity.pojo.Schedule;
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
+import com.vdurmont.emoji.EmojiParser;
 import lombok.SneakyThrows;
 import okhttp3.MediaType;
 import okhttp3.Request;
@@ -44,6 +45,7 @@ public class  ScheduleApiImpl implements ScheduleApi {
         }
 
         String data = SiriusHttpUtils.getRequest(siriusBotClient, request).body().string();
+        data = EmojiParser.parseToUnicode(data);
         Tuple<List<Schedule>, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, List.class)).setSecond(data);
         return tuple;
@@ -65,6 +67,7 @@ public class  ScheduleApiImpl implements ScheduleApi {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/schedules/" + schedule_id).build();
         String data = SiriusHttpUtils.getRequest(siriusBotClient, request).body().string();
+        data = EmojiParser.parseToUnicode(data);
         Tuple<Schedule, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Schedule.class)).setSecond(data);
         return tuple;

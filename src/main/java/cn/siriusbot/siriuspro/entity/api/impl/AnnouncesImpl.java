@@ -9,6 +9,7 @@ import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
+import com.vdurmont.emoji.EmojiParser;
 import lombok.SneakyThrows;
 import okhttp3.MediaType;
 import okhttp3.Request;
@@ -92,6 +93,9 @@ public class  AnnouncesImpl implements AnnouncesApi {
     @Override
     public Tuple<Announces,String> createGuildRecommend_Channels(String bot_id, String guild_id, Integer announces_type, List<RecommendChannel> recommendChannels) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
+        for (int i = 0; i < recommendChannels.size(); i++) {
+            recommendChannels.get(i).setIntroduce(EmojiParser.parseToUnicode(recommendChannels.get(i).getIntroduce()));
+        }
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl()+"guilds/"+guild_id+"/announces").build();
         MediaType mediaType = MediaType.parse("application/json;text/plain");
         JSONObject json = new JSONObject();

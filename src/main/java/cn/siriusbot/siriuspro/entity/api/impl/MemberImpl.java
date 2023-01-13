@@ -8,6 +8,7 @@ import cn.siriusbot.siriuspro.entity.pojo.member.MemberQueryLimit;
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
+import com.vdurmont.emoji.EmojiParser;
 import lombok.SneakyThrows;
 import okhttp3.MediaType;
 import okhttp3.Request;
@@ -43,6 +44,7 @@ public class  MemberImpl implements MemberApi {
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/members?after=" + after + "&limit=" + limit).build();
         Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();
+        data = EmojiParser.parseToUnicode(data);
         List<Member> memberList = JSONObject.parseObject(data, List.class);
         Tuple<List<Member>,String> tuple = new Tuple<>();
         tuple.setFirst(memberList).setSecond(data);
@@ -65,6 +67,7 @@ public class  MemberImpl implements MemberApi {
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/members/" + user_id).build();
         Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();
+        data = EmojiParser.parseToUnicode(data);
         Tuple<Member,String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Member.class)).setSecond(data);
         return tuple;
@@ -87,6 +90,7 @@ public class  MemberImpl implements MemberApi {
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/roles/" + role_id + "/members?start_index=" + start_index + "&limit=" + limit).build();
         Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();
+        data = EmojiParser.parseToUnicode(data);
         MemberQueryLimit memberList = JSONObject.parseObject(data,MemberQueryLimit.class);
         Tuple<MemberQueryLimit,String> tuple = new Tuple<>();
         tuple.setFirst(memberList).setSecond(data);

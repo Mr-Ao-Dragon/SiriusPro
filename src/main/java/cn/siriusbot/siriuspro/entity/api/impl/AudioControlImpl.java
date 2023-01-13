@@ -6,6 +6,7 @@ import cn.siriusbot.siriuspro.entity.api.AudioApi;
 import cn.siriusbot.siriuspro.entity.pojo.audio.AudioControl;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
+import com.vdurmont.emoji.EmojiParser;
 import lombok.SneakyThrows;
 import okhttp3.MediaType;
 import okhttp3.Request;
@@ -35,6 +36,7 @@ public class  AudioControlImpl implements AudioApi {
     @Override
     public Boolean audioControl(String bot_id, String channel_id, AudioControl audioControl) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
+        audioControl.setText(EmojiParser.parseToUnicode(audioControl.getText()));
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl()+"channels/"+channel_id+"/audio").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         JSONObject json = new JSONObject();

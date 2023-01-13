@@ -7,6 +7,7 @@ import cn.siriusbot.siriuspro.entity.pojo.Channel;
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
+import com.vdurmont.emoji.EmojiParser;
 import lombok.SneakyThrows;
 import okhttp3.MediaType;
 import okhttp3.Request;
@@ -37,7 +38,7 @@ public class  ChannelImpl implements ChannelApi {
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/channels").build();
         Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();
-
+        data = EmojiParser.parseToUnicode(data);
         Tuple<List<Channel>,String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, List.class)).setSecond(data);
         return tuple;
@@ -57,6 +58,7 @@ public class  ChannelImpl implements ChannelApi {
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id).build();
         Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();
+        data = EmojiParser.parseToUnicode(data);
         Tuple<Channel,String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Channel.class)).setSecond(data);
         return tuple;
@@ -73,6 +75,7 @@ public class  ChannelImpl implements ChannelApi {
     @Override
     public Tuple<Channel,String>createChannel(String bot_id, String guild_id, Channel channel) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
+        channel.setName(EmojiParser.parseToUnicode(channel.getName()));
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/channels").build();
         RequestBody body = RequestBody.create(mediaType, JSONObject.toJSONString(channel));
@@ -94,6 +97,7 @@ public class  ChannelImpl implements ChannelApi {
     @Override
     public Tuple<Channel,String> modifyChannel(String bot_id, String channel_id, Channel channel) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
+        channel.setName(EmojiParser.parseToUnicode(channel.getName()));
         MediaType mediaType = MediaType.parse("text/plain;application/json");
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id).build();
         RequestBody body = RequestBody.create(mediaType, JSONObject.toJSONString(channel));

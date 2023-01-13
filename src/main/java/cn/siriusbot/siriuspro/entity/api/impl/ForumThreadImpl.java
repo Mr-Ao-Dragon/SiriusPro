@@ -9,6 +9,7 @@ import cn.siriusbot.siriuspro.entity.pojo.forum.thread.ForumThread;
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
+import com.vdurmont.emoji.EmojiParser;
 import lombok.SneakyThrows;
 import okhttp3.MediaType;
 import okhttp3.Request;
@@ -35,6 +36,7 @@ public class  ForumThreadImpl implements ForumApi {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/threads").build();
         String data = SiriusHttpUtils.getRequest(siriusBotClient, request).body().string();
+        data = EmojiParser.parseToUnicode(data);
         ThreadList threadList = JSONObject.parseObject(data, ThreadList.class);
         Tuple<ThreadList,String> tuple = new Tuple<>();
         tuple.setFirst(threadList).setSecond(data);
@@ -56,6 +58,7 @@ public class  ForumThreadImpl implements ForumApi {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/threads/" + thread_id).build();
         String data = SiriusHttpUtils.getRequest(siriusBotClient, request).body().string();
+        data = EmojiParser.parseToUnicode(data);
         JSONObject json = JSONObject.parseObject(data);
         ForumThread forumThread = json.getObject("thread", ForumThread.class);
         Tuple<ForumThread,String> tuple = new Tuple<>();
@@ -85,6 +88,7 @@ public class  ForumThreadImpl implements ForumApi {
         json.put("format", format);
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         String data = SiriusHttpUtils.putRequest(siriusBotClient, request, body).body().string();
+        data = EmojiParser.parseToUnicode(data);
         Tuple<createThread,String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, createThread.class)).setSecond(data);
         return tuple;

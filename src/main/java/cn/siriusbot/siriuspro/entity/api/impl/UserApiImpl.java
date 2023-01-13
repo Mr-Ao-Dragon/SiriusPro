@@ -8,6 +8,7 @@ import cn.siriusbot.siriuspro.entity.pojo.User;
 import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
+import com.vdurmont.emoji.EmojiParser;
 import lombok.SneakyThrows;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -71,6 +72,7 @@ public class  UserApiImpl implements UserApi {
         }
         Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
         String data = response.body().string();
+        data = EmojiParser.parseToUnicode(data);
         List<Guild> guildList = JSONObject.parseObject(data, List.class);
         Tuple<List<Guild>,String> tuple = new Tuple<>();
         tuple.setFirst(guildList);
