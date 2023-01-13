@@ -46,4 +46,12 @@ public class PowerAspect {
         throw new MsgException(90003, "权限授权异常，请联系管理员!");
     }
 
+    @Pointcut("@within(cn.siriusbot.siriuspro.config.aop.PowerInterceptor)")
+    public void clazz(){}
+
+
+    @Around("clazz()")
+    public Object clazzAround(ProceedingJoinPoint joinPoint) throws Throwable{
+        return around(joinPoint);
+    }
 }
