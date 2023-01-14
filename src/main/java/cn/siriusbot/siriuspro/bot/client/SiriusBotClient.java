@@ -83,6 +83,7 @@ public class SiriusBotClient implements BotClient {
     @Override
     public void close() {
         pushEvent(BotEventType.BOT_CLOSE, null);
+        log.info(String.format("Bot[%s]关闭连接", this.info.getBotId()));
     }
 
     /**
