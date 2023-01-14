@@ -10,6 +10,7 @@ import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
 import cn.siriusbot.siriuspro.bot.client.BotClient;
 import cn.siriusbot.siriuspro.bot.event.BotHttpEvent;
 import cn.siriusbot.siriuspro.bot.pojo.BotRequest;
+import cn.siriusbot.siriuspro.bot.pojo.e.RequestMethod;
 import cn.siriusbot.siriuspro.config.bean.BotPool;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
@@ -53,13 +54,13 @@ public class  AnnouncesImpl implements AnnouncesApi {
     public Tuple<Announces,String> createGuildAnnounces(String bot_id, String guild_id, String message_id, String channel_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
+                .setMethod(RequestMethod.POST)
                 .setUrl(client.getSession().getOpenUrl() + "guilds/" + guild_id + "/announces")
                 .setMediaType("application/json;text/plain")
                 .putRequestBody("message_id", message_id)
                 .putRequestBody("channel_id", channel_id);
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
         String response = http.request(botRequest);
-
         Tuple<Announces,String> tuple = new Tuple<>();
         tuple
                 .setFirst(JSONObject.parseObject(response, Announces.class))

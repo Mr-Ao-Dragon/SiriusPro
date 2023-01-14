@@ -3,6 +3,7 @@ package cn.siriusbot.siriuspro.bot.api.impl;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.api.MessageApi;
+import cn.siriusbot.siriuspro.bot.api.pojo.announces.Announces;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.Message;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.MessageKeyboard;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.MessageMarkdown;
@@ -11,6 +12,11 @@ import cn.siriusbot.siriuspro.bot.api.pojo.message.ark.MessageArk;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.embed.MessageEmbed;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.requestPack.RequestCustomKeyboard;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
+import cn.siriusbot.siriuspro.bot.client.BotClient;
+import cn.siriusbot.siriuspro.bot.event.BotHttpEvent;
+import cn.siriusbot.siriuspro.bot.pojo.BotRequest;
+import cn.siriusbot.siriuspro.bot.pojo.e.RequestMethod;
+import cn.siriusbot.siriuspro.config.bean.BotPool;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.vdurmont.emoji.EmojiParser;
@@ -23,6 +29,9 @@ import java.io.File;
 
 @Component
 public class MessageImpl implements MessageApi {
+
+    @Autowired
+    BotPool botPool;
 
     @Autowired
     BotManager botManager;
@@ -47,27 +56,23 @@ public class MessageImpl implements MessageApi {
      * @param event_id   事件ID
      * @return 消息对象
      */
-    @SneakyThrows
     @Override
     public Tuple<Message, String> sendMessage(String bot_id, String channel_id, String content, String image_Url, String msg_id, String event_id) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages").build();
-        if (channel_id == null || channel_id.equals(""))
-            return null;
-
-        content = EmojiParser.parseToUnicode(content);
-        MediaType mediaType = MediaType.parse("text/plain;application/json");
-
-        JSONObject json = new JSONObject();
-        json.put("content", content);
-        json.put("image", image_Url);
-        json.put("msg_id", msg_id);
-        json.put("event_id", event_id);
-        RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
-        String data = response.body().string();
+        BotClient client = botPool.getBotById(bot_id);
+        BotRequest botRequest = new BotRequest()
+                .setMethod(RequestMethod.POST)
+                .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/messages")
+                .setMediaType("text/plain;application/json")
+                .putRequestBody("content", content)
+                .putRequestBody("image", image_Url)
+                .putRequestBody("msg_id", msg_id)
+                .putRequestBody("event_id", event_id);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        String response = http.request(botRequest);
         Tuple<Message, String> tuple = new Tuple<>();
-        tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
+        tuple
+                .setFirst(JSONObject.parseObject(response, Message.class))
+                .setSecond(response);
         return tuple;
     }
 

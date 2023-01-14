@@ -40,6 +40,7 @@ public class PlugInEventImpl implements PlugInEvent , EventMethodHaveParam<BotEv
     @OnBotEvent
     @Override
     public void onEvent(BotEventType type, BotEventMessage body) {
+        log.info(body);
         pool.putEvent(this.client.getInfo().getBotId(), body);
     }
 }
