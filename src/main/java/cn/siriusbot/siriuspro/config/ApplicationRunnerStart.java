@@ -1,6 +1,7 @@
 package cn.siriusbot.siriuspro.config;
 
 import cn.siriusbot.siriuspro.application.ApplicationManager;
+import cn.siriusbot.siriuspro.bot.BotApi;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.bot.client.BotClient;
 import cn.siriusbot.siriuspro.bot.client.SiriusBotClient;
@@ -29,6 +30,9 @@ public class ApplicationRunnerStart implements ApplicationRunner {
     @Autowired
     BotConfig botConfig;
 
+    @Autowired
+    BotApi botApi;
+
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -48,19 +52,19 @@ public class ApplicationRunnerStart implements ApplicationRunner {
 
         BotClient botClient = new SiriusBotClient(
                 new BotInfo()
-                        .setBotId("101997967")
-                        .setToken("BecMX9rY8hhFzKPecZIOWisnTXSIBTEd")
-                        .setBotType(BotType.PUBLIC_TYPE)
+                        .setBotId("102035548")
+                        .setToken("mXpN8ABhF5CDxae9QmhWuvWB9Pb2bokf")
+                        .setBotType(BotType.PRIVATE_TYPE)
                         .setSandBox(false),
                 botConfig
         );
         botClient.setConfig(
                 IntentsEvent.class, new IntentsEventImpl()
-                        .setIntents(IntentsType.GUILDS)
-                        .setIntents(IntentsType.AUDIO_ACTION)
-                        .setIntents(IntentsType.PUBLIC_ALL)
+                        .setIntents(IntentsType.GUILD_MESSAGES)
         );
         botClient.start();
         System.out.println("启动完成");
+        Thread.sleep(2000);
+        botApi.messageApi().sendMessage("102035548", "12492052", "测试发送", "", "08c8e5e0a384dceeccc7011094bafa0538840248c58f8b9e06", "");
     }
 }

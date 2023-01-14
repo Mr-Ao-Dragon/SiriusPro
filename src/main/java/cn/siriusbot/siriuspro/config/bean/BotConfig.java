@@ -24,6 +24,9 @@ public class BotConfig implements BotConfigBuilder {
     @Autowired
     PlugInPool plugInPool;
 
+    @Autowired
+    BotPool botPool;
+
 
     /**
      * 首要配置事件类
@@ -47,6 +50,7 @@ public class BotConfig implements BotConfigBuilder {
                 .setConfig(MessageEvent.class, new MessageEventImpl())
                 .setConfig(HeartbeatEvent.class, new HeartbeatEventImpl())
                 .setConfig(PlugInEvent.class, new PlugInEventImpl(plugInPool))
-                .setConfig(WebSocketServiceEvent.class, new WebSocketServiceEventImpl(this.staticPoll, this.staticQueue));
+                .setConfig(WebSocketServiceEvent.class, new WebSocketServiceEventImpl(this.staticPoll, this.staticQueue))
+                .setConfig(BotPoolEvent.class, new BotPoolEventImpl(botPool));
     }
 }
