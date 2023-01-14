@@ -1,9 +1,9 @@
 package cn.siriusbot.siriuspro.bot.pojo.message.DirectMessageEvent;
 
+import cn.siriusbot.siriuspro.bot.api.pojo.User;
+import cn.siriusbot.siriuspro.bot.api.pojo.message.Message;
 import cn.siriusbot.siriuspro.bot.pojo.message.MessageBody;
 import cn.siriusbot.siriuspro.entity.Op_User;
-import cn.siriusbot.siriuspro.entity.pojo.User;
-import cn.siriusbot.siriuspro.entity.pojo.message.Message;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

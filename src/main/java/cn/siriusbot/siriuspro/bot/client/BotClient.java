@@ -32,13 +32,18 @@ public interface BotClient {
     void start();
 
     /**
+     * 退出机器人
+     */
+    void close();
+
+    /**
      * 设置配置对象
      *
      * @param config
      * @param <T>
      * @return
      */
-    <T extends BotEvent> BotClient setConfig(T config);
+    <T extends BotEvent> BotClient setConfig(Class<T> clazz, T config);
 
     /**
      * 获取配置对象
@@ -51,6 +56,7 @@ public interface BotClient {
 
     /**
      * 推送事件信息
+     *
      * @param type
      * @param body
      * @param <T>

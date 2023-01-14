@@ -1,11 +1,7 @@
 package cn.siriusbot.siriuspro.webapi.controller.api;
 
-import cn.siriusbot.siriuspro.entity.api.RoleApi;
-import cn.siriusbot.siriuspro.entity.pojo.Channel;
-import cn.siriusbot.siriuspro.entity.pojo.role.GuildRoleList;
-import cn.siriusbot.siriuspro.entity.pojo.role.NewRole;
-import cn.siriusbot.siriuspro.entity.pojo.role.Role;
-import cn.siriusbot.siriuspro.entity.temp.Tuple;
+import cn.siriusbot.siriuspro.bot.api.RoleApi;
+import cn.siriusbot.siriuspro.bot.api.pojo.Channel;
 import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.webapi.R.R;
 import com.alibaba.fastjson.JSONObject;

@@ -1,17 +1,11 @@
 package cn.siriusbot.siriuspro.webapi.controller.api;
 
-import cn.siriusbot.siriuspro.entity.api.MemberApi;
-import cn.siriusbot.siriuspro.entity.pojo.member.Member;
-import cn.siriusbot.siriuspro.entity.pojo.member.MemberQueryLimit;
-import cn.siriusbot.siriuspro.entity.temp.Tuple;
+import cn.siriusbot.siriuspro.bot.api.MemberApi;
 import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.webapi.R.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * 成员Api

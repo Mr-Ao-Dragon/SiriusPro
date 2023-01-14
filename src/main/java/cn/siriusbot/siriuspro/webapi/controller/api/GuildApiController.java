@@ -1,8 +1,6 @@
 package cn.siriusbot.siriuspro.webapi.controller.api;
 
-import cn.siriusbot.siriuspro.entity.api.GuildApi;
-import cn.siriusbot.siriuspro.entity.pojo.Guild;
-import cn.siriusbot.siriuspro.entity.temp.Tuple;
+import cn.siriusbot.siriuspro.bot.api.GuildApi;
 import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.webapi.R.R;
 import org.springframework.beans.factory.annotation.Autowired;

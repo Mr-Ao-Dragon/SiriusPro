@@ -1,16 +1,11 @@
 package cn.siriusbot.siriuspro.webapi.controller.api;
 
-import cn.siriusbot.siriuspro.entity.api.UserApi;
-import cn.siriusbot.siriuspro.entity.pojo.Guild;
-import cn.siriusbot.siriuspro.entity.pojo.User;
-import cn.siriusbot.siriuspro.entity.temp.Tuple;
+import cn.siriusbot.siriuspro.bot.api.UserApi;
 import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.webapi.R.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")

@@ -1,12 +1,12 @@
 package cn.siriusbot.siriuspro.webapi.controller.api;
 
 import cn.siriusbot.siriuspro.application.ApplicationUtils;
-import cn.siriusbot.siriuspro.entity.api.MessageApi;
-import cn.siriusbot.siriuspro.entity.pojo.message.MessageMarkdown;
-import cn.siriusbot.siriuspro.entity.pojo.message.MessageReference;
-import cn.siriusbot.siriuspro.entity.pojo.message.ark.MessageArk;
-import cn.siriusbot.siriuspro.entity.pojo.message.embed.MessageEmbed;
-import cn.siriusbot.siriuspro.entity.pojo.message.requestPack.RequestCustomKeyboard;
+import cn.siriusbot.siriuspro.bot.api.MessageApi;
+import cn.siriusbot.siriuspro.bot.api.pojo.message.MessageMarkdown;
+import cn.siriusbot.siriuspro.bot.api.pojo.message.MessageReference;
+import cn.siriusbot.siriuspro.bot.api.pojo.message.ark.MessageArk;
+import cn.siriusbot.siriuspro.bot.api.pojo.message.embed.MessageEmbed;
+import cn.siriusbot.siriuspro.bot.api.pojo.message.requestPack.RequestCustomKeyboard;
 import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.webapi.R.R;
 import com.alibaba.fastjson.JSONObject;

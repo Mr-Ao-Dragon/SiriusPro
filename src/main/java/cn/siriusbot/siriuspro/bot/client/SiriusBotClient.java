@@ -1,10 +1,11 @@
 package cn.siriusbot.siriuspro.bot.client;
 
 import cn.siriusbot.siriuspro.bot.annotation.OnBotEvent;
+import cn.siriusbot.siriuspro.bot.error.BotIsInOperationException;
 import cn.siriusbot.siriuspro.bot.error.NoFindBotEventException;
+import cn.siriusbot.siriuspro.bot.event.*;
 import cn.siriusbot.siriuspro.bot.event.impl.*;
 import cn.siriusbot.siriuspro.bot.event.v1.BotEvent;
-import cn.siriusbot.siriuspro.bot.event.BotHttpEvent;
 import cn.siriusbot.siriuspro.bot.pojo.BotInfo;
 import cn.siriusbot.siriuspro.bot.pojo.BotRequest;
 import cn.siriusbot.siriuspro.bot.pojo.BotSession;
@@ -20,6 +21,7 @@ import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Log4j2
@@ -28,17 +30,19 @@ public class SiriusBotClient implements BotClient {
     BotInfo info;
     BotSession session;
 
-    List<BotEvent> botEvents = new ArrayList<>();
+    HashMap<Class< ? extends BotEvent>, BotEvent> botEvents = new HashMap<>();
 
-    public SiriusBotClient(BotInfo botInfo) {
+    boolean start = false;
+
+    public SiriusBotClient(BotInfo botInfo, BotConfigBuilder builder) {
         this.info = botInfo;
-        this.setConfig(new BotHttpEventImpl()); // 首要加载http插件
+        this.setConfig(BotHttpEvent.class, builder.getBotHttpEvent()); // 首要加载http插件
         this.session = new BotSession()
                 .setS(0)
                 .setOpenUrl(info.isSandBox() ? "https://sandbox.api.sgroup.qq.com/" : "https://api.sgroup.qq.com/")
                 .setSessionId("");
         this.authBot(); // 验证机器人数据，初始化连接头
-        this.defaultEvent();    // 加载默认事件
+        builder.builder(this);
     }
 
     /**
@@ -66,9 +70,19 @@ public class SiriusBotClient implements BotClient {
      */
     @Override
     public void start() {
-        for (BotEvent event : this.botEvents) {
+        this.start = true;
+        for (Class<? extends BotEvent> key : this.botEvents.keySet()) {
+            BotEvent event = this.botEvents.get(key);
             event.start();
         }
+    }
+
+    /**
+     * 退出机器人
+     */
+    @Override
+    public void close() {
+        pushEvent(BotEventType.BOT_CLOSE, null);
     }
 
     /**
@@ -78,8 +92,11 @@ public class SiriusBotClient implements BotClient {
      * @return
      */
     @Override
-    public <T extends BotEvent> BotClient setConfig(T config) {
-        this.botEvents.add(config);
+    public <T extends BotEvent> BotClient setConfig(Class<T> clazz, T config) {
+        if (start){
+            throw new BotIsInOperationException();
+        }
+        this.botEvents.put(clazz, config);
         config.init(this);
         return this;
     }
@@ -93,7 +110,8 @@ public class SiriusBotClient implements BotClient {
     @Override
     @SuppressWarnings("unchecked")
     public <T extends BotEvent> T getBean(Class<T> clazz) {
-        for (BotEvent event : this.botEvents) {
+        for (Class<? extends BotEvent> key : this.botEvents.keySet()) {
+            BotEvent event = this.botEvents.get(key);
             if (clazz.isAssignableFrom(event.getClass())) {
                 return (T) event;
             }
@@ -109,7 +127,8 @@ public class SiriusBotClient implements BotClient {
      */
     @Override
     public <T extends BotEventBody> void pushEvent(BotEventType type, T body) {
-        for (BotEvent event : this.botEvents) {
+        for (Class<? extends BotEvent> key : this.botEvents.keySet()) {
+            BotEvent event = this.botEvents.get(key);
             Class<? extends BotEvent> aClass = event.getClass();
             Method[] methods = aClass.getMethods();
             for (Method method : methods) {
@@ -168,15 +187,4 @@ public class SiriusBotClient implements BotClient {
         }
     }
 
-    /**
-     * 默认自带事件
-     */
-    private void defaultEvent(){
-        this
-                .setConfig(new WebSocketEventImpl())
-                .setConfig(new MessageEventImpl())
-                .setConfig(new HeartbeatEventImpl())
-                .setConfig(new PlugInEventImpl())
-                .setConfig(new WebSocketServiceEventImpl());
-    }
 }

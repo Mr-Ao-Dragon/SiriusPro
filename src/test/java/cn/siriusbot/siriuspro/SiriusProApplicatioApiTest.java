@@ -1,16 +1,13 @@
 package cn.siriusbot.siriuspro;
 
 import cn.siriusbot.siriuspro.bot.BotApi;
-import cn.siriusbot.siriuspro.entity.api.MessageApi;
-import cn.siriusbot.siriuspro.entity.api.impl.MessageImpl;
-import cn.siriusbot.siriuspro.entity.pojo.message.MessageKeyboard;
-import cn.siriusbot.siriuspro.entity.pojo.message.MessageMarkdown;
-import cn.siriusbot.siriuspro.entity.pojo.message.MessageMarkdownParams;
-import cn.siriusbot.siriuspro.entity.pojo.message.keyboard.*;
-import cn.siriusbot.siriuspro.entity.pojo.message.requestPack.RequestCustomKeyboard;
+import cn.siriusbot.siriuspro.bot.api.pojo.message.MessageKeyboard;
+import cn.siriusbot.siriuspro.bot.api.pojo.message.MessageMarkdown;
+import cn.siriusbot.siriuspro.bot.api.pojo.message.MessageMarkdownParams;
+import cn.siriusbot.siriuspro.bot.api.pojo.message.keyboard.*;
+import cn.siriusbot.siriuspro.bot.api.pojo.message.requestPack.RequestCustomKeyboard;
 import com.alibaba.fastjson.JSONObject;
 import org.junit.jupiter.api.Test;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 

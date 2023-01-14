@@ -2,9 +2,9 @@ package cn.siriusbot.siriuspro.bot.pojo.message;
 
 
 import cn.siriusbot.siriuspro.application.ApplicationManager;
-import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.BotManager;
-import cn.siriusbot.siriuspro.entity.pojo.User;
+import cn.siriusbot.siriuspro.bot.SiriusBotClient;
+import cn.siriusbot.siriuspro.bot.api.pojo.User;
 import cn.siriusbot.siriuspro.bot.pojo.message.AudioLiveChannelEvent.AudioLiveChannelMemberEvent;
 import cn.siriusbot.siriuspro.bot.pojo.message.AudioMessageEvent.AudioMessageEvent;
 import cn.siriusbot.siriuspro.bot.pojo.message.AuditMessageEvent.AuditMessageEvent;
@@ -25,7 +25,6 @@ import cn.siriusbot.siriuspro.uitls.AppContextUtil;
 import cn.siriusbot.siriuspro.websocket.WebSocketServer;
 import cn.siriusbot.siriuspro.websocket.WebSocketUtils;
 import com.alibaba.fastjson.JSONObject;
-
 
 import java.util.Date;
 import java.util.Objects;

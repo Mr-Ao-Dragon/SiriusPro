@@ -1,7 +1,6 @@
 package cn.siriusbot.siriuspro.bot;
 
-import cn.siriusbot.siriuspro.entity.api.*;
-import cn.siriusbot.siriuspro.entity.pojo.MessageSetting;
+import cn.siriusbot.siriuspro.bot.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -46,14 +46,7 @@ public class ApplicationManager {
      * 加载全部应用
      */
     public void loadApps() {
-        File file = new File(ApplicationUtils.appsPath);
-        for (File appFile : Objects.requireNonNull(file.listFiles())) {
-            SiriusApplication app = getAppInstance(appFile);
-            if (app != null) {
-                System.out.println(SiriusLogger.getFormatLogString("应用"+"["+app.appInfo().getAppName()+"-"+app.appInfo().getAppAuthor()+"]加载成功！",36,1));
-                apps.add(app);
-            }
-        }
+
 
     }
 

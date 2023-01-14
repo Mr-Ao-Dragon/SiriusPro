@@ -1,10 +1,10 @@
 package cn.siriusbot.siriuspro.webapi.controller.api;
 
-import cn.siriusbot.siriuspro.entity.api.ApiPermissionApi;
-import cn.siriusbot.siriuspro.entity.pojo.apipermission.APIPermission;
-import cn.siriusbot.siriuspro.entity.pojo.apipermission.ApiPermissionDemand;
-import cn.siriusbot.siriuspro.entity.pojo.apipermission.ApiPermissionDemandIdentify;
-import cn.siriusbot.siriuspro.entity.temp.Tuple;
+import cn.siriusbot.siriuspro.bot.api.ApiPermissionApi;
+import cn.siriusbot.siriuspro.bot.api.pojo.apipermission.APIPermission;
+import cn.siriusbot.siriuspro.bot.api.pojo.apipermission.ApiPermissionDemand;
+import cn.siriusbot.siriuspro.bot.api.pojo.apipermission.ApiPermissionDemandIdentify;
+import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
 import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.webapi.R.R;
 import com.alibaba.fastjson.JSONObject;

@@ -1,8 +1,7 @@
 package cn.siriusbot.siriuspro.bot.pojo.message.GuildMemberEvent;
 
+import cn.siriusbot.siriuspro.bot.api.pojo.User;
 import cn.siriusbot.siriuspro.bot.pojo.message.MessageBody;
-import cn.siriusbot.siriuspro.entity.pojo.User;
-
 import lombok.Data;
 import lombok.experimental.Accessors;
 

@@ -1,6 +1,6 @@
 package cn.siriusbot.siriuspro.bot;
 
-import cn.siriusbot.siriuspro.entity.pojo.User;
+import cn.siriusbot.siriuspro.bot.api.pojo.User;
 import cn.siriusbot.siriuspro.websocket.SiriusWebSocketClient;
 import okhttp3.OkHttpClient;
 

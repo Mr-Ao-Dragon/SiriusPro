@@ -1,17 +1,15 @@
 package cn.siriusbot.siriuspro.config;
 
-import cn.siriusbot.siriuspro.admin.dao.RobotMapper;
-import cn.siriusbot.siriuspro.admin.entity.Robot;
 import cn.siriusbot.siriuspro.application.ApplicationManager;
-import cn.siriusbot.siriuspro.application.ApplicationUtils;
-import cn.siriusbot.siriuspro.bot.BotToken;
 import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.bot.client.BotClient;
 import cn.siriusbot.siriuspro.bot.client.SiriusBotClient;
+import cn.siriusbot.siriuspro.bot.event.IntentsEvent;
 import cn.siriusbot.siriuspro.bot.event.impl.IntentsEventImpl;
 import cn.siriusbot.siriuspro.bot.pojo.BotInfo;
 import cn.siriusbot.siriuspro.bot.pojo.e.BotType;
 import cn.siriusbot.siriuspro.bot.pojo.e.IntentsType;
+import cn.siriusbot.siriuspro.config.bean.BotConfig;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -27,6 +25,9 @@ public class ApplicationRunnerStart implements ApplicationRunner {
 
     @Autowired
     BotManager botManager;
+
+    @Autowired
+    BotConfig botConfig;
 
 
     @Override
@@ -50,10 +51,11 @@ public class ApplicationRunnerStart implements ApplicationRunner {
                         .setBotId("101997967")
                         .setToken("BecMX9rY8hhFzKPecZIOWisnTXSIBTEd")
                         .setBotType(BotType.PUBLIC_TYPE)
-                        .setSandBox(false)
+                        .setSandBox(false),
+                botConfig
         );
         botClient.setConfig(
-                new IntentsEventImpl()
+                IntentsEvent.class, new IntentsEventImpl()
                         .setIntents(IntentsType.GUILDS)
                         .setIntents(IntentsType.AUDIO_ACTION)
                         .setIntents(IntentsType.PUBLIC_ALL)

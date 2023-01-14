@@ -1,26 +1,22 @@
 package cn.siriusbot.siriuspro.webapi.controller.api;
 
 import cn.siriusbot.siriuspro.application.ApplicationUtils;
-import cn.siriusbot.siriuspro.entity.api.DMS_Api;
-import cn.siriusbot.siriuspro.entity.pojo.message.Message;
-import cn.siriusbot.siriuspro.entity.pojo.message.MessageMarkdown;
-import cn.siriusbot.siriuspro.entity.pojo.message.MessageReference;
-import cn.siriusbot.siriuspro.entity.pojo.message.ark.MessageArk;
-import cn.siriusbot.siriuspro.entity.pojo.message.embed.MessageEmbed;
-import cn.siriusbot.siriuspro.entity.temp.Tuple;
+import cn.siriusbot.siriuspro.bot.api.DMS_Api;
+import cn.siriusbot.siriuspro.bot.api.pojo.message.MessageMarkdown;
+import cn.siriusbot.siriuspro.bot.api.pojo.message.MessageReference;
+import cn.siriusbot.siriuspro.bot.api.pojo.message.ark.MessageArk;
+import cn.siriusbot.siriuspro.bot.api.pojo.message.embed.MessageEmbed;
 import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.webapi.R.R;
 import com.alibaba.fastjson.JSONObject;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 
 /**
  * 私信Api

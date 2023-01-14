@@ -1,9 +1,11 @@
 package cn.siriusbot.siriuspro.bot.event.impl;
 
+import cn.siriusbot.siriuspro.bot.annotation.OnBotEvent;
 import cn.siriusbot.siriuspro.bot.client.BotClient;
 import cn.siriusbot.siriuspro.bot.client.BotWebSocket;
 import cn.siriusbot.siriuspro.bot.client.BotWebSocketClient;
 import cn.siriusbot.siriuspro.bot.event.WebSocketEvent;
+import cn.siriusbot.siriuspro.bot.event.v1.EventMethodNoParam;
 import cn.siriusbot.siriuspro.bot.pojo.e.BotEventType;
 import cn.siriusbot.siriuspro.bot.pojo.event.BotWebSocketMessage;
 import com.alibaba.fastjson.JSONObject;
@@ -13,10 +15,11 @@ import org.java_websocket.handshake.ServerHandshake;
 import java.net.URI;
 
 @Log4j2
-public class WebSocketEventImpl implements WebSocketEvent{
+public class WebSocketEventImpl implements WebSocketEvent, EventMethodNoParam {
 
     BotClient client;
     BotWebSocket webSocket;
+
 
     private static class BotWebSocketClientImpl extends BotWebSocketClient{
         BotClient client;
@@ -95,5 +98,15 @@ public class WebSocketEventImpl implements WebSocketEvent{
     public void reconnection() {
         this.webSocket = new BotWebSocketClientImpl(this.client.getSession().getWebSocketUri(), client);
         this.webSocket.connect();
+    }
+
+
+    @OnBotEvent
+    @Override
+    public void onEvent(BotEventType type) {
+        if (type == BotEventType.BOT_CLOSE){
+            // 退出机器人
+            this.webSocket.close();
+        }
     }
 }

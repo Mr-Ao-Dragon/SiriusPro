@@ -1,6 +1,6 @@
 package cn.siriusbot.siriuspro.bot;
 
-import cn.siriusbot.siriuspro.entity.api.*;
+import cn.siriusbot.siriuspro.bot.api.*;
 
 public interface BotApi {
     /**

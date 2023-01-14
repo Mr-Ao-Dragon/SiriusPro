@@ -1,7 +1,7 @@
 package cn.siriusbot.siriuspro.bot.pojo.message.OpenForumEvent;
 
+import cn.siriusbot.siriuspro.bot.api.pojo.forum.thread.ForumThread;
 import cn.siriusbot.siriuspro.bot.pojo.message.MessageBody;
-import cn.siriusbot.siriuspro.entity.pojo.forum.thread.ForumThread;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

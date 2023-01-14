@@ -1,9 +1,9 @@
 package cn.siriusbot.siriuspro.bot.pojo.message.ForumEvent;
 
 
+import cn.siriusbot.siriuspro.bot.api.pojo.forum.post.PostInfo;
+import cn.siriusbot.siriuspro.bot.api.pojo.forum.reply.ReplyInfo;
 import cn.siriusbot.siriuspro.bot.pojo.message.MessageBody;
-import cn.siriusbot.siriuspro.entity.pojo.forum.post.PostInfo;
-import cn.siriusbot.siriuspro.entity.pojo.forum.reply.ReplyInfo;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

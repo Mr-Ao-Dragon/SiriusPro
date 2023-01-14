@@ -1,12 +1,15 @@
 package cn.siriusbot.siriuspro.bot.pojo.e;
 
 
-
 public enum BotEventType {
     /**
      * 通用的
      */
     UNIVERSAL,
+    /**
+     * 机器人关闭事件
+     */
+    BOT_CLOSE,
     /**
      * WebSocket消息事件
      */
@@ -24,6 +27,6 @@ public enum BotEventType {
      */
     TASK_HEARTBEAT_PAUSE;
 
-    private BotEventType() {
+    BotEventType() {
     }
 }

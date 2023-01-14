@@ -1,9 +1,9 @@
 package cn.siriusbot.siriuspro.webapi.controller.api;
 
-import cn.siriusbot.siriuspro.entity.api.AnnouncesApi;
-import cn.siriusbot.siriuspro.entity.pojo.announces.Announces;
-import cn.siriusbot.siriuspro.entity.pojo.announces.RecommendChannel;
-import cn.siriusbot.siriuspro.entity.temp.Tuple;
+import cn.siriusbot.siriuspro.bot.api.AnnouncesApi;
+import cn.siriusbot.siriuspro.bot.api.pojo.announces.Announces;
+import cn.siriusbot.siriuspro.bot.api.pojo.announces.RecommendChannel;
+import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
 import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.webapi.R.R;
 import com.alibaba.fastjson.JSONObject;

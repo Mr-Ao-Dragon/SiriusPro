@@ -1,7 +1,7 @@
 package cn.siriusbot.siriuspro.webapi.controller.api;
 
-import cn.siriusbot.siriuspro.entity.api.ChannelApi;
-import cn.siriusbot.siriuspro.entity.pojo.Channel;
+import cn.siriusbot.siriuspro.bot.api.ChannelApi;
+import cn.siriusbot.siriuspro.bot.api.pojo.Channel;
 import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.webapi.R.R;
 import org.springframework.beans.factory.annotation.Autowired;

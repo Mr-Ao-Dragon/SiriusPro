@@ -1,7 +1,7 @@
 package cn.siriusbot.siriuspro.webapi.controller.api;
 
-import cn.siriusbot.siriuspro.entity.api.AudioApi;
-import cn.siriusbot.siriuspro.entity.pojo.audio.AudioControl;
+import cn.siriusbot.siriuspro.bot.api.AudioApi;
+import cn.siriusbot.siriuspro.bot.api.pojo.audio.AudioControl;
 import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.webapi.R.R;
 import com.alibaba.fastjson.JSONObject;

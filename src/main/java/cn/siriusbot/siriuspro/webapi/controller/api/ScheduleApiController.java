@@ -1,15 +1,12 @@
 package cn.siriusbot.siriuspro.webapi.controller.api;
 
-import cn.siriusbot.siriuspro.entity.api.ScheduleApi;
-import cn.siriusbot.siriuspro.entity.pojo.Schedule;
-import cn.siriusbot.siriuspro.entity.temp.Tuple;
+import cn.siriusbot.siriuspro.bot.api.ScheduleApi;
+import cn.siriusbot.siriuspro.bot.api.pojo.Schedule;
 import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.webapi.R.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * 日常Api

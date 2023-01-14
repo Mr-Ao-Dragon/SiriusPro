@@ -1,6 +1,5 @@
 package cn.siriusbot.siriuspro.websocket.messagequeue;
 
-import cn.siriusbot.siriuspro.entity.temp.Tuple;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 

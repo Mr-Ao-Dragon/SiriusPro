@@ -87,7 +87,7 @@ public class HeartbeatEventImpl implements HeartbeatEvent , EventMethodNoParam ,
                 // 启动心跳包事件
                 this.run();
             }
-            case TASK_HEARTBEAT_PAUSE -> {
+            case TASK_HEARTBEAT_PAUSE, BOT_CLOSE -> {
                 // 停止心跳包事件
                 this.pause();
             }
