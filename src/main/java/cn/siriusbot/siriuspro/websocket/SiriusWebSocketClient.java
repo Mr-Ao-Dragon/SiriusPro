@@ -1,7 +1,7 @@
 package cn.siriusbot.siriuspro.websocket;
 
 import cn.siriusbot.siriuspro.bot.SiriusBotClient;
-import cn.siriusbot.siriuspro.message.MessageManager;
+import cn.siriusbot.siriuspro.bot.pojo.message.MessageManager;
 import com.alibaba.fastjson.JSONObject;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -16,6 +16,7 @@ public class SiriusWebSocketClient extends WebSocketClient {
         this.siriusBotClient = siriusBotClient;
     }
     public SiriusWebSocketClient(){
+        super(null);
 
     }
     @Override
