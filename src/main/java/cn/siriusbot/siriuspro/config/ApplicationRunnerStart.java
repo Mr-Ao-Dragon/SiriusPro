@@ -64,7 +64,6 @@ public class ApplicationRunnerStart implements ApplicationRunner {
         );
         botClient.start();
         System.out.println("启动完成");
-        Thread.sleep(2000);
-        botApi.messageApi().sendMessage("102035548", "12492052", "测试发送", "", "08c8e5e0a384dceeccc7011094bafa0538840248c58f8b9e06", "");
+
     }
 }

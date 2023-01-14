@@ -24,33 +24,34 @@ public interface AnnouncesApi {
      * 只有子频道权限为全体成员可见才可设置为推荐子频道。
      * 删除推荐子频道类型的频道公告请使用 删除频道公告,并将 message_id 设置为 all。
      *
-     * @param bot_id               传入机器人ID
-     * @param guild_id          频道ID
-     * @param message_id        消息ID
-     * @param channel_id        子频道ID
+     * @param bot_id     传入机器人ID
+     * @param guild_id   频道ID
+     * @param message_id 消息ID
+     * @param channel_id 子频道ID
      * @return 返回公告对象
      */
-    public abstract Tuple<Announces,String> createGuildAnnounces(String bot_id, String guild_id, String message_id, String channel_id);
+    public abstract Tuple<Announces, String> createGuildAnnounces(String bot_id, String guild_id, String message_id, String channel_id);
 
     /**
      * 删除频道公告
      * 用于删除频道 guild_id 下指定 message_id 的全局公告。
      * message_id 有值时，会校验 message_id 合法性，若不校验校验 message_id，请将 message_id 设置为 all
      *
-     * @param bot_id        传入机器人ID
+     * @param bot_id     传入机器人ID
      * @param guild_id   频道ID
      * @param message_id 消息ID
      * @return 返回删除结果
      */
-    public abstract Boolean deleteAnnouncesByGuildId(String bot_id, String guild_id,@RequestParam("message_id") String message_id);
+    public abstract Boolean deleteAnnouncesByGuildId(String bot_id, String guild_id, String message_id);
 
     /**
      * 创建频道推荐子频道列表
-     * @param bot_id 传入机器人ID
-     * @param guild_id 频道ID
-     * @param announces_type 公告类型
+     *
+     * @param bot_id            传入机器人ID
+     * @param guild_id          频道ID
+     * @param announces_type    公告类型
      * @param recommendChannels 机器人推荐列表
      * @return 返回公告对象
      */
-    public abstract Tuple<Announces,String> createGuildRecommend_Channels(String bot_id, String guild_id, Integer announces_type, List<RecommendChannel> recommendChannels);
+    public abstract Tuple<Announces, String> createGuildRecommend_Channels(String bot_id, String guild_id, Integer announces_type, List<RecommendChannel> recommendChannels);
 }

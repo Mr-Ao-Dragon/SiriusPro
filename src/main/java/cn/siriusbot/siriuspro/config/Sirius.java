@@ -1,6 +1,6 @@
 package cn.siriusbot.siriuspro.config;
 
-import cn.siriusbot.siriuspro.application.ApplicationUtils;
+import cn.siriusbot.siriuspro.uitls.ApplicationUtils;
 import org.fusesource.jansi.AnsiConsole;
 
 public class Sirius {

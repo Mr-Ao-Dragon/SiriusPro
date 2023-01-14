@@ -1,4 +1,4 @@
-package cn.siriusbot.siriuspro.application;
+package cn.siriusbot.siriuspro.bot.application;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

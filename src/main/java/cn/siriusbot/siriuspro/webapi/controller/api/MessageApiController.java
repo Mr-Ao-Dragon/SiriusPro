@@ -1,6 +1,6 @@
 package cn.siriusbot.siriuspro.webapi.controller.api;
 
-import cn.siriusbot.siriuspro.application.ApplicationUtils;
+import cn.siriusbot.siriuspro.uitls.ApplicationUtils;
 import cn.siriusbot.siriuspro.bot.api.MessageApi;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.MessageMarkdown;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.MessageReference;

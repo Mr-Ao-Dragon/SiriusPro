@@ -1,7 +1,7 @@
 package cn.siriusbot.siriuspro.application;
 
 import cn.siriusbot.siriuspro.bot.BotApi;
-import cn.siriusbot.siriuspro.logger.SiriusLogger;
+import cn.siriusbot.siriuspro.bot.application.SiriusApplication;
 import cn.siriusbot.siriuspro.bot.pojo.message.AudioLiveChannelEvent.AudioLiveChannelMemberEvent;
 import cn.siriusbot.siriuspro.bot.pojo.message.AudioMessageEvent.AudioMessageEvent;
 import cn.siriusbot.siriuspro.bot.pojo.message.AuditMessageEvent.AuditMessageEvent;
@@ -27,7 +27,6 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Objects;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
