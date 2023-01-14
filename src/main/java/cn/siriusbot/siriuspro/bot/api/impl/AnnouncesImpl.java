@@ -7,6 +7,10 @@ import cn.siriusbot.siriuspro.bot.api.pojo.announces.Announces;
 import cn.siriusbot.siriuspro.bot.api.pojo.announces.RecommendChannel;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
 
+import cn.siriusbot.siriuspro.bot.client.BotClient;
+import cn.siriusbot.siriuspro.bot.event.BotHttpEvent;
+import cn.siriusbot.siriuspro.bot.pojo.BotRequest;
+import cn.siriusbot.siriuspro.config.bean.BotPool;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.vdurmont.emoji.EmojiParser;
@@ -22,6 +26,9 @@ import java.util.List;
 
 @Component
 public class  AnnouncesImpl implements AnnouncesApi {
+
+    @Autowired
+    BotPool botPool;
 
     @Autowired
     BotManager botManager;
@@ -42,20 +49,21 @@ public class  AnnouncesImpl implements AnnouncesApi {
      * @param channel_id        子频道ID
      * @return 返回公告对象
      */
-    @SneakyThrows
     @Override
     public Tuple<Announces,String> createGuildAnnounces(String bot_id, String guild_id, String message_id, String channel_id) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/announces").build();
-        MediaType mediaType = MediaType.parse("application/json;text/plain");
-        JSONObject json = new JSONObject();
-        json.put("message_id", message_id);
-        json.put("channel_id", channel_id);
-        RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
-        String data = response.body().string();
+        BotClient client = botPool.getBotById(bot_id);
+        BotRequest botRequest = new BotRequest()
+                .setUrl(client.getSession().getOpenUrl() + "guilds/" + guild_id + "/announces")
+                .setMediaType("application/json;text/plain")
+                .putRequestBody("message_id", message_id)
+                .putRequestBody("channel_id", channel_id);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        String response = http.request(botRequest);
+
         Tuple<Announces,String> tuple = new Tuple<>();
-        tuple.setFirst(JSONObject.parseObject(data, Announces.class)).setSecond(data);
+        tuple
+                .setFirst(JSONObject.parseObject(response, Announces.class))
+                .setSecond(response);
         return tuple;
     }
 
