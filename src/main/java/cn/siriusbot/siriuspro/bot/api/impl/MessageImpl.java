@@ -14,7 +14,9 @@ import cn.siriusbot.siriuspro.bot.api.pojo.message.requestPack.RequestCustomKeyb
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
 import cn.siriusbot.siriuspro.bot.client.BotClient;
 import cn.siriusbot.siriuspro.bot.event.BotHttpEvent;
+import cn.siriusbot.siriuspro.bot.event.v1.BotEvent;
 import cn.siriusbot.siriuspro.bot.pojo.BotRequest;
+import cn.siriusbot.siriuspro.bot.pojo.BotResponse;
 import cn.siriusbot.siriuspro.bot.pojo.e.RequestMethod;
 import cn.siriusbot.siriuspro.config.bean.BotPool;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
@@ -87,11 +89,13 @@ public class MessageImpl implements MessageApi {
     @SneakyThrows
     @Override
     public Tuple<Message, String> getMessageById(String bot_id, String channel_id, String message_id) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id).build();
-        Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
-        String data = response.body().string();
-        data = EmojiParser.parseToUnicode(data);
+        BotClient client = botPool.getBotById(bot_id);
+        BotRequest botRequest = new BotRequest()
+                .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id)
+                .setMethod(RequestMethod.GET);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        String data = EmojiParser.parseToUnicode(response.getBody());
         Tuple<Message, String> tuple = new Tuple<>();
         JSONObject json = JSONObject.parseObject(data);
         tuple.setFirst(json.getObject("message", Message.class)).setSecond(data);
@@ -110,17 +114,17 @@ public class MessageImpl implements MessageApi {
     @SneakyThrows
     @Override
     public Tuple<Message, String> sendReferenceMessage(String bot_id, String channel_id, String content, MessageReference reference) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
+        BotClient client = botPool.getBotById(bot_id);
         content = EmojiParser.parseToUnicode(content);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages").build();
-        MediaType mediaType = MediaType.parse("text/plain;application/json");
-        JSONObject json = new JSONObject();
-        json.put("content", content);
-        json.put("message_reference", reference);
-        json.put("msg_id", reference.getMessage_id());
-        RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
-        String data = response.body().string();
+        BotRequest botRequest = new BotRequest()
+                .setMethod(RequestMethod.POST)
+                .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/messages")
+                .putRequestBody("content", content)
+                .putRequestBody("msg_id", reference.getMessage_id())
+                .putRequestBody("message_reference", reference);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        String data = EmojiParser.parseToUnicode(response.getBody());
         Tuple<Message, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
         return tuple;
@@ -146,17 +150,17 @@ public class MessageImpl implements MessageApi {
     @SneakyThrows
     @Override
     public Tuple<Message, String> sendMarkdownMessage(String bot_id, String channel_id, String msg_id, String event_id, MessageMarkdown markdown) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
+        BotClient client = botPool.getBotById(bot_id);
         markdown.setContent(EmojiParser.parseToUnicode(markdown.getContent()));
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages").build();
-        MediaType mediaType = MediaType.parse("text/plain;application/json");
-        JSONObject json = new JSONObject();
-        json.put("markdown", markdown);
-        json.put("msg_id", msg_id);
-        json.put("event_id", event_id);
-        RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
-        String data = response.body().string();
+        BotRequest botRequest = new BotRequest()
+                .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/messages")
+                .setMethod(RequestMethod.POST)
+                .putRequestBody("msg_id", msg_id)
+                .putRequestBody("event_id", event_id)
+                .putRequestBody("markdown", markdown);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        String data = EmojiParser.parseToUnicode(response.getBody());
         Tuple<Message, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
         return tuple;
@@ -179,10 +183,13 @@ public class MessageImpl implements MessageApi {
      */
     @Override
     public Boolean deleteMessageById(String bot_id, String channel_id, String message_id, boolean hidetip) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "?hidetip=" + hidetip).build();
-        Response response = SiriusHttpUtils.deleteRequest(siriusBotClient, request, null);
-        return response.code() == 200;
+        BotClient client = botPool.getBotById(bot_id);
+        BotRequest botRequest = new BotRequest()
+                .setMethod(RequestMethod.DELETE)
+                .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "?hidetip=" + hidetip);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        return response.getCode() == 200;
     }
 
 
@@ -203,16 +210,16 @@ public class MessageImpl implements MessageApi {
     @SneakyThrows
     @Override
     public Tuple<Message, String> sendArkMessage(String bot_id, String channel_id, MessageArk ark, String msg_id, String event_id) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages").build();
-        MediaType mediaType = MediaType.parse("text/plain;application/json");
-        JSONObject json = new JSONObject();
-        json.put("ark", ark);
-        json.put("msg_id", msg_id);
-        json.put("event_id", event_id);
-        RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
-        String data = response.body().string();
+        BotClient client = botPool.getBotById(bot_id);
+        BotRequest botRequest = new BotRequest()
+                .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/messages")
+                .setMethod(RequestMethod.POST)
+                .putRequestBody("ark", ark)
+                .putRequestBody("msg_id", msg_id)
+                .putRequestBody("event_id", event_id);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        String data = EmojiParser.parseToUnicode(response.getBody());
         Tuple<Message, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
         return tuple;
@@ -233,19 +240,19 @@ public class MessageImpl implements MessageApi {
     @SneakyThrows
     @Override
     public Tuple<Message, String> sendEmbedMessage(String bot_id, String channel_id, MessageEmbed embed, String msg_id, String event_id) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
+        BotClient client = botPool.getBotById(bot_id);
         for (int i = 0; i < embed.getFields().size(); i++) {
             embed.getFields().get(i).setName(EmojiParser.parseToUnicode(embed.getFields().get(i).getName()));
         }
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages").build();
-        MediaType mediaType = MediaType.parse("text/plain;application/json");
-        JSONObject json = new JSONObject();
-        json.put("embed", embed);
-        json.put("msg_id", msg_id);
-        json.put("event_id", event_id);
-        RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
-        String data = response.body().string();
+        BotRequest botRequest = new BotRequest()
+                .setMethod(RequestMethod.POST)
+                .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/messages")
+                .putRequestBody("embed", embed)
+                .putRequestBody("msg_id", msg_id)
+                .putRequestBody("event_id", event_id);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        String data = EmojiParser.parseToUnicode(response.getBody());
         Tuple<Message, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
         return tuple;
@@ -302,17 +309,16 @@ public class MessageImpl implements MessageApi {
     @SneakyThrows
     @Override
     public Tuple<Message, String> sendCustomInLineKeyword(String bot_id, String channel_id, RequestCustomKeyboard requestCustomKeyboard) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
+        BotClient client = botPool.getBotById(bot_id);
         requestCustomKeyboard.getMarkdown().setContent(EmojiParser.parseToUnicode(requestCustomKeyboard.getMarkdown().getContent()));
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages").build();
-        JSONObject json = new JSONObject();
-        MessageKeyboard messageKeyboard = new MessageKeyboard();
-        MediaType mediaType = MediaType.parse("text/plain;application/json");
-        json.put("markdown", requestCustomKeyboard.getMarkdown());
-        json.put("keyboard", requestCustomKeyboard.getMessageKeyboard());
-        RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
-        String data = response.body().string();
+        BotRequest botRequest = new BotRequest()
+                .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/messages")
+                .setMethod(RequestMethod.POST)
+                .putRequestBody("markdown", requestCustomKeyboard.getMarkdown())
+                .putRequestBody("keyboard", requestCustomKeyboard.getMessageKeyboard());
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        String data = response.getBody();
         Tuple<Message, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
         return tuple;
