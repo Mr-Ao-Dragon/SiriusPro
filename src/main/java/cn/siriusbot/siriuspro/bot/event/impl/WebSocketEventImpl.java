@@ -96,6 +96,11 @@ public class WebSocketEventImpl implements WebSocketEvent, EventMethodNoParam {
      */
     @Override
     public void reconnection() {
+        try {
+            this.webSocket.close();
+        } catch (Throwable ignored){
+
+        }
         this.webSocket = new BotWebSocketClientImpl(this.client.getSession().getWebSocketUri(), client);
         this.webSocket.connect();
     }

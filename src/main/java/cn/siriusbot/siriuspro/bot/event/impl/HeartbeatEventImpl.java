@@ -105,5 +105,20 @@ public class HeartbeatEventImpl implements HeartbeatEvent , EventMethodNoParam ,
             WebSocketEvent bean = this.client.getBean(WebSocketEvent.class);
             bean.reconnection(); // 重连
         }
+        if (type == BotEventType.WEBSOCKET_MESSAGE && body.getOp() == 9) {
+            if (!this.client.getSession().getSessionId().isEmpty()){
+                // 会话失效，进行重连
+                this.client.getSession().setSessionId("");
+                this.client.getSession().setS(0);
+                log.info("Bot[" + client.getInfo().getBotId() + "]会话失效，重连重新授权");
+                this.pause();
+                WebSocketEvent bean = this.client.getBean(WebSocketEvent.class);
+                bean.reconnection(); // 重连
+            } else {
+                log.error("Bot[" + client.getInfo().getBotId() + "]连接失败或会话上限，请检查配置。");
+                this.client.pushEvent(BotEventType.WEBSOCKET_ERROR, null);
+            }
+
+        }
     }
 }

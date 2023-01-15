@@ -14,6 +14,11 @@ public enum BotEventType {
      * WebSocket消息事件
      */
     WEBSOCKET_MESSAGE,
+
+    /**
+     * WebSocket连接失败事件
+     */
+    WEBSOCKET_ERROR,
     /**
      * 订阅消息事件
      */
