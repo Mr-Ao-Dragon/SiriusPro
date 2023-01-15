@@ -7,3 +7,5 @@ mybatis-plus:
   global-config:
     db-config:
       id-type : auto
+logging:
+  config: classpath:logback-spring.xml

@@ -146,6 +146,7 @@ public class SiriusBotClient implements BotClient {
                         try {
                             method.invoke(event, type);
                         } catch (IllegalAccessException | InvocationTargetException e) {
+                            e.printStackTrace();
                             log.error("bot事件推送异常，bot对象为:" + this + "，嵌套异常为:" + e);
                         }
                     } else {
@@ -162,6 +163,7 @@ public class SiriusBotClient implements BotClient {
                         try {
                             method.invoke(event, type, body);
                         } catch (IllegalAccessException | InvocationTargetException e) {
+                            e.printStackTrace();
                             log.error("bot事件推送异常，bot对象为:" + this + "，嵌套异常为:" + e);
                         }
                     }

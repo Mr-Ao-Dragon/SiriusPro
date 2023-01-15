@@ -39,15 +39,7 @@ public class HeartbeatEventImpl implements HeartbeatEvent , EventMethodNoParam ,
      */
     @Override
     public void start() {
-        WebSocketEvent bean = this.client.getBean(WebSocketEvent.class);
-        BotWebSocket webSocket = bean.getWebSocket();
-        this.task = new TimerTask() {
-            @Override
-            public void run() {
-                log.info("Bot[" + client.getInfo().getBotId() + "]发送心跳包");
-                webSocket.send(getHeartBeatPack());
-            }
-        };
+
     }
 
     /**
@@ -67,6 +59,15 @@ public class HeartbeatEventImpl implements HeartbeatEvent , EventMethodNoParam ,
      */
     @Override
     public void run() {
+        WebSocketEvent bean = this.client.getBean(WebSocketEvent.class);
+        this.task = new TimerTask() {
+            @Override
+            public void run() {
+                BotWebSocket webSocket = bean.getWebSocket();
+                log.info("Bot[" + client.getInfo().getBotId() + "]发送心跳包");
+                webSocket.send(getHeartBeatPack());
+            }
+        };
         this.timer.schedule(task, new Date(), this.client.getSession().getHeartBeat());
     }
 
