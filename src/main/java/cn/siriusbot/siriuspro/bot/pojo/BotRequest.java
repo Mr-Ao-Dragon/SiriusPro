@@ -15,9 +15,8 @@ public class BotRequest {
     RequestMethod method;
 
     public BotRequest() {
-        this.addHeader("Content-Type", "application/json"); // 默认为json请求
+        this.addHeader("Content-Type", "application/json;text/plain"); // 默认为json请求
     }
-
     public String getUrl() {
         return url.toString();
     }

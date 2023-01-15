@@ -3,6 +3,7 @@ package cn.siriusbot.siriuspro.bot.event.impl;
 import cn.siriusbot.siriuspro.bot.client.BotClient;
 import cn.siriusbot.siriuspro.bot.event.BotHttpEvent;
 import cn.siriusbot.siriuspro.bot.pojo.BotRequest;
+import cn.siriusbot.siriuspro.bot.pojo.BotResponse;
 import cn.siriusbot.siriuspro.error.MsgException;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.*;
@@ -61,6 +62,53 @@ public class BotHttpEventImpl implements BotHttpEvent {
                 }
                 default -> {
                     throw new MsgException(500, String.format("httpClient请求错误代码:%d，body:%s", response.code(), response.body().string()));
+                }
+            }
+        } catch (MsgException e) {
+            log.error(e);
+            throw e;
+        } catch (Exception e) {
+            log.error(e);
+            throw new MsgException(500, "httpClient请求错误!");
+        }
+    }
+
+    /**
+     * http请求
+     *
+     * @param request 请求对象
+     * @return Bot专属响应体
+     */
+    @Override
+    public BotResponse req(BotRequest request) {
+        request
+                .addHeader("Authorization", "Bot " + client.getInfo().getBotId() + "." + client.getInfo().getToken())
+                .addHeader("User-Agent", "SiriusBot");
+        // 构建外部请求对象
+        Request toRequest = botRequestToRequest(request);
+        try {
+            Response response = httpClient.newCall(toRequest).execute();
+            switch (response.code()){
+                case 200 -> {
+                    return new BotResponse()
+                            .setCode(200)
+                            .setBody(Objects.requireNonNull(response.body()).string())
+                            .setTraceId(response.header("X-Tps-trace-ID"));
+                }
+                case 204->{
+                    return new BotResponse()
+                            .setCode(204)
+                            .setBody(Objects.requireNonNull(response.body()).string())
+                            .setTraceId(response.header("X-Tps-trace-ID"));
+                }
+                case 500->{
+                    return new BotResponse()
+                            .setCode(500)
+                            .setBody(Objects.requireNonNull(response.body()).string())
+                            .setTraceId(response.header("X-Tps-trace-ID"));
+                }
+                default -> {
+                    throw new MsgException(500, String.format("httpClient请求错误代码:%d，body:%s,X-Tps-trace-ID：%d", response.code(), response.body().string(),response.header("X-Tps-trace-ID")));
                 }
             }
         } catch (MsgException e) {
