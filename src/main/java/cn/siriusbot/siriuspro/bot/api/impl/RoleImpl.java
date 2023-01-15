@@ -8,6 +8,13 @@ import cn.siriusbot.siriuspro.bot.api.pojo.role.GuildRoleList;
 import cn.siriusbot.siriuspro.bot.api.pojo.role.NewRole;
 import cn.siriusbot.siriuspro.bot.api.pojo.role.Role;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
+import cn.siriusbot.siriuspro.bot.client.BotClient;
+import cn.siriusbot.siriuspro.bot.event.BotHttpEvent;
+import cn.siriusbot.siriuspro.bot.event.v1.BotEvent;
+import cn.siriusbot.siriuspro.bot.pojo.BotRequest;
+import cn.siriusbot.siriuspro.bot.pojo.BotResponse;
+import cn.siriusbot.siriuspro.bot.pojo.e.RequestMethod;
+import cn.siriusbot.siriuspro.config.bean.BotPool;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.vdurmont.emoji.EmojiParser;
@@ -25,6 +32,9 @@ public class RoleImpl implements RoleApi {
     @Autowired
     BotManager botManager;
 
+    @Autowired
+    BotPool botPool;
+
     /**
      * 创建频道身份组
      *
@@ -38,17 +48,17 @@ public class RoleImpl implements RoleApi {
     @SneakyThrows
     @Override
     public Tuple<Role, String> createRole(String bot_id, String guild_id, String name, Integer color, Integer hoist) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
+        BotClient client = botPool.getBotById(bot_id);
         name = EmojiParser.parseToUnicode(name);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/roles").build();
-        MediaType mediaType = MediaType.parse("text/plain;application/json");
-        JSONObject json = new JSONObject();
-        json.put("name", name);
-        json.put("color", color);
-        json.put("hoist", hoist);
-        RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
-        String data = response.body().string();
+        BotRequest botRequest = new BotRequest()
+                .setMethod(RequestMethod.POST)
+                .setUrl(client.getSession().getOpenUrl() + "guilds/" + guild_id + "/roles")
+                .putRequestBody("name", name)
+                .putRequestBody("color", color)
+                .putRequestBody("hoist", hoist);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        String data = response.getBody();
         data = EmojiParser.parseToUnicode(data);
         JSONObject roleObject = JSONObject.parseObject(data);
         Role role = roleObject.getJSONObject("role").toJavaObject(Role.class);
@@ -69,12 +79,13 @@ public class RoleImpl implements RoleApi {
      */
     @Override
     public Boolean removeRoleMemberForGuild(String bot_id, String guild_id, String role_id, String user_id, Channel channel) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/members/" + user_id + "/roles/" + role_id).build();
-        MediaType mediaType = MediaType.parse("text/plain;application/json");
-        RequestBody body = RequestBody.create(mediaType, JSONObject.toJSONString(channel));
-        Response response = SiriusHttpUtils.deleteRequest(siriusBotClient, request, body);
-        return response.code() == 204;
+        BotClient client = botPool.getBotById(bot_id);
+        BotRequest botRequest = new BotRequest()
+                .setUrl(client.getSession().getOpenUrl() + "guilds/" + guild_id + "/members/" + user_id + "/roles/" + role_id)
+                .setMethod(RequestMethod.DELETE);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        return response.getCode() == 204;
     }
 
     /**
@@ -90,12 +101,13 @@ public class RoleImpl implements RoleApi {
     @SneakyThrows
     @Override
     public Boolean createRoleMemberInGuild(String bot_id, String guild_id, String user_id, String role_id, Channel channel) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/members/" + user_id + "/roles/" + role_id).build();
-        MediaType mediaType = MediaType.parse("text/plain;application/json");
-        RequestBody body = RequestBody.create(mediaType, JSONObject.toJSONString(channel));
-        Response response = SiriusHttpUtils.putRequest(siriusBotClient, request, body);
-        return response.code() == 204;
+        BotClient client = botPool.getBotById(bot_id);
+        BotRequest botRequest = new BotRequest()
+                .setMethod(RequestMethod.POST)
+                .setUrl(client.getSession().getOpenUrl() + "guilds/" + guild_id + "/members/" + user_id + "/roles/" + role_id);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        return response.getCode() == 204;
     }
 
     /**
@@ -112,17 +124,18 @@ public class RoleImpl implements RoleApi {
     @SneakyThrows
     @Override
     public Tuple<NewRole, String> modifyRoleByGuild(String bot_id, String guild_id, String role_id, String name, Integer color, Integer hoist) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
+        BotClient client = botPool.getBotById(bot_id);
         name = EmojiParser.parseToUnicode(name);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/roles/" + role_id).build();
-        MediaType mediaType = MediaType.parse("text/plain;application/json");
-        JSONObject json = new JSONObject();
-        json.put("name", name);
-        json.put("color", color);
-        json.put("hoist", hoist);
-        RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.patchRequest(siriusBotClient, request, body);
-        String data = response.body().string();
+        BotRequest botRequest = new BotRequest()
+                .setMethod(RequestMethod.PATCH)
+                .setUrl(client.getSession().getOpenUrl() + "guilds/" + guild_id + "/roles/" + role_id)
+                .putRequestBody("name", name)
+                .putRequestBody("color", color)
+                .putRequestBody("hoist", hoist);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+
+        String data = EmojiParser.parseToUnicode(response.getBody());
         NewRole newRole = JSONObject.parseObject(data, NewRole.class);
         Tuple<NewRole, String> tuple = new Tuple<>();
         tuple.setFirst(newRole).setSecond(data);
@@ -139,10 +152,13 @@ public class RoleImpl implements RoleApi {
      */
     @Override
     public Boolean deleteRoleForGuild(String bot_id, String guild_id, String role_id) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/roles/" + role_id).build();
-        Response response = SiriusHttpUtils.deleteRequest(siriusBotClient, request, null);
-        return response.code() == 204;
+        BotClient client = botPool.getBotById(bot_id);
+        BotRequest botRequest = new BotRequest()
+                .setMethod(RequestMethod.DELETE)
+                .setUrl(client.getSession().getOpenUrl() + "guilds/" + guild_id + "/roles/" + role_id);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        return response.getCode() == 204;
     }
 
     /**
@@ -155,10 +171,13 @@ public class RoleImpl implements RoleApi {
     @SneakyThrows
     @Override
     public Tuple<GuildRoleList, String> getRoleListByGuild(String bot_id, String guild_id) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/roles").build();
-        Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
-        String data = response.body().string();
+        BotClient client = botPool.getBotById(bot_id);
+        BotRequest botRequest = new BotRequest()
+                .setUrl(client.getSession().getOpenUrl() + "guilds/" + guild_id + "/roles")
+                .setMethod(RequestMethod.GET);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        String data = EmojiParser.parseToUnicode(response.getBody());
         GuildRoleList guildRoleList = JSONObject.parseObject(data, GuildRoleList.class);
         Tuple<GuildRoleList, String> tuple = new Tuple<>();
         tuple.setFirst(guildRoleList).setSecond(data);
