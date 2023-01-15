@@ -3,39 +3,40 @@ package cn.siriusbot.siriuspro.bot.api.pojo;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 @Data
 @Accessors(chain = true)
 public class Channel{
     /**
      * 子频道ID
      */
-    public String id;
+    String id;
 
     /**
      * 频道ID
      */
-    public String guild_id;
+    String guild_id;
 
     /**
      * 子频道名称
      */
-    public String name;
+    String name;
 
     /**
      * 子频道类型
      */
-
-    public Integer type;
+    Integer type;
 
     /**
      * 子频道子类型
      */
-    public Integer sub_type;
+    Integer sub_type;
 
     /**
      * 排序值
      */
-    public Integer position;
+    Integer position;
 
     @Override
     public String toString() {
@@ -58,32 +59,37 @@ public class Channel{
     /**
      * 所属分组id
      */
-    public String parent_id;
+    String parent_id;
+
+    /**
+     * 子频道私密类型成员ID
+     */
+    List<String> private_user_ids;
 
     /**
      * 创建人ID
      */
-    public String owner_id;
+    String owner_id;
 
     /**
      * 子频道私密类型
      */
-    public Integer private_type;
+    Integer private_type;
 
     /**
      * 子频道发言权限
      */
-    public Integer speak_permission;
+    Integer speak_permission;
 
     /**
      * 子频道应用类型
      */
-    public String application_id;
+    String application_id;
 
     /**
      * 用户在子频道的权限
      */
-    public String permissions;
+    String permissions;
 
     /**
      * 子频道类型
