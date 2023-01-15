@@ -133,7 +133,7 @@ public class ChannelImpl implements ChannelApi {
         channel.setName(EmojiParser.parseToUnicode(channel.getName()));
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id)
-                .setMethod(RequestMethod.POST)
+                .setMethod(RequestMethod.PATCH)
                 .putRequestBody("name", channel.getName())
                 .putRequestBody("type", channel.getType())
                 .putRequestBody("sub_type", channel.getSub_type())
