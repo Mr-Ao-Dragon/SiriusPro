@@ -6,6 +6,12 @@ import cn.siriusbot.siriuspro.bot.api.UserApi;
 import cn.siriusbot.siriuspro.bot.api.pojo.Guild;
 import cn.siriusbot.siriuspro.bot.api.pojo.User;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
+import cn.siriusbot.siriuspro.bot.client.BotClient;
+import cn.siriusbot.siriuspro.bot.event.BotHttpEvent;
+import cn.siriusbot.siriuspro.bot.pojo.BotRequest;
+import cn.siriusbot.siriuspro.bot.pojo.BotResponse;
+import cn.siriusbot.siriuspro.bot.pojo.e.RequestMethod;
+import cn.siriusbot.siriuspro.config.bean.BotPool;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.vdurmont.emoji.EmojiParser;
@@ -16,27 +22,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
 @Component
-public class  UserApiImpl implements UserApi {
+public class UserApiImpl implements UserApi {
 
     @Autowired
     BotManager botManager;
-    
+
+    @Autowired
+    BotPool botPool;
+
     /**
      * 获取机器人基本信息
+     *
      * @return 返回Bot(机器人)对象
      */
 
     @SneakyThrows
     @Override
-    public Tuple<User,String> getRobotInfo(String bot_id) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "users/@me").build();
-        Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
-        String data = response.body().string();
+    public Tuple<User, String> getRobotInfo(String bot_id) {
+        BotClient client = botPool.getBotById(bot_id);
+        BotRequest botRequest = new BotRequest()
+                .setMethod(RequestMethod.GET)
+                .setUrl(client.getSession().getOpenUrl() + "users/@me");
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        String data = response.getBody();
         User user = JSONObject.parseObject(data, User.class);
         user.setBot(true);
-        Tuple<User,String> tuple = new Tuple<>();
+        Tuple<User, String> tuple = new Tuple<>();
         tuple.setFirst(user).setSecond(data);
         return tuple;
     }
@@ -44,35 +58,37 @@ public class  UserApiImpl implements UserApi {
 
     /**
      * 获取频道指定机器人频道列表
+     *
      * @param bot_id 传入机器人对象ID
      * @param before 读此 guild id 之前的数据
-     * @param after 读此 guild id 之后的数据
-     * @param limit 每次查询的条数，默认100，最大100
+     * @param after  读此 guild id 之后的数据
+     * @param limit  每次查询的条数，默认100，最大100
      * @return 频道数组
      * after 和 before 同时设置时， after 参数无效
      */
     @SneakyThrows
     @Override
-    public Tuple<List<Guild>,String>  getGuildList(String bot_id, String before, String after, int limit) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl()).build();
-        String path = siriusBotClient.getSocket().getOpenUrl() + "users/@me/guilds";
+    public Tuple<List<Guild>, String> getGuildList(String bot_id, String before, String after, int limit) {
+        BotClient client = botPool.getBotById(bot_id);
+        BotRequest botRequest = new BotRequest()
+                .setMethod(RequestMethod.GET);
+        String path = client.getSession().getOpenUrl() + "users/@me/guilds";
         try {
             if (before != null) {
-                request = request.newBuilder().url(path + "?before=" + before + "&limit=" + limit).build();
+                botRequest = botRequest.setUrl(path + "?before=" + before + "&limit=" + limit);
             } else if (after != null) {
-                request = request.newBuilder().url(path + "?after=" + after + "&limit=" + limit).build();
+                botRequest = botRequest.setUrl(path + "?after=" + after + "&limit=" + limit);
             } else if (after == null && before == null) {
-                request = request.newBuilder().url(path + "?limit=" + limit).build();
+                botRequest = botRequest.setUrl(path + "?limit=" + limit);
             }
         } catch (Exception e) {
-            request = request.newBuilder().url(path + "?limit=" + limit).build();
+            botRequest = botRequest.setUrl(path + "?limit=" + limit);
         }
-        Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
-        String data = response.body().string();
-        data = EmojiParser.parseToUnicode(data);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        String data = EmojiParser.parseToUnicode(response.getBody());
         List<Guild> guildList = JSONObject.parseObject(data, List.class);
-        Tuple<List<Guild>,String> tuple = new Tuple<>();
+        Tuple<List<Guild>, String> tuple = new Tuple<>();
         tuple.setFirst(guildList);
         tuple.setSecond(data);
         return tuple;
