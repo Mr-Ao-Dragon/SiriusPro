@@ -5,6 +5,12 @@ import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.api.MessageReactionApi;
 import cn.siriusbot.siriuspro.bot.api.pojo.emoji.ReactionReply;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
+import cn.siriusbot.siriuspro.bot.client.BotClient;
+import cn.siriusbot.siriuspro.bot.event.BotHttpEvent;
+import cn.siriusbot.siriuspro.bot.pojo.BotRequest;
+import cn.siriusbot.siriuspro.bot.pojo.BotResponse;
+import cn.siriusbot.siriuspro.bot.pojo.e.RequestMethod;
+import cn.siriusbot.siriuspro.config.bean.BotPool;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
 import lombok.SneakyThrows;
@@ -13,16 +19,20 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 @Component
-public class  MessageReactionImpl implements MessageReactionApi {
+public class MessageReactionImpl implements MessageReactionApi {
 
     @Autowired
     BotManager botManager;
 
+    @Autowired
+    BotPool botPool;
+
     /**
      * 拉取表情表态用户列表
      *
-     * @param bot_id        传入机器人对象ID
+     * @param bot_id     传入机器人对象ID
      * @param channel_id 子频道ID
      * @param message_id 消息ID
      * @param type       表情类型
@@ -33,18 +43,20 @@ public class  MessageReactionImpl implements MessageReactionApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<ReactionReply,String> getReactionUsers(String bot_id, String channel_id, String message_id, Integer type, String id, String cookie, Integer limit) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
-        Request request;
-        if(cookie==null){
-            request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "/reactions/" + type + "/" + id + "?limit=" + limit).build();
-        }else{
-            request   = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "/reactions/" + type + "/" + id + "?cookie=" + cookie + "&limit=" + limit).build();
+    public Tuple<ReactionReply, String> getReactionUsers(String bot_id, String channel_id, String message_id, Integer type, String id, String cookie, Integer limit) {
+        BotClient client = botPool.getBotById(bot_id);
+        BotRequest botRequest = new BotRequest()
+                .setMethod(RequestMethod.GET);
+        if (cookie == null) {
+            botRequest = botRequest.setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "/reactions/" + type + "/" + id + "?limit=" + limit);
+        } else {
+            botRequest = botRequest.setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "/reactions/" + type + "/" + id + "?cookie=" + cookie + "&limit=" + limit);
         }
-        String data = SiriusHttpUtils.getRequest(siriusBotClient, request).body().string();
-
-        Tuple<ReactionReply,String> tuple = new Tuple<>();
-        tuple.setFirst(JSONObject.parseObject(data,ReactionReply.class)).setSecond(data);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        String data = response.getBody();
+        Tuple<ReactionReply, String> tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, ReactionReply.class)).setSecond(data);
         return tuple;
 
     }
@@ -52,7 +64,7 @@ public class  MessageReactionImpl implements MessageReactionApi {
     /**
      * 删除机器人对指定消息的表态
      *
-     * @param bot_id        传入机器人对象ID
+     * @param bot_id     传入机器人对象ID
      * @param channel_id 子频道ID
      * @param message_id 消息ID
      * @param type       表情类型，参考EmojiType
@@ -62,15 +74,20 @@ public class  MessageReactionImpl implements MessageReactionApi {
     @SneakyThrows
     @Override
     public Boolean deleteReactionForMessageId(String bot_id, String channel_id, String message_id, Integer type, String id) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "/reactions/" + type + "/" + id).build();
-        return SiriusHttpUtils.deleteRequest(siriusBotClient, request,null).code() == 204;
+        BotClient client = botPool.getBotById(bot_id);
+        BotRequest botRequest = new BotRequest()
+                .setMethod(RequestMethod.DELETE)
+                .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "/reactions/" + type + "/" + id);
+
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        return response.getCode() == 204;
     }
 
     /**
      * 发表表情表态
      *
-     * @param bot_id        传入机器人对象ID
+     * @param bot_id     传入机器人对象ID
      * @param channel_id 子频道ID
      * @param message_id 消息ID
      * @param type       表情类型，参考EmojiType
@@ -79,8 +96,13 @@ public class  MessageReactionImpl implements MessageReactionApi {
      */
     @Override
     public Boolean addReaction(String bot_id, String channel_id, String message_id, Integer type, String id) {
+        BotClient client = botPool.getBotById(bot_id);
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "/reactions/" + type + "/" + id).build();
-        return SiriusHttpUtils.putRequest(siriusBotClient, request, RequestBody.create(MediaType.parse("application/json;text/plain"), "")).code() == 204;
+        BotRequest botRequest = new BotRequest()
+                .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "/reactions/" + type + "/" + id)
+                .setMethod(RequestMethod.PUT);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        return response.getCode() == 204;
     }
 }
