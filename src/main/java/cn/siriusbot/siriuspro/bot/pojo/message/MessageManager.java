@@ -83,7 +83,7 @@ public class MessageManager {
             case "READY":
                 JSONObject userObject = dObject.getJSONObject("user");
                 siriusBotClient.setUser(new User()
-                        .setUserName(userObject.getString("username"))
+                        .setUsername(userObject.getString("username"))
                         .setBot(true)
                         .setId(userObject.getString("id")));
                 siriusBotClient.getSocket().setS(json.getInteger("s"))

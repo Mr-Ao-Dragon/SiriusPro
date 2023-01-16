@@ -4,7 +4,7 @@ import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.api.ForumApi;
 import cn.siriusbot.siriuspro.bot.api.pojo.forum.responseObj.ThreadList;
-import cn.siriusbot.siriuspro.bot.api.pojo.forum.responseObj.createThread;
+import cn.siriusbot.siriuspro.bot.api.pojo.forum.responseObj.CreateThread;
 import cn.siriusbot.siriuspro.bot.api.pojo.forum.thread.ForumThread;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
 import cn.siriusbot.siriuspro.bot.client.BotClient;
@@ -94,7 +94,7 @@ public class ForumThreadImpl implements ForumApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<createThread, String> postThread(String bot_id, String channel_id, String title, String content, Integer format) {
+    public Tuple<CreateThread, String> postThread(String bot_id, String channel_id, String title, String content, Integer format) {
         BotClient client = botPool.getBotById(bot_id);
         content = EmojiParser.parseToUnicode(content);
         BotRequest botRequest = new BotRequest()
@@ -105,8 +105,8 @@ public class ForumThreadImpl implements ForumApi {
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
         BotResponse response = http.req(botRequest);
         String data = EmojiParser.parseToUnicode(response.getBody());
-        Tuple<createThread, String> tuple = new Tuple<>();
-        tuple.setFirst(JSONObject.parseObject(data, createThread.class)).setSecond(data);
+        Tuple<CreateThread, String> tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, CreateThread.class)).setSecond(data);
         return tuple;
     }
 

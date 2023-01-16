@@ -61,6 +61,10 @@ import cn.siriusbot.siriuspro.bot.pojo.message.Op_User;
 import cn.siriusbot.siriuspro.bot.pojo.message.OpenForumEvent.OpenForumEventInfo;
 import cn.siriusbot.siriuspro.bot.pojo.message.PrivateDomainEvent.PrivateDObject;
 import cn.siriusbot.siriuspro.bot.pojo.message.PrivateDomainEvent.PrivateDomainMessageInfo;
+import cn.siriusbot.siriuspro.bot.pojo.message.PrivateDomainEvent.PrivateMessageDeleteDObject;
+import cn.siriusbot.siriuspro.bot.pojo.message.PrivateDomainEvent.PrivateMessageDeleteEvent;
+import cn.siriusbot.siriuspro.bot.pojo.message.PublicMessageEvent.PublicMessageDeleteDObject;
+import cn.siriusbot.siriuspro.bot.pojo.message.PublicMessageEvent.PublicMessageDeleteEvent;
 import cn.siriusbot.siriuspro.bot.pojo.message.PublicMessageEvent.PublicMessageEvent;
 import cn.siriusbot.siriuspro.bot.pojo.message.PublicMessageEvent.PublicMessageEventDObject;
 import lombok.Data;
@@ -207,22 +211,25 @@ public class ELanguageGenerate {
                     // 数组事件
                     sb.append("    ").append(String.format("item ＝ json.取属性 (, “%s”)", info.getName())).append('\n');
                     sb.append("    ").append("length ＝ item.取成员数 ()").append('\n');
-                    sb.append("    ").append(String.format("清除数组 (%s.%s)", o, info.getName())).append('\n');
-                    sb.append("    ").append(".计次循环首 (length, i)").append('\n');
+                    sb.append("    ").append(String.format("重定义数组 (%s.%s, 假, length)", o, info.getName())).append('\n');
                     String eType = info.getType();
                     if (eType.equals(info.getSrcType())) {
                         // 对象类型成员
+                        sb.append("    ").append("i ＝ 0").append('\n');
+                        sb.append("    ").append(".判断循环首 (i < length)").append('\n');
+                        sb.append("    ").append("    ").append("i ＝ i + 1").append('\n');
                         sb.append("    ").append("    ").append(String.format(
-                                "%s(%s.%s, %s(“%s“,json.取属性 (, “%s”).到文本()))",
+                                "%s(%s.%s[i], %s(“%s“, item.取成员 (, i - 1).到文本()))",
                                 transition,
                                 o,
                                 info.getName(),
                                 methodName,
-                                info.getType(),
-                                info.getName()
+                                info.getType()
                         )).append('\n');
+                        sb.append("    ").append(".判断循环尾 ()").append('\n');
                     } else {
                         // 普通类型成员
+                        sb.append("    ").append(".计次循环首 (length, i)").append('\n');
                         String jsonType;
                         switch (eType) {
                             case "文本型" -> jsonType = "取文本";
@@ -232,9 +239,10 @@ public class ELanguageGenerate {
                             case "长整数型" -> jsonType = "取长整数";
                             default -> jsonType = "取文本";
                         }
-                        sb.append("    ").append(String.format("    加入成员 (%s.%s, item.取成员 (, 0).%s ())", o, info.getName(), jsonType)).append('\n');
+                        sb.append("    ").append(String.format("    %s.%s[i] ＝ item.取成员 (, i - 1).%s ()", o, info.getName(), jsonType)).append('\n');
                         sb.append("    ").append(".计次循环尾 ()").append('\n');
                     }
+
                 } else {
                     // 单属性事件
                     String eType = info.getType();
@@ -386,12 +394,17 @@ public class ELanguageGenerate {
         put(PublicMessageEvent.class);
         put(PublicMessageEventDObject.class);
         put(Op_User.class);
+        put(PrivateMessageDeleteDObject.class);
+        put(PrivateMessageDeleteEvent.class);
+        put(PublicMessageDeleteDObject.class);
+        put(PublicMessageDeleteEvent.class);
     }
 
 
     @PostConstruct
     public void start() {
         config();
+        log.info("\n" + generateTypeInfos() + "\n");
         System.out.println("=======================");
         System.out.println("=======================");
         System.out.println("======易语言代码生成=====");
