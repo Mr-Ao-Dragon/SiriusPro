@@ -18,15 +18,8 @@ import java.util.List;
 @Accessors(chain = true)
 public class PublicMessageEventDObject implements MessageBody {
 
-    /**
-     * 被撤回的消息对象
-     */
-    private Message message;
 
-    /**
-     * 操作人对象
-     */
-    private Op_User op_user;
+
 
     /**
      * 子频道消息排序

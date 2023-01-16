@@ -10,8 +10,16 @@ import cn.siriusbot.siriuspro.bot.api.pojo.message.MessageReference;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.ark.MessageArk;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.embed.MessageEmbed;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
+import cn.siriusbot.siriuspro.bot.client.BotClient;
+import cn.siriusbot.siriuspro.bot.event.BotHttpEvent;
+import cn.siriusbot.siriuspro.bot.pojo.BotRequest;
+import cn.siriusbot.siriuspro.bot.pojo.BotResponse;
+import cn.siriusbot.siriuspro.bot.pojo.e.RequestMethod;
+import cn.siriusbot.siriuspro.config.bean.BotPool;
+import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
+import com.vdurmont.emoji.Emoji;
 import com.vdurmont.emoji.EmojiParser;
 import lombok.SneakyThrows;
 import okhttp3.*;
@@ -26,6 +34,9 @@ public class DMSImpl implements DMS_Api {
     @Autowired
     BotManager botManager;
 
+    @Autowired
+    BotPool botPool;
+
     /**
      * 创建私信会话
      * 机器人和用户存在共同频道才能创建私信会话。
@@ -39,15 +50,15 @@ public class DMSImpl implements DMS_Api {
     @SneakyThrows
     @Override
     public Tuple<DMS, String> createDMS(String bot_id, String recipient_id, String source_guild_id) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "users/@me/dms").build();
-        MediaType mediaType = MediaType.parse("application/json;text/plain");
-        JSONObject json = new JSONObject();
-        json.put("recipient_id", recipient_id);
-        json.put("source_guild_id", source_guild_id);
-        RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
-        String data = response.body().string();
+        BotClient client = botPool.getBotById(bot_id);
+        BotRequest botRequest = new BotRequest()
+                .setUrl(client.getSession().getOpenUrl() + "user/@me/dms")
+                .setMethod(RequestMethod.POST)
+                .putRequestBody("recipient_id", recipient_id)
+                .putRequestBody("source_guild_id", source_guild_id);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        String data = response.getBody();
         Tuple<DMS, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, DMS.class)).setSecond(data);
         return tuple;
@@ -75,21 +86,20 @@ public class DMSImpl implements DMS_Api {
     @SneakyThrows
     @Override
     public Tuple<Message, String> sendMessage(String bot_id, String guild_id, String content, String image_Url, String msg_id, String event_id) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
+        BotClient client = botPool.getBotById(bot_id);
         content = EmojiParser.parseToUnicode(content);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
-        if (guild_id == null || guild_id == "")
-            return null;
-        MediaType mediaType = MediaType.parse("text/plain;application/json");
-
-        JSONObject json = new JSONObject();
-        json.put("content", content);
-        json.put("image", image_Url);
-        json.put("msg_id", msg_id);
-        json.put("event_id", event_id);
-        RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
-        String data = response.body().string();
+        if (guild_id == null || guild_id.isEmpty())
+            throw new MsgException(500, "guild_id不可为空");
+        BotRequest botRequest = new BotRequest()
+                .setMethod(RequestMethod.POST)
+                .setUrl(client.getSession().getOpenUrl() + "dms/" + guild_id + "/messages")
+                .putRequestBody("content", content)
+                .putRequestBody("image_url", image_Url)
+                .putRequestBody("msg_id", msg_id)
+                .putRequestBody("event_id", event_id);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        String data = response.getBody();
         data = EmojiParser.parseToUnicode(data);
         Tuple<Message, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
@@ -116,17 +126,18 @@ public class DMSImpl implements DMS_Api {
     @SneakyThrows
     @Override
     public Tuple<Message, String> sendReferenceMessage(String bot_id, String guild_id, String content, MessageReference reference) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
+        BotClient client = botPool.getBotById(bot_id);
         content = EmojiParser.parseToUnicode(content);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
-        MediaType mediaType = MediaType.parse("text/plain;application/json");
-        JSONObject json = new JSONObject();
-        json.put("content", content);
-        json.put("message_reference", reference);
-        json.put("msg_id", reference.getMessage_id());
-        RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
-        String data = response.body().string();
+        if (guild_id == null || guild_id.isEmpty())
+            throw new MsgException(500, "guild_id不可为空");
+        BotRequest botRequest = new BotRequest()
+                .setUrl(client.getSession().getOpenUrl() + "dms/" + guild_id + "/messages")
+                .setMethod(RequestMethod.POST)
+                .putRequestBody("content", content)
+                .putRequestBody("message_reference", reference);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        String data = response.getBody();
         data = EmojiParser.parseToUnicode(data);
         Tuple<Message, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
@@ -158,17 +169,18 @@ public class DMSImpl implements DMS_Api {
     @SneakyThrows
     @Override
     public Tuple<Message, String> sendMarkdownMessage(String bot_id, String guild_id, String msg_id, String event_id, MessageMarkdown markdown) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
-        markdown.setContent(EmojiParser.parseToUnicode(markdown.getContent()));
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
-        MediaType mediaType = MediaType.parse("text/plain;application/json");
-        JSONObject json = new JSONObject();
-        json.put("markdown", markdown);
-        json.put("msg_id", msg_id);
-        json.put("event_id", event_id);
-        RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
-        String data = response.body().string();
+        BotClient client = botPool.getBotById(bot_id);
+        if (guild_id == null || guild_id.isEmpty())
+            throw new MsgException(500, "guild_id不可为空");
+        BotRequest botRequest = new BotRequest()
+                .setUrl(client.getSession().getOpenUrl() + "dms/" + guild_id + "/messages")
+                .setMethod(RequestMethod.POST)
+                .putRequestBody("markdown", markdown)
+                .putRequestBody("msg_id", msg_id)
+                .putRequestBody("event_id", event_id);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        String data = response.getBody();
         data = EmojiParser.parseToUnicode(data);
         Tuple<Message, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
@@ -188,10 +200,15 @@ public class DMSImpl implements DMS_Api {
     @SneakyThrows
     @Override
     public Boolean deleteMessageById(String bot_id, String guild_id, String message_id, boolean hidetip) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages/" + message_id + "?hidetip=" + hidetip).build();
-        Response response = SiriusHttpUtils.deleteRequest(siriusBotClient, request, null);
-        return response.code() == 200;
+        BotClient client = botPool.getBotById(bot_id);
+        if (guild_id == null || guild_id.isEmpty())
+            throw new MsgException(500, "guild_id不可为空");
+        BotRequest botRequest = new BotRequest()
+                .setMethod(RequestMethod.DELETE)
+                .setUrl("dms/" + guild_id + "/messages/" + message_id + "?hidetip=" + hidetip);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        return response.getCode() == 200;
     }
 
 
@@ -212,16 +229,18 @@ public class DMSImpl implements DMS_Api {
     @SneakyThrows
     @Override
     public Tuple<Message, String> sendArkMessage(String bot_id, String guild_id, MessageArk ark, String msg_id, String event_id) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
-        MediaType mediaType = MediaType.parse("text/plain;application/json");
-        JSONObject json = new JSONObject();
-        json.put("ark", ark);
-        json.put("msg_id", msg_id);
-        json.put("event_id", event_id);
-        RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
-        String data = response.body().string();
+        BotClient client = botPool.getBotById(bot_id);
+        if (guild_id == null || guild_id.isEmpty())
+            throw new MsgException(500, "guild_id不可为空");
+        BotRequest botRequest = new BotRequest()
+                .setUrl(client.getSession().getOpenUrl() + "dms/" + guild_id + "/messages")
+                .setMethod(RequestMethod.POST)
+                .putRequestBody("ark", ark)
+                .putRequestBody("msg_id", msg_id)
+                .putRequestBody("event_id", event_id);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        String data = response.getBody();
         data = EmojiParser.parseToUnicode(data);
         Tuple<Message, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
@@ -243,20 +262,23 @@ public class DMSImpl implements DMS_Api {
     @SneakyThrows
     @Override
     public Tuple<Message, String> sendEmbedMessage(String bot_id, String guild_id, MessageEmbed embed, String msg_id, String event_id) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
+        BotClient client = botPool.getBotById(bot_id);
+        if (guild_id == null || guild_id.isEmpty())
+            throw new MsgException(500, "guild_id不可为空");
         for (int i = 0; i < embed.getFields().size(); i++) {
             embed.getFields().get(i).setName(EmojiParser.parseToUnicode(embed.getFields().get(i).getName()));
         }
+        BotRequest botRequest = new BotRequest()
+                .setMethod(RequestMethod.POST)
+                .setUrl(client.getSession().getOpenUrl() + "dms/" + guild_id + "/messages")
+                .putRequestBody("embed", embed)
+                .putRequestBody("msg_id", msg_id)
+                .putRequestBody("event_id", event_id);
 
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
-        MediaType mediaType = MediaType.parse("text/plain;application/json");
-        JSONObject json = new JSONObject();
-        json.put("embed", embed);
-        json.put("msg_id", msg_id);
-        json.put("event_id", event_id);
-        RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
-        String data = response.body().string();
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        String data = response.getBody();
+        data = EmojiParser.parseToUnicode(data);
         Tuple<Message, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
         return tuple;

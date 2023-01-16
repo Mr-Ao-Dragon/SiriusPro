@@ -5,6 +5,12 @@ import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.api.ChannelPermissionsApi;
 import cn.siriusbot.siriuspro.bot.api.pojo.ChannelPermissions;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
+import cn.siriusbot.siriuspro.bot.client.BotClient;
+import cn.siriusbot.siriuspro.bot.event.BotHttpEvent;
+import cn.siriusbot.siriuspro.bot.pojo.BotRequest;
+import cn.siriusbot.siriuspro.bot.pojo.BotResponse;
+import cn.siriusbot.siriuspro.bot.pojo.e.RequestMethod;
+import cn.siriusbot.siriuspro.config.bean.BotPool;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
 import lombok.SneakyThrows;
@@ -16,10 +22,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class  ChannelPermissionsImpl implements ChannelPermissionsApi {
+public class ChannelPermissionsImpl implements ChannelPermissionsApi {
 
     @Autowired
     BotManager botManager;
+    @Autowired
+    BotPool botPool;
 
     /**
      * 获取子频道用户权限
@@ -27,19 +35,22 @@ public class  ChannelPermissionsImpl implements ChannelPermissionsApi {
      * 获取子频道用户权限。
      * 要求操作人具有管理子频道的权限，如果是机器人，则需要将机器人设置为管理员
      *
-     * @param bot_id        传入机器人对象ID
+     * @param bot_id     传入机器人对象ID
      * @param channel_id 子频道ID
      * @param user_id    用户ID
      * @return 子频道权限对象
      */
     @SneakyThrows
     @Override
-    public Tuple<ChannelPermissions,String> getChannelPermissionsByUser_id(String bot_id, String channel_id, String user_id) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/members/" + user_id + "/permissions").build();
-        Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
-        String data = response.body().string();
-        Tuple<ChannelPermissions,String> tuple = new Tuple<>();
+    public Tuple<ChannelPermissions, String> getChannelPermissionsByUser_id(String bot_id, String channel_id, String user_id) {
+        BotClient client = botPool.getBotById(bot_id);
+        BotRequest botRequest = new BotRequest()
+                .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/members/" + user_id + "/permissions")
+                .setMethod(RequestMethod.GET);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        String data = response.getBody();
+        Tuple<ChannelPermissions, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, ChannelPermissions.class)).setSecond(data);
         return tuple;
     }
@@ -51,7 +62,7 @@ public class  ChannelPermissionsImpl implements ChannelPermissionsApi {
      * 获取子频道用户权限。
      * 要求操作人具有管理子频道的权限，如果是机器人，则需要将机器人设置为管理员
      *
-     * @param bot_id        传入机器人对象ID
+     * @param bot_id     传入机器人对象ID
      * @param channel_id 子频道ID
      * @param role_id    身份组ID
      * @param add        要添加的权限
@@ -61,15 +72,15 @@ public class  ChannelPermissionsImpl implements ChannelPermissionsApi {
     @SneakyThrows
     @Override
     public Boolean modifyChannelPermissionsByRole_id(String bot_id, String channel_id, String role_id, String add, String remove) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/roles/" + role_id + "/permissions").build();
-        MediaType mediaType = MediaType.parse("application/json");
-        JSONObject json = new JSONObject();
-        json.put("add", add);
-        json.put("remove", remove);
-        RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.putRequest(siriusBotClient, request, body);
-        return response.code() == 204;
+        BotClient client = botPool.getBotById(bot_id);
+        BotRequest botRequest = new BotRequest()
+                .setMethod(RequestMethod.PATCH)
+                .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/roles/" + role_id + "/permissions")
+                .putRequestBody("add", add)
+                .putRequestBody("remove", remove);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        return response.getCode() == 204;
     }
 
 
@@ -79,7 +90,7 @@ public class  ChannelPermissionsImpl implements ChannelPermissionsApi {
      * 获取子频道用户权限。
      * 要求操作人具有管理子频道的权限，如果是机器人，则需要将机器人设置为管理员
      *
-     * @param bot_id        传入机器人对象ID
+     * @param bot_id     传入机器人对象ID
      * @param channel_id 子频道ID
      * @param user_id    用户id
      * @param add        添加的权限
@@ -89,17 +100,15 @@ public class  ChannelPermissionsImpl implements ChannelPermissionsApi {
     @SneakyThrows
     @Override
     public Boolean modifyChannelPermissionsByUser_id(String bot_id, String channel_id, String user_id, String add, String remove) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
-        System.out.println(add+remove);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/members/" + user_id + "/permissions").build();
-        MediaType mediaType = MediaType.parse("application/json");
-        JSONObject json = new JSONObject();
-        json.put("add", add);
-        json.put("remove", remove);
-        RequestBody body = RequestBody.create(mediaType, json.toJSONString());
-        Response response = SiriusHttpUtils.putRequest(siriusBotClient, request, body);
-        System.out.println(response.body().string());
-        return response.code() == 204;
+        BotClient client = botPool.getBotById(bot_id);
+        BotRequest botRequest = new BotRequest()
+                .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/members/" + user_id + "/permissions")
+                .setMethod(RequestMethod.PATCH)
+                .putRequestBody("add", add)
+                .putRequestBody("remove", remove);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        return response.getCode() == 204;
     }
 
 
@@ -108,21 +117,23 @@ public class  ChannelPermissionsImpl implements ChannelPermissionsApi {
      * 用于获取子频道 channel_id 下身份组 role_id 的权限。
      * 要求操作人具有管理子频道的权限，如果是机器人，则需要将机器人设置为管理员。
      *
-     * @param bot_id        传入机器人对象ID
+     * @param bot_id     传入机器人对象ID
      * @param channel_id 子频道ID
      * @param role_id    身份组ID
      * @return 子频道权限对象
      */
     @SneakyThrows
     @Override
-    public Tuple<ChannelPermissions,String> getChannelPermissionsByRole_id(String bot_id, String channel_id, String role_id) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/roles/" + role_id + "/permissions").build();
-        Response response = SiriusHttpUtils.getRequest(siriusBotClient, request);
-        String data = response.body().string();
-        Tuple<ChannelPermissions,String> tuple = new Tuple<>();
+    public Tuple<ChannelPermissions, String> getChannelPermissionsByRole_id(String bot_id, String channel_id, String role_id) {
+        BotClient client = botPool.getBotById(bot_id);
+        BotRequest botRequest = new BotRequest()
+                .setMethod(RequestMethod.GET)
+                .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/roles/" + role_id + "/permissions");
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        String data = response.getBody();
+        Tuple<ChannelPermissions, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, ChannelPermissions.class)).setSecond(data);
         return tuple;
     }
-
 }

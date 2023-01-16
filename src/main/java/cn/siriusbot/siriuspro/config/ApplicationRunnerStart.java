@@ -52,17 +52,31 @@ public class ApplicationRunnerStart implements ApplicationRunner {
 
         BotClient botClient = new SiriusBotClient(
                 new BotInfo()
-                        .setBotId("102035548")
-                        .setToken("mXpN8ABhF5CDxae9QmhWuvWB9Pb2bokf")
-                        .setBotType(BotType.PRIVATE_TYPE)
-                        .setSandBox(false),
+                        .setBotId("102004321")
+                        .setToken("VwUd3zkSBZIbLlWZOXNlhrBsZDCtn6Dn")
+                        .setBotType(BotType.PUBLIC_TYPE)
+                        .setSandBox(true),
                 botConfig
         );
         botClient.setConfig(
                 IntentsEvent.class, new IntentsEventImpl()
-                        .setIntents(IntentsType.GUILD_MESSAGES)
+                        .setIntents(IntentsType.PUBLIC_ALL)
         );
         botClient.start();
+
+        BotClient botClient2 = new SiriusBotClient(
+                new BotInfo()
+                        .setBotId("101990484")
+                        .setToken("vPavLsOHhJT90lUgo8SwAavbalnFzJMN")
+                        .setBotType(BotType.PUBLIC_TYPE)
+                        .setSandBox(true),
+                botConfig
+        );
+        botClient2.setConfig(
+                IntentsEvent.class, new IntentsEventImpl()
+                        .setIntents(IntentsType.PUBLIC_ALL)
+        );
+        botClient2.start();
         System.out.println("启动完成");
 
     }

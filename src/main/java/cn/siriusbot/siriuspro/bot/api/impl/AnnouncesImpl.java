@@ -10,6 +10,7 @@ import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
 import cn.siriusbot.siriuspro.bot.client.BotClient;
 import cn.siriusbot.siriuspro.bot.event.BotHttpEvent;
 import cn.siriusbot.siriuspro.bot.pojo.BotRequest;
+import cn.siriusbot.siriuspro.bot.pojo.BotResponse;
 import cn.siriusbot.siriuspro.bot.pojo.e.RequestMethod;
 import cn.siriusbot.siriuspro.config.bean.BotPool;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
@@ -26,14 +27,14 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class  AnnouncesImpl implements AnnouncesApi {
+public class AnnouncesImpl implements AnnouncesApi {
 
     @Autowired
     BotPool botPool;
 
     @Autowired
     BotManager botManager;
-    
+
     /**
      * 创建频道公告
      * 用于创建频道全局公告，公告类型分为 消息类型的频道公告 和 推荐子频道类型的频道公告 。
@@ -44,14 +45,14 @@ public class  AnnouncesImpl implements AnnouncesApi {
      * 只有子频道权限为全体成员可见才可设置为推荐子频道。
      * 删除推荐子频道类型的频道公告请使用 删除频道公告,并将 message_id 设置为 all。
      *
-     * @param bot_id               传入机器人对象ID
-     * @param guild_id          频道ID
-     * @param message_id        消息ID
-     * @param channel_id        子频道ID
+     * @param bot_id     传入机器人对象ID
+     * @param guild_id   频道ID
+     * @param message_id 消息ID
+     * @param channel_id 子频道ID
      * @return 返回公告对象
      */
     @Override
-    public Tuple<Announces,String> createGuildAnnounces(String bot_id, String guild_id, String message_id, String channel_id) {
+    public Tuple<Announces, String> createGuildAnnounces(String bot_id, String guild_id, String message_id, String channel_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.POST)
@@ -60,11 +61,11 @@ public class  AnnouncesImpl implements AnnouncesApi {
                 .putRequestBody("message_id", message_id)
                 .putRequestBody("channel_id", channel_id);
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
-        String response = http.request(botRequest);
-        Tuple<Announces,String> tuple = new Tuple<>();
+        BotResponse response = http.req(botRequest);
+        Tuple<Announces, String> tuple = new Tuple<>();
         tuple
-                .setFirst(JSONObject.parseObject(response, Announces.class))
-                .setSecond(response);
+                .setFirst(JSONObject.parseObject(response.getBody(), Announces.class))
+                .setSecond(response.getBody());
         return tuple;
     }
 
@@ -74,7 +75,7 @@ public class  AnnouncesImpl implements AnnouncesApi {
      * 用于删除频道 guild_id 下指定 message_id 的全局公告。
      * message_id 有值时，会校验 message_id 合法性，若不校验校验 message_id，请将 message_id 设置为 all
      *
-     * @param bot_id        传入机器人对象ID
+     * @param bot_id     传入机器人对象ID
      * @param guild_id   频道ID
      * @param message_id 消息ID
      * @return 返回删除结果
@@ -82,37 +83,39 @@ public class  AnnouncesImpl implements AnnouncesApi {
     @SneakyThrows
     @Override
     public Boolean deleteAnnouncesByGuildId(String bot_id, String guild_id, String message_id) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "guilds/" + guild_id + "/announces/" + message_id).build();
-        Response response = SiriusHttpUtils.deleteRequest(siriusBotClient, request, null);
-        System.out.println(response.body().string());
-        return response.code() == 204;
+        BotClient client = botPool.getBotById(bot_id);
+        BotRequest botRequest = new BotRequest()
+                .setMethod(RequestMethod.DELETE)
+                .setUrl(client.getSession().getOpenUrl() + "guilds/" + guild_id + "/announces/" + message_id);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        return response.getCode() == 204;
     }
 
     /**
      * 创建频道推荐子频道列表
-     * @param bot_id 传入机器人对象ID
-     * @param guild_id 频道ID
+     *
+     * @param bot_id            传入机器人对象ID
+     * @param guild_id          频道ID
      * @param recommendChannels 机器人推荐列表
      * @return 返回公告对象
      */
     @SneakyThrows
     @Override
-    public Tuple<Announces,String> createGuildRecommend_Channels(String bot_id, String guild_id, Integer announces_type, List<RecommendChannel> recommendChannels) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
+    public Tuple<Announces, String> createGuildRecommend_Channels(String bot_id, String guild_id, Integer announces_type, List<RecommendChannel> recommendChannels) {
+        BotClient client = botPool.getBotById(bot_id);
         for (int i = 0; i < recommendChannels.size(); i++) {
             recommendChannels.get(i).setIntroduce(EmojiParser.parseToUnicode(recommendChannels.get(i).getIntroduce()));
         }
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl()+"guilds/"+guild_id+"/announces").build();
-        MediaType mediaType = MediaType.parse("application/json;text/plain");
-        JSONObject json = new JSONObject();
-        json.put("recommend_channels",recommendChannels);
-        json.put("announces_type",announces_type);
-        RequestBody body = RequestBody.create(mediaType,json.toJSONString());
-        Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body);
-        String data = response.body().string();
-        Tuple<Announces,String> tuple = new Tuple<>();
-        tuple.setFirst(JSONObject.parseObject(data, Announces.class)).setSecond(data);
+        BotRequest botRequest = new BotRequest()
+                .setUrl(client.getSession().getOpenUrl() + "guilds/" + guild_id + "/announces")
+                .setMethod(RequestMethod.POST)
+                .putRequestBody("recommend_channels", recommendChannels)
+                .putRequestBody("announces_type", announces_type);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        Tuple<Announces, String> tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(response.getBody(), Announces.class)).setSecond(response.getBody());
         return tuple;
     }
 }
