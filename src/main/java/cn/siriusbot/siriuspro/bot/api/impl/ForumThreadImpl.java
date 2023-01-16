@@ -4,7 +4,7 @@ import cn.siriusbot.siriuspro.bot.BotManager;
 import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.api.ForumApi;
 import cn.siriusbot.siriuspro.bot.api.pojo.forum.responseObj.ThreadList;
-import cn.siriusbot.siriuspro.bot.api.pojo.forum.responseObj.createThread;
+import cn.siriusbot.siriuspro.bot.api.pojo.forum.responseObj.CreateThread;
 import cn.siriusbot.siriuspro.bot.api.pojo.forum.thread.ForumThread;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
@@ -79,7 +79,7 @@ public class  ForumThreadImpl implements ForumApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<createThread,String> postThread(String bot_id, String channel_id, String title, String content, Integer format) {
+    public Tuple<CreateThread,String> postThread(String bot_id, String channel_id, String title, String content, Integer format) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/threads").build();
         MediaType mediaType = MediaType.parse("text/plain;application/json");
@@ -90,8 +90,8 @@ public class  ForumThreadImpl implements ForumApi {
         RequestBody body = RequestBody.create(mediaType, json.toJSONString());
         String data = SiriusHttpUtils.putRequest(siriusBotClient, request, body).body().string();
         data = EmojiParser.parseToUnicode(data);
-        Tuple<createThread,String> tuple = new Tuple<>();
-        tuple.setFirst(JSONObject.parseObject(data, createThread.class)).setSecond(data);
+        Tuple<CreateThread,String> tuple = new Tuple<>();
+        tuple.setFirst(JSONObject.parseObject(data, CreateThread.class)).setSecond(data);
         return tuple;
     }
 

@@ -1,7 +1,7 @@
 package cn.siriusbot.siriuspro.bot.api;
 
 import cn.siriusbot.siriuspro.bot.api.pojo.forum.responseObj.ThreadList;
-import cn.siriusbot.siriuspro.bot.api.pojo.forum.responseObj.createThread;
+import cn.siriusbot.siriuspro.bot.api.pojo.forum.responseObj.CreateThread;
 import cn.siriusbot.siriuspro.bot.api.pojo.forum.thread.ForumThread;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
 
@@ -41,7 +41,7 @@ public interface ForumApi {
      * @param format     解析模式，参考Forum下Thread的FORMAT枚举类型
      * @return 返回发表帖子响应对象
      */
-    public abstract Tuple<createThread,String> postThread(String bot_id, String channel_id, String title, String content, Integer format);
+    public abstract Tuple<CreateThread,String> postThread(String bot_id, String channel_id, String title, String content, Integer format);
 
     /**
      * 删除帖子

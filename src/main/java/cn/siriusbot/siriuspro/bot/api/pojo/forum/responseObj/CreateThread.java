@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class createThread {
+public class CreateThread {
 
     /**
      * 帖子任务ID
