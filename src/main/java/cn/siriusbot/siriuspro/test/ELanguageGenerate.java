@@ -71,9 +71,11 @@ import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
+import org.aspectj.util.FileUtil;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -145,6 +147,10 @@ public class ELanguageGenerate {
                     .setList(isList);
             list.add(info);
         }
+        exec(clazz, list);
+        for (Info info : list){
+            System.out.println(info.getName() + " -> " + info.getJavaDoc());
+        }
         map.put(getName(clazz.getName()), list);
     }
 
@@ -159,9 +165,11 @@ public class ELanguageGenerate {
             for (Info info : map.get(key)) {
                 sb.append("    .成员 ").append(info.getName()).append(',').append(info.getType());
                 if (info.list) {
-                    sb.append(", , \"1\"");
+                    sb.append(", , \"1\" , ").append(info.getJavaDoc()).append('\n');
+                } else {
+                    sb.append(", , , ").append(info.getJavaDoc()).append('\n');
                 }
-                sb.append('\n');
+
             }
             sb.append('\n');
         }
@@ -287,6 +295,136 @@ public class ELanguageGenerate {
         return sb.toString();
     }
 
+    private String eTypeToJsonName(String eType) {
+        String jsonType;
+        switch (eType) {
+            case "整数型" -> jsonType = "取整数";
+            case "逻辑型" -> jsonType = "取逻辑";
+            case "双精度小数型" -> jsonType = "取双精度";
+            case "长整数型" -> jsonType = "取长整数";
+            default -> jsonType = "取文本";
+        }
+        return jsonType;
+    }
+
+    /**
+     * 生成解析对象
+     *
+     * @return
+     */
+    private String generateAnalyticClass() {
+        StringBuilder sb = new StringBuilder();
+        String paramMethodHead = "parse";
+        String paramSource = "source";
+        // 添加代码头
+        sb.append("""
+                .版本 2
+
+                """);
+        for (String key : map.keySet()) {
+            String obj = key.substring(0, 1).toLowerCase(Locale.ROOT) + key.substring(1);
+            // 生成方法
+            sb.append(String.format(".子程序 %s%s, %s, 公开", paramMethodHead, key, key)).append('\n');
+            sb.append(String.format(".参数 %s, 文本型", paramSource)).append('\n');
+            // 生成局部变量
+            sb.append(".局部变量 i, 整数型").append('\n');
+            sb.append(".局部变量 length, 整数型").append('\n');
+            sb.append(".局部变量 json, zyJsonDocument").append('\n');
+            sb.append(".局部变量 item, zyJsonValue").append('\n');
+            sb.append(String.format(".局部变量 %s, %s", obj, key)).append('\n');
+            sb.append('\n');
+            // 生成方法
+            sb.append(String.format("json.解析 (%s, , , )", paramSource)).append('\n');
+            List<Info> infos = map.get(key);
+            for (Info info : infos) {
+                if (info.isList()) {
+                    // 数组解析
+                    sb.append(String.format("item ＝ json.取属性 (, “%s”)", info.getName())).append('\n');
+                    sb.append("length ＝ item.取成员数 ()").append('\n');
+                    sb.append(String.format("重定义数组 (%s.%s, 假, length)", obj, info.getName())).append('\n');
+                    sb.append("    ").append(".计次循环首 (length, i)").append('\n');
+                    if (info.getType().equals(info.getSrcType())) {
+                        // 对象类型
+                        sb.append("    ").append(String.format("%s.%s[i] ＝ %s%s(item.取成员 (, i - 1).到文本 ())",
+                                        obj,
+                                        info.getName(),
+                                        paramMethodHead,
+                                        info.getType()
+                                )
+                        ).append('\n');
+                    } else {
+                        // 基础类型
+                        sb.append("    ").append(String.format("%s.%s[i] ＝ item.取成员 (, i - 1).%s ()", obj, info.getName(), eTypeToJsonName(info.getType()))).append('\n');
+                    }
+                    sb.append("    ").append(".计次循环尾 ()").append('\n');
+                } else {
+                    // 单独对象解析
+                    if (info.getType().equals(info.getSrcType())) {
+                        // 对象类型
+                        sb.append(String.format(
+                                        "%s.%s ＝ %s%s(json.取属性 (, “%s”).到文本())",
+                                        obj,
+                                        info.getName(),
+                                        paramMethodHead,
+                                        info.getType(),
+                                        info.getName()
+                                )
+                        ).append('\n');
+                    } else {
+                        // 基础类型
+                        sb.append(String.format(
+                                        "%s.%s ＝ json.%s (“%s”)",
+                                        obj,
+                                        info.getName(),
+                                        eTypeToJsonName(info.getType()),
+                                        info.getName()
+                                )
+                        ).append('\n');
+                    }
+                }
+            }
+            // 生成返回
+            sb.append(String.format("返回 (%s)", obj)).append('\n');
+            sb.append('\n');
+        }
+        return sb.toString();
+    }
+
+
+    @SneakyThrows
+    public void exec(Class<?> clazz, List<Info> infos) {
+        String url = System.getProperty("user.dir") + "\\src\\main\\java\\";
+        url = url + clazz.getName().replace('.', '\\') + ".java";
+        String str = FileUtil.readAsString(new File(url));
+        int index = str.indexOf("class");;
+        for (Info info : infos) {
+            try {
+                int a = str.indexOf("/**", index);
+                int b = str.indexOf(" " + info.getName() + ";");
+                index = b;
+                String substring = str.substring(a, b);
+                int c = substring.indexOf("\n");
+                int d = substring.indexOf("*/");
+                substring = substring.substring(c,d);
+                String[] split = substring.split("\n");
+                StringBuilder doc = new StringBuilder();
+                for (String s : split){
+                    String replace = s.replace(" ", "");
+                    if (!replace.isEmpty()){
+                        if (replace.charAt(0) == '*'){
+                            replace =  replace.substring(1);
+                        }
+                        doc.append(replace);
+                    }
+                }
+                info.setJavaDoc(doc.toString());
+            } catch (Exception e){
+                info.setJavaDoc("");
+            }
+
+        }
+    }
+
     @SneakyThrows
     private void config() {
         // 配置实体类
@@ -410,9 +548,10 @@ public class ELanguageGenerate {
         System.out.println("======易语言代码生成=====");
         System.out.println("=======================");
         System.out.println("=======================");
-        System.out.println(map);
+
         //log.info("\n" + generateTypeInfos() + "\n");
-        log.info("\n" + generateAnalyticMethod() + "\n");
+        log.info("\n" + generateAnalyticClass() + "\n");
+        //exec(User.class);
     }
 
 
@@ -422,6 +561,7 @@ public class ELanguageGenerate {
         String name;
         String type;
         String srcType; // 源类型
+        String javaDoc;
         boolean list;
     }
 }
