@@ -56,7 +56,7 @@ public class BotHttpEventImpl implements BotHttpEvent {
         Request toRequest = botRequestToRequest(request);
         try {
             Response response = httpClient.newCall(toRequest).execute();
-            switch (response.code()){
+            switch (response.code()) {
                 case 200 -> {
                     return Objects.requireNonNull(response.body()).string();
                 }
@@ -88,21 +88,21 @@ public class BotHttpEventImpl implements BotHttpEvent {
         Request toRequest = botRequestToRequest(request);
         try {
             Response response = httpClient.newCall(toRequest).execute();
-            switch (response.code()){
-                case 202,200,204->{
+            switch (response.code()) {
+                case 202, 200, 204 -> {
                     return new BotResponse()
                             .setCode(response.code())
                             .setBody(Objects.requireNonNull(response.body()).string())
                             .setTraceId(response.header("X-Tps-trace-ID"));
                 }
-                case 500->{
+                case 500 -> {
                     return new BotResponse()
                             .setCode(500)
                             .setBody(Objects.requireNonNull(response.body()).string())
                             .setTraceId(response.header("X-Tps-trace-ID"));
                 }
                 default -> {
-                    throw new MsgException(500, String.format("httpClient请求错误代码:%d，body:%s,X-Tps-trace-ID：%d", response.code(), response.body().string(),response.header("X-Tps-trace-ID")));
+                    throw new MsgException(500, String.format("httpClient请求错误代码:%d，body:%s,X-Tps-trace-ID：%d", response.code(), response.body().string(), response.header("X-Tps-trace-ID")));
                 }
             }
         } catch (MsgException e) {

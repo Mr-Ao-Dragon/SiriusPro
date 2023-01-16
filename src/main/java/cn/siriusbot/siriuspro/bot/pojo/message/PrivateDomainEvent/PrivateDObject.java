@@ -61,13 +61,4 @@ public class PrivateDObject implements MessageBody {
      */
     private String timestamp;
 
-    /**
-     * 被操作的消息对象
-     */
-    private Message message;
-
-    /**
-     * 操作人对象
-     */
-    private Op_User op_user;
 }
