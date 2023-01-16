@@ -64,7 +64,7 @@ public class UserApiImpl implements UserApi {
      * @param after  读此 guild id 之后的数据
      * @param limit  每次查询的条数，默认100，最大100
      * @return 频道数组
-     * after 和 before 同时设置时， after 参数无效
+     * after 和 before   同时设置时， after 参数无效
      */
     @SneakyThrows
     @Override

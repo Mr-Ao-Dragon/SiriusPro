@@ -89,15 +89,9 @@ public class BotHttpEventImpl implements BotHttpEvent {
         try {
             Response response = httpClient.newCall(toRequest).execute();
             switch (response.code()){
-                case 200 -> {
+                case 202,200,204->{
                     return new BotResponse()
-                            .setCode(200)
-                            .setBody(Objects.requireNonNull(response.body()).string())
-                            .setTraceId(response.header("X-Tps-trace-ID"));
-                }
-                case 204->{
-                    return new BotResponse()
-                            .setCode(204)
+                            .setCode(response.code())
                             .setBody(Objects.requireNonNull(response.body()).string())
                             .setTraceId(response.header("X-Tps-trace-ID"));
                 }

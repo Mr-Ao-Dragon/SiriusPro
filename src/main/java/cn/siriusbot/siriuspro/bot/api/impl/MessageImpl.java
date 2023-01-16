@@ -61,6 +61,7 @@ public class MessageImpl implements MessageApi {
     @Override
     public Tuple<Message, String> sendMessage(String bot_id, String channel_id, String content, String image_Url, String msg_id, String event_id) {
         BotClient client = botPool.getBotById(bot_id);
+        content = EmojiParser.parseToUnicode(content);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.POST)
                 .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/messages")
@@ -70,11 +71,11 @@ public class MessageImpl implements MessageApi {
                 .putRequestBody("msg_id", msg_id)
                 .putRequestBody("event_id", event_id);
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
-        String response = http.request(botRequest);
+        BotResponse response = http.req(botRequest);
         Tuple<Message, String> tuple = new Tuple<>();
         tuple
-                .setFirst(JSONObject.parseObject(response, Message.class))
-                .setSecond(response);
+                .setFirst(JSONObject.parseObject(response.getBody(), Message.class))
+                .setSecond(response.getBody());
         return tuple;
     }
 
