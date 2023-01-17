@@ -1,7 +1,5 @@
 package cn.siriusbot.siriuspro.bot.api.impl;
 
-import cn.siriusbot.siriuspro.bot.BotManager;
-import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.api.DMS_Api;
 import cn.siriusbot.siriuspro.bot.api.pojo.DMS;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.Message;
@@ -18,12 +16,9 @@ import cn.siriusbot.siriuspro.bot.pojo.e.RequestBodyType;
 import cn.siriusbot.siriuspro.bot.pojo.e.RequestMethod;
 import cn.siriusbot.siriuspro.config.bean.BotPool;
 import cn.siriusbot.siriuspro.error.MsgException;
-import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
-import com.vdurmont.emoji.Emoji;
 import com.vdurmont.emoji.EmojiParser;
 import lombok.SneakyThrows;
-import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,9 +27,6 @@ import java.io.File;
 
 @Component
 public class DMSImpl implements DMS_Api {
-
-    @Autowired
-    BotManager botManager;
 
     @Autowired
     BotPool botPool;

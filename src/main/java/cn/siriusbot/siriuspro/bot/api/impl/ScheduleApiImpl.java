@@ -1,7 +1,5 @@
 package cn.siriusbot.siriuspro.bot.api.impl;
 
-import cn.siriusbot.siriuspro.bot.BotManager;
-import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.api.ScheduleApi;
 import cn.siriusbot.siriuspro.bot.api.pojo.Schedule;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
@@ -11,13 +9,9 @@ import cn.siriusbot.siriuspro.bot.pojo.BotRequest;
 import cn.siriusbot.siriuspro.bot.pojo.BotResponse;
 import cn.siriusbot.siriuspro.bot.pojo.e.RequestMethod;
 import cn.siriusbot.siriuspro.config.bean.BotPool;
-import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.vdurmont.emoji.EmojiParser;
 import lombok.SneakyThrows;
-import okhttp3.MediaType;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,9 +20,6 @@ import java.util.List;
 
 @Component
 public class ScheduleApiImpl implements ScheduleApi {
-
-    @Autowired
-    BotManager botManager;
 
     @Autowired
     BotPool botPool;

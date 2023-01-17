@@ -1,11 +1,7 @@
 package cn.siriusbot.siriuspro.bot.api.impl;
 
-import cn.siriusbot.siriuspro.bot.BotManager;
-import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.api.MessageApi;
-import cn.siriusbot.siriuspro.bot.api.pojo.announces.Announces;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.Message;
-import cn.siriusbot.siriuspro.bot.api.pojo.message.MessageKeyboard;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.MessageMarkdown;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.MessageReference;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.ark.MessageArk;
@@ -14,17 +10,14 @@ import cn.siriusbot.siriuspro.bot.api.pojo.message.requestPack.RequestCustomKeyb
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
 import cn.siriusbot.siriuspro.bot.client.BotClient;
 import cn.siriusbot.siriuspro.bot.event.BotHttpEvent;
-import cn.siriusbot.siriuspro.bot.event.v1.BotEvent;
 import cn.siriusbot.siriuspro.bot.pojo.BotRequest;
 import cn.siriusbot.siriuspro.bot.pojo.BotResponse;
 import cn.siriusbot.siriuspro.bot.pojo.e.RequestBodyType;
 import cn.siriusbot.siriuspro.bot.pojo.e.RequestMethod;
 import cn.siriusbot.siriuspro.config.bean.BotPool;
-import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.vdurmont.emoji.EmojiParser;
 import lombok.SneakyThrows;
-import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,9 +29,6 @@ public class MessageImpl implements MessageApi {
 
     @Autowired
     BotPool botPool;
-
-    @Autowired
-    BotManager botManager;
 
     /**
      * 用于向 channel_id 指定的子频道发送消息。
