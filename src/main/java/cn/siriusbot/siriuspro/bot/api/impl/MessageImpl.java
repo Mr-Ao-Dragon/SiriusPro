@@ -17,6 +17,7 @@ import cn.siriusbot.siriuspro.bot.event.BotHttpEvent;
 import cn.siriusbot.siriuspro.bot.event.v1.BotEvent;
 import cn.siriusbot.siriuspro.bot.pojo.BotRequest;
 import cn.siriusbot.siriuspro.bot.pojo.BotResponse;
+import cn.siriusbot.siriuspro.bot.pojo.e.RequestBodyType;
 import cn.siriusbot.siriuspro.bot.pojo.e.RequestMethod;
 import cn.siriusbot.siriuspro.config.bean.BotPool;
 import cn.siriusbot.siriuspro.http.SiriusHttpUtils;
@@ -275,26 +276,20 @@ public class MessageImpl implements MessageApi {
     @SneakyThrows
     @Override
     public Tuple<Message, String> sendImageAndTextMessage(@NotNull String bot_id, String channel_id, String content, String image_path, String msg_id, String event_id) {
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
-        Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "channels/" + channel_id + "/messages").build();
+        BotClient client = botPool.getBotById(bot_id);
         content = EmojiParser.parseToUnicode(content);
-        MediaType mediaType = MediaType.parse("multipart/form-data");
-        MultipartBody.Builder builder = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM);
-        if (content != null)
-            builder.addFormDataPart("content", content);
-        if (msg_id != null)
-            builder.addFormDataPart("msg_id", msg_id);
-        if (image_path != null) {
-            File file = new File(image_path);
-            builder.addFormDataPart("file_image", file.getAbsolutePath(), RequestBody.create(mediaType, file));
-        }
-        if (event_id != null)
-            builder.addFormDataPart("event_id", event_id);
-
-        MultipartBody body = builder.build();
-        Response response = SiriusHttpUtils.postRequest(siriusBotClient, request, body, "multipart/form-data");
-        String data = response.body().string();
+        BotRequest botRequest = new BotRequest()
+                .setMethod(RequestMethod.POST)
+                .setBodyType(RequestBodyType.FORM)
+                .setMediaType("multipart/form-data")
+                .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/messages")
+                .putRequestBody("content", content)
+                .putRequestBody("msg_id", msg_id)
+                .putRequestBody("file_image", new File(image_path))
+                .putRequestBody("event_id", event_id);
+        BotHttpEvent http = client.getBean(BotHttpEvent.class);
+        BotResponse response = http.req(botRequest);
+        String data = EmojiParser.parseToUnicode(response.getBody());
         Tuple<Message, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Message.class)).setSecond(data);
         return tuple;

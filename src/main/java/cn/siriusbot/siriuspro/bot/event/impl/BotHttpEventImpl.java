@@ -4,10 +4,12 @@ import cn.siriusbot.siriuspro.bot.client.BotClient;
 import cn.siriusbot.siriuspro.bot.event.BotHttpEvent;
 import cn.siriusbot.siriuspro.bot.pojo.BotRequest;
 import cn.siriusbot.siriuspro.bot.pojo.BotResponse;
+import cn.siriusbot.siriuspro.bot.pojo.e.RequestBodyType;
 import cn.siriusbot.siriuspro.error.MsgException;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.*;
 
+import java.io.File;
 import java.time.Duration;
 import java.util.Objects;
 
@@ -142,6 +144,21 @@ public class BotHttpEventImpl implements BotHttpEvent {
     }
 
     private RequestBody botRequestToRequestBody(BotRequest request) {
+        if (request.getBodyType() == RequestBodyType.FORM) {
+            // 发送图文
+            MultipartBody.Builder builder = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM);
+            for (String key : request.getMap().keySet()) {
+                Object o = request.getMap().get(key);
+                if (o instanceof String s) {
+                    builder.addFormDataPart(key, s);
+                }
+                if (o instanceof File file) {
+                    builder.addFormDataPart(key, file.getAbsolutePath(), RequestBody.create(file, MediaType.parse(request.getMediaType())));
+                }
+            }
+            return builder.build();
+        }
         return RequestBody.create(request.getRequestBody(), MediaType.parse(request.getMediaType()));
     }
 }

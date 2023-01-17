@@ -105,8 +105,8 @@ public class AnnouncesImpl implements AnnouncesApi {
     @Override
     public Tuple<Announces, String> createGuildRecommend_Channels(@NotNull String bot_id, String guild_id, Integer announces_type, List<RecommendChannel> recommendChannels) {
         BotClient client = botPool.getBotById(bot_id);
-        for (int i = 0; i < recommendChannels.size(); i++) {
-            recommendChannels.get(i).setIntroduce(EmojiParser.parseToUnicode(recommendChannels.get(i).getIntroduce()));
+        for (RecommendChannel recommendChannel : recommendChannels) {
+            recommendChannel.setIntroduce(EmojiParser.parseToUnicode(recommendChannel.getIntroduce()));
         }
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "guilds/" + guild_id + "/announces")

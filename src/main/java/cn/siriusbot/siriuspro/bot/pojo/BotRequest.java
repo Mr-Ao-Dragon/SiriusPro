@@ -1,5 +1,6 @@
 package cn.siriusbot.siriuspro.bot.pojo;
 
+import cn.siriusbot.siriuspro.bot.pojo.e.RequestBodyType;
 import cn.siriusbot.siriuspro.bot.pojo.e.RequestMethod;
 import com.alibaba.fastjson2.JSON;
 
@@ -13,6 +14,7 @@ public class BotRequest {
     Map<String, String> header = new HashMap<>();
     Map<String, Object> map = new HashMap<>();
     RequestMethod method;
+    RequestBodyType bodyType = RequestBodyType.JSON;    // 默认为JSON
 
     public BotRequest() {
         this.addHeader("Content-Type", "application/json;text/plain"); // 默认为json请求
@@ -30,6 +32,10 @@ public class BotRequest {
             return JSON.toJSONString(this.map);
         }
         return requestBody;
+    }
+
+    public Map<String, Object> getMap() {
+        return map;
     }
 
     public Map<String, String> getHeader() {
@@ -80,6 +86,12 @@ public class BotRequest {
         return this;
     }
 
+    public RequestBodyType getBodyType() {
+        return bodyType;
+    }
 
-
+    public BotRequest setBodyType(RequestBodyType bodyType) {
+        this.bodyType = bodyType;
+        return this;
+    }
 }

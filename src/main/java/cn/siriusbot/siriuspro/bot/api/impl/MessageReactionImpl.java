@@ -98,7 +98,6 @@ public class MessageReactionImpl implements MessageReactionApi {
     @Override
     public Boolean addReaction(@NotNull String bot_id, String channel_id, String message_id, Integer type, String id) {
         BotClient client = botPool.getBotById(bot_id);
-        SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "/reactions/" + type + "/" + id)
                 .setMethod(RequestMethod.PUT);
