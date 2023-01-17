@@ -1,5 +1,8 @@
 package cn.siriusbot.siriuspro.test;
 
+import cn.siriusbot.siriuspro.bot.annotation.EName;
+import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
+import cn.siriusbot.siriuspro.bot.api.*;
 import cn.siriusbot.siriuspro.bot.api.pojo.*;
 import cn.siriusbot.siriuspro.bot.api.pojo.announces.Announces;
 import cn.siriusbot.siriuspro.bot.api.pojo.announces.RecommendChannel;
@@ -68,6 +71,7 @@ import cn.siriusbot.siriuspro.bot.pojo.message.PublicMessageEvent.PublicMessageD
 import cn.siriusbot.siriuspro.bot.pojo.message.PublicMessageEvent.PublicMessageEvent;
 import cn.siriusbot.siriuspro.bot.pojo.message.PublicMessageEvent.PublicMessageEventDObject;
 import lombok.Data;
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
@@ -76,9 +80,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.*;
 
 /**
@@ -88,7 +90,8 @@ import java.util.*;
 @Log4j2
 public class ELanguageGenerate {
 
-    private Map<String, List<Info>> map = new HashMap<>();
+    private final Map<String, List<Info>> map = new HashMap<>();
+    private final Map<String, List<MethodInfo>> apiMap = new HashMap<>();
 
     private String getName(String s) {
         return s.substring(s.lastIndexOf(".") + 1);
@@ -148,9 +151,6 @@ public class ELanguageGenerate {
             list.add(info);
         }
         exec(clazz, list);
-        for (Info info : list){
-            System.out.println(info.getName() + " -> " + info.getJavaDoc());
-        }
         map.put(getName(clazz.getName()), list);
     }
 
@@ -307,6 +307,18 @@ public class ELanguageGenerate {
         return jsonType;
     }
 
+    private String jsonNameToeType(String eType) {
+        String jsonType;
+        switch (eType) {
+            case "整数型" -> jsonType = "置整数";
+            case "逻辑型" -> jsonType = "置逻辑";
+            case "双精度小数型" -> jsonType = "置双精度";
+            case "长整数型" -> jsonType = "置长整数";
+            default -> jsonType = "置文本";
+        }
+        return jsonType;
+    }
+
     /**
      * 生成解析对象
      *
@@ -342,7 +354,7 @@ public class ELanguageGenerate {
                     sb.append(String.format("item ＝ json.取属性 (, “%s”)", info.getName())).append('\n');
                     sb.append("length ＝ item.取成员数 ()").append('\n');
                     sb.append(String.format("重定义数组 (%s.%s, 假, length)", obj, info.getName())).append('\n');
-                    sb.append("    ").append(".计次循环首 (length, i)").append('\n');
+                    sb.append(".计次循环首 (length, i)").append('\n');
                     if (info.getType().equals(info.getSrcType())) {
                         // 对象类型
                         sb.append("    ").append(String.format("%s.%s[i] ＝ %s%s(item.取成员 (, i - 1).到文本 ())",
@@ -356,7 +368,7 @@ public class ELanguageGenerate {
                         // 基础类型
                         sb.append("    ").append(String.format("%s.%s[i] ＝ item.取成员 (, i - 1).%s ()", obj, info.getName(), eTypeToJsonName(info.getType()))).append('\n');
                     }
-                    sb.append("    ").append(".计次循环尾 ()").append('\n');
+                    sb.append(".计次循环尾 ()").append('\n');
                 } else {
                     // 单独对象解析
                     if (info.getType().equals(info.getSrcType())) {
@@ -390,13 +402,277 @@ public class ELanguageGenerate {
         return sb.toString();
     }
 
+    /**
+     * 生成构建对象
+     *
+     * @return
+     */
+    private String generateBuildObject() {
+        StringBuilder sb = new StringBuilder();
+        String paramMethodHead = "build";
+        String paramSource = "source";
+        // 添加代码头
+        sb.append("""
+                .版本 2
+
+                """);
+        for (String key : map.keySet()) {
+            // 生成方法
+            sb.append(String.format(".子程序 %s%s, 文本型, 公开", paramMethodHead, key)).append('\n');
+            sb.append(String.format(".参数 %s, %s", paramSource, key)).append('\n');
+            // 生成局部变量
+            sb.append(".局部变量 i, 整数型").append('\n');
+            sb.append(".局部变量 length, 整数型").append('\n');
+            sb.append(".局部变量 json, zyJsonDocument").append('\n');
+            sb.append('\n');
+            // 生成方法
+            sb.append("json.创建 ()").append('\n');
+            List<Info> infos = map.get(key);
+            for (Info info : infos) {
+                if (info.isList()) {
+                    // 数组构建
+                    sb.append(String.format("length ＝ 取数组成员数 (%s.%s)", paramSource, info.getName())).append('\n');
+                    sb.append(".计次循环首 (length, i)").append('\n');
+                    if (info.getType().equals(info.getSrcType())) {
+                        // 对象类型
+                        // json.置JSON (“id [i - 1]”, build (source.id [i]))
+                        sb.append(String.format("json.置JSON (“%s[” ＋ 到文本 (i － 1) ＋ “]”, %s%s (%s.%s [i]))",
+                                        info.getName(),
+                                        paramMethodHead,
+                                        info.getType(),
+                                        paramSource,
+                                        info.getName()
+                                )
+                        ).append('\n');
+                    } else {
+                        // 普通类型
+                        // json.置文本 (“id[0]”, source.id[1])
+                        sb.append("    ").append(String.format("json.%s (“%s[” ＋ 到文本 (i － 1) ＋ “]”, %s.%s [i])",
+                                        jsonNameToeType(info.getType()),
+                                        info.getName(),
+                                        paramSource,
+                                        info.getName()
+                                )
+                        ).append('\n');
+                    }
+                    sb.append(".计次循环尾 ()").append('\n');
+                } else {
+                    // 普通构建
+                    if (info.getType().equals(info.getSrcType())) {
+                        // 对象类型
+                        // json.置JSON (“id”, build (source.id))
+                        sb.append(String.format("json.置JSON (“%s”, %s%s (%s.%s))",
+                                        info.getName(),
+                                        paramMethodHead,
+                                        info.getType(),
+                                        paramSource,
+                                        info.getName()
+                                )
+                        ).append('\n');
+                    } else {
+                        // 基础类型
+                        // json.置文本 (“id”, source.id)
+                        sb.append(String.format("json.%s (“%s”, %s.%s)",
+                                        jsonNameToeType(info.getType()),
+                                        info.getName(),
+                                        paramSource,
+                                        info.getName()
+                                )
+                        ).append('\n');
+                    }
+                }
+            }
+
+            sb.append("返回 (json.到文本 ())").append('\n');
+            sb.append('\n');
+        }
+        return sb.toString();
+    }
+
+
+    /**
+     * 生成API方法
+     *
+     * @return
+     */
+    private String generateAPIMethod() {
+        StringBuilder sb = new StringBuilder();
+        String paramSource = "source";
+        String url = "global_url_head";
+        String build = "build_util.build";
+        String jsonApi = "api";
+        String jsonMethod = "method";
+        String jsonParam = "param";
+        for (String apiName : apiMap.keySet()) {
+            // 构建代码头
+            sb.append(String.format("""
+                    .版本 2
+                                        
+                    .程序集 %s
+                    .程序集变量 %s, 文本型
+                                        
+                    .子程序 _初始化, , , 当基于本类的对象被创建后，此方法会被自动调用
+                                        
+                    .子程序 _销毁, , , 当基于本类的对象被销毁前，此方法会被自动调用
+                                        
+                    """, apiName, url));
+
+            List<MethodInfo> methodInfos = apiMap.get(apiName);
+            for (MethodInfo methodInfo : methodInfos) {
+                // 构建方法
+                sb.append(String.format(".子程序 %s, 整数型, 公开", methodInfo.getFormatName())).append('\n');
+                sb.append(String.format(".参数 %s, %s, 参考%s, 返回结果",
+                        methodInfo.getType().getSrcType(),
+                        methodInfo.getType().getType(),
+                        methodInfo.getType().isList() ? " 数组" : ""
+                )).append('\n');
+                sb.append(String.format(".参数 %s, 文本型, 参考, http源消息，包括错误消息", paramSource)).append('\n');
+                // 构造参数
+                for (Info param : methodInfo.getParams()) {
+                    sb.append(String.format(".参数 %s, %s,%s%s",
+                                    param.getName(),
+                                    param.getType(),
+                                    !param.isNonNull() ? " 可空" : "",
+                                    param.isList() ? " 数组" : ""
+                            )
+                    ).append('\n');
+                }
+                // 构造局部变量
+                sb.append(".局部变量 i, 整数型").append('\n');
+                sb.append(".局部变量 code, 整数型").append('\n');
+                sb.append(".局部变量 length, 整数型").append('\n');
+                sb.append(".局部变量 json, zyJsonDocument").append('\n');
+                sb.append(".局部变量 data, zyJsonDocument").append('\n');
+                sb.append('\n');
+                // 构造方法代码
+                sb.append("json.创建 ()").append('\n');
+                sb.append(String.format("json.置文本 (“%s”, “%s”)", jsonApi, apiName)).append('\n');
+                sb.append(String.format("json.置文本 (“%s”, “%s”)", jsonMethod, methodInfo.getName())).append('\n');
+                // 构建参数json
+                for (Info param : methodInfo.getParams()) {
+                    if (!param.isNonNull()) {
+                        // 可空
+                        sb.append(String.format(".如果真 (是否为空 (%s) ＝ 假)", param.getName())).append('\n');
+                    }
+                    // =====
+                    if (param.isList()) {
+                        // 处理数组
+                        sb.append(String.format("length ＝ 取数组成员数 (%s)", param.getName())).append('\n');
+                        sb.append(".计次循环首 (length, i)").append('\n');
+                        if (param.getType().equals(param.getSrcType())) {
+                            // 对象类型
+                            sb.append(String.format("json.置JSON (“%s.%s[” ＋ 到文本 (i － 1) ＋ “]”, %s%s(%s [i]))",
+                                    jsonParam,
+                                    param.getName(),
+                                    build,
+                                    param.getType(),
+                                    param.getName()
+                            )).append('\n');
+                        } else {
+                            // 基础类型
+                            sb.append(String.format("json.%s (“%s.%s[” ＋ 到文本 (i － 1) ＋ “]”, %s [i])",
+                                    jsonNameToeType(param.getType()),
+                                    jsonParam,
+                                    param.getName(),
+                                    param.getName()
+                            )).append('\n');
+                        }
+                        sb.append(".计次循环尾 ()").append('\n');
+                    } else {
+                        // 处理单个
+                        if (param.getType().equals(param.getSrcType())) {
+                            // 对象类型
+                            sb.append(String.format("json.置JSON (“%s.%s”, %s%s(%s))",
+                                    jsonParam,
+                                    param.getName(),
+                                    build,
+                                    param.getType(),
+                                    param.getName()
+                            )).append('\n');
+                        } else {
+                            // 基础类型
+                            sb.append(String.format("json.%s (“%s.%s”, %s)",
+                                    jsonNameToeType(param.getType()),
+                                    jsonParam,
+                                    param.getName(),
+                                    param.getName()
+                            )).append('\n');
+                        }
+                    }
+                    // =====
+                    if (!param.isNonNull()) {
+                        // 可空
+                        sb.append(".如果真结束").append('\n');
+                    }
+                }
+                // 构建http请求代码
+                StringBuilder build_return = new StringBuilder();
+                if (methodInfo.getType().isList()) {
+                    // 处理数组
+                    build_return.append("length ＝ data.取成员数 (“data”)").append('\n');
+                    build_return.append(String.format("重定义数组 (%s, 假, length)", methodInfo.getType().getSrcType())).append('\n');
+                    build_return.append(".计次循环首 (length, i)").append('\n');
+                    if (methodInfo.getType().getType().equals(methodInfo.getType().getSrcType())) {
+                        // 对象类型
+                        build_return.append(String.format("%s [i] ＝ %s%s (data.取属性 (, “data[” ＋ 到文本 (i － 1) ＋ “]”).到文本 ())",
+                                methodInfo.getType().getSrcType(),
+                                build,
+                                methodInfo.getType().getType()
+                        )).append('\n');
+                    } else {
+                        // 基础类型
+                        build_return.append(String.format("%s [i] ＝ data.%s (“data[” ＋ 到文本 (i － 1) ＋ “]”)",
+                                methodInfo.getType().getSrcType(),
+                                eTypeToJsonName(methodInfo.getType().getType())
+                        )).append('\n');
+                    }
+                    build_return.append(".计次循环尾 ()");
+                } else {
+                    // 处理对象
+                    if (methodInfo.getType().getType().equals(methodInfo.getType().getSrcType())) {
+                        // 对象类型
+                        build_return.append(String.format("%s ＝ %s%s (data.取属性 (, “data”).到文本 ())",
+                                methodInfo.getType().getSrcType(),
+                                build,
+                                methodInfo.getType().getType()
+                        ));
+                    } else {
+                        // 基础类型
+                        build_return.append(String.format("%s ＝ data.%s (“data”)",
+                                methodInfo.getType().getSrcType(),
+                                eTypeToJsonName(methodInfo.getType().getType())
+                        ));
+                    }
+                }
+
+                sb.append(String.format("""              
+                        source ＝ 网页_访问S (%s, 1, json.到文本 ())
+                        data.解析 (source)
+                        code ＝ data.取整数 (“code”)
+                        .如果真 (code ＝ 0)
+                        %s
+                        .如果真结束
+                        返回 (code)
+                        """, url, build_return));
+            }
+
+            // 类分隔符
+            sb.append('\n');
+            sb.append("======================================================").append('\n');
+            sb.append("======================================================").append('\n');
+            sb.append('\n');
+        }
+        return sb.toString();
+    }
+
 
     @SneakyThrows
     public void exec(Class<?> clazz, List<Info> infos) {
         String url = System.getProperty("user.dir") + "\\src\\main\\java\\";
         url = url + clazz.getName().replace('.', '\\') + ".java";
         String str = FileUtil.readAsString(new File(url));
-        int index = str.indexOf("class");;
+        int index = str.indexOf("class");
+        ;
         for (Info info : infos) {
             try {
                 int a = str.indexOf("/**", index);
@@ -405,20 +681,20 @@ public class ELanguageGenerate {
                 String substring = str.substring(a, b);
                 int c = substring.indexOf("\n");
                 int d = substring.indexOf("*/");
-                substring = substring.substring(c,d);
+                substring = substring.substring(c, d);
                 String[] split = substring.split("\n");
                 StringBuilder doc = new StringBuilder();
-                for (String s : split){
+                for (String s : split) {
                     String replace = s.replace(" ", "");
-                    if (!replace.isEmpty()){
-                        if (replace.charAt(0) == '*'){
-                            replace =  replace.substring(1);
+                    if (!replace.isEmpty()) {
+                        if (replace.charAt(0) == '*') {
+                            replace = replace.substring(1);
                         }
                         doc.append(replace);
                     }
                 }
                 info.setJavaDoc(doc.toString());
-            } catch (Exception e){
+            } catch (Exception e) {
                 info.setJavaDoc("");
             }
 
@@ -538,22 +814,152 @@ public class ELanguageGenerate {
         put(PublicMessageDeleteEvent.class);
     }
 
+    private void configApi() {
+        putApi(AnnouncesApi.class);
+        putApi(ApiPermissionApi.class);
+        putApi(AudioApi.class);
+        putApi(ChannelApi.class);
+        putApi(ChannelPermissionsApi.class);
+        putApi(DMS_Api.class);
+        putApi(ForumApi.class);
+        putApi(GuildApi.class);
+        putApi(MemberApi.class);
+        putApi(MessageApi.class);
+        putApi(MessageReactionApi.class);
+        putApi(MessageSettingApi.class);
+        putApi(NoSpeakApi.class);
+        putApi(PinsMessageApi.class);
+        putApi(RoleApi.class);
+        putApi(ScheduleApi.class);
+        putApi(UserApi.class);
+    }
+
+    private void putApi(Class<?> clazz) {
+        Method[] methods = clazz.getMethods();
+        List<MethodInfo> methodInfos = new ArrayList<>();
+        for (Method method : methods) {
+            Type genericReturnType = method.getGenericReturnType();
+            MethodInfo methodInfo = new MethodInfo();
+            methodInfo.setName(method.getName());
+            methodInfo.setFormatName(method.getName());     // 可以获取注解自定义名称
+            methodInfo.setParams(new ArrayList<>());
+
+            EName annotation = method.getAnnotation(EName.class);
+            if (annotation != null){
+                methodInfo.setFormatName(annotation.name());
+            }
+
+            // 构建返回值
+            if (genericReturnType instanceof ParameterizedType type) {
+                // 泛型返回
+                Type[] actualTypeArguments = type.getActualTypeArguments();
+                for (Type actualTypeArgument : actualTypeArguments) {
+                    if (actualTypeArgument instanceof ParameterizedType list) {
+                        // list泛型
+                        Class<?> typeArgClass = (Class<?>) list.getActualTypeArguments()[0];
+                        String name = getName(typeArgClass.getName());
+                        Info info = new Info();
+                        info
+                                .setName("")
+                                .setSrcType(name)
+                                .setType(getEType(name))
+                                .setList(true)
+                                .setJavaDoc("");
+                        methodInfo.setType(info);
+                    } else {
+                        // 普通类型
+                        Class<?> typeArgClass = (Class<?>) actualTypeArgument;
+                        if (typeArgClass != String.class) {
+                            String name = getName(typeArgClass.getName());
+                            Info info = new Info();
+                            info
+                                    .setName("")
+                                    .setSrcType(name)
+                                    .setType(getEType(name))
+                                    .setList(false)
+                                    .setJavaDoc("");
+                            ;
+                            methodInfo.setType(info);
+                        }
+                    }
+
+                }
+            } else {
+                // 普通返回
+                Class<?> returnType = method.getReturnType();
+                String name = getName(returnType.getName());
+                Info info = new Info();
+                info
+                        .setName("")
+                        .setSrcType(name)
+                        .setType(getEType(name))
+                        .setList(false)
+                        .setJavaDoc("");
+                methodInfo.setType(info);
+            }
+            // 构建参数类型
+            Parameter[] parameters = method.getParameters();
+
+            for (Parameter parameter : parameters) {
+                Type genericParameterType = parameter.getParameterizedType();
+                Info info = new Info()
+                        .setName(parameter.getName())
+                        .setJavaDoc("");
+                ENonNull eNonNull = parameter.getAnnotation(ENonNull.class);
+                if (eNonNull != null){
+                    info.setNonNull(true);
+                }
+
+                if (genericParameterType instanceof ParameterizedType type) {
+                    // 泛型类型
+                    info.setList(true);
+                    Class<?> paramClass = (Class<?>) type.getActualTypeArguments()[0];
+                    info
+                            .setSrcType(getName(paramClass.getName()))
+                            .setType(getEType(info.getSrcType()));
+                } else {
+                    // 普通类型
+                    info.setList(false);
+                    Class<?> paramClass = (Class<?>) genericParameterType;
+                    info
+                            .setSrcType(getName(paramClass.getName()))
+                            .setType(getEType(info.getSrcType()));
+                }
+                methodInfo.getParams().add(info);
+            }
+/*            System.out.println("方法名：" + methodInfo.getName() + " -> " + methodInfo.getType());
+            for (Info info : methodInfo.getParams()){
+                System.out.println("参数 -> " + info.getName() + " - " + info.getType());
+            }
+            System.out.println("====");*/
+            methodInfos.add(methodInfo);
+        }
+        apiMap.put(getName(clazz.getName()), methodInfos);
+    }
 
     @PostConstruct
     public void start() {
         config();
-        log.info("\n" + generateTypeInfos() + "\n");
+        configApi();
         System.out.println("=======================");
         System.out.println("=======================");
         System.out.println("======易语言代码生成=====");
         System.out.println("=======================");
         System.out.println("=======================");
 
-        //log.info("\n" + generateTypeInfos() + "\n");
-        log.info("\n" + generateAnalyticClass() + "\n");
-        //exec(User.class);
+        log.info("\n" + generateAPIMethod() + "\n");
+
+
     }
 
+    @Data
+    @Accessors(chain = true)
+    private static class MethodInfo {
+        String name;    // 方法名
+        String formatName;  // 格式化名
+        Info type;    // 返回类型
+        List<Info> params;  // 参数列表
+    }
 
     @Data
     @Accessors(chain = true)
@@ -562,6 +968,7 @@ public class ELanguageGenerate {
         String type;
         String srcType; // 源类型
         String javaDoc;
+        boolean nonNull = false;    // 不能为空
         boolean list;
     }
 }

@@ -18,6 +18,7 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -41,7 +42,7 @@ public class AudioControlImpl implements AudioApi {
      */
     @SneakyThrows
     @Override
-    public Boolean audioControl(String bot_id, String channel_id, AudioControl audioControl) {
+    public Boolean audioControl(@NotNull String bot_id, String channel_id, AudioControl audioControl) {
         BotClient client = botPool.getBotById(bot_id);
         audioControl.setText(EmojiParser.parseToUnicode(audioControl.getText()));
         BotRequest botRequest = new BotRequest()
@@ -64,7 +65,7 @@ public class AudioControlImpl implements AudioApi {
      */
     @SneakyThrows
     @Override
-    public Boolean singStart(String bot_id, String channel_id) {
+    public Boolean singStart(@NotNull String bot_id, String channel_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/mic")
@@ -83,7 +84,7 @@ public class AudioControlImpl implements AudioApi {
      */
     @SneakyThrows
     @Override
-    public Boolean singEnd(String bot_id, String channel_id) {
+    public Boolean singEnd(@NotNull String bot_id, String channel_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.DELETE)

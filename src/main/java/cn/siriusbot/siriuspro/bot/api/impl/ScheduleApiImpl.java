@@ -18,6 +18,7 @@ import lombok.SneakyThrows;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -44,7 +45,7 @@ public class ScheduleApiImpl implements ScheduleApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<List<Schedule>, String> getScheduleListByChannel_id(String bot_id, String channel_id, String since) {
+    public Tuple<List<Schedule>, String> getScheduleListByChannel_id(@NotNull String bot_id, String channel_id, String since) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.GET);
@@ -73,7 +74,7 @@ public class ScheduleApiImpl implements ScheduleApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Schedule, String> getScheduleInfo(String bot_id, String channel_id, String schedule_id) {
+    public Tuple<Schedule, String> getScheduleInfo(@NotNull String bot_id, String channel_id, String schedule_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "schedules/" + schedule_id)
@@ -97,7 +98,7 @@ public class ScheduleApiImpl implements ScheduleApi {
      * @return 返回操作结果
      */
     @Override
-    public Boolean deleteSchedule(String bot_id, String channel_id, String schedule_id) {
+    public Boolean deleteSchedule(@NotNull String bot_id, String channel_id, String schedule_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.DELETE)
@@ -118,7 +119,7 @@ public class ScheduleApiImpl implements ScheduleApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Schedule, String> createSchedule(String bot_id, String channel_id, Schedule schedule) {
+    public Tuple<Schedule, String> createSchedule(@NotNull String bot_id, String channel_id, Schedule schedule) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl("channels/" + channel_id + "/schedules")
@@ -145,7 +146,7 @@ public class ScheduleApiImpl implements ScheduleApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Schedule, String> modifySchedule(String bot_id, String channel_id, String schedule_id, Schedule schedule) {
+    public Tuple<Schedule, String> modifySchedule(@NotNull String bot_id, String channel_id, String schedule_id, Schedule schedule) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.PATCH)

@@ -20,6 +20,7 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -44,7 +45,7 @@ public class MemberImpl implements MemberApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<List<Member>, String> getMemberList(String bot_id, String guild_id, String after, int limit) {
+    public Tuple<List<Member>, String> getMemberList(@NotNull String bot_id, String guild_id, String after, int limit) {
         BotClient client = botPool.getBotById(bot_id);
         if (after == null)
             after = "0";
@@ -71,7 +72,7 @@ public class MemberImpl implements MemberApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Member, String> getMemberInfo(String bot_id, String guild_id, String user_id) {
+    public Tuple<Member, String> getMemberInfo(@NotNull String bot_id, String guild_id, String user_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.GET)
@@ -96,7 +97,7 @@ public class MemberImpl implements MemberApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<MemberQueryLimit, String> getMemberListByRoleId(String bot_id, String guild_id, String role_id, String start_index, int limit) {
+    public Tuple<MemberQueryLimit, String> getMemberListByRoleId(@NotNull String bot_id, String guild_id, String role_id, String start_index, int limit) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "guilds/" + guild_id + "/roles/" + role_id + "/members?start_index=" + start_index + "&limit=" + limit)
@@ -122,7 +123,7 @@ public class MemberImpl implements MemberApi {
      */
     @SneakyThrows
     @Override
-    public boolean deleteMemberByUserId(String bot_id, String guild_id, String user_id, boolean add_black, int delete_history_msg_days) {
+    public boolean deleteMemberByUserId(@NotNull String bot_id, String guild_id, String user_id, boolean add_black, int delete_history_msg_days) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.DELETE)

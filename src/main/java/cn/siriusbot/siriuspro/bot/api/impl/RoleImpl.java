@@ -23,6 +23,7 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -47,7 +48,7 @@ public class RoleImpl implements RoleApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Role, String> createRole(String bot_id, String guild_id, String name, Integer color, Integer hoist) {
+    public Tuple<Role, String> createRole(@NotNull String bot_id, String guild_id, String name, Integer color, Integer hoist) {
         BotClient client = botPool.getBotById(bot_id);
         name = EmojiParser.parseToUnicode(name);
         BotRequest botRequest = new BotRequest()
@@ -78,7 +79,7 @@ public class RoleImpl implements RoleApi {
      * @return 返回操作结果
      */
     @Override
-    public Boolean removeRoleMemberForGuild(String bot_id, String guild_id, String role_id, String user_id, Channel channel) {
+    public Boolean removeRoleMemberForGuild(@NotNull String bot_id, String guild_id, String role_id, String user_id, Channel channel) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "guilds/" + guild_id + "/members/" + user_id + "/roles/" + role_id)
@@ -100,7 +101,7 @@ public class RoleImpl implements RoleApi {
      */
     @SneakyThrows
     @Override
-    public Boolean createRoleMemberInGuild(String bot_id, String guild_id, String user_id, String role_id, Channel channel) {
+    public Boolean createRoleMemberInGuild(@NotNull String bot_id, String guild_id, String user_id, String role_id, Channel channel) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.POST)
@@ -123,7 +124,7 @@ public class RoleImpl implements RoleApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<NewRole, String> modifyRoleByGuild(String bot_id, String guild_id, String role_id, String name, Integer color, Integer hoist) {
+    public Tuple<NewRole, String> modifyRoleByGuild(@NotNull String bot_id, String guild_id, String role_id, String name, Integer color, Integer hoist) {
         BotClient client = botPool.getBotById(bot_id);
         name = EmojiParser.parseToUnicode(name);
         BotRequest botRequest = new BotRequest()
@@ -151,7 +152,7 @@ public class RoleImpl implements RoleApi {
      * @return 操作结果
      */
     @Override
-    public Boolean deleteRoleForGuild(String bot_id, String guild_id, String role_id) {
+    public Boolean deleteRoleForGuild(@NotNull String bot_id, String guild_id, String role_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.DELETE)
@@ -170,7 +171,7 @@ public class RoleImpl implements RoleApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<GuildRoleList, String> getRoleListByGuild(String bot_id, String guild_id) {
+    public Tuple<GuildRoleList, String> getRoleListByGuild(@NotNull String bot_id, String guild_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "guilds/" + guild_id + "/roles")

@@ -1,8 +1,10 @@
 package cn.siriusbot.siriuspro.bot.api;
 
 
+import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.emoji.ReactionReply;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
+import lombok.NonNull;
 
 /**
  * 消息表情表态Api
@@ -21,7 +23,7 @@ public interface MessageReactionApi {
      * @param limit      每次拉取数量，默认20，最多50，只在第一次请求设置
      * @return 拉取表情表态响应对象
      */
-    public Tuple<ReactionReply,String> getReactionUsers(String bot_id, String channel_id, String message_id, Integer type, String id, String cookie, Integer limit);
+    public Tuple<ReactionReply,String> getReactionUsers(@NonNull @ENonNull String bot_id, String channel_id, String message_id, Integer type, String id, String cookie, Integer limit);
 
 
     /**
@@ -34,7 +36,7 @@ public interface MessageReactionApi {
      * @param id         表情ID，参考Emoji列表
      * @return 操作结果
      */
-    public abstract Boolean deleteReactionForMessageId(String bot_id, String channel_id, String message_id, Integer type, String id);
+    public abstract Boolean deleteReactionForMessageId(@NonNull @ENonNull String bot_id, String channel_id, String message_id, Integer type, String id);
 
     /**
      * 发表表情表态
@@ -46,5 +48,5 @@ public interface MessageReactionApi {
      * @param id         表情ID，参考Emoji列表
      * @return 操作结果
      */
-    public abstract Boolean addReaction(String bot_id, String channel_id, String message_id, Integer type, String id);
+    public abstract Boolean addReaction(@NonNull @ENonNull String bot_id, String channel_id, String message_id, Integer type, String id);
 }

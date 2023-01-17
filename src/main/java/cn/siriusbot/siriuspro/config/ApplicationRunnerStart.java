@@ -50,7 +50,7 @@ public class ApplicationRunnerStart implements ApplicationRunner {
 //        BotManager.loginBot(siriusBotClient2.getInfo().getBotId());
 
 
-        BotClient botClient = new SiriusBotClient(
+        /*BotClient botClient = new SiriusBotClient(
                 new BotInfo()
                         .setBotId("102004321")
                         .setToken("VwUd3zkSBZIbLlWZOXNlhrBsZDCtn6Dn")
@@ -77,7 +77,7 @@ public class ApplicationRunnerStart implements ApplicationRunner {
                         .setIntents(IntentsType.PUBLIC_ALL)
         );
         botClient2.start();
-        System.out.println("启动完成");
+        System.out.println("启动完成");*/
 
     }
 }

@@ -1,8 +1,10 @@
 package cn.siriusbot.siriuspro.bot.api;
 
 
+import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.ChannelPermissions;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
+import lombok.NonNull;
 
 /**
  * 子频道权限接口
@@ -20,7 +22,7 @@ public interface ChannelPermissionsApi {
      * @param user_id    用户ID
      * @return 子频道权限对象
      */
-    public abstract Tuple<ChannelPermissions,String> getChannelPermissionsByUser_id(String bot_id, String channel_id, String user_id);
+    public abstract Tuple<ChannelPermissions,String> getChannelPermissionsByUser_id(@NonNull @ENonNull String bot_id, String channel_id, String user_id);
 
     /**
      * 修改子频道身份组权限
@@ -35,7 +37,7 @@ public interface ChannelPermissionsApi {
      * @param remove     要移除的权限
      * @return 修改结果
      */
-    public abstract Boolean modifyChannelPermissionsByRole_id(String bot_id, String channel_id, String role_id, String add, String remove);
+    public abstract Boolean modifyChannelPermissionsByRole_id(@NonNull @ENonNull String bot_id, String channel_id, String role_id, String add, String remove);
 
     /**
      * 修改指定用户在指定子频道的权限
@@ -50,7 +52,7 @@ public interface ChannelPermissionsApi {
      * @param remove     移除的权限
      * @return 返回修改结果
      */
-    public abstract Boolean modifyChannelPermissionsByUser_id(String bot_id, String channel_id,String user_id, String add, String remove);
+    public abstract Boolean modifyChannelPermissionsByUser_id(@NonNull @ENonNull String bot_id, String channel_id,String user_id, String add, String remove);
 
     /**
      * 获取指定身份组在指定子频道的权限
@@ -62,5 +64,5 @@ public interface ChannelPermissionsApi {
      * @param role_id    身份组ID
      * @return 子频道权限对象
      */
-    public abstract Tuple<ChannelPermissions,String> getChannelPermissionsByRole_id(String bot_id, String channel_id, String role_id);
+    public abstract Tuple<ChannelPermissions,String> getChannelPermissionsByRole_id(@NonNull @ENonNull String bot_id, String channel_id, String role_id);
 }

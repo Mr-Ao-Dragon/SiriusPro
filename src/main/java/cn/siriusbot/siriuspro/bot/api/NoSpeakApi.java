@@ -1,7 +1,9 @@
 package cn.siriusbot.siriuspro.bot.api;
 
+import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.NoSpeak;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
+import lombok.NonNull;
 
 import java.util.List;
 
@@ -19,7 +21,7 @@ public interface NoSpeakApi {
      * @param mute_seconds 禁言秒数
      * @return 返回禁言结果
      */
-    public abstract Boolean noSpeakByUser_id(String bot_id, String guild_id, String user_id, String mute_end_timestamp, String mute_seconds);
+    public abstract Boolean noSpeakByUser_id(@NonNull @ENonNull String bot_id, String guild_id, String user_id, String mute_end_timestamp, String mute_seconds);
 
 
     /**
@@ -31,7 +33,7 @@ public interface NoSpeakApi {
      * @param mute_seconds 禁言秒数
      * @return 返回禁言成员对象
      */
-    public abstract Tuple<NoSpeak,String> noSpeakByUser_ids(String bot_id, String guild_id, List<String> user_ids, String mute_end_timestamp, String mute_seconds);
+    public abstract Tuple<NoSpeak,String> noSpeakByUser_ids(@NonNull @ENonNull String bot_id, String guild_id, List<String> user_ids, String mute_end_timestamp, String mute_seconds);
 
 
     /**
@@ -41,5 +43,5 @@ public interface NoSpeakApi {
      * @param mute_seconds 禁言秒数
      * @return 返回禁言结果
      */
-    public abstract Boolean nodeSpeakAll(String bot_id,String guild_id,String mute_end_timestamp,String mute_seconds);
+    public abstract Boolean nodeSpeakAll(@NonNull @ENonNull String bot_id,String guild_id,String mute_end_timestamp,String mute_seconds);
 }

@@ -19,6 +19,7 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -42,7 +43,7 @@ public class PinsMessageImpl implements PinsMessageApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<PinsMessage, String> addPinsMessage(String bot_id, String channel_id, String message_id) {
+    public Tuple<PinsMessage, String> addPinsMessage(@NotNull String bot_id, String channel_id, String message_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl("channels/" + channel_id + "/pins/" + message_id)
@@ -66,7 +67,7 @@ public class PinsMessageImpl implements PinsMessageApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<PinsMessage, String> getPinsMessage(String bot_id, String channel_id) {
+    public Tuple<PinsMessage, String> getPinsMessage(@NotNull String bot_id, String channel_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.GET)
@@ -90,7 +91,7 @@ public class PinsMessageImpl implements PinsMessageApi {
      * @return 删除结果
      */
     @Override
-    public Boolean deletePinsMessage(String bot_id, String channel_id, String message_id) {
+    public Boolean deletePinsMessage(@NotNull String bot_id, String channel_id, String message_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/pins/" + message_id)

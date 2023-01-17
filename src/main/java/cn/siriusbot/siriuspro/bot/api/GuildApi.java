@@ -1,8 +1,10 @@
 package cn.siriusbot.siriuspro.bot.api;
 
 
+import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.Guild;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
+import lombok.NonNull;
 
 /**
  * 频道Api
@@ -15,5 +17,5 @@ public interface GuildApi {
      * @param guild_id 频道ID
      * @return 返回频道详情对象
      */
-    public abstract Tuple<Guild,String> getGuildInfo(String bot_id, String guild_id);
+    public abstract Tuple<Guild,String> getGuildInfo(@NonNull @ENonNull String bot_id, String guild_id);
 }

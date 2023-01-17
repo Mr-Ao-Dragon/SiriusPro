@@ -21,6 +21,7 @@ import lombok.SneakyThrows;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -47,7 +48,7 @@ public class APIPermissionImpl implements ApiPermissionApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<ApiPermissionDemand, String> createApiGrantLink(String bot_id, String guild_id, String channel_id, ApiPermissionDemandIdentify api_identify, String desc) {
+    public Tuple<ApiPermissionDemand, String> createApiGrantLink(@NotNull String bot_id, String guild_id, String channel_id, ApiPermissionDemandIdentify api_identify, String desc) {
         BotClient client = botPool.getBotById(bot_id);
         desc = EmojiParser.parseToUnicode(desc);
         BotRequest botRequest = new BotRequest()
@@ -73,7 +74,7 @@ public class APIPermissionImpl implements ApiPermissionApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<List<APIPermission>, String> getAPIPermissions(String bot_id, String guild_id) {
+    public Tuple<List<APIPermission>, String> getAPIPermissions(@NotNull String bot_id, String guild_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.GET)

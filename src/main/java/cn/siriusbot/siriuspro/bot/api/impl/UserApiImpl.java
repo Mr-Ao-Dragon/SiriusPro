@@ -18,6 +18,7 @@ import com.vdurmont.emoji.EmojiParser;
 import lombok.SneakyThrows;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -40,7 +41,7 @@ public class UserApiImpl implements UserApi {
 
     @SneakyThrows
     @Override
-    public Tuple<User, String> getRobotInfo(String bot_id) {
+    public Tuple<User, String> getRobotInfo(@NotNull String bot_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.GET)
@@ -68,7 +69,7 @@ public class UserApiImpl implements UserApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<List<Guild>, String> getGuildList(String bot_id, String before, String after, int limit) {
+    public Tuple<List<Guild>, String> getGuildList(@NotNull String bot_id, String before, String after, int limit) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.GET);

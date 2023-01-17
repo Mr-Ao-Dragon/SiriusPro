@@ -17,6 +17,7 @@ import lombok.SneakyThrows;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -43,7 +44,7 @@ public class MessageReactionImpl implements MessageReactionApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<ReactionReply, String> getReactionUsers(String bot_id, String channel_id, String message_id, Integer type, String id, String cookie, Integer limit) {
+    public Tuple<ReactionReply, String> getReactionUsers(@NotNull String bot_id, String channel_id, String message_id, Integer type, String id, String cookie, Integer limit) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.GET);
@@ -73,7 +74,7 @@ public class MessageReactionImpl implements MessageReactionApi {
      */
     @SneakyThrows
     @Override
-    public Boolean deleteReactionForMessageId(String bot_id, String channel_id, String message_id, Integer type, String id) {
+    public Boolean deleteReactionForMessageId(@NotNull String bot_id, String channel_id, String message_id, Integer type, String id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.DELETE)
@@ -95,7 +96,7 @@ public class MessageReactionImpl implements MessageReactionApi {
      * @return 操作结果
      */
     @Override
-    public Boolean addReaction(String bot_id, String channel_id, String message_id, Integer type, String id) {
+    public Boolean addReaction(@NotNull String bot_id, String channel_id, String message_id, Integer type, String id) {
         BotClient client = botPool.getBotById(bot_id);
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         BotRequest botRequest = new BotRequest()

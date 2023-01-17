@@ -1,9 +1,11 @@
 package cn.siriusbot.siriuspro.bot.api;
 
 
+import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.announces.Announces;
 import cn.siriusbot.siriuspro.bot.api.pojo.announces.RecommendChannel;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
+import lombok.NonNull;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -30,7 +32,7 @@ public interface AnnouncesApi {
      * @param channel_id 子频道ID
      * @return 返回公告对象
      */
-    public abstract Tuple<Announces, String> createGuildAnnounces(String bot_id, String guild_id, String message_id, String channel_id);
+    public abstract Tuple<Announces, String> createGuildAnnounces(@NonNull @ENonNull String bot_id, String guild_id, String message_id, String channel_id);
 
     /**
      * 删除频道公告
@@ -42,7 +44,7 @@ public interface AnnouncesApi {
      * @param message_id 消息ID
      * @return 返回删除结果
      */
-    public abstract Boolean deleteAnnouncesByGuildId(String bot_id, String guild_id, String message_id);
+    public abstract Boolean deleteAnnouncesByGuildId(@NonNull @ENonNull String bot_id, String guild_id, String message_id);
 
     /**
      * 创建频道推荐子频道列表
@@ -53,5 +55,5 @@ public interface AnnouncesApi {
      * @param recommendChannels 机器人推荐列表
      * @return 返回公告对象
      */
-    public abstract Tuple<Announces, String> createGuildRecommend_Channels(String bot_id, String guild_id, Integer announces_type, List<RecommendChannel> recommendChannels);
+    public abstract Tuple<Announces, String> createGuildRecommend_Channels(@NonNull @ENonNull String bot_id, String guild_id, Integer announces_type, List<RecommendChannel> recommendChannels);
 }

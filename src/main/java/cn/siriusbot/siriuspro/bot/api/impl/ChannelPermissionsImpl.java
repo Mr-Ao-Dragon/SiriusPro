@@ -18,6 +18,7 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -42,7 +43,7 @@ public class ChannelPermissionsImpl implements ChannelPermissionsApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<ChannelPermissions, String> getChannelPermissionsByUser_id(String bot_id, String channel_id, String user_id) {
+    public Tuple<ChannelPermissions, String> getChannelPermissionsByUser_id(@NotNull String bot_id, String channel_id, String user_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/members/" + user_id + "/permissions")
@@ -71,7 +72,7 @@ public class ChannelPermissionsImpl implements ChannelPermissionsApi {
      */
     @SneakyThrows
     @Override
-    public Boolean modifyChannelPermissionsByRole_id(String bot_id, String channel_id, String role_id, String add, String remove) {
+    public Boolean modifyChannelPermissionsByRole_id(@NotNull String bot_id, String channel_id, String role_id, String add, String remove) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.PATCH)
@@ -99,7 +100,7 @@ public class ChannelPermissionsImpl implements ChannelPermissionsApi {
      */
     @SneakyThrows
     @Override
-    public Boolean modifyChannelPermissionsByUser_id(String bot_id, String channel_id, String user_id, String add, String remove) {
+    public Boolean modifyChannelPermissionsByUser_id(@NotNull String bot_id, String channel_id, String user_id, String add, String remove) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/members/" + user_id + "/permissions")
@@ -124,7 +125,7 @@ public class ChannelPermissionsImpl implements ChannelPermissionsApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<ChannelPermissions, String> getChannelPermissionsByRole_id(String bot_id, String channel_id, String role_id) {
+    public Tuple<ChannelPermissions, String> getChannelPermissionsByRole_id(@NotNull String bot_id, String channel_id, String role_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.GET)

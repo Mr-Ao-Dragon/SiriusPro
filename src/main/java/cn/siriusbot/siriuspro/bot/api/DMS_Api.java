@@ -1,5 +1,6 @@
 package cn.siriusbot.siriuspro.bot.api;
 
+import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.DMS;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.Message;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.MessageMarkdown;
@@ -7,6 +8,7 @@ import cn.siriusbot.siriuspro.bot.api.pojo.message.MessageReference;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.ark.MessageArk;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.embed.MessageEmbed;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
+import lombok.NonNull;
 
 /**
  * 私信对象Api
@@ -24,7 +26,7 @@ public interface DMS_Api {
      * @param source_guild_id 源频道ID
      * @return 私信会话对象
      */
-    public abstract Tuple<DMS, String> createDMS(String bot_id, String recipient_id, String source_guild_id);
+    public abstract Tuple<DMS, String> createDMS(@NonNull @ENonNull String bot_id, String recipient_id, String source_guild_id);
 
     /**
      * 发送普通私信消息
@@ -44,7 +46,7 @@ public interface DMS_Api {
      * @param event_id  事件ID
      * @return 消息对象
      */
-    public abstract Tuple<Message, String> sendMessage(String bot_id, String guild_id, String content, String image_Url, String msg_id, String event_id);
+    public abstract Tuple<Message, String> sendMessage(@NonNull @ENonNull String bot_id, String guild_id, String content, String image_Url, String msg_id, String event_id);
 
 
     /**
@@ -63,7 +65,7 @@ public interface DMS_Api {
      * @param reference 引用消息对象
      * @return 返回消息对象
      */
-    public abstract Tuple<Message, String> sendReferenceMessage(String bot_id, String guild_id, String content, MessageReference reference);
+    public abstract Tuple<Message, String> sendReferenceMessage(@NonNull @ENonNull String bot_id, String guild_id, String content, MessageReference reference);
 
     /**
      * 发送markdown消息(富文本)
@@ -86,7 +88,7 @@ public interface DMS_Api {
      * @param markdown markdown对象
      * @return 返回消息对象
      */
-    public abstract Tuple<Message, String> sendMarkdownMessage(String bot_id, String guild_id, String msg_id, String event_id, MessageMarkdown markdown);
+    public abstract Tuple<Message, String> sendMarkdownMessage(@NonNull @ENonNull String bot_id, String guild_id, String msg_id, String event_id, MessageMarkdown markdown);
 
     /**
      * 用于撤回机器人发送的，指定私信会话消息。
@@ -97,7 +99,7 @@ public interface DMS_Api {
      * @param hidetip    是否隐藏删除消息后的小灰条
      * @return 撤回结果
      */
-    public abstract Boolean deleteMessageById(String bot_id, String guild_id, String message_id, boolean hidetip);
+    public abstract Boolean deleteMessageById(@NonNull @ENonNull String bot_id, String guild_id, String message_id, boolean hidetip);
 
     /**
      * 通过指定 ark 字段发送模板消息。
@@ -113,7 +115,7 @@ public interface DMS_Api {
      * @param event_id 事件ID
      * @return 消息对象
      */
-    public abstract Tuple<Message, String> sendArkMessage(String bot_id, String guild_id, MessageArk ark, String msg_id, String event_id);
+    public abstract Tuple<Message, String> sendArkMessage(@NonNull @ENonNull String bot_id, String guild_id, MessageArk ark, String msg_id, String event_id);
 
     /**
      * 发送embed模板消息
@@ -126,7 +128,7 @@ public interface DMS_Api {
      * @param event_id 事件id
      * @return 消息对象
      */
-    public abstract Tuple<Message, String> sendEmbedMessage(String bot_id, String guild_id, MessageEmbed embed, String msg_id, String event_id);
+    public abstract Tuple<Message, String> sendEmbedMessage(@NonNull @ENonNull String bot_id, String guild_id, MessageEmbed embed, String msg_id, String event_id);
 
     /**
      * 发送图文消息
@@ -139,5 +141,5 @@ public interface DMS_Api {
      * @param event_id   事件ID
      * @return 消息对象
      */
-    public abstract Tuple<Message, String> sendImageAndTextMessage(String bot_id, String guild_id, String content, String image_path, String msg_id, String event_id);
+    public abstract Tuple<Message, String> sendImageAndTextMessage(@NonNull @ENonNull String bot_id, String guild_id, String content, String image_path, String msg_id, String event_id);
 }

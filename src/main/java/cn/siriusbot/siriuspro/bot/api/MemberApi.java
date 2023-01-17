@@ -1,9 +1,11 @@
 package cn.siriusbot.siriuspro.bot.api;
 
 
+import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.member.Member;
 import cn.siriusbot.siriuspro.bot.api.pojo.member.MemberQueryLimit;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
+import lombok.NonNull;
 
 import java.util.List;
 
@@ -21,7 +23,7 @@ public interface MemberApi {
      * @return 返回成员列表 分页大小，1-400，默认是 1。成员较多的频道尽量使用较大的limit值，以减少请求数
      *
      */
-    public abstract Tuple<List<Member>,String> getMemberList(String bot_id, String guild_id, String after, int limit);
+    public abstract Tuple<List<Member>,String> getMemberList(@NonNull @ENonNull String bot_id, String guild_id, String after, int limit);
 
     /**
      * 获取成员详情
@@ -30,7 +32,7 @@ public interface MemberApi {
      * @param user_id 用户ID
      * @return 返回成员对象
      */
-    public abstract Tuple<Member,String> getMemberInfo(String bot_id, String guild_id,String user_id);
+    public abstract Tuple<Member,String> getMemberInfo(@NonNull @ENonNull String bot_id, String guild_id,String user_id);
 
     /**
      * 获取拥有此身份组的成员列表
@@ -40,7 +42,7 @@ public interface MemberApi {
      * @param start_index 上一次返回包中的next，第一次请求填0，默认0
      * @return 返回持有指定身份组ID的成员列表
      */
-    public abstract Tuple<MemberQueryLimit,String> getMemberListByRoleId(String bot_id, String guild_id, String role_id, String start_index, int limit);
+    public abstract Tuple<MemberQueryLimit,String> getMemberListByRoleId(@NonNull @ENonNull String bot_id, String guild_id, String role_id, String start_index, int limit);
 
     /**
      * 将指定成员从频道内移除
@@ -51,5 +53,5 @@ public interface MemberApi {
      * @param delete_history_msg_days 撤回消息的天数
      * @return 移除结果
      */
-    public abstract boolean deleteMemberByUserId(String bot_id,String guild_id,String user_id,boolean add_black,int delete_history_msg_days);
+    public abstract boolean deleteMemberByUserId(@NonNull @ENonNull String bot_id,String guild_id,String user_id,boolean add_black,int delete_history_msg_days);
 }

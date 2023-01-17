@@ -17,6 +17,7 @@ import com.vdurmont.emoji.EmojiParser;
 import lombok.SneakyThrows;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -37,7 +38,7 @@ public class GuildImpl implements GuildApi {
      * @return 返回频道详情对象
      */
     @SneakyThrows
-    public Tuple<Guild, String> getGuildInfo(String bot_id, String guild_id) {
+    public Tuple<Guild, String> getGuildInfo(@NotNull String bot_id, String guild_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.GET)

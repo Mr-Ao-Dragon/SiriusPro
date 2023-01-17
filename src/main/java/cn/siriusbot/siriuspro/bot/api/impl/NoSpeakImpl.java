@@ -18,6 +18,7 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -43,7 +44,7 @@ public class NoSpeakImpl implements NoSpeakApi {
      * @return 返回禁言结果
      */
     @Override
-    public Boolean noSpeakByUser_id(String bot_id, String guild_id, String user_id, String mute_end_timestamp, String mute_seconds) {
+    public Boolean noSpeakByUser_id(@NotNull String bot_id, String guild_id, String user_id, String mute_end_timestamp, String mute_seconds) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "guilds/" + guild_id + "/members/" + user_id + "/mute")
@@ -68,7 +69,7 @@ public class NoSpeakImpl implements NoSpeakApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<NoSpeak, String> noSpeakByUser_ids(String bot_id, String guild_id, List<String> user_ids, String mute_end_timestamp, String mute_seconds) {
+    public Tuple<NoSpeak, String> noSpeakByUser_ids(@NotNull String bot_id, String guild_id, List<String> user_ids, String mute_end_timestamp, String mute_seconds) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.PATCH)
@@ -94,7 +95,7 @@ public class NoSpeakImpl implements NoSpeakApi {
      * @return 返回禁言结果
      */
     @Override
-    public Boolean nodeSpeakAll(String bot_id, String guild_id, String mute_end_timestamp, String mute_seconds) {
+    public Boolean nodeSpeakAll(@NotNull String bot_id, String guild_id, String mute_end_timestamp, String mute_seconds) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "guilds/" + guild_id + "/mute")

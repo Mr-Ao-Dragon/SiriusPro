@@ -1,7 +1,9 @@
 package cn.siriusbot.siriuspro.bot.api;
 
+import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.PinsMessage;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
+import lombok.NonNull;
 
 /**
  * 精华消息对象Api
@@ -15,7 +17,7 @@ public interface PinsMessageApi {
      * @param message_id 消息ID
      * @return 返回精华消息对象
      */
-    public abstract Tuple<PinsMessage,String> addPinsMessage(String bot_id, String channel_id, String message_id);
+    public abstract Tuple<PinsMessage,String> addPinsMessage(@NonNull @ENonNull String bot_id, String channel_id, String message_id);
 
 
     /**
@@ -24,7 +26,7 @@ public interface PinsMessageApi {
      * @param channel_id 子频道ID
      * @return 返回精华消息对象
      */
-    public abstract Tuple<PinsMessage,String> getPinsMessage(String bot_id, String channel_id);
+    public abstract Tuple<PinsMessage,String> getPinsMessage(@NonNull @ENonNull String bot_id, String channel_id);
 
     /**
      * 删除精华消息
@@ -33,5 +35,5 @@ public interface PinsMessageApi {
      * @param message_id 消息ID
      * @return 删除结果
      */
-    public abstract Boolean deletePinsMessage(String bot_id,String channel_id,String message_id);
+    public abstract Boolean deletePinsMessage(@NonNull @ENonNull String bot_id,String channel_id,String message_id);
 }

@@ -23,6 +23,7 @@ import com.vdurmont.emoji.Emoji;
 import com.vdurmont.emoji.EmojiParser;
 import lombok.SneakyThrows;
 import okhttp3.*;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -49,7 +50,7 @@ public class DMSImpl implements DMS_Api {
      */
     @SneakyThrows
     @Override
-    public Tuple<DMS, String> createDMS(String bot_id, String recipient_id, String source_guild_id) {
+    public Tuple<DMS, String> createDMS(@NotNull String bot_id, String recipient_id, String source_guild_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "user/@me/dms")
@@ -85,7 +86,7 @@ public class DMSImpl implements DMS_Api {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message, String> sendMessage(String bot_id, String guild_id, String content, String image_Url, String msg_id, String event_id) {
+    public Tuple<Message, String> sendMessage(@NotNull String bot_id, String guild_id, String content, String image_Url, String msg_id, String event_id) {
         BotClient client = botPool.getBotById(bot_id);
         content = EmojiParser.parseToUnicode(content);
         if (guild_id == null || guild_id.isEmpty())
@@ -125,7 +126,7 @@ public class DMSImpl implements DMS_Api {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message, String> sendReferenceMessage(String bot_id, String guild_id, String content, MessageReference reference) {
+    public Tuple<Message, String> sendReferenceMessage(@NotNull String bot_id, String guild_id, String content, MessageReference reference) {
         BotClient client = botPool.getBotById(bot_id);
         content = EmojiParser.parseToUnicode(content);
         if (guild_id == null || guild_id.isEmpty())
@@ -168,7 +169,7 @@ public class DMSImpl implements DMS_Api {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message, String> sendMarkdownMessage(String bot_id, String guild_id, String msg_id, String event_id, MessageMarkdown markdown) {
+    public Tuple<Message, String> sendMarkdownMessage(@NotNull String bot_id, String guild_id, String msg_id, String event_id, MessageMarkdown markdown) {
         BotClient client = botPool.getBotById(bot_id);
         if (guild_id == null || guild_id.isEmpty())
             throw new MsgException(500, "guild_id不可为空");
@@ -199,7 +200,7 @@ public class DMSImpl implements DMS_Api {
      */
     @SneakyThrows
     @Override
-    public Boolean deleteMessageById(String bot_id, String guild_id, String message_id, boolean hidetip) {
+    public Boolean deleteMessageById(@NotNull String bot_id, String guild_id, String message_id, boolean hidetip) {
         BotClient client = botPool.getBotById(bot_id);
         if (guild_id == null || guild_id.isEmpty())
             throw new MsgException(500, "guild_id不可为空");
@@ -228,7 +229,7 @@ public class DMSImpl implements DMS_Api {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message, String> sendArkMessage(String bot_id, String guild_id, MessageArk ark, String msg_id, String event_id) {
+    public Tuple<Message, String> sendArkMessage(@NotNull String bot_id, String guild_id, MessageArk ark, String msg_id, String event_id) {
         BotClient client = botPool.getBotById(bot_id);
         if (guild_id == null || guild_id.isEmpty())
             throw new MsgException(500, "guild_id不可为空");
@@ -261,7 +262,7 @@ public class DMSImpl implements DMS_Api {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message, String> sendEmbedMessage(String bot_id, String guild_id, MessageEmbed embed, String msg_id, String event_id) {
+    public Tuple<Message, String> sendEmbedMessage(@NotNull String bot_id, String guild_id, MessageEmbed embed, String msg_id, String event_id) {
         BotClient client = botPool.getBotById(bot_id);
         if (guild_id == null || guild_id.isEmpty())
             throw new MsgException(500, "guild_id不可为空");
@@ -298,7 +299,7 @@ public class DMSImpl implements DMS_Api {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message, String> sendImageAndTextMessage(String bot_id, String guild_id, String content, String image_path, String msg_id, String event_id) {
+    public Tuple<Message, String> sendImageAndTextMessage(@NotNull String bot_id, String guild_id, String content, String image_path, String msg_id, String event_id) {
         SiriusBotClient siriusBotClient = botManager.getBotByBotId(bot_id);
         Request request = new Request.Builder().url(siriusBotClient.getSocket().getOpenUrl() + "dms/" + guild_id + "/messages").build();
         content = EmojiParser.parseToUnicode(content);

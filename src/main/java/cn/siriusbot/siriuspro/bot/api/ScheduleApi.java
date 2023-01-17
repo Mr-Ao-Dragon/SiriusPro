@@ -1,7 +1,9 @@
 package cn.siriusbot.siriuspro.bot.api;
 
+import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.Schedule;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
+import lombok.NonNull;
 
 import java.util.List;
 
@@ -20,7 +22,7 @@ public interface ScheduleApi {
      * @param since      起始时间戳(ms)
      * @return 返回日程列表
      */
-    public abstract Tuple<List<Schedule>,String> getScheduleListByChannel_id(String bot_id, String channel_id, String since);
+    public abstract Tuple<List<Schedule>,String> getScheduleListByChannel_id(@NonNull @ENonNull String bot_id, String channel_id, String since);
 
     /**
      * 获取日程详情
@@ -31,7 +33,7 @@ public interface ScheduleApi {
      * @param schedule_id 日程ID
      * @return 返回日程对象
      */
-    public abstract Tuple<Schedule,String> getScheduleInfo(String bot_id, String channel_id, String schedule_id);
+    public abstract Tuple<Schedule,String> getScheduleInfo(@NonNull @ENonNull String bot_id, String channel_id, String schedule_id);
 
     /**
      * 删除日程
@@ -40,7 +42,7 @@ public interface ScheduleApi {
      * @param schedule_id 日程ID
      * @return 返回操作结果
      */
-    public abstract Boolean deleteSchedule(String bot_id, String channel_id, String schedule_id);
+    public abstract Boolean deleteSchedule(@NonNull @ENonNull String bot_id, String channel_id, String schedule_id);
 
     /**
      * 在指定日程子频道创建一个日程
@@ -49,7 +51,7 @@ public interface ScheduleApi {
      * @param schedule 不带id的日程对象
      * @return 返回日程对象
      */
-    public abstract Tuple<Schedule,String> createSchedule(String bot_id,String channel_id,Schedule schedule);
+    public abstract Tuple<Schedule,String> createSchedule(@NonNull @ENonNull String bot_id, String channel_id, Schedule schedule);
 
     /**
      * 修改日程
@@ -59,5 +61,5 @@ public interface ScheduleApi {
      * @param schedule 修改后的日程对象，不带id
      * @return 返回日程对象
      */
-    public abstract Tuple<Schedule,String> modifySchedule(String bot_id,String channel_id,String schedule_id,Schedule schedule);
+    public abstract Tuple<Schedule,String> modifySchedule(@NonNull @ENonNull String bot_id,String channel_id,String schedule_id,Schedule schedule);
 }

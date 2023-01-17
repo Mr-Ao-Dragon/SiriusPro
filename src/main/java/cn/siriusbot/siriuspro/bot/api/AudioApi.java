@@ -1,6 +1,8 @@
 package cn.siriusbot.siriuspro.bot.api;
 
+import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.audio.AudioControl;
+import lombok.NonNull;
 
 /**
  * 语音对象Api
@@ -16,7 +18,7 @@ public interface AudioApi {
      * @param audioControl 音频控制对象
      * @return 操作结果
      */
-    public abstract Boolean audioControl(String bot_id, String channel_id, AudioControl audioControl);
+    public abstract Boolean audioControl(@NonNull @ENonNull String bot_id, String channel_id, AudioControl audioControl);
 
     /**
      * 机器人上麦
@@ -24,7 +26,7 @@ public interface AudioApi {
      * @param channel_id 子频道ID
      * @return 返回操作结果
      */
-    public abstract Boolean singStart(String bot_id,String channel_id);
+    public abstract Boolean singStart(@NonNull @ENonNull String bot_id, String channel_id);
 
     /**
      * 机器人下麦
@@ -32,5 +34,5 @@ public interface AudioApi {
      * @param channel_id 子频道ID
      * @return 操作结果
      */
-    public abstract  Boolean singEnd(String bot_id,String channel_id);
+    public abstract  Boolean singEnd(@NonNull @ENonNull String bot_id,String channel_id);
 }

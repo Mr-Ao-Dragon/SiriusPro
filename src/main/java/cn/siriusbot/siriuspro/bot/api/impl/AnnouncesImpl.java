@@ -21,6 +21,7 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -52,7 +53,7 @@ public class AnnouncesImpl implements AnnouncesApi {
      * @return 返回公告对象
      */
     @Override
-    public Tuple<Announces, String> createGuildAnnounces(String bot_id, String guild_id, String message_id, String channel_id) {
+    public Tuple<Announces, String> createGuildAnnounces(@NotNull String bot_id, String guild_id, String message_id, String channel_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.POST)
@@ -82,7 +83,7 @@ public class AnnouncesImpl implements AnnouncesApi {
      */
     @SneakyThrows
     @Override
-    public Boolean deleteAnnouncesByGuildId(String bot_id, String guild_id, String message_id) {
+    public Boolean deleteAnnouncesByGuildId(@NotNull String bot_id, String guild_id, String message_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.DELETE)
@@ -102,7 +103,7 @@ public class AnnouncesImpl implements AnnouncesApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Announces, String> createGuildRecommend_Channels(String bot_id, String guild_id, Integer announces_type, List<RecommendChannel> recommendChannels) {
+    public Tuple<Announces, String> createGuildRecommend_Channels(@NotNull String bot_id, String guild_id, Integer announces_type, List<RecommendChannel> recommendChannels) {
         BotClient client = botPool.getBotById(bot_id);
         for (int i = 0; i < recommendChannels.size(); i++) {
             recommendChannels.get(i).setIntroduce(EmojiParser.parseToUnicode(recommendChannels.get(i).getIntroduce()));
