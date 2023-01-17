@@ -1,7 +1,5 @@
 package cn.siriusbot.siriuspro.bot.pojo.message.PrivateDomainEvent;
 
-import cn.siriusbot.siriuspro.bot.pojo.message.PublicMessageEvent.PublicMessageDeleteDObject;
-
 /**
  * 私域消息呗撤回事件
  */

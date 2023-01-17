@@ -1,6 +1,5 @@
 package cn.siriusbot.siriuspro.bot.event.impl;
 
-import cn.siriusbot.siriuspro.bot.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.annotation.OnBotEvent;
 import cn.siriusbot.siriuspro.bot.client.BotClient;
 import cn.siriusbot.siriuspro.bot.client.BotWebSocket;

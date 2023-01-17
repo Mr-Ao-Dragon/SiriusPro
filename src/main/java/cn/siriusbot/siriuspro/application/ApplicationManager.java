@@ -41,14 +41,6 @@ public class ApplicationManager {
 
     public static List<SiriusApplication> apps = new ArrayList<>();
 
-    /**
-     * 加载全部应用
-     */
-    public void loadApps() {
-
-
-    }
-
 
     /**
      * 获取应用实例

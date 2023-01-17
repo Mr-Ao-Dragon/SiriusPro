@@ -6,7 +6,6 @@ import cn.siriusbot.siriuspro.bot.api.pojo.announces.Announces;
 import cn.siriusbot.siriuspro.bot.api.pojo.announces.RecommendChannel;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
 import lombok.NonNull;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 

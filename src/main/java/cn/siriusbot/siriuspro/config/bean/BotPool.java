@@ -4,6 +4,9 @@ import cn.siriusbot.siriuspro.bot.client.BotClient;
 import cn.siriusbot.siriuspro.error.MsgException;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -27,5 +30,9 @@ public class BotPool {
             throw new MsgException(500, "Bot对象不存在！");
         }
         return botClientMap.get(botId);
+    }
+
+    public List<BotClient> getAllClient(){
+        return new ArrayList<>(botClientMap.values());
     }
 }

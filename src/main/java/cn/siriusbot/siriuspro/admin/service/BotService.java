@@ -1,7 +1,7 @@
 package cn.siriusbot.siriuspro.admin.service;
 
 import cn.siriusbot.siriuspro.admin.entity.Robot;
-import cn.siriusbot.siriuspro.bot.BotClient;
+import cn.siriusbot.siriuspro.bot.client.BotClient;
 
 import java.util.List;
 

@@ -4,10 +4,8 @@ import cn.siriusbot.siriuspro.bot.client.BotClient;
 import cn.siriusbot.siriuspro.bot.client.BotConfigBuilder;
 import cn.siriusbot.siriuspro.bot.event.*;
 import cn.siriusbot.siriuspro.bot.event.impl.*;
-import cn.siriusbot.siriuspro.bot.event.v1.BotEvent;
 import cn.siriusbot.siriuspro.websocket.messagequeue.ClientSubject;
 import cn.siriusbot.siriuspro.websocket.messagequeue.MsgQueue;
-import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,5 @@
 package cn.siriusbot.siriuspro.bot.event.impl;
 
-import cn.siriusbot.siriuspro.application.ApplicationManager;
 import cn.siriusbot.siriuspro.bot.annotation.OnBotEvent;
 import cn.siriusbot.siriuspro.bot.client.BotClient;
 import cn.siriusbot.siriuspro.bot.event.MessageEvent;
@@ -23,7 +22,6 @@ import cn.siriusbot.siriuspro.bot.pojo.message.MessageReactionEvent.ReactionEven
 import cn.siriusbot.siriuspro.bot.pojo.message.OpenForumEvent.OpenForumEventInfo;
 import cn.siriusbot.siriuspro.bot.pojo.message.PrivateDomainEvent.PrivateDomainMessageInfo;
 import cn.siriusbot.siriuspro.bot.pojo.message.PublicMessageEvent.PublicMessageEvent;
-import cn.siriusbot.siriuspro.websocket.WebSocketServer;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.log4j.Log4j2;
 

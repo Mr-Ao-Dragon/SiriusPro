@@ -1,7 +1,5 @@
 package cn.siriusbot.siriuspro.websocket.messagequeue;
 
-import java.io.IOException;
-
 public interface ClientObserver {
 
     /**

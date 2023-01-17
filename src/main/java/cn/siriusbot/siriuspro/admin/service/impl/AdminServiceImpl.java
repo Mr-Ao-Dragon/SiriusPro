@@ -2,7 +2,6 @@ package cn.siriusbot.siriuspro.admin.service.impl;
 
 import cn.siriusbot.siriuspro.admin.dao.AdminMapper;
 import cn.siriusbot.siriuspro.admin.entity.Admin;
-import cn.siriusbot.siriuspro.admin.entity.Robot;
 import cn.siriusbot.siriuspro.admin.service.AdminService;
 import cn.siriusbot.siriuspro.error.MsgException;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;

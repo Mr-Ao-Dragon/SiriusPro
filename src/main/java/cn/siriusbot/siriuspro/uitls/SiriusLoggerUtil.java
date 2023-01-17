@@ -1,9 +1,9 @@
-package cn.siriusbot.siriuspro.logger;
+package cn.siriusbot.siriuspro.uitls;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class SiriusLogger {
+public class SiriusLoggerUtil {
 
 
     public static final Map<Integer,String> colorMap = new HashMap() {

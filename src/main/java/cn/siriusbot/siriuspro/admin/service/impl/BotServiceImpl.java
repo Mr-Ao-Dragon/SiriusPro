@@ -3,28 +3,35 @@ package cn.siriusbot.siriuspro.admin.service.impl;
 import cn.siriusbot.siriuspro.admin.dao.RobotMapper;
 import cn.siriusbot.siriuspro.admin.entity.Robot;
 import cn.siriusbot.siriuspro.admin.service.BotService;
-import cn.siriusbot.siriuspro.bot.BotClient;
-import cn.siriusbot.siriuspro.bot.BotManager;
-import cn.siriusbot.siriuspro.bot.BotToken;
-import cn.siriusbot.siriuspro.bot.SiriusBotClient;
+import cn.siriusbot.siriuspro.bot.client.BotClient;
+import cn.siriusbot.siriuspro.bot.client.SiriusBotClient;
+import cn.siriusbot.siriuspro.bot.event.IntentsEvent;
+import cn.siriusbot.siriuspro.bot.event.impl.IntentsEventImpl;
+import cn.siriusbot.siriuspro.bot.pojo.BotInfo;
+import cn.siriusbot.siriuspro.bot.pojo.e.BotType;
+import cn.siriusbot.siriuspro.bot.pojo.e.IntentsType;
 import cn.siriusbot.siriuspro.config.aop.PowerInterceptor;
+import cn.siriusbot.siriuspro.config.bean.BotConfig;
+import cn.siriusbot.siriuspro.config.bean.BotPool;
 import cn.siriusbot.siriuspro.error.MsgException;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class BotServiceImpl implements BotService {
 
     @Autowired
-    BotManager botManager;
+    BotPool botPool;
 
     @Autowired
     RobotMapper robotMapper;
+
+    @Autowired
+    BotConfig botConfig;
 
     /**
      * 添加机器人到数据库
@@ -80,13 +87,20 @@ public class BotServiceImpl implements BotService {
      */
     private void loginBot(Robot robot) {
         verificationInfo(robot);
-        BotToken token = this.robotToBotToken(robot);
-        SiriusBotClient siriusBotClient = new SiriusBotClient(token);
-        botManager.addBot(siriusBotClient);
-        if (!botManager.AuthBot(siriusBotClient)){
-            throw new MsgException(10401, "验证机器人信息不通过，登录失败!");
+        BotInfo token = this.robotToBotToken(robot);
+        BotClient client = new SiriusBotClient(token, botConfig);
+        if (token.getBotType() == BotType.PUBLIC_TYPE){
+            client.setConfig(
+                    IntentsEvent.class, new IntentsEventImpl()
+                            .setIntents(IntentsType.PUBLIC_ALL)
+            );
+        } else {
+            client.setConfig(
+                    IntentsEvent.class, new IntentsEventImpl()
+                            .setIntents(IntentsType.ALL)
+            );
         }
-        botManager.loginBot(robot.getBotId());
+        client.start();
     }
 
     /**
@@ -112,12 +126,12 @@ public class BotServiceImpl implements BotService {
      * @param robot 数据库实例
      * @return 客户端信息
      */
-    private BotToken robotToBotToken(Robot robot) {
-        BotToken bot = new BotToken();
+    private BotInfo robotToBotToken(Robot robot) {
+        BotInfo bot = new BotInfo();
         bot
                 .setBotId(robot.getBotId())
                 .setToken(robot.getToken())
-                .setBotType(robot.getBotType() == 0 ? BotToken.botType.PUBLIC_TYPE : BotToken.botType.PRIVATE_TYPE)
+                .setBotType(robot.getBotType() == 0 ? BotType.PUBLIC_TYPE : BotType.PRIVATE_TYPE)
                 .setSandBox(robot.getSandBox());
         return bot;
     }
@@ -170,7 +184,8 @@ public class BotServiceImpl implements BotService {
         if (robot == null) {
             throw new MsgException(10201, "robot对应ID不存在！");
         }
-        botManager.logoutBot(robot.getBotId());
+        BotClient client = botPool.getBotById(robot.getBotId());
+        client.close();
     }
 
     /**
@@ -180,7 +195,8 @@ public class BotServiceImpl implements BotService {
      */
     @Override
     public void logoutBotByBotId(String botId) {
-        botManager.logoutBot(botId);
+        BotClient client = botPool.getBotById(botId);
+        client.close();
     }
 
     /**
@@ -243,6 +259,6 @@ public class BotServiceImpl implements BotService {
      */
     @Override
     public List<BotClient> queryBotClientAll() {
-        return new ArrayList<>(botManager.getAllBot().values());
+        return botPool.getAllClient();
     }
 }

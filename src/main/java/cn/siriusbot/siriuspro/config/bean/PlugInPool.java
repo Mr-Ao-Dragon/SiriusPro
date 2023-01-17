@@ -1,8 +1,10 @@
 package cn.siriusbot.siriuspro.config.bean;
 
-import cn.siriusbot.siriuspro.bot.annotation.OnBotEvent;
+import cn.siriusbot.siriuspro.bot.BotApi;
 import cn.siriusbot.siriuspro.bot.annotation.OnEventMessage;
+import cn.siriusbot.siriuspro.bot.application.SiriusApplication;
 import cn.siriusbot.siriuspro.bot.pojo.e.MessageType;
+import cn.siriusbot.siriuspro.bot.pojo.event.BotEventMessage;
 import cn.siriusbot.siriuspro.bot.pojo.message.AudioLiveChannelEvent.AudioLiveChannelMemberEvent;
 import cn.siriusbot.siriuspro.bot.pojo.message.AudioMessageEvent.AudioMessageEvent;
 import cn.siriusbot.siriuspro.bot.pojo.message.AuditMessageEvent.AuditMessageEvent;
@@ -19,9 +21,6 @@ import cn.siriusbot.siriuspro.bot.pojo.message.OpenForumEvent.OpenForumEventInfo
 import cn.siriusbot.siriuspro.bot.pojo.message.PrivateDomainEvent.PrivateDomainMessageInfo;
 import cn.siriusbot.siriuspro.bot.pojo.message.PublicMessageEvent.PublicMessageEvent;
 import cn.siriusbot.siriuspro.uitls.ApplicationUtils;
-import cn.siriusbot.siriuspro.bot.application.SiriusApplication;
-import cn.siriusbot.siriuspro.bot.BotApi;
-import cn.siriusbot.siriuspro.bot.pojo.event.BotEventMessage;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;

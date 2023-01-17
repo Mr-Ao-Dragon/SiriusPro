@@ -1,11 +1,9 @@
 package cn.siriusbot.siriuspro.bot.pojo;
 
-import cn.siriusbot.siriuspro.timer.SiriusTimer;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.net.URI;
-import java.util.TimerTask;
 
 @Data
 @Accessors(chain = true)

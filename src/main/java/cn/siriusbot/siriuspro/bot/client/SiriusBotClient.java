@@ -3,15 +3,14 @@ package cn.siriusbot.siriuspro.bot.client;
 import cn.siriusbot.siriuspro.bot.annotation.OnBotEvent;
 import cn.siriusbot.siriuspro.bot.error.BotIsInOperationException;
 import cn.siriusbot.siriuspro.bot.error.NoFindBotEventException;
-import cn.siriusbot.siriuspro.bot.event.*;
-import cn.siriusbot.siriuspro.bot.event.impl.*;
+import cn.siriusbot.siriuspro.bot.event.BotHttpEvent;
 import cn.siriusbot.siriuspro.bot.event.v1.BotEvent;
 import cn.siriusbot.siriuspro.bot.pojo.BotInfo;
 import cn.siriusbot.siriuspro.bot.pojo.BotRequest;
 import cn.siriusbot.siriuspro.bot.pojo.BotSession;
+import cn.siriusbot.siriuspro.bot.pojo.e.BotEventType;
 import cn.siriusbot.siriuspro.bot.pojo.e.RequestMethod;
 import cn.siriusbot.siriuspro.bot.pojo.event.BotEventBody;
-import cn.siriusbot.siriuspro.bot.pojo.e.BotEventType;
 import cn.siriusbot.siriuspro.error.MsgException;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.log4j.Log4j2;
@@ -20,9 +19,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 @Log4j2
 public class SiriusBotClient implements BotClient {

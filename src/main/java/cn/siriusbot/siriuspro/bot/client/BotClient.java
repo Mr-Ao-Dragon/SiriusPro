@@ -4,8 +4,8 @@ package cn.siriusbot.siriuspro.bot.client;
 import cn.siriusbot.siriuspro.bot.event.v1.BotEvent;
 import cn.siriusbot.siriuspro.bot.pojo.BotInfo;
 import cn.siriusbot.siriuspro.bot.pojo.BotSession;
-import cn.siriusbot.siriuspro.bot.pojo.event.BotEventBody;
 import cn.siriusbot.siriuspro.bot.pojo.e.BotEventType;
+import cn.siriusbot.siriuspro.bot.pojo.event.BotEventBody;
 
 /**
  * 机器人客户端

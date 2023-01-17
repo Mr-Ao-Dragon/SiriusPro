@@ -2,12 +2,14 @@ package cn.siriusbot.siriuspro.admin.webapi;
 
 import cn.siriusbot.siriuspro.admin.entity.Robot;
 import cn.siriusbot.siriuspro.admin.service.BotService;
-import cn.siriusbot.siriuspro.bot.BotClient;
+import cn.siriusbot.siriuspro.bot.client.BotClient;
 import cn.siriusbot.siriuspro.config.aop.PowerInterceptor;
 import cn.siriusbot.siriuspro.webapi.R.R;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +63,7 @@ public class BotController {
         List<JSONObject> list = new ArrayList<>();
         for (BotClient client : botClients) {
             JSONObject bean = (JSONObject) JSONObject.toJSON(client.getInfo());
-            bean.put("s", client.getSocket().getS());
+            bean.put("s", client.getSession().getS());
             list.add(bean);
         }
         return new R()
@@ -74,7 +76,7 @@ public class BotController {
     ) {
         BotClient client = botService.queryBotClientByBotId(botId);
         JSONObject bean = (JSONObject) JSONObject.toJSON(client.getInfo());
-        bean.put("s", client.getSocket().getS());
+        bean.put("s", client.getSession().getS());
         return new R()
                 .setData(bean);
     }
