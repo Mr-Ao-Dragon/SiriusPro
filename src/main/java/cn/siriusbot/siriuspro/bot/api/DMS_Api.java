@@ -1,5 +1,6 @@
 package cn.siriusbot.siriuspro.bot.api;
 
+import cn.siriusbot.siriuspro.bot.annotation.EDoc;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.DMS;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.Message;
@@ -26,7 +27,19 @@ public interface DMS_Api {
      * @param source_guild_id 源频道ID
      * @return 私信会话对象
      */
-    public abstract Tuple<DMS, String> createDMS(@NonNull @ENonNull String bot_id, String recipient_id, String source_guild_id);
+    @EDoc(doc = "创建私信会话")
+    Tuple<DMS, String> createDMS
+    (
+            @EDoc(doc = "机器人ID")
+            @NonNull @ENonNull String bot_id,
+
+            @EDoc(doc = "接收者ID")
+            @NonNull @ENonNull String recipient_id,
+
+            @EDoc(doc = "源频道ID")
+            @NonNull @ENonNull
+            String source_guild_id
+    );
 
     /**
      * 发送普通私信消息
@@ -46,7 +59,27 @@ public interface DMS_Api {
      * @param event_id  事件ID
      * @return 消息对象
      */
-    public abstract Tuple<Message, String> sendMessage(@NonNull @ENonNull String bot_id, String guild_id, String content, String image_Url, String msg_id, String event_id);
+    @EDoc(doc = "发送普通消息")
+    Tuple<Message, String> sendMessage
+    (
+            @EDoc(doc = "机器人ID")
+            @NonNull @ENonNull String bot_id,
+
+            @EDoc(doc = "私信会话ID")
+            @NonNull @ENonNull String guild_id,
+
+            @EDoc(doc = "消息内容")
+            String content,
+
+            @EDoc(doc = "图片URL地址")
+            String image_Url,
+
+            @EDoc(doc = "消息ID")
+            String msg_id,
+
+            @EDoc(doc = "事件ID")
+            String event_id
+    );
 
 
     /**
@@ -65,7 +98,21 @@ public interface DMS_Api {
      * @param reference 引用消息对象
      * @return 返回消息对象
      */
-    public abstract Tuple<Message, String> sendReferenceMessage(@NonNull @ENonNull String bot_id, String guild_id, String content, MessageReference reference);
+    @EDoc(doc = "发送引用消息")
+    Tuple<Message, String> sendReferenceMessage
+    (
+            @EDoc(doc = "机器人ID")
+            @NonNull @ENonNull String bot_id,
+
+            @EDoc(doc = "私信会话ID")
+            @NonNull @ENonNull String guild_id,
+
+            @EDoc(doc = "消息内容")
+            @NonNull @ENonNull String content,
+
+            @EDoc(doc = "引用消息对象")
+            @NonNull @ENonNull MessageReference reference
+    );
 
     /**
      * 发送markdown消息(富文本)
@@ -83,12 +130,29 @@ public interface DMS_Api {
      *
      * @param bot_id   传入机器人ID
      * @param guild_id 私信场景下的私信会话ID
-     * @param msg_id   消息idx
+     * @param msg_id   消息id
      * @param event_id 事件ID
      * @param markdown markdown对象
      * @return 返回消息对象
      */
-    public abstract Tuple<Message, String> sendMarkdownMessage(@NonNull @ENonNull String bot_id, String guild_id, String msg_id, String event_id, MessageMarkdown markdown);
+    @EDoc(doc = "发送markdown消息")
+    Tuple<Message, String> sendMarkdownMessage
+    (
+            @EDoc(doc = "机器人ID")
+            @NonNull @ENonNull String bot_id,
+
+            @EDoc(doc = "私信会话ID")
+            @NonNull @ENonNull String guild_id,
+
+            @EDoc(doc = "消息ID")
+            String msg_id,
+
+            @EDoc(doc = "事件ID")
+            String event_id,
+
+            @EDoc(doc = "Markdown对象")
+            @NonNull @ENonNull MessageMarkdown markdown
+    );
 
     /**
      * 用于撤回机器人发送的，指定私信会话消息。
@@ -99,7 +163,21 @@ public interface DMS_Api {
      * @param hidetip    是否隐藏删除消息后的小灰条
      * @return 撤回结果
      */
-    public abstract Boolean deleteMessageById(@NonNull @ENonNull String bot_id, String guild_id, String message_id, boolean hidetip);
+    @EDoc(doc = "撤回私信消息")
+    Boolean deleteMessageById
+    (
+            @EDoc(doc = "机器人ID")
+            @NonNull @ENonNull String bot_id,
+
+            @EDoc(doc = "私信会话ID")
+            @NonNull @ENonNull String guild_id,
+
+            @EDoc(doc = "消息ID")
+            @NonNull @ENonNull
+            String message_id,
+
+            @EDoc(doc = "是否隐藏小灰条")
+            boolean hidetip);
 
     /**
      * 通过指定 ark 字段发送模板消息。
@@ -115,7 +193,26 @@ public interface DMS_Api {
      * @param event_id 事件ID
      * @return 消息对象
      */
-    public abstract Tuple<Message, String> sendArkMessage(@NonNull @ENonNull String bot_id, String guild_id, MessageArk ark, String msg_id, String event_id);
+
+    @EDoc(doc = "发送ark消息")
+    Tuple<Message, String> sendArkMessage
+    (
+            @EDoc(doc = "机器人ID")
+            @NonNull @ENonNull String bot_id,
+
+            @EDoc(doc = "私信会话ID")
+            @NonNull @ENonNull String guild_id,
+
+            @EDoc(doc = "ark消息对象")
+            @NonNull @ENonNull
+            MessageArk ark,
+
+            @EDoc(doc = "消息ID")
+            String msg_id,
+
+            @EDoc(doc = "事件ID")
+            String event_id
+    );
 
     /**
      * 发送embed模板消息
@@ -128,7 +225,24 @@ public interface DMS_Api {
      * @param event_id 事件id
      * @return 消息对象
      */
-    public abstract Tuple<Message, String> sendEmbedMessage(@NonNull @ENonNull String bot_id, String guild_id, MessageEmbed embed, String msg_id, String event_id);
+    @EDoc(doc = "发送embed消息")
+    Tuple<Message, String> sendEmbedMessage
+    (
+            @EDoc(doc = "机器人ID")
+            @NonNull @ENonNull String bot_id,
+
+            @EDoc(doc = "私信会话ID")
+            @NonNull @ENonNull String guild_id,
+
+            @EDoc(doc = "embed对象")
+            @NonNull @ENonNull MessageEmbed embed,
+
+            @EDoc(doc = "消息ID")
+            String msg_id,
+
+            @EDoc(doc = "事件ID")
+            String event_id
+    );
 
     /**
      * 发送图文消息
@@ -141,5 +255,24 @@ public interface DMS_Api {
      * @param event_id   事件ID
      * @return 消息对象
      */
-    public abstract Tuple<Message, String> sendImageAndTextMessage(@NonNull @ENonNull String bot_id, String guild_id, String content, String image_path, String msg_id, String event_id);
+    @EDoc(doc = "发送本地图文消息")
+    Tuple<Message, String> sendImageAndTextMessage
+    (
+            @EDoc(doc = "机器人ID")
+            @NonNull @ENonNull String bot_id,
+
+            @EDoc(doc = "私信会话ID")
+            @NonNull @ENonNull String guild_id,
+
+            @EDoc(doc = "消息内容")
+            String content,
+
+            @EDoc(doc = "本地图片路径")
+            String image_path,
+
+            @EDoc(doc = "消息ID")
+            String msg_id,
+
+            @EDoc(doc = "事件ID")
+            String event_id);
 }
