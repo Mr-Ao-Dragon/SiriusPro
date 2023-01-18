@@ -1,5 +1,6 @@
 package cn.siriusbot.siriuspro.bot.api;
 
+import cn.siriusbot.siriuspro.bot.annotation.EDoc;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.Channel;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
@@ -14,52 +15,104 @@ public interface ChannelApi {
 
     /**
      * 获取子频道列表
-     * @param bot_id 传入机器人ID
+     *
+     * @param bot_id   传入机器人ID
      * @param guild_id 频道ID
      * @return 返回存放子频道的容器对象
      */
-    public abstract Tuple<List<Channel>,String> getChannelList(@NonNull @ENonNull String bot_id, String guild_id);
+    Tuple<List<Channel>, String> getChannelList
+    (
+            @EDoc(doc = "机器人ID")
+            @NonNull @ENonNull String bot_id,
+
+            @EDoc(doc = "频道ID")
+            @NonNull @ENonNull String guild_id
+    );
 
 
     /**
      * 获取子频道详情
-     * @param bot_id 传入机器人ID
+     *
+     * @param bot_id     传入机器人ID
      * @param channel_id 子频道ID
      * @return 返回子频道对象
      */
-    public abstract Tuple<Channel,String> getChannelInfo(@NonNull @ENonNull String bot_id,String channel_id);
+    Tuple<Channel, String> getChannelInfo
+    (
+            @EDoc(doc = "机器人ID")
+            @NonNull @ENonNull String bot_id,
+
+            @EDoc(doc = "子频道ID")
+            @ENonNull @NonNull String channel_id
+    );
 
     /**
      * 创建子频道
-     * @param bot_id 传入机器人ID
+     *
+     * @param bot_id   传入机器人ID
      * @param guild_id 频道ID
-     * @param channel 子频道对象
+     * @param channel  子频道对象
      * @return 返回子频道对象
      */
-    public abstract Tuple<Channel,String> createChannel(@NonNull @ENonNull String bot_id,String guild_id,Channel channel);
+    Tuple<Channel, String> createChannel
+    (
+            @EDoc(doc = "机器人ID")
+            @NonNull @ENonNull String bot_id,
+
+            @EDoc(doc = "频道ID")
+            @NonNull @ENonNull String guild_id,
+
+            @EDoc(doc = "子频道对象")
+            @NonNull @ENonNull
+            Channel channel
+    );
 
     /**
      * 修改子频道
-     * @param bot_id 传入机器人ID
+     *
+     * @param bot_id     传入机器人ID
      * @param channel_id 子频道id
-     * @param channel 修改后的子频道对象
+     * @param channel    修改后的子频道对象
      * @return 修改后的子频道对象
      */
-    public abstract Tuple<Channel,String>  modifyChannel(@NonNull @ENonNull String bot_id, String channel_id, Channel channel);
+    Tuple<Channel, String> modifyChannel
+    (
+            @EDoc(doc = "机器人ID")
+            @NonNull @ENonNull String bot_id,
+
+            @EDoc(doc = "子频道对象")
+            @NonNull @ENonNull String channel_id,
+            Channel channel
+    );
 
     /**
      * 删除子频道
-     * @param bot_id 传入机器人ID
+     *
+     * @param bot_id     传入机器人ID
      * @param channel_id 子频道ID
      * @return 删除结果
      */
-    public abstract Boolean deleteChannel(@NonNull @ENonNull String bot_id, String channel_id);
+    Boolean deleteChannel
+    (
+            @EDoc(doc = "机器人ID")
+            @NonNull @ENonNull String bot_id,
+
+            @EDoc(doc = "子频道ID")
+            @NonNull @ENonNull String channel_id
+    );
 
     /**
      * 获取当前音视频/直播子频道的在线成员数
-     * @param bot_id 传入机器人ID
+     *
+     * @param bot_id     传入机器人ID
      * @param channel_id 子频道ID
      * @return 在线人数
      */
-    public abstract Integer getOnlineMemberNumber(@NonNull @ENonNull String bot_id,String channel_id);
+    Integer getOnlineMemberNumber
+    (
+            @EDoc(doc = "机器人ID")
+            @NonNull @ENonNull String bot_id,
+
+            @EDoc(doc = "子频道ID")
+            @NonNull @ENonNull String channel_id);
 }
