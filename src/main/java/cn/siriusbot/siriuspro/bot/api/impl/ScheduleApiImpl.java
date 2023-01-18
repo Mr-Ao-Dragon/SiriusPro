@@ -39,12 +39,9 @@ public class ScheduleApiImpl implements ScheduleApi {
     public Tuple<List<Schedule>, String> getScheduleListByChannel_id(@NotNull String bot_id, String channel_id, String since) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
-                .setMethod(RequestMethod.GET);
-        if (since != null) {
-            botRequest = botRequest.setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/schedules?since=" + since);
-        } else {
-            botRequest = botRequest.setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/schedules");
-        }
+                .setMethod(RequestMethod.GET)
+                .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/schedules")
+                .appendUrl(since != null ? "?since=" + since : "");
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
         BotResponse response = http.req(botRequest);
         String data = EmojiParser.parseToUnicode(response.getBody());
