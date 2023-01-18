@@ -26,6 +26,7 @@ public interface ApiPermissionApi {
      * @param desc         机器人申请对于的API接口权限后，可使用功能的描述
      * @return Api接口权限需求对象
      */
+    @EDoc(doc = "创建接口授权链接")
     Tuple<ApiPermissionDemand, String> createApiGrantLink
     (
             @EDoc(doc = "机器人ID")
@@ -51,6 +52,7 @@ public interface ApiPermissionApi {
      * @param guild_id 频道ID
      * @return 返回可用Api权限对象列表
      */
+    @EDoc(doc = "获取可用权限列表")
     Tuple<List<APIPermission>, String> getAPIPermissions
     (
             @EDoc(doc = "机器人ID")

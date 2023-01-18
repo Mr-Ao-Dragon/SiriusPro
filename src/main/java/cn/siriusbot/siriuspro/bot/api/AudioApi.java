@@ -19,6 +19,7 @@ public interface AudioApi {
      * @param audioControl 音频控制对象
      * @return 操作结果
      */
+    @EDoc(doc = "音频控制")
     Boolean audioControl
     (
             @EDoc(doc = "机器人ID")
@@ -40,6 +41,7 @@ public interface AudioApi {
      * @param channel_id 子频道ID
      * @return 返回操作结果
      */
+    @EDoc(doc = "机器人上麦")
     Boolean singStart
     (
             @EDoc(doc = "机器人ID")
@@ -56,6 +58,7 @@ public interface AudioApi {
      * @param channel_id 子频道ID
      * @return 操作结果
      */
+    @EDoc(doc = "机器人下麦")
     Boolean singEnd
     (
             @EDoc(doc = "机器人ID")

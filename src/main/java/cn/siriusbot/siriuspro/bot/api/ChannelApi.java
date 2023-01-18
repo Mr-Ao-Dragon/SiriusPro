@@ -20,6 +20,7 @@ public interface ChannelApi {
      * @param guild_id 频道ID
      * @return 返回存放子频道的容器对象
      */
+    @EDoc(doc = "获取子频道列表")
     Tuple<List<Channel>, String> getChannelList
     (
             @EDoc(doc = "机器人ID")
@@ -37,6 +38,7 @@ public interface ChannelApi {
      * @param channel_id 子频道ID
      * @return 返回子频道对象
      */
+    @EDoc(doc = "获取子频道详情")
     Tuple<Channel, String> getChannelInfo
     (
             @EDoc(doc = "机器人ID")
@@ -54,6 +56,7 @@ public interface ChannelApi {
      * @param channel  子频道对象
      * @return 返回子频道对象
      */
+    @EDoc(doc = "创建子频道")
     Tuple<Channel, String> createChannel
     (
             @EDoc(doc = "机器人ID")
@@ -75,6 +78,7 @@ public interface ChannelApi {
      * @param channel    修改后的子频道对象
      * @return 修改后的子频道对象
      */
+    @EDoc(doc = "修改子频道")
     Tuple<Channel, String> modifyChannel
     (
             @EDoc(doc = "机器人ID")
@@ -92,6 +96,8 @@ public interface ChannelApi {
      * @param channel_id 子频道ID
      * @return 删除结果
      */
+
+    @EDoc(doc = "删除子频道")
     Boolean deleteChannel
     (
             @EDoc(doc = "机器人ID")
@@ -108,6 +114,7 @@ public interface ChannelApi {
      * @param channel_id 子频道ID
      * @return 在线人数
      */
+    @EDoc(doc = "获取音视频或直播子频道在线人数")
     Integer getOnlineMemberNumber
     (
             @EDoc(doc = "机器人ID")
