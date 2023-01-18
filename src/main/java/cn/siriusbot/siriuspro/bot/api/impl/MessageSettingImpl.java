@@ -31,7 +31,7 @@ public class MessageSettingImpl implements MessageSettingApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<MessageSetting, String> getMessageSettingInfo(@NotNull String bot_id, String guild_id) {
+    public Tuple<MessageSetting, String> getMessageSettingInfo(@NotNull String bot_id, @NotNull String guild_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.GET)
