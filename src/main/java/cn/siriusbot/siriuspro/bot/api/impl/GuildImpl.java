@@ -30,7 +30,7 @@ public class GuildImpl implements GuildApi {
      * @return 返回频道详情对象
      */
     @SneakyThrows
-    public Tuple<Guild, String> getGuildInfo(@NotNull String bot_id, String guild_id) {
+    public Tuple<Guild, String> getGuildInfo(@NotNull String bot_id, @NotNull String guild_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.GET)
