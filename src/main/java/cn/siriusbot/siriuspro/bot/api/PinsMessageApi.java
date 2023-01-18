@@ -1,5 +1,6 @@
 package cn.siriusbot.siriuspro.bot.api;
 
+import cn.siriusbot.siriuspro.bot.annotation.EDoc;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.PinsMessage;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
@@ -12,28 +13,62 @@ public interface PinsMessageApi {
 
     /**
      * 添加精华消息
-     * @param bot_id 传入机器人ID
+     *
+     * @param bot_id     传入机器人ID
      * @param channel_id 子频道ID
      * @param message_id 消息ID
      * @return 返回精华消息对象
      */
-    public abstract Tuple<PinsMessage,String> addPinsMessage(@NonNull @ENonNull String bot_id, String channel_id, String message_id);
+    @EDoc(doc = "添加精华消息")
+    Tuple<PinsMessage, String> addPinsMessage
+    (
+            @EDoc(doc = "机器人ID")
+            @NonNull @ENonNull String bot_id,
+
+            @EDoc(doc = "子频道ID")
+            @NonNull @ENonNull
+            String channel_id,
+
+            @EDoc(doc = "消息ID")
+            @NonNull @ENonNull String message_id
+    );
 
 
     /**
      * 获取当前子频道精华消息
-     * @param bot_id 传入机器人ID
+     *
+     * @param bot_id     传入机器人ID
      * @param channel_id 子频道ID
      * @return 返回精华消息对象
      */
-    public abstract Tuple<PinsMessage,String> getPinsMessage(@NonNull @ENonNull String bot_id, String channel_id);
+    @EDoc(doc = "获取精华消息列表")
+    Tuple<PinsMessage, String> getPinsMessage
+    (
+            @EDoc(doc = "机器人ID")
+            @NonNull @ENonNull String bot_id,
+
+            @EDoc(doc = "子频道ID")
+            @NonNull @ENonNull String channel_id
+    );
 
     /**
      * 删除精华消息
-     * @param bot_id 传入机器人ID
+     *
+     * @param bot_id     传入机器人ID
      * @param channel_id 子频道ID
      * @param message_id 消息ID
      * @return 删除结果
      */
-    public abstract Boolean deletePinsMessage(@NonNull @ENonNull String bot_id,String channel_id,String message_id);
+    @EDoc(doc = "删除精华消息")
+    Boolean deletePinsMessage
+    (
+            @EDoc(doc = "机器人ID")
+            @NonNull @ENonNull String bot_id,
+
+            @EDoc(doc = "子频道ID")
+            @NonNull @ENonNull String channel_id,
+
+            @EDoc(doc = "消息ID")
+            @NonNull @ENonNull String message_id
+    );
 }
