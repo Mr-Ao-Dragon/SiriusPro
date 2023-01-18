@@ -34,7 +34,7 @@ public class ForumThreadImpl implements ForumApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<ThreadList, String> getThreadsByChannelId(@NotNull String bot_id, String channel_id) {
+    public Tuple<ThreadList, String> getThreadsByChannelId(@NotNull String bot_id, @NotNull String channel_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/threads")
@@ -59,7 +59,7 @@ public class ForumThreadImpl implements ForumApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<ForumThread, String> getThreadInfo(@NotNull String bot_id, String channel_id, String thread_id) {
+    public Tuple<ForumThread, String> getThreadInfo(@NotNull String bot_id, @NotNull String channel_id, @NotNull String thread_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.GET)
@@ -86,7 +86,7 @@ public class ForumThreadImpl implements ForumApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<CreateThread, String> postThread(@NotNull String bot_id, String channel_id, String title, String content, Integer format) {
+    public Tuple<CreateThread, String> postThread(@NotNull String bot_id, @NotNull String channel_id, @NotNull String title, @NotNull String content, @NotNull Integer format) {
         BotClient client = botPool.getBotById(bot_id);
         content = EmojiParser.parseToUnicode(content);
         BotRequest botRequest = new BotRequest()
@@ -112,7 +112,7 @@ public class ForumThreadImpl implements ForumApi {
      * @return 操作结果
      */
     @Override
-    public Boolean deleteThread(@NotNull String bot_id, String channel_id, String thread_id) {
+    public Boolean deleteThread(@NotNull String bot_id, @NotNull String channel_id, @NotNull String thread_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/threads/" + thread_id)
