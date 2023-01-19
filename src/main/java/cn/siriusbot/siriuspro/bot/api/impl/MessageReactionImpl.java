@@ -35,7 +35,7 @@ public class MessageReactionImpl implements MessageReactionApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<ReactionReply, String> getReactionUsers(@NotNull String bot_id, String channel_id, String message_id, Integer type, String id, String cookie, Integer limit) {
+    public Tuple<ReactionReply, String> getReactionUsers(@NotNull String bot_id, @NotNull String channel_id, @NotNull String message_id, @NotNull Integer type, @NotNull String id, String cookie, Integer limit) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.GET);
@@ -65,7 +65,7 @@ public class MessageReactionImpl implements MessageReactionApi {
      */
     @SneakyThrows
     @Override
-    public Boolean deleteReactionForMessageId(@NotNull String bot_id, String channel_id, String message_id, Integer type, String id) {
+    public Boolean deleteReactionForMessageId(@NotNull String bot_id, @NotNull String channel_id, @NotNull String message_id, @NotNull Integer type, @NotNull String id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.DELETE)
@@ -87,7 +87,7 @@ public class MessageReactionImpl implements MessageReactionApi {
      * @return 操作结果
      */
     @Override
-    public Boolean addReaction(@NotNull String bot_id, String channel_id, String message_id, Integer type, String id) {
+    public Boolean addReaction(@NotNull String bot_id, @NotNull String channel_id, @NotNull String message_id, @NotNull Integer type, @NotNull String id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id + "/reactions/" + type + "/" + id)

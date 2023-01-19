@@ -51,7 +51,7 @@ public class MessageImpl implements MessageApi {
      * @return 消息对象
      */
     @Override
-    public Tuple<Message, String> sendMessage(@NotNull String bot_id, String channel_id, String content, String image_Url, String msg_id, String event_id) {
+    public Tuple<Message, String> sendMessage(@NotNull String bot_id, @NotNull String channel_id, String content, String image_Url, String msg_id, String event_id) {
         BotClient client = botPool.getBotById(bot_id);
         content = EmojiParser.parseToUnicode(content);
         BotRequest botRequest = new BotRequest()
@@ -81,7 +81,7 @@ public class MessageImpl implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message, String> getMessageById(@NotNull String bot_id, String channel_id, String message_id) {
+    public Tuple<Message, String> getMessageById(@NotNull String bot_id, @NotNull String channel_id, String message_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/messages/" + message_id)
@@ -106,7 +106,7 @@ public class MessageImpl implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message, String> sendReferenceMessage(@NotNull String bot_id, String channel_id, String content, MessageReference reference) {
+    public Tuple<Message, String> sendReferenceMessage(@NotNull String bot_id, @NotNull String channel_id, String content, @NotNull MessageReference reference) {
         BotClient client = botPool.getBotById(bot_id);
         content = EmojiParser.parseToUnicode(content);
         BotRequest botRequest = new BotRequest()
@@ -142,7 +142,7 @@ public class MessageImpl implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message, String> sendMarkdownMessage(@NotNull String bot_id, String channel_id, String msg_id, String event_id, MessageMarkdown markdown) {
+    public Tuple<Message, String> sendMarkdownMessage(@NotNull String bot_id, @NotNull String channel_id, String msg_id, String event_id, @NotNull MessageMarkdown markdown) {
         BotClient client = botPool.getBotById(bot_id);
         markdown.setContent(EmojiParser.parseToUnicode(markdown.getContent()));
         BotRequest botRequest = new BotRequest()
@@ -175,7 +175,7 @@ public class MessageImpl implements MessageApi {
      * @return 撤回结果
      */
     @Override
-    public Boolean deleteMessageById(@NotNull String bot_id, String channel_id, String message_id, boolean hidetip) {
+    public Boolean deleteMessageById(@NotNull String bot_id, @NotNull String channel_id, @NotNull String message_id, boolean hidetip) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.DELETE)
@@ -202,7 +202,7 @@ public class MessageImpl implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message, String> sendArkMessage(@NotNull String bot_id, String channel_id, MessageArk ark, String msg_id, String event_id) {
+    public Tuple<Message, String> sendArkMessage(@NotNull String bot_id, @NotNull String channel_id, @NotNull MessageArk ark, String msg_id, String event_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/messages")
@@ -232,7 +232,7 @@ public class MessageImpl implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message, String> sendEmbedMessage(@NotNull String bot_id, String channel_id, MessageEmbed embed, String msg_id, String event_id) {
+    public Tuple<Message, String> sendEmbedMessage(@NotNull String bot_id, @NotNull String channel_id, @NotNull MessageEmbed embed, String msg_id, String event_id) {
         BotClient client = botPool.getBotById(bot_id);
         for (int i = 0; i < embed.getFields().size(); i++) {
             embed.getFields().get(i).setName(EmojiParser.parseToUnicode(embed.getFields().get(i).getName()));
@@ -265,7 +265,7 @@ public class MessageImpl implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message, String> sendImageAndTextMessage(@NotNull String bot_id, String channel_id, String content, String image_path, String msg_id, String event_id) {
+    public Tuple<Message, String> sendImageAndTextMessage(@NotNull String bot_id, @NotNull String channel_id, String content, String image_path, String msg_id, String event_id) {
         BotClient client = botPool.getBotById(bot_id);
         content = EmojiParser.parseToUnicode(content);
         BotRequest botRequest = new BotRequest()
@@ -295,7 +295,7 @@ public class MessageImpl implements MessageApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message, String> sendCustomInLineKeyword(@NotNull String bot_id, String channel_id, RequestCustomKeyboard requestCustomKeyboard) {
+    public Tuple<Message, String> sendCustomInLineKeyword(@NotNull String bot_id, @NotNull String channel_id, @NotNull RequestCustomKeyboard requestCustomKeyboard) {
         BotClient client = botPool.getBotById(bot_id);
         requestCustomKeyboard.getMarkdown().setContent(EmojiParser.parseToUnicode(requestCustomKeyboard.getMarkdown().getContent()));
         BotRequest botRequest = new BotRequest()

@@ -34,7 +34,7 @@ public class NoSpeakImpl implements NoSpeakApi {
      * @return 返回禁言结果
      */
     @Override
-    public Boolean noSpeakByUser_id(@NotNull String bot_id, String guild_id, String user_id, String mute_end_timestamp, String mute_seconds) {
+    public Boolean noSpeakByUser_id(@NotNull String bot_id, @NotNull String guild_id, @NotNull String user_id, String mute_end_timestamp, String mute_seconds) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "guilds/" + guild_id + "/members/" + user_id + "/mute")
@@ -59,7 +59,7 @@ public class NoSpeakImpl implements NoSpeakApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<NoSpeak, String> noSpeakByUser_ids(@NotNull String bot_id, String guild_id, List<String> user_ids, String mute_end_timestamp, String mute_seconds) {
+    public Tuple<NoSpeak, String> noSpeakByUser_ids(@NotNull String bot_id, @NotNull String guild_id, @NotNull List<String> user_ids, String mute_end_timestamp, String mute_seconds) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.PATCH)
@@ -85,7 +85,7 @@ public class NoSpeakImpl implements NoSpeakApi {
      * @return 返回禁言结果
      */
     @Override
-    public Boolean nodeSpeakAll(@NotNull String bot_id, String guild_id, String mute_end_timestamp, String mute_seconds) {
+    public Boolean nodeSpeakAll(@NotNull String bot_id, @NotNull String guild_id, String mute_end_timestamp, String mute_seconds) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "guilds/" + guild_id + "/mute")

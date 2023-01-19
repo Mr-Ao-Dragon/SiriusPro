@@ -31,7 +31,7 @@ public class AudioControlImpl implements AudioApi {
      */
     @SneakyThrows
     @Override
-    public Boolean audioControl(@NotNull String bot_id, String channel_id, AudioControl audioControl) {
+    public Boolean audioControl(@NotNull String bot_id, @NotNull String channel_id, @NotNull AudioControl audioControl) {
         BotClient client = botPool.getBotById(bot_id);
         audioControl.setText(EmojiParser.parseToUnicode(audioControl.getText()));
         BotRequest botRequest = new BotRequest()
@@ -73,7 +73,7 @@ public class AudioControlImpl implements AudioApi {
      */
     @SneakyThrows
     @Override
-    public Boolean singEnd(@NotNull String bot_id, String channel_id) {
+    public Boolean singEnd(@NotNull String bot_id, @NotNull String channel_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.DELETE)

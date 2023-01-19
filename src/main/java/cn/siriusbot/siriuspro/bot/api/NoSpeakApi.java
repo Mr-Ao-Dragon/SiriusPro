@@ -1,5 +1,6 @@
 package cn.siriusbot.siriuspro.bot.api;
 
+import cn.siriusbot.siriuspro.bot.annotation.EDoc;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.NoSpeak;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
@@ -14,34 +15,85 @@ public interface NoSpeakApi {
 
     /**
      * 禁言指定成员
-     * @param bot_id 传入机器人ID
-     * @param guild_id 频道ID
-     * @param user_id 用户ID
+     *
+     * @param bot_id             传入机器人ID
+     * @param guild_id           频道ID
+     * @param user_id            用户ID
      * @param mute_end_timestamp 禁言到期时间戳
-     * @param mute_seconds 禁言秒数
+     * @param mute_seconds       禁言秒数
      * @return 返回禁言结果
      */
-    public abstract Boolean noSpeakByUser_id(@NonNull @ENonNull String bot_id, String guild_id, String user_id, String mute_end_timestamp, String mute_seconds);
+    @EDoc(doc = "禁言指定用户")
+    Boolean noSpeakByUser_id
+    (
+            @EDoc(doc = "机器人ID")
+            @NonNull @ENonNull String bot_id,
+
+            @EDoc(doc = "频道ID")
+            @NonNull @ENonNull String guild_id,
+
+            @EDoc(doc = "用户ID")
+            @NonNull @ENonNull String user_id,
+
+            @EDoc(doc = "禁言到期时间戳")
+            String mute_end_timestamp,
+
+            @EDoc(doc = "禁言描述")
+            String mute_seconds
+    );
 
 
     /**
      * 批量禁言成员
-     * @param bot_id 传入机器人ID
-     * @param guild_id 频道ID
-     * @param user_ids 需要禁言的成员列表
+     *
+     * @param bot_id             传入机器人ID
+     * @param guild_id           频道ID
+     * @param user_ids           需要禁言的成员列表
      * @param mute_end_timestamp 禁言到期时间戳
-     * @param mute_seconds 禁言秒数
+     * @param mute_seconds       禁言秒数
      * @return 返回禁言成员对象
      */
-    public abstract Tuple<NoSpeak,String> noSpeakByUser_ids(@NonNull @ENonNull String bot_id, String guild_id, List<String> user_ids, String mute_end_timestamp, String mute_seconds);
+    @EDoc(doc = "批量禁言用户")
+    Tuple<NoSpeak, String> noSpeakByUser_ids
+    (
+            @EDoc(doc = "机器人ID")
+            @NonNull @ENonNull String bot_id,
+
+            @EDoc(doc = "频道ID")
+            @NonNull @ENonNull String guild_id,
+
+            @EDoc(doc = "用户ID数组")
+            @NonNull @ENonNull List<String> user_ids,
+
+            @EDoc(doc = "禁言到期时间戳")
+            String mute_end_timestamp,
+
+            @EDoc(doc = "禁言秒数")
+            String mute_seconds
+    );
 
 
     /**
      * 全员禁言
-     * @param bot_id 传入机器人ID
+     *
+     * @param bot_id             传入机器人ID
      * @param mute_end_timestamp 禁言到期时间戳
-     * @param mute_seconds 禁言秒数
+     * @param mute_seconds       禁言秒数
      * @return 返回禁言结果
      */
-    public abstract Boolean nodeSpeakAll(@NonNull @ENonNull String bot_id,String guild_id,String mute_end_timestamp,String mute_seconds);
+    @EDoc(doc = "全员禁言")
+    Boolean nodeSpeakAll
+    (
+            @EDoc(doc = "机器人ID")
+            @NonNull @ENonNull String bot_id,
+
+            @EDoc(doc = "频道ID")
+            @NonNull @ENonNull
+            String guild_id,
+
+            @EDoc(doc = "禁言到期时间戳")
+            String mute_end_timestamp,
+
+            @EDoc(doc = "禁言秒数")
+            String mute_seconds);
 }

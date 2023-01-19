@@ -33,7 +33,7 @@ public class ChannelImpl implements ChannelApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<List<Channel>, String> getChannelList(@NotNull String bot_id, String guild_id) {
+    public Tuple<List<Channel>, String> getChannelList(@NotNull String bot_id, @NotNull String guild_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "guilds/" + guild_id + "/channels")
@@ -58,7 +58,7 @@ public class ChannelImpl implements ChannelApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Channel, String> getChannelInfo(@NotNull String bot_id, String channel_id) {
+    public Tuple<Channel, String> getChannelInfo(@NotNull String bot_id, @NotNull String channel_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.GET)
@@ -82,7 +82,7 @@ public class ChannelImpl implements ChannelApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Channel, String> createChannel(@NotNull String bot_id, String guild_id, Channel channel) {
+    public Tuple<Channel, String> createChannel(@NotNull String bot_id, @NotNull String guild_id, @NotNull Channel channel) {
         BotClient client = botPool.getBotById(bot_id);
         channel.setName(EmojiParser.parseToUnicode(channel.getName()));
         BotRequest botRequest = new BotRequest()
@@ -116,7 +116,7 @@ public class ChannelImpl implements ChannelApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Channel, String> modifyChannel(@NotNull String bot_id, String channel_id, Channel channel) {
+    public Tuple<Channel, String> modifyChannel(@NotNull String bot_id, @NotNull String channel_id, Channel channel) {
         BotClient client = botPool.getBotById(bot_id);
         channel.setName(EmojiParser.parseToUnicode(channel.getName()));
         BotRequest botRequest = new BotRequest()
@@ -147,7 +147,7 @@ public class ChannelImpl implements ChannelApi {
      * @return 删除结果
      */
     @Override
-    public Boolean deleteChannel(@NotNull String bot_id, String channel_id) {
+    public Boolean deleteChannel(@NotNull String bot_id, @NotNull String channel_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.DELETE)
@@ -166,7 +166,7 @@ public class ChannelImpl implements ChannelApi {
      */
     @SneakyThrows
     @Override
-    public Integer getOnlineMemberNumber(@NotNull String bot_id, String channel_id) {
+    public Integer getOnlineMemberNumber(@NotNull String bot_id, @NotNull String channel_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/online_nums")

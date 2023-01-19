@@ -35,7 +35,7 @@ public class MemberImpl implements MemberApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<List<Member>, String> getMemberList(@NotNull String bot_id, String guild_id, String after, int limit) {
+    public Tuple<List<Member>, String> getMemberList(@NotNull String bot_id, @NotNull String guild_id, String after, int limit) {
         BotClient client = botPool.getBotById(bot_id);
         if (after == null)
             after = "0";
@@ -62,7 +62,7 @@ public class MemberImpl implements MemberApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Member, String> getMemberInfo(@NotNull String bot_id, String guild_id, String user_id) {
+    public Tuple<Member, String> getMemberInfo(@NotNull String bot_id, @NotNull String guild_id, @NotNull String user_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.GET)
@@ -87,7 +87,7 @@ public class MemberImpl implements MemberApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<MemberQueryLimit, String> getMemberListByRoleId(@NotNull String bot_id, String guild_id, String role_id, String start_index, int limit) {
+    public Tuple<MemberQueryLimit, String> getMemberListByRoleId(@NotNull String bot_id, @NotNull String guild_id, @NotNull String role_id, String start_index, int limit) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "guilds/" + guild_id + "/roles/" + role_id + "/members?start_index=" + start_index + "&limit=" + limit)
@@ -113,7 +113,7 @@ public class MemberImpl implements MemberApi {
      */
     @SneakyThrows
     @Override
-    public boolean deleteMemberByUserId(@NotNull String bot_id, String guild_id, String user_id, boolean add_black, int delete_history_msg_days) {
+    public boolean deleteMemberByUserId(@NotNull String bot_id, @NotNull String guild_id, @NotNull String user_id, boolean add_black, int delete_history_msg_days) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.DELETE)

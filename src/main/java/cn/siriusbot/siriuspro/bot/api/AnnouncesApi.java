@@ -1,6 +1,7 @@
 package cn.siriusbot.siriuspro.bot.api;
 
 
+import cn.siriusbot.siriuspro.bot.annotation.EDoc;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.announces.Announces;
 import cn.siriusbot.siriuspro.bot.api.pojo.announces.RecommendChannel;
@@ -31,7 +32,21 @@ public interface AnnouncesApi {
      * @param channel_id 子频道ID
      * @return 返回公告对象
      */
-    public abstract Tuple<Announces, String> createGuildAnnounces(@NonNull @ENonNull String bot_id, String guild_id, String message_id, String channel_id);
+    @EDoc(doc = "创建频道公告")
+    Tuple<Announces, String> createGuildAnnounces
+    (
+            @EDoc(doc = "机器人ID")
+            @NonNull @ENonNull String bot_id,
+
+            @EDoc(doc = "频道ID")
+            @NonNull @ENonNull String guild_id,
+
+            @EDoc(doc = "消息ID")
+            @NonNull @ENonNull String message_id,
+
+            @EDoc(doc = "子频道ID")
+            @NonNull @ENonNull String channel_id
+    );
 
     /**
      * 删除频道公告
@@ -43,7 +58,19 @@ public interface AnnouncesApi {
      * @param message_id 消息ID
      * @return 返回删除结果
      */
-    public abstract Boolean deleteAnnouncesByGuildId(@NonNull @ENonNull String bot_id, String guild_id, String message_id);
+    @EDoc(doc = "删除频道公告")
+    Boolean deleteAnnouncesByGuildId
+    (
+            @EDoc(doc = "机器人ID")
+            @NonNull @ENonNull String bot_id,
+
+            @EDoc(doc = "频道ID")
+            @NonNull @ENonNull String guild_id,
+
+            @EDoc(doc = "消息ID")
+            @NonNull @ENonNull
+            String message_id
+    );
 
     /**
      * 创建频道推荐子频道列表
@@ -51,8 +78,23 @@ public interface AnnouncesApi {
      * @param bot_id            传入机器人ID
      * @param guild_id          频道ID
      * @param announces_type    公告类型
-     * @param recommendChannels 机器人推荐列表
+     * @param recommendChannels 子频道推荐列表
      * @return 返回公告对象
      */
-    public abstract Tuple<Announces, String> createGuildRecommend_Channels(@NonNull @ENonNull String bot_id, String guild_id, Integer announces_type, List<RecommendChannel> recommendChannels);
+    @EDoc(doc = "创建推荐子频道列表")
+    Tuple<Announces, String> createGuildRecommend_Channels
+    (
+            @EDoc(doc = "机器人ID")
+            @NonNull @ENonNull String bot_id,
+
+            @EDoc(doc = "频道ID")
+            @NonNull @ENonNull String guild_id,
+
+            @EDoc(doc = "公告类型")
+            @NonNull @ENonNull Integer announces_type,
+
+            @EDoc(doc = "子频道推荐列表对象数组")
+            @NonNull @ENonNull
+            List<RecommendChannel> recommendChannels
+    );
 }

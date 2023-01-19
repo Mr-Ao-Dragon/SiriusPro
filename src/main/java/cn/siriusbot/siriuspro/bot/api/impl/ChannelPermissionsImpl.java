@@ -33,7 +33,7 @@ public class ChannelPermissionsImpl implements ChannelPermissionsApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<ChannelPermissions, String> getChannelPermissionsByUser_id(@NotNull String bot_id, String channel_id, String user_id) {
+    public Tuple<ChannelPermissions, String> getChannelPermissionsByUser_id(@NotNull String bot_id, @NotNull String channel_id, @NotNull String user_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/members/" + user_id + "/permissions")
@@ -62,7 +62,7 @@ public class ChannelPermissionsImpl implements ChannelPermissionsApi {
      */
     @SneakyThrows
     @Override
-    public Boolean modifyChannelPermissionsByRole_id(@NotNull String bot_id, String channel_id, String role_id, String add, String remove) {
+    public Boolean modifyChannelPermissionsByRole_id(@NotNull String bot_id, @NotNull String channel_id, @NotNull String role_id, String add, String remove) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.PATCH)
@@ -90,7 +90,7 @@ public class ChannelPermissionsImpl implements ChannelPermissionsApi {
      */
     @SneakyThrows
     @Override
-    public Boolean modifyChannelPermissionsByUser_id(@NotNull String bot_id, String channel_id, String user_id, String add, String remove) {
+    public Boolean modifyChannelPermissionsByUser_id(@NotNull String bot_id, @NotNull String channel_id, @NotNull String user_id, String add, String remove) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/members/" + user_id + "/permissions")
@@ -115,7 +115,7 @@ public class ChannelPermissionsImpl implements ChannelPermissionsApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<ChannelPermissions, String> getChannelPermissionsByRole_id(@NotNull String bot_id, String channel_id, String role_id) {
+    public Tuple<ChannelPermissions, String> getChannelPermissionsByRole_id(@NotNull String bot_id, @NotNull String channel_id, @NotNull String role_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.GET)

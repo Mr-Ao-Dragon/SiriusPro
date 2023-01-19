@@ -42,7 +42,7 @@ public class AnnouncesImpl implements AnnouncesApi {
      * @return 返回公告对象
      */
     @Override
-    public Tuple<Announces, String> createGuildAnnounces(@NotNull String bot_id, String guild_id, String message_id, String channel_id) {
+    public Tuple<Announces, String> createGuildAnnounces(@NotNull String bot_id, @NotNull String guild_id, @NotNull String message_id, @NotNull String channel_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.POST)
@@ -72,7 +72,7 @@ public class AnnouncesImpl implements AnnouncesApi {
      */
     @SneakyThrows
     @Override
-    public Boolean deleteAnnouncesByGuildId(@NotNull String bot_id, String guild_id, String message_id) {
+    public Boolean deleteAnnouncesByGuildId(@NotNull String bot_id, @NotNull String guild_id, @NotNull String message_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.DELETE)
@@ -92,7 +92,7 @@ public class AnnouncesImpl implements AnnouncesApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Announces, String> createGuildRecommend_Channels(@NotNull String bot_id, String guild_id, Integer announces_type, List<RecommendChannel> recommendChannels) {
+    public Tuple<Announces, String> createGuildRecommend_Channels(@NotNull String bot_id, @NotNull String guild_id, @NotNull Integer announces_type, @NotNull List<RecommendChannel> recommendChannels) {
         BotClient client = botPool.getBotById(bot_id);
         for (RecommendChannel recommendChannel : recommendChannels) {
             recommendChannel.setIntroduce(EmojiParser.parseToUnicode(recommendChannel.getIntroduce()));
