@@ -499,6 +499,7 @@ public class ELanguageGenerate {
         String paramSource = "source";
         String url = "global_url_head";
         String build = "build_util.build";
+        String parse = "parse_util.parse";
         String jsonApi = "api";
         String jsonMethod = "method";
         String jsonParam = "param";
@@ -615,7 +616,7 @@ public class ELanguageGenerate {
                         // 对象类型
                         build_return.append(String.format("%s [i] ＝ %s%s (data.取属性 (, “data[” ＋ 到文本 (i － 1) ＋ “]”).到文本 ())",
                                 methodInfo.getType().getSrcType(),
-                                build,
+                                parse,
                                 methodInfo.getType().getType()
                         )).append('\n');
                     } else {
@@ -632,7 +633,7 @@ public class ELanguageGenerate {
                         // 对象类型
                         build_return.append(String.format("%s ＝ %s%s (data.取属性 (, “data”).到文本 ())",
                                 methodInfo.getType().getSrcType(),
-                                build,
+                                parse,
                                 methodInfo.getType().getType()
                         ));
                     } else {
@@ -645,7 +646,7 @@ public class ELanguageGenerate {
                 }
 
                 sb.append(String.format("""              
-                        source ＝ 网页_访问S (%s, 1, json.到文本 ())
+                        source ＝ 网页_访问S (%s, 1, , , , “Content-Type: application/json;charset=utf-8”, , , , , , , , , , , , , , 编码转换 (到字节集 (json.到文本 (, , , )), #编码_GB18030, #编码_UTF_8, ), )
                         data.解析 (source)
                         code ＝ data.取整数 (“code”)
                         .如果真 (code ＝ 0)
@@ -945,6 +946,7 @@ public class ELanguageGenerate {
         System.out.println("======易语言代码生成=====");
         System.out.println("=======================");
         System.out.println("=======================");
+
 
         log.info("\n" + generateAPIMethod() + "\n");
 
