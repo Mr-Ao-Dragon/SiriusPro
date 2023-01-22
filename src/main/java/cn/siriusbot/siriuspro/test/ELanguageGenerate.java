@@ -646,7 +646,7 @@ public class ELanguageGenerate {
                 }
 
                 sb.append(String.format("""              
-                        source ＝ 网页_访问S (%s, 1, , , , “Content-Type: application/json;charset=utf-8”, , , , , , , , , , , , , , 编码转换 (到字节集 (json.到文本 (, , , )), #编码_GB18030, #编码_UTF_8, ), )
+                        source ＝ 编码_Utf8到Ansi (网页_访问_对象 (%s, 1, , , , “Content-Type: application/json;charset=utf-8”, , , , 编码转换 (到字节集 (json.到文本 (, , , )), #编码_GB18030, #编码_UTF_8, )))
                         data.解析 (source)
                         code ＝ data.取整数 (“code”)
                         .如果真 (code ＝ 0)

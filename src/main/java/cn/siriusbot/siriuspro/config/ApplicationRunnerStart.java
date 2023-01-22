@@ -2,6 +2,13 @@ package cn.siriusbot.siriuspro.config;
 
 import cn.siriusbot.siriuspro.application.ApplicationManager;
 import cn.siriusbot.siriuspro.bot.BotApi;
+import cn.siriusbot.siriuspro.bot.client.BotClient;
+import cn.siriusbot.siriuspro.bot.client.SiriusBotClient;
+import cn.siriusbot.siriuspro.bot.event.IntentsEvent;
+import cn.siriusbot.siriuspro.bot.event.impl.IntentsEventImpl;
+import cn.siriusbot.siriuspro.bot.pojo.BotInfo;
+import cn.siriusbot.siriuspro.bot.pojo.e.BotType;
+import cn.siriusbot.siriuspro.bot.pojo.e.IntentsType;
 import cn.siriusbot.siriuspro.config.bean.BotConfig;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,17 +46,18 @@ public class ApplicationRunnerStart implements ApplicationRunner {
 //        BotManager.loginBot(siriusBotClient2.getInfo().getBotId());
 
 
-        /*BotClient botClient = new SiriusBotClient(
+        BotClient botClient = new SiriusBotClient(
                 new BotInfo()
                         .setBotId("102004321")
                         .setToken("VwUd3zkSBZIbLlWZOXNlhrBsZDCtn6Dn")
                         .setBotType(BotType.PUBLIC_TYPE)
-                        .setSandBox(true),
+                        .setSandBox(false),
                 botConfig
         );
         botClient.setConfig(
                 IntentsEvent.class, new IntentsEventImpl()
-                        .setIntents(IntentsType.PUBLIC_ALL)
+                        .setIntents(IntentsType
+                                .PUBLIC_ALL)
         );
         botClient.start();
 
@@ -58,15 +66,15 @@ public class ApplicationRunnerStart implements ApplicationRunner {
                         .setBotId("101990484")
                         .setToken("vPavLsOHhJT90lUgo8SwAavbalnFzJMN")
                         .setBotType(BotType.PUBLIC_TYPE)
-                        .setSandBox(true),
+                        .setSandBox(false),
                 botConfig
         );
         botClient2.setConfig(
                 IntentsEvent.class, new IntentsEventImpl()
-                        .setIntents(IntentsType.PUBLIC_ALL)
+                        .setIntents(IntentsType.DIRECT_MESSAGE)
         );
         botClient2.start();
-        System.out.println("启动完成");*/
+        System.out.println("启动完成");
 
     }
 }
