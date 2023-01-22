@@ -4,12 +4,13 @@ package cn.siriusbot.siriuspro.bot.pojo.message.DirectMessageEvent;
  * 私信消息撤回事件对象
  */
 
+import cn.siriusbot.siriuspro.bot.pojo.message.MessageBody;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class DirectMessageDeleteEvent {
+public class DirectMessageDeleteEvent implements MessageBody {
 
     /**
      * op值

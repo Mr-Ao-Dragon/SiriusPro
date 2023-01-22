@@ -46,6 +46,8 @@ import cn.siriusbot.siriuspro.bot.pojo.message.AudioMessageEvent.AudioMessageEve
 import cn.siriusbot.siriuspro.bot.pojo.message.ChannelEvent.ChannelDObject;
 import cn.siriusbot.siriuspro.bot.pojo.message.ChannelEvent.ChannelEventInfo;
 import cn.siriusbot.siriuspro.bot.pojo.message.DirectMessageEvent.DirectMessageDObject;
+import cn.siriusbot.siriuspro.bot.pojo.message.DirectMessageEvent.DirectMessageDeleteDObject;
+import cn.siriusbot.siriuspro.bot.pojo.message.DirectMessageEvent.DirectMessageDeleteEvent;
 import cn.siriusbot.siriuspro.bot.pojo.message.DirectMessageEvent.DirectMessageEventInfo;
 import cn.siriusbot.siriuspro.bot.pojo.message.ForumEvent.ForumEvent;
 import cn.siriusbot.siriuspro.bot.pojo.message.ForumEvent.ForumEventDObject;
@@ -787,8 +789,10 @@ public class ELanguageGenerate {
         put(AudioMessageEventDObject.class);
         put(ChannelDObject.class);
         put(ChannelEventInfo.class);
-        put(DirectMessageDObject.class);
         put(DirectMessageEventInfo.class);
+        put(DirectMessageDObject.class);
+        put(DirectMessageDeleteEvent.class);
+        put(DirectMessageDeleteDObject.class);
         put(ForumEvent.class);
         put(ForumEventDObject.class);
         put(GuildDObject.class);

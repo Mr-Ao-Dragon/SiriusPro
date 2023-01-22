@@ -11,6 +11,7 @@ import cn.siriusbot.siriuspro.bot.pojo.message.AudioLiveChannelEvent.AudioLiveCh
 import cn.siriusbot.siriuspro.bot.pojo.message.AudioMessageEvent.AudioMessageEvent;
 import cn.siriusbot.siriuspro.bot.pojo.message.AuditMessageEvent.AuditMessageEvent;
 import cn.siriusbot.siriuspro.bot.pojo.message.ChannelEvent.ChannelEventInfo;
+import cn.siriusbot.siriuspro.bot.pojo.message.DirectMessageEvent.DirectMessageDeleteEvent;
 import cn.siriusbot.siriuspro.bot.pojo.message.DirectMessageEvent.DirectMessageEventInfo;
 import cn.siriusbot.siriuspro.bot.pojo.message.ForumEvent.ForumEvent;
 import cn.siriusbot.siriuspro.bot.pojo.message.GuildEvent.GuildEventInfo;
@@ -55,7 +56,7 @@ public class MessageEventImpl implements MessageEvent , EventMethodHaveParam<Bot
         map.put("MESSAGE_REACTION_ADD", ReactionEventInfo.class);
         map.put("MESSAGE_REACTION_REMOVE", ReactionEventInfo.class);
         map.put("DIRECT_MESSAGE_CREATE", DirectMessageEventInfo.class);
-        map.put("DIRECT_MESSAGE_DELETE", DirectMessageEventInfo.class);
+        map.put("DIRECT_MESSAGE_DELETE", DirectMessageDeleteEvent.class);
         map.put("OPEN_FORUM_THREAD_CREATE", OpenForumEventInfo.class);
         map.put("OPEN_FORUM_THREAD_UPDATE", OpenForumEventInfo.class);
         map.put("OPEN_FORUM_THREAD_DELETE", OpenForumEventInfo.class);

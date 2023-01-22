@@ -1,6 +1,7 @@
 package cn.siriusbot.siriuspro.bot.pojo.message.DirectMessageEvent;
 
 import cn.siriusbot.siriuspro.bot.api.pojo.message.Message;
+import cn.siriusbot.siriuspro.bot.pojo.message.MessageBody;
 import cn.siriusbot.siriuspro.bot.pojo.message.Op_User;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -10,7 +11,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class DirectMessageDeleteDObject {
+public class DirectMessageDeleteDObject implements MessageBody {
 
     /**
      * 被撤回的消息事件对象
