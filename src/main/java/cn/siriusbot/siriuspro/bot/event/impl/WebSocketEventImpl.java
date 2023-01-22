@@ -45,6 +45,7 @@ public class WebSocketEventImpl implements WebSocketEvent, EventMethodNoParam {
             JSONObject json = JSONObject.parseObject(message);
             json.put("bot_id",client.getInfo().getBotId());
             message = json.toJSONString();
+            System.out.println(message);
             client.pushEvent(BotEventType.WEBSOCKET_MESSAGE, new BotWebSocketMessage(
                     json.getInteger("op"), message, json));
         }

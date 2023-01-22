@@ -20,10 +20,6 @@ public class DirectMessageDObject implements MessageBody {
      */
     private Message message;
 
-    /**
-     * 操作人信息
-     */
-    private Op_User op_user;
 
     /**
      * 私信来源频道ID
