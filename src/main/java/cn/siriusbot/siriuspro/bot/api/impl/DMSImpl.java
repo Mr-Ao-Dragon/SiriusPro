@@ -48,6 +48,7 @@ public class DMSImpl implements DMS_Api {
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "user/@me/dms")
                 .setMethod(RequestMethod.POST)
+                .addHeader("Content-Type","text/plain;application/json")
                 .putRequestBody("recipient_id", recipient_id)
                 .putRequestBody("source_guild_id", source_guild_id);
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
@@ -90,6 +91,7 @@ public class DMSImpl implements DMS_Api {
                 .putRequestBody("content", content)
                 .putRequestBody("image_url", image_Url)
                 .putRequestBody("msg_id", msg_id)
+                .setMediaType("text/plain;application/json")
                 .putRequestBody("event_id", event_id);
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
         BotResponse response = http.req(botRequest);

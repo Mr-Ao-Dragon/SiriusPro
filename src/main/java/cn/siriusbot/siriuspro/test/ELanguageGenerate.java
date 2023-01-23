@@ -162,7 +162,7 @@ public class ELanguageGenerate {
         StringBuilder sb = new StringBuilder();
         sb.append(".版本 2").append('\n').append('\n');
         for (String key : map.keySet()) {
-            sb.append(".数据类型 ").append(key).append('\n');
+            sb.append(".数据类型 ").append(key).append(",公开").append('\n');
             for (Info info : map.get(key)) {
                 sb.append("    .成员 ").append(info.getName()).append(',').append(info.getType());
                 if (info.list) {
@@ -952,7 +952,8 @@ public class ELanguageGenerate {
         System.out.println("=======================");
 
 
-        log.info("\n" + generateAPIMethod() + "\n");
+        log.info("\n" + generateAnalyticClass() + "\n");
+
 
 
     }

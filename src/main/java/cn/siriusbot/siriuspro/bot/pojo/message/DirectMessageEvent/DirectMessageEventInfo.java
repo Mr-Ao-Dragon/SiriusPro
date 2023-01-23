@@ -21,6 +21,11 @@ public class DirectMessageEventInfo implements MessageBody {
     private Integer s;
 
     /**
+     * 事件类型
+     */
+    private String t;
+
+    /**
      * 消息对象
      */
     private DirectMessageDObject d;
