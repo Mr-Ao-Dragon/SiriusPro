@@ -69,4 +69,9 @@ public class GuildDObject implements MessageBody {
      * 当前频道人数
      */
     private Integer member_count;
+
+    /**
+     * 频道名称
+     */
+    private String name;
 }

@@ -43,6 +43,8 @@ import cn.siriusbot.siriuspro.bot.pojo.message.AudioLiveChannelEvent.AudioLiveCh
 import cn.siriusbot.siriuspro.bot.pojo.message.AudioLiveChannelEvent.AudioLiveChannelMemberEventDObject;
 import cn.siriusbot.siriuspro.bot.pojo.message.AudioMessageEvent.AudioMessageEvent;
 import cn.siriusbot.siriuspro.bot.pojo.message.AudioMessageEvent.AudioMessageEventDObject;
+import cn.siriusbot.siriuspro.bot.pojo.message.AuditMessageEvent.AuditMessageEvent;
+import cn.siriusbot.siriuspro.bot.pojo.message.AuditMessageEvent.AuditMessageEventDObject;
 import cn.siriusbot.siriuspro.bot.pojo.message.ChannelEvent.ChannelDObject;
 import cn.siriusbot.siriuspro.bot.pojo.message.ChannelEvent.ChannelEventInfo;
 import cn.siriusbot.siriuspro.bot.pojo.message.DirectMessageEvent.DirectMessageDObject;
@@ -87,12 +89,13 @@ import java.util.*;
 /**
  * 易语言代码通用解析器生成
  */
-@Component
+ @Component
 @Log4j2
 public class ELanguageGenerate {
 
     private final Map<String, List<Info>> map = new HashMap<>();
     private final Map<String, List<MethodInfo>> apiMap = new HashMap<>();
+
 
     private String getName(String s) {
         return s.substring(s.lastIndexOf(".") + 1);
@@ -162,7 +165,7 @@ public class ELanguageGenerate {
         StringBuilder sb = new StringBuilder();
         sb.append(".版本 2").append('\n').append('\n');
         for (String key : map.keySet()) {
-            sb.append(".数据类型 ").append(key).append(",公开").append('\n');
+            sb.append(".数据类型 ").append(key).append(", 公开").append('\n');
             for (Info info : map.get(key)) {
                 sb.append("    .成员 ").append(info.getName()).append(',').append(info.getType());
                 if (info.list) {
@@ -738,6 +741,8 @@ public class ELanguageGenerate {
         put(AtRoleInfo.class);
         put(AtUserInfo.class);
         put(AuditResult.class);
+        put(AuditMessageEvent.class);
+        put(AuditMessageEventDObject.class);
         put(ChannelInfo.class);
         put(Elem.class);
         put(EmojiInfo.class);
@@ -952,7 +957,7 @@ public class ELanguageGenerate {
         System.out.println("=======================");
 
 
-        log.info("\n" + generateAnalyticClass() + "\n");
+        log.info("\n" + generateTypeInfos() + "\n");
 
 
 

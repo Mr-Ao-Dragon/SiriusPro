@@ -110,6 +110,7 @@ public class BaseApiControl {
     @SneakyThrows
     @PostMapping("control")
     public R control(@RequestBody BaseApiBody body){
+        System.out.println(body);
         if (ObjectUtils.isEmpty(body.getApi())){
             throw new MsgException(500, "构建请求错误，api为空!");
         }

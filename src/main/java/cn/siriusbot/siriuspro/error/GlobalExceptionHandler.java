@@ -21,6 +21,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(Throwable.class)
     public R globalException(HttpServletRequest request, Throwable ex){
+        ex.printStackTrace();
         log.error(request.getRequestURI() +  "请求异常错误："  + ex.getMessage());
         return new R()
                 .setData(50000)
