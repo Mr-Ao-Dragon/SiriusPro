@@ -957,7 +957,7 @@ public class ELanguageGenerate {
         System.out.println("=======================");
 
 
-        log.info("\n" + generateTypeInfos() + "\n");
+        log.info("\n" + generateBuildObject() + "\n");
 
 
 

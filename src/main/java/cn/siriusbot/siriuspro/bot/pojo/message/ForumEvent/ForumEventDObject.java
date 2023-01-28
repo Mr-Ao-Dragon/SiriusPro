@@ -3,6 +3,7 @@ package cn.siriusbot.siriuspro.bot.pojo.message.ForumEvent;
 
 import cn.siriusbot.siriuspro.bot.api.pojo.forum.post.PostInfo;
 import cn.siriusbot.siriuspro.bot.api.pojo.forum.reply.ReplyInfo;
+import cn.siriusbot.siriuspro.bot.api.pojo.forum.thread.ForumThreadInfo;
 import cn.siriusbot.siriuspro.bot.pojo.message.MessageBody;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -37,5 +38,10 @@ public class ForumEventDObject implements MessageBody {
      * 回复详情对象
      */
     private PostInfo post_info;
+
+    /**
+     * 帖子详情对象
+     */
+    private ForumThreadInfo thread_info;
 
 }
