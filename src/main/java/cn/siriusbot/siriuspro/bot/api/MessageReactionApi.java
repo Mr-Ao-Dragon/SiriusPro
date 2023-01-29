@@ -2,6 +2,7 @@ package cn.siriusbot.siriuspro.bot.api;
 
 
 import cn.siriusbot.siriuspro.bot.annotation.EDoc;
+import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.emoji.ReactionReply;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
@@ -24,7 +25,7 @@ public interface MessageReactionApi {
      * @param limit      每次拉取数量，默认20，最多50，只在第一次请求设置
      * @return 拉取表情表态响应对象
      */
-    @EDoc(doc = "拉取表情表态用户列表")
+    @EName(name = "拉取表情表态用户列表")
     Tuple<ReactionReply, String> getReactionUsers
     (
             @EDoc(doc = "机器人ID")
@@ -60,7 +61,7 @@ public interface MessageReactionApi {
      * @param id         表情ID，参考Emoji列表
      * @return 操作结果
      */
-    @EDoc(doc = "删除表情表态")
+    @EName(name = "删除表情表态")
     Boolean deleteReactionForMessageId
     (
             @EDoc(doc = "机器人ID")
@@ -89,7 +90,7 @@ public interface MessageReactionApi {
      * @param id         表情ID，参考Emoji列表
      * @return 操作结果
      */
-    @EDoc(doc = "发表表情表态")
+    @EName(name = "发表表情表态")
     Boolean addReaction
     (
             @EDoc(doc = "机器人ID")

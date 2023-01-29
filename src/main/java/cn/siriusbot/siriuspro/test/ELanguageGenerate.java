@@ -1,5 +1,6 @@
 package cn.siriusbot.siriuspro.test;
 
+import cn.siriusbot.siriuspro.bot.annotation.EDoc;
 import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.*;
@@ -529,11 +530,12 @@ public class ELanguageGenerate {
                 sb.append(String.format(".参数 %s, 文本型, 参考, http源消息，包括错误消息", paramSource)).append('\n');
                 // 构造参数
                 for (Info param : methodInfo.getParams()) {
-                    sb.append(String.format(".参数 %s, %s,%s%s",
+                    sb.append(String.format(".参数 %s, %s,%s%s,%s",
                                     param.getName(),
                                     param.getType(),
                                     !param.isNonNull() ? " 可空" : "",
-                                    param.isList() ? " 数组" : ""
+                                    param.isList() ? " 数组" : "",
+                                    param.getJavaDoc()
                             )
                     ).append('\n');
                 }
@@ -906,8 +908,12 @@ public class ELanguageGenerate {
                         .setName(parameter.getName())
                         .setJavaDoc("");
                 ENonNull eNonNull = parameter.getAnnotation(ENonNull.class);
+                EDoc eDoc = parameter.getAnnotation(EDoc.class);
                 if (eNonNull != null){
                     info.setNonNull(true);
+                }
+                if (eDoc != null){
+                    info.setJavaDoc(eDoc.doc());
                 }
 
                 if (genericParameterType instanceof ParameterizedType type) {
@@ -948,7 +954,7 @@ public class ELanguageGenerate {
         System.out.println("=======================");
 
 
-        log.info("\n" + generateAPIMethod() + "\n");
+        //log.info("\n" + generateAPIMethod() + "\n");
 
 
     }

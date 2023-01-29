@@ -1,6 +1,7 @@
 package cn.siriusbot.siriuspro.bot.api;
 
 import cn.siriusbot.siriuspro.bot.annotation.EDoc;
+import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.Schedule;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
@@ -23,7 +24,7 @@ public interface ScheduleApi {
      * @param since      起始时间戳(ms)
      * @return 返回日程列表
      */
-    @EDoc(doc = "获取日常列表")
+    @EName(name = "获取日常列表")
     Tuple<List<Schedule>, String> getScheduleListByChannel_id
     (
             @EDoc(doc = "机器人ID")
@@ -45,6 +46,7 @@ public interface ScheduleApi {
      * @param schedule_id 日程ID
      * @return 返回日程对象
      */
+    @EName(name = "获取日程详情")
     Tuple<Schedule, String> getScheduleInfo
     (
             @EDoc(doc = "机器人ID")
@@ -65,7 +67,7 @@ public interface ScheduleApi {
      * @param schedule_id    日程ID
      * @return 返回操作结果
      */
-    @EDoc(doc = "删除日程")
+    @EName(name = "删除日程")
     Boolean deleteSchedule
     (
             @EDoc(doc = "机器人ID")
@@ -86,7 +88,7 @@ public interface ScheduleApi {
      * @param schedule   不带id的日程对象
      * @return 返回日程对象
      */
-    @EDoc(doc = "创建日程")
+    @EName(name = "创建日程")
     Tuple<Schedule, String> createSchedule
     (
             @EDoc(doc = "机器人ID")
@@ -108,7 +110,7 @@ public interface ScheduleApi {
      * @param schedule    修改后的日程对象，不带id
      * @return 返回日程对象
      */
-    @EDoc(doc = "修改日程")
+    @EName(name = "修改日程")
     Tuple<Schedule, String> modifySchedule
     (
             @EDoc(doc = "机器人ID")

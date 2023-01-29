@@ -1,6 +1,5 @@
 package cn.siriusbot.siriuspro.config;
 
-import cn.siriusbot.siriuspro.application.ApplicationManager;
 import cn.siriusbot.siriuspro.bot.BotApi;
 import cn.siriusbot.siriuspro.config.bean.BotConfig;
 import lombok.extern.log4j.Log4j2;
@@ -12,9 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @Log4j2
 public class ApplicationRunnerStart implements ApplicationRunner {
-
-    @Autowired
-    ApplicationManager manager;
 
 
     @Autowired

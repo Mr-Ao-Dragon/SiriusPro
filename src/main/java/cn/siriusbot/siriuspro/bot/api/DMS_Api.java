@@ -1,6 +1,7 @@
 package cn.siriusbot.siriuspro.bot.api;
 
 import cn.siriusbot.siriuspro.bot.annotation.EDoc;
+import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.DMS;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.Message;
@@ -27,7 +28,7 @@ public interface DMS_Api {
      * @param source_guild_id 源频道ID
      * @return 私信会话对象
      */
-    @EDoc(doc = "创建私信会话")
+    @EName(name = "创建私信会话")
     Tuple<DMS, String> createDMS
     (
             @EDoc(doc = "机器人ID")
@@ -59,7 +60,7 @@ public interface DMS_Api {
      * @param event_id  事件ID
      * @return 消息对象
      */
-    @EDoc(doc = "发送普通消息")
+    @EName(name = "发送普通消息")
     Tuple<Message, String> sendMessage
     (
             @EDoc(doc = "机器人ID")
@@ -98,7 +99,7 @@ public interface DMS_Api {
      * @param reference 引用消息对象
      * @return 返回消息对象
      */
-    @EDoc(doc = "发送引用消息")
+    @EName(name = "发送引用消息")
     Tuple<Message, String> sendReferenceMessage
     (
             @EDoc(doc = "机器人ID")
@@ -135,7 +136,7 @@ public interface DMS_Api {
      * @param markdown markdown对象
      * @return 返回消息对象
      */
-    @EDoc(doc = "发送markdown消息")
+    @EName(name = "发送markdown消息")
     Tuple<Message, String> sendMarkdownMessage
     (
             @EDoc(doc = "机器人ID")
@@ -163,7 +164,7 @@ public interface DMS_Api {
      * @param hidetip    是否隐藏删除消息后的小灰条
      * @return 撤回结果
      */
-    @EDoc(doc = "撤回私信消息")
+    @EName(name = "撤回私信消息")
     Boolean deleteMessageById
     (
             @EDoc(doc = "机器人ID")
@@ -194,7 +195,7 @@ public interface DMS_Api {
      * @return 消息对象
      */
 
-    @EDoc(doc = "发送ark消息")
+    @EName(name = "发送ark消息")
     Tuple<Message, String> sendArkMessage
     (
             @EDoc(doc = "机器人ID")
@@ -225,7 +226,7 @@ public interface DMS_Api {
      * @param event_id 事件id
      * @return 消息对象
      */
-    @EDoc(doc = "发送embed消息")
+    @EName(name = "发送embed消息")
     Tuple<Message, String> sendEmbedMessage
     (
             @EDoc(doc = "机器人ID")
@@ -255,7 +256,7 @@ public interface DMS_Api {
      * @param event_id   事件ID
      * @return 消息对象
      */
-    @EDoc(doc = "发送本地图文消息")
+    @EName(name = "发送本地图文消息")
     Tuple<Message, String> sendImageAndTextMessage
     (
             @EDoc(doc = "机器人ID")

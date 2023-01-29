@@ -2,6 +2,7 @@ package cn.siriusbot.siriuspro.bot.api;
 
 
 import cn.siriusbot.siriuspro.bot.annotation.EDoc;
+import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.announces.Announces;
 import cn.siriusbot.siriuspro.bot.api.pojo.announces.RecommendChannel;
@@ -32,7 +33,7 @@ public interface AnnouncesApi {
      * @param channel_id 子频道ID
      * @return 返回公告对象
      */
-    @EDoc(doc = "创建频道公告")
+    @EName(name = "创建频道公告")
     Tuple<Announces, String> createGuildAnnounces
     (
             @EDoc(doc = "机器人ID")
@@ -58,7 +59,7 @@ public interface AnnouncesApi {
      * @param message_id 消息ID
      * @return 返回删除结果
      */
-    @EDoc(doc = "删除频道公告")
+    @EName(name = "删除频道公告")
     Boolean deleteAnnouncesByGuildId
     (
             @EDoc(doc = "机器人ID")
@@ -81,7 +82,7 @@ public interface AnnouncesApi {
      * @param recommendChannels 子频道推荐列表
      * @return 返回公告对象
      */
-    @EDoc(doc = "创建推荐子频道列表")
+    @EName(name = "创建推荐子频道列表")
     Tuple<Announces, String> createGuildRecommend_Channels
     (
             @EDoc(doc = "机器人ID")

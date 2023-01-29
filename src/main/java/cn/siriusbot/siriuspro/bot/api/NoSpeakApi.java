@@ -1,6 +1,7 @@
 package cn.siriusbot.siriuspro.bot.api;
 
 import cn.siriusbot.siriuspro.bot.annotation.EDoc;
+import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.NoSpeak;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
@@ -23,7 +24,7 @@ public interface NoSpeakApi {
      * @param mute_seconds       禁言秒数
      * @return 返回禁言结果
      */
-    @EDoc(doc = "禁言指定用户")
+    @EName(name = "禁言指定用户")
     Boolean noSpeakByUser_id
     (
             @EDoc(doc = "机器人ID")
@@ -53,7 +54,7 @@ public interface NoSpeakApi {
      * @param mute_seconds       禁言秒数
      * @return 返回禁言成员对象
      */
-    @EDoc(doc = "批量禁言用户")
+    @EName(name = "批量禁言用户")
     Tuple<NoSpeak, String> noSpeakByUser_ids
     (
             @EDoc(doc = "机器人ID")
@@ -81,7 +82,7 @@ public interface NoSpeakApi {
      * @param mute_seconds       禁言秒数
      * @return 返回禁言结果
      */
-    @EDoc(doc = "全员禁言")
+    @EName(name = "全员禁言")
     Boolean nodeSpeakAll
     (
             @EDoc(doc = "机器人ID")

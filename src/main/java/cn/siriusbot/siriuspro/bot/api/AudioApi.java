@@ -1,6 +1,7 @@
 package cn.siriusbot.siriuspro.bot.api;
 
 import cn.siriusbot.siriuspro.bot.annotation.EDoc;
+import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.audio.AudioControl;
 import lombok.NonNull;
@@ -19,7 +20,7 @@ public interface AudioApi {
      * @param audioControl 音频控制对象
      * @return 操作结果
      */
-    @EDoc(doc = "音频控制")
+    @EName(name = "音频控制")
     Boolean audioControl
     (
             @EDoc(doc = "机器人ID")
@@ -41,7 +42,7 @@ public interface AudioApi {
      * @param channel_id 子频道ID
      * @return 返回操作结果
      */
-    @EDoc(doc = "机器人上麦")
+    @EName(name = "机器人上麦")
     Boolean singStart
     (
             @EDoc(doc = "机器人ID")
@@ -58,7 +59,7 @@ public interface AudioApi {
      * @param channel_id 子频道ID
      * @return 操作结果
      */
-    @EDoc(doc = "机器人下麦")
+    @EName(name = "机器人下麦")
     Boolean singEnd
     (
             @EDoc(doc = "机器人ID")

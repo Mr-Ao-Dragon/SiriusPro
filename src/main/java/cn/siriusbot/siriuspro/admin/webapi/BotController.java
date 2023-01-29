@@ -4,7 +4,7 @@ import cn.siriusbot.siriuspro.admin.entity.Robot;
 import cn.siriusbot.siriuspro.admin.service.BotService;
 import cn.siriusbot.siriuspro.bot.client.BotClient;
 import cn.siriusbot.siriuspro.config.aop.PowerInterceptor;
-import cn.siriusbot.siriuspro.webapi.R.R;
+import cn.siriusbot.siriuspro.web.R.R;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

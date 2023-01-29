@@ -3,7 +3,7 @@ package cn.siriusbot.siriuspro.admin.webapi;
 import cn.siriusbot.siriuspro.admin.entity.Admin;
 import cn.siriusbot.siriuspro.admin.service.AdminService;
 import cn.siriusbot.siriuspro.config.Constant;
-import cn.siriusbot.siriuspro.webapi.R.R;
+import cn.siriusbot.siriuspro.web.R.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

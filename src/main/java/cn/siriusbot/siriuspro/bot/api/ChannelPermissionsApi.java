@@ -2,6 +2,7 @@ package cn.siriusbot.siriuspro.bot.api;
 
 
 import cn.siriusbot.siriuspro.bot.annotation.EDoc;
+import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.ChannelPermissions;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
@@ -23,7 +24,7 @@ public interface ChannelPermissionsApi {
      * @param user_id    用户ID
      * @return 子频道权限对象
      */
-    @EDoc(doc = "获取子频道用户权限")
+    @EName(name = "获取子频道用户权限")
     Tuple<ChannelPermissions, String> getChannelPermissionsByUser_id
     (
             @EDoc(doc = "机器人ID")
@@ -48,7 +49,7 @@ public interface ChannelPermissionsApi {
      * @param remove     要移除的权限
      * @return 修改结果
      */
-    @EDoc(doc = "修改子频道身份组权限")
+    @EName(name = "修改子频道身份组权限")
     Boolean modifyChannelPermissionsByRole_id
     (
             @EDoc(doc = "机器人ID")
@@ -80,7 +81,7 @@ public interface ChannelPermissionsApi {
      * @param remove     移除的权限
      * @return 返回修改结果
      */
-    @EDoc(doc = "修改子频道用户权限")
+    @EName(name = "修改子频道用户权限")
     Boolean modifyChannelPermissionsByUser_id
     (
             @EDoc(doc = "机器人ID")
@@ -109,7 +110,7 @@ public interface ChannelPermissionsApi {
      * @param role_id    身份组ID
      * @return 子频道权限对象
      */
-    @EDoc(doc = "获取子频道身份组权限")
+    @EName(name = "获取子频道身份组权限")
     Tuple<ChannelPermissions, String> getChannelPermissionsByRole_id
     (
             @EDoc(doc = "机器人ID")

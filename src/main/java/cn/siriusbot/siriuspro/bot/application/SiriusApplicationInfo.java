@@ -12,6 +12,10 @@ import java.util.Map;
 @Data
 @Accessors(chain = true)
 public class SiriusApplicationInfo {
+    /**
+     * 应用包名，用于判断应用的唯一标识，比如 cn.siriusbot.siriuspro
+     */
+    private String packageName;
 
     /**
      * 应用名称
@@ -39,8 +43,8 @@ public class SiriusApplicationInfo {
     private String appPath;
 
     /**
-     * 应用方法集
+     * 应用图标
      */
-    private Map<String, Method> methods;
+    private byte[] appIcon;
 
 }

@@ -1,6 +1,6 @@
 package cn.siriusbot.siriuspro.error;
 
-import cn.siriusbot.siriuspro.webapi.R.R;
+import cn.siriusbot.siriuspro.web.R.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

@@ -1,6 +1,7 @@
 package cn.siriusbot.siriuspro.bot.api;
 
 import cn.siriusbot.siriuspro.bot.annotation.EDoc;
+import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.MessageSetting;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
@@ -20,7 +21,7 @@ public interface MessageSettingApi {
      * @return 返回频道消息频率设置对象
      */
 
-    @EDoc(doc = "获取消息频率设置详情")
+    @EName(name = "获取消息频率设置详情")
     Tuple<MessageSetting, String> getMessageSettingInfo
     (
             @EDoc(doc = "机器人ID")

@@ -2,6 +2,7 @@ package cn.siriusbot.siriuspro.bot.api;
 
 
 import cn.siriusbot.siriuspro.bot.annotation.EDoc;
+import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.Channel;
 import cn.siriusbot.siriuspro.bot.api.pojo.role.GuildRoleList;
@@ -25,7 +26,7 @@ public interface RoleApi {
      * @param hoist    是否在成员列表中单独展示,0:否,1:是
      * @return 返回身份组对象
      */
-    @EDoc(doc = "创建身份组")
+    @EName(name = "创建身份组")
     Tuple<Role, String> createRole
     (
 
@@ -55,7 +56,7 @@ public interface RoleApi {
      * @param channel  只传入子频道ID的子频道对象
      * @return 返回操作结果
      */
-    @EDoc(doc = "移除身份组成员")
+    @EName(name = "移除身份组成员")
     Boolean removeRoleMemberForGuild
     (
             @EDoc(doc = "机器人ID")
@@ -84,7 +85,7 @@ public interface RoleApi {
      * @param channel  只传入了子频道ID的子频道对象
      * @return 操作结果
      */
-    @EDoc(doc = "创建频道身份组成员")
+    @EName(name = "创建频道身份组成员")
     Boolean createRoleMemberInGuild
     (
             @EDoc(doc = "机器人ID")
@@ -114,7 +115,7 @@ public interface RoleApi {
      * @param hoist    是否在成员列表中单独展示,0:否,1:是
      * @return 修改后的身份组信息
      */
-    @EDoc(doc = "修改身份组")
+    @EName(name = "修改身份组")
     Tuple<NewRole, String> modifyRoleByGuild
     (
             @EDoc(doc = "机器人ID")
@@ -144,7 +145,7 @@ public interface RoleApi {
      * @param role_id  身份组ID
      * @return 操作结果
      */
-    @EDoc(doc = "删除身份组")
+    @EName(name = "删除身份组")
     Boolean deleteRoleForGuild
     (
             @EDoc(doc = "机器人ID")
@@ -164,7 +165,7 @@ public interface RoleApi {
      * @param guild_id 频道ID
      * @return 身份组列表
      */
-    @EDoc(doc = "获取身份组列表")
+    @EName(name = "获取身份组列表")
     Tuple<GuildRoleList, String> getRoleListByGuild
     (
             @EDoc(doc = "机器人ID")

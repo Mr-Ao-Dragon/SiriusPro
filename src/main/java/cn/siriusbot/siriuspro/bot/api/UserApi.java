@@ -1,6 +1,7 @@
 package cn.siriusbot.siriuspro.bot.api;
 
 import cn.siriusbot.siriuspro.bot.annotation.EDoc;
+import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.Guild;
 import cn.siriusbot.siriuspro.bot.api.pojo.User;
@@ -18,7 +19,7 @@ public interface UserApi {
      * 获取机器人基本信息
      * @return 返回Bot(机器人)对象
      */
-    @EDoc(doc = "获取机器人信息")
+    @EName(name = "获取机器人信息")
      Tuple<User,String> getRobotInfo
      (
              @EDoc(doc = "机器人ID")
@@ -35,7 +36,7 @@ public interface UserApi {
      * after 和 before 同时设置时， after 参数无效
      */
 
-    @EDoc(doc = "获取频道列表")
+    @EName(name = "获取频道列表")
      Tuple<List<Guild>,String> getGuildList
     (
             @EDoc(doc = "机器人ID")

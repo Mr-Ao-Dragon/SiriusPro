@@ -6,9 +6,9 @@ import cn.siriusbot.siriuspro.bot.event.WebSocketServiceEvent;
 import cn.siriusbot.siriuspro.bot.event.v1.EventMethodHaveParam;
 import cn.siriusbot.siriuspro.bot.pojo.e.BotEventType;
 import cn.siriusbot.siriuspro.bot.pojo.event.BotWebSocketMessage;
-import cn.siriusbot.siriuspro.websocket.messagequeue.ClientSubject;
-import cn.siriusbot.siriuspro.websocket.messagequeue.ClientTask;
-import cn.siriusbot.siriuspro.websocket.messagequeue.MsgQueue;
+import cn.siriusbot.siriuspro.web.websocket.messagequeue.ClientSubject;
+import cn.siriusbot.siriuspro.web.websocket.messagequeue.ClientTask;
+import cn.siriusbot.siriuspro.web.websocket.messagequeue.MsgQueue;
 import com.vdurmont.emoji.EmojiParser;
 
 public class WebSocketServiceEventImpl implements WebSocketServiceEvent, EventMethodHaveParam<BotWebSocketMessage> {
@@ -54,7 +54,7 @@ public class WebSocketServiceEventImpl implements WebSocketServiceEvent, EventMe
     @Override
     public void onEvent(BotEventType type, BotWebSocketMessage body) {
         if (type == BotEventType.WEBSOCKET_MESSAGE) {
-            this.sendAll(body.getMessage());
+            //this.sendAll(body.getMessage());
         }
     }
 }

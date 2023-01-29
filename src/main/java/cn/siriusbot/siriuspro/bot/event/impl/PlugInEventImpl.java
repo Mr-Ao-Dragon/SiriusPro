@@ -4,19 +4,26 @@ import cn.siriusbot.siriuspro.bot.annotation.OnBotEvent;
 import cn.siriusbot.siriuspro.bot.client.BotClient;
 import cn.siriusbot.siriuspro.bot.event.PlugInEvent;
 import cn.siriusbot.siriuspro.bot.event.v1.EventMethodHaveParam;
+import cn.siriusbot.siriuspro.bot.plugin.PlugInClient;
+import cn.siriusbot.siriuspro.bot.plugin.PlugInFactory;
 import cn.siriusbot.siriuspro.bot.pojo.e.BotEventType;
 import cn.siriusbot.siriuspro.bot.pojo.event.BotEventMessage;
-import cn.siriusbot.siriuspro.config.bean.PlugInPool;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Log4j2
-public class PlugInEventImpl implements PlugInEvent , EventMethodHaveParam<BotEventMessage> {
+public class PlugInEventImpl implements PlugInEvent, EventMethodHaveParam<BotEventMessage> {
 
     BotClient client;
-    PlugInPool pool;
+    PlugInFactory factory;
 
-    public PlugInEventImpl(PlugInPool pool) {
-        this.pool = pool;
+    public PlugInEventImpl(PlugInFactory factory) {
+        this.factory = factory;
     }
 
     /**
@@ -41,6 +48,7 @@ public class PlugInEventImpl implements PlugInEvent , EventMethodHaveParam<BotEv
     @Override
     public void onEvent(BotEventType type, BotEventMessage body) {
         log.info(body);
-        pool.putEvent(this.client.getInfo().getBotId(), body);
+        factory.putEvent(this.client.getInfo().getBotId(), body);
     }
+
 }

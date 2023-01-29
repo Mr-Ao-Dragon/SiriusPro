@@ -68,7 +68,6 @@ public interface MessageApi {
      * @return 返回消息对象
      */
     @EName(name = "获取消息详情")
-    @EDoc(doc = "获取指定子频道的指定消息详情")
     Tuple<Message, String> getMessageById
     (
             @EDoc(doc = "传入机器人ID")
@@ -90,6 +89,7 @@ public interface MessageApi {
      * @param reference  引用消息对象
      * @return 返回消息对象
      */
+    @EName(name = "发送引用消息")
     Tuple<Message, String> sendReferenceMessage
     (
             @EDoc(doc = "机器人ID")
@@ -120,6 +120,7 @@ public interface MessageApi {
      * @param markdown   markdown对象
      * @return 返回消息对象
      */
+    @EName(name = "发送markdown消息")
     Tuple<Message, String> sendMarkdownMessage
     (
             @EDoc(doc = "机器人ID")
@@ -152,6 +153,7 @@ public interface MessageApi {
      * @param hidetip    是否隐藏删除消息后的小灰条
      * @return 撤回结果
      */
+    @EName(name = "撤回消息")
     Boolean deleteMessageById
     (
 
@@ -182,6 +184,7 @@ public interface MessageApi {
      * @param event_id   事件ID
      * @return 消息对象
      */
+    @EName(name = "发送ark消息")
     Tuple<Message, String> sendArkMessage
     (
             @EDoc(doc = "机器人ID")
@@ -211,6 +214,7 @@ public interface MessageApi {
      * @param event_id   事件id
      * @return 消息对象
      */
+    @EName(name = "发送embed消息")
     Tuple<Message, String> sendEmbedMessage
     (
 
@@ -242,6 +246,7 @@ public interface MessageApi {
      * @param event_id   事件ID
      * @return 消息对象
      */
+    @EName(name = "发送图文消息")
     Tuple<Message, String> sendImageAndTextMessage
     (
             @EDoc(doc = "机器人ID")
@@ -271,6 +276,7 @@ public interface MessageApi {
      * @param requestCustomKeyboard 自定义按钮请求对象
      * @return 返回消息对象
      */
+    @EName(name = "发送自定义按钮模板消息")
     Tuple<Message, String> sendCustomInLineKeyword
     (
             @EDoc(doc = "机器人ID")

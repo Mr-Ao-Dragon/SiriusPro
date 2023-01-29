@@ -2,6 +2,7 @@ package cn.siriusbot.siriuspro.bot.api;
 
 
 import cn.siriusbot.siriuspro.bot.annotation.EDoc;
+import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.member.Member;
 import cn.siriusbot.siriuspro.bot.api.pojo.member.MemberQueryLimit;
@@ -24,7 +25,7 @@ public interface MemberApi {
      * @param limit    查询条数
      * @return 返回成员列表 分页大小，1-400，默认是 1。成员较多的频道尽量使用较大的limit值，以减少请求数
      */
-    @EDoc(doc = "获取频道成员列表")
+    @EName(name = "获取频道成员列表")
     Tuple<List<Member>, String> getMemberList
     (
             @EDoc(doc = "机器人ID")
@@ -47,7 +48,7 @@ public interface MemberApi {
      * @param user_id  用户ID
      * @return 返回成员对象
      */
-    @EDoc(doc = "获取成员详情")
+    @EName(name = "获取成员详情")
     Tuple<Member, String> getMemberInfo
     (
             @EDoc(doc = "机器人ID")
@@ -72,7 +73,7 @@ public interface MemberApi {
      * @return 返回持有指定身份组ID的成员列表
      */
 
-    @EDoc(doc = "获取身份组成员列表")
+    @EName(name = "获取身份组成员列表")
     Tuple<MemberQueryLimit, String> getMemberListByRoleId
     (
             @EDoc(doc = "机器人ID")
@@ -101,7 +102,7 @@ public interface MemberApi {
      * @param delete_history_msg_days 撤回消息的天数
      * @return 移除结果
      */
-    @EDoc(doc = "移除成员")
+    @EName(name = "移除成员")
     boolean deleteMemberByUserId
     (
             @EDoc(doc = "机器人ID")

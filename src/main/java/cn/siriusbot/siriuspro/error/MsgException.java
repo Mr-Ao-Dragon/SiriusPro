@@ -1,6 +1,6 @@
 package cn.siriusbot.siriuspro.error;
 
-import cn.siriusbot.siriuspro.webapi.R.R;
+import cn.siriusbot.siriuspro.web.R.R;
 
 public class MsgException extends RuntimeException{
     R r = new R();

@@ -2,6 +2,7 @@ package cn.siriusbot.siriuspro.bot.api;
 
 
 import cn.siriusbot.siriuspro.bot.annotation.EDoc;
+import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.Guild;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
@@ -19,7 +20,7 @@ public interface GuildApi {
      * @param guild_id 频道ID
      * @return 返回频道详情对象
      */
-    @EDoc(doc = "获取频道详情")
+    @EName(name = "获取频道详情")
     Tuple<Guild, String> getGuildInfo
     (
             @EDoc(doc = "机器人ID")

@@ -1,6 +1,7 @@
 package cn.siriusbot.siriuspro.bot.api;
 
 import cn.siriusbot.siriuspro.bot.annotation.EDoc;
+import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.PinsMessage;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
@@ -19,7 +20,7 @@ public interface PinsMessageApi {
      * @param message_id 消息ID
      * @return 返回精华消息对象
      */
-    @EDoc(doc = "添加精华消息")
+    @EName(name = "添加精华消息")
     Tuple<PinsMessage, String> addPinsMessage
     (
             @EDoc(doc = "机器人ID")
@@ -41,7 +42,7 @@ public interface PinsMessageApi {
      * @param channel_id 子频道ID
      * @return 返回精华消息对象
      */
-    @EDoc(doc = "获取精华消息列表")
+    @EName(name = "获取精华消息列表")
     Tuple<PinsMessage, String> getPinsMessage
     (
             @EDoc(doc = "机器人ID")
@@ -59,7 +60,7 @@ public interface PinsMessageApi {
      * @param message_id 消息ID
      * @return 删除结果
      */
-    @EDoc(doc = "删除精华消息")
+    @EName(name = "删除精华消息")
     Boolean deletePinsMessage
     (
             @EDoc(doc = "机器人ID")
