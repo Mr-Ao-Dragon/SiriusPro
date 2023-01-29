@@ -1,22 +1,24 @@
 package cn.siriusbot.siriuspro.bot.pojo.message.DirectMessageEvent;
 
+/**
+ * 私信消息撤回事件对象
+ */
+
 import cn.siriusbot.siriuspro.bot.pojo.message.MessageBody;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-/**
- * 私信消息事件对象
- */
 @Data
 @Accessors(chain = true)
-public class DirectMessageEventInfo implements MessageBody {
+public class DirectMessageDeleteEvent implements MessageBody {
+
     /**
      * op值
      */
     private Integer op;
 
     /**
-     * webSocketClient消息排序
+     * 会话级事件排序
      */
     private Integer s;
 
@@ -26,17 +28,18 @@ public class DirectMessageEventInfo implements MessageBody {
     private String t;
 
     /**
-     * 消息对象
-     */
-    private DirectMessageDObject d;
-
-    /**
      * 事件ID
      */
     private String id;
 
     /**
-     * 所属机器人ID
+     * 事件详情对象
+     */
+    private DirectMessageDeleteDObject d;
+
+    /**
+     * 事件所属机器人ID
      */
     private String bot_id;
+
 }

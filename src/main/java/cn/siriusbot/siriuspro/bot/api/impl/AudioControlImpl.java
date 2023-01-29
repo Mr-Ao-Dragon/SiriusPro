@@ -59,6 +59,7 @@ public class AudioControlImpl implements AudioApi {
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/mic")
                 .setMethod(RequestMethod.PUT);
+        System.out.println(botRequest.getHeader());
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
         BotResponse response = http.req(botRequest);
         return response.getCode() == 200;
@@ -80,6 +81,7 @@ public class AudioControlImpl implements AudioApi {
                 .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/mic");
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
         BotResponse response = http.req(botRequest);
+        System.out.println(response);
         return response.getCode() == 200;
     }
 }

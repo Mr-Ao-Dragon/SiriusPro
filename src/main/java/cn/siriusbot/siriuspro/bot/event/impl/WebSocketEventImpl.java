@@ -43,6 +43,8 @@ public class WebSocketEventImpl implements WebSocketEvent, EventMethodNoParam {
         @Override
         public void onMessage(String message) {
             JSONObject json = JSONObject.parseObject(message);
+            json.put("bot_id",client.getInfo().getBotId());
+            message = json.toJSONString();
             client.pushEvent(BotEventType.WEBSOCKET_MESSAGE, new BotWebSocketMessage(
                     json.getInteger("op"), message, json));
         }

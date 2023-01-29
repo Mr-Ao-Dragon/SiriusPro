@@ -15,15 +15,7 @@ import java.lang.reflect.Member;
 @Data
 @Accessors(chain = true)
 public class DirectMessageDObject implements MessageBody {
-    /**
-     * 消息对象
-     */
-    private Message message;
 
-    /**
-     * 操作人信息
-     */
-    private Op_User op_user;
 
     /**
      * 私信来源频道ID
