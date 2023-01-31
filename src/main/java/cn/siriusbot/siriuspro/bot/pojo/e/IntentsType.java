@@ -25,4 +25,55 @@ public enum IntentsType {
     public int getVal() {
         return val;
     }
+
+
+    static public IntentsType getInstance(int i){
+        switch (i){
+            case 1 -> {
+                return GUILDS;
+            }
+            case 1 << 1 -> {
+                return GUILD_MEMBERS;
+            }
+            case 1 << 9 -> {
+                return GUILD_MESSAGES;
+            }
+            case 1 << 10 -> {
+                return GUILD_MESSAGE_REACTIONS;
+            }
+            case 1 << 12 -> {
+                return DIRECT_MESSAGE;
+            }
+            case 1 << 18 -> {
+                return OPEN_FORUMS_EVENT;
+            }
+            case 1 << 19 -> {
+                return AUDIO_OR_LIVE_CHANNEL_MEMBER;
+            }
+            case 1 << 26 -> {
+                return INTERACTION;
+            }
+            case 1 << 27 -> {
+                return MESSAGE_AUDIT;
+            }
+            case 1 << 28 -> {
+                return FORUMS_EVENT;
+            }
+            case 1 << 29 -> {
+                return AUDIO_ACTION;
+            }
+            case 1 << 30 -> {
+                return PUBLIC_GUILD_MESSAGES;
+            }
+            case 1812730883 -> {
+                return PUBLIC_ALL;
+            }
+            case 2081166851 -> {
+                return ALL;
+            }
+            default -> {
+                return null;
+            }
+        }
+    }
 }

@@ -16,12 +16,14 @@ import cn.siriusbot.siriuspro.config.bean.BotPool;
 import cn.siriusbot.siriuspro.error.MsgException;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Log4j2
 public class BotServiceImpl implements BotService {
 
     @Autowired
@@ -88,6 +90,9 @@ public class BotServiceImpl implements BotService {
     private void loginBot(Robot robot) {
         verificationInfo(robot);
         BotInfo token = this.robotToBotToken(robot);
+        if (botPool.botWhetherThereIs(token.getBotId())){
+            throw new MsgException(10401, "当前robot已经登录中！");
+        }
         BotClient client = new SiriusBotClient(token, botConfig);
         if (token.getBotType() == BotType.PUBLIC_TYPE){
             client.setConfig(
@@ -260,5 +265,23 @@ public class BotServiceImpl implements BotService {
     @Override
     public List<BotClient> queryBotClientAll() {
         return botPool.getAllClient();
+    }
+
+    /**
+     * 自动登录机器人
+     */
+    @Override
+    public void autoLoginBot() {
+        List<Robot> robots = this.queryRobotAll(0, 10000);
+        for (Robot robot : robots){
+            if (robot.getAutoLogin()){
+                try {
+                    log.info(String.format("Bot[%s] 自动登录", robot.getBotId()));
+                    loginBot(robot);
+                } catch (Exception ignored){
+                    log.info(String.format("Bot[%s] 登录失败", robot.getBotId()));
+                }
+            }
+        }
     }
 }

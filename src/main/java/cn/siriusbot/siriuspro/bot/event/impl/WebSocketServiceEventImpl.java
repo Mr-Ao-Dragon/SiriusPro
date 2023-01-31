@@ -54,7 +54,7 @@ public class WebSocketServiceEventImpl implements WebSocketServiceEvent, EventMe
     @Override
     public void onEvent(BotEventType type, BotWebSocketMessage body) {
         if (type == BotEventType.WEBSOCKET_MESSAGE) {
-            //this.sendAll(body.getMessage());
+            this.sendAll(body.getMessage());
         }
     }
 }

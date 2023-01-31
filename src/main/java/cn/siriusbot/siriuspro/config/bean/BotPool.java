@@ -32,6 +32,15 @@ public class BotPool {
         return botClientMap.get(botId);
     }
 
+    /**
+     * 查询机器人是否存在
+     * @param botId
+     * @return
+     */
+    public boolean botWhetherThereIs(String botId){
+        return botClientMap.containsKey(botId);
+    }
+
     public List<BotClient> getAllClient(){
         return new ArrayList<>(botClientMap.values());
     }

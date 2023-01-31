@@ -30,7 +30,6 @@ public class BotPoolEventImpl implements BotPoolEvent , EventMethodNoParam {
      */
     @Override
     public void start() {
-        System.out.println("添加");
         pool.addBot(this.client);
     }
 

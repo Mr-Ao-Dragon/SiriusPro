@@ -83,4 +83,10 @@ public interface BotService {
      * @return 机器人客户端列表
      */
     List<BotClient> queryBotClientAll();
+
+
+    /**
+     * 自动登录机器人
+     */
+    void autoLoginBot();
 }
