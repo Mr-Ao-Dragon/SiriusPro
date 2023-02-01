@@ -85,7 +85,7 @@ import java.util.*;
 /**
  * 易语言代码通用解析器生成
  */
-@Component
+//@Component
 @Log4j2
 public class ELanguageGenerate {
 
@@ -704,7 +704,7 @@ public class ELanguageGenerate {
     @SneakyThrows
     private void config() {
         // 配置实体类
-        put(Channel.class);
+            put(Channel.class);
         put(ChannelPermissions.class);
         put(DMS.class);
         put(Guild.class);

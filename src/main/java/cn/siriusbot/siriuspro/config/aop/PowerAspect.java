@@ -26,13 +26,19 @@ public class PowerAspect {
 
     @Around("fun()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable{
+        Class<?> targetClass = joinPoint.getTarget().getClass();
+
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Method method = methodSignature.getMethod();
+
         PowerInterceptor annotation = method.getAnnotation(PowerInterceptor.class);
+        if (annotation == null){
+            // 如果方法没有注解，则获取类注解
+            annotation = targetClass.getAnnotation(PowerInterceptor.class);
+        }
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        if (requestAttributes != null){
+        if (requestAttributes != null && annotation != null){
             HttpSession session = ((ServletRequestAttributes) requestAttributes).getRequest().getSession();
-            System.out.println(session);
             Admin admin = (Admin) session.getAttribute(Constant.SESSION_ADMIN);
             if (admin == null){
                 throw new MsgException(90002, "未登录，无权限使用!");

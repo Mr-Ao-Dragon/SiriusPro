@@ -254,7 +254,7 @@ public class BotServiceImpl implements BotService {
      */
     @Override
     public BotClient queryBotClientByBotId(String botId) {
-        return null;
+        return botPool.getBotById(botId);
     }
 
     /**
@@ -278,8 +278,9 @@ public class BotServiceImpl implements BotService {
                 try {
                     log.info(String.format("Bot[%s] 自动登录", robot.getBotId()));
                     loginBot(robot);
-                } catch (Exception ignored){
-                    log.info(String.format("Bot[%s] 登录失败", robot.getBotId()));
+                } catch (Exception e){
+                    e.printStackTrace();
+                    log.error(String.format("Bot[%s] 登录失败,失败原因:%s", robot.getBotId(), e.getCause()));
                 }
             }
         }
