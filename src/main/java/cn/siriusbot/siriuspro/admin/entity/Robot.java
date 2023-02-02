@@ -1,5 +1,6 @@
 package cn.siriusbot.siriuspro.admin.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -31,4 +32,13 @@ public class Robot {
      * 自动登录
      */
     Boolean autoLogin;
+
+    /**
+     * 是否在线 0 未登录 1 已登录 2 登录中 3 登录失败
+     */
+    @TableField(exist = false)
+    Integer state = 0;
+
+    public static final int STATE_READY = 0;    // 未登录
+    public static final int STATE_ONLINE = 1;    // 已登录
 }

@@ -1,34 +1,40 @@
 package cn.siriusbot.siriuspro.bot.pojo.e;
 
 public enum IntentsType {
-    ALL(2081166851),
-    PUBLIC_ALL(1812730883),
-    GUILDS(1),
-    GUILD_MEMBERS(1 << 1),
-    GUILD_MESSAGES(1 << 9),
-    GUILD_MESSAGE_REACTIONS(1 << 10),
-    DIRECT_MESSAGE(1 << 12),
-    OPEN_FORUMS_EVENT(1 << 18),
-    AUDIO_OR_LIVE_CHANNEL_MEMBER(1 << 19),
-    INTERACTION(1 << 26),
-    MESSAGE_AUDIT(1 << 27),
-    FORUMS_EVENT(1 << 28),
-    AUDIO_ACTION(1 << 29),
-    PUBLIC_GUILD_MESSAGES(1 << 30);
+    ALL(2081166851, "ALL"),
+    PUBLIC_ALL(1812730883, "PUBLIC_ALL"),
+    GUILDS(1, "GUILDS"),
+    GUILD_MEMBERS(1 << 1, "GUILD_MEMBERS"),
+    GUILD_MESSAGES(1 << 9, "GUILD_MESSAGES"),
+    GUILD_MESSAGE_REACTIONS(1 << 10, "GUILD_MESSAGE_REACTIONS"),
+    DIRECT_MESSAGE(1 << 12, "DIRECT_MESSAGE"),
+    OPEN_FORUMS_EVENT(1 << 18, "OPEN_FORUMS_EVENT"),
+    AUDIO_OR_LIVE_CHANNEL_MEMBER(1 << 19, "AUDIO_OR_LIVE_CHANNEL_MEMBER"),
+    INTERACTION(1 << 26, "INTERACTION"),
+    MESSAGE_AUDIT(1 << 27, "MESSAGE_AUDIT"),
+    FORUMS_EVENT(1 << 28, "FORUMS_EVENT"),
+    AUDIO_ACTION(1 << 29, "AUDIO_ACTION"),
+    PUBLIC_GUILD_MESSAGES(1 << 30, "PUBLIC_GUILD_MESSAGES");
 
     int val;
+    String name;
 
-    IntentsType(int val) {
+    IntentsType(int val, String name) {
         this.val = val;
+        this.name = name;
     }
 
     public int getVal() {
         return val;
     }
 
+    public String getName() {
+        return name;
+    }
 
-    static public IntentsType getInstance(int i){
-        switch (i){
+
+    static public IntentsType getInstance(int i) {
+        switch (i) {
             case 1 -> {
                 return GUILDS;
             }

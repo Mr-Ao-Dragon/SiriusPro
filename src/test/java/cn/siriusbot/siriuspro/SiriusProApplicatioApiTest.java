@@ -1,11 +1,13 @@
 package cn.siriusbot.siriuspro;
 
+import cn.siriusbot.siriuspro.admin.service.IntentService;
 import cn.siriusbot.siriuspro.bot.BotApi;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.MessageKeyboard;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.MessageMarkdown;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.MessageMarkdownParams;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.keyboard.*;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.requestPack.RequestCustomKeyboard;
+import cn.siriusbot.siriuspro.bot.pojo.e.IntentsType;
 import com.alibaba.fastjson.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ public class SiriusProApplicatioApiTest {
 
     @Autowired
     BotApi botApi;
+
+    @Autowired
+    IntentService intentService;
 
     @Test
     void api_1(){
@@ -69,5 +74,10 @@ public class SiriusProApplicatioApiTest {
 
         System.out.println(botApi.messageApi().sendCustomInLineKeyword("101999871", "7770989", requestCustomKeyboard));
         System.out.println(JSONObject.toJSONString(requestCustomKeyboard));
+    }
+
+    @Test
+    void test_1(){
+
     }
 }

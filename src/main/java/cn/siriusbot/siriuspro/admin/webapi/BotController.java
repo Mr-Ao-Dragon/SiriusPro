@@ -2,16 +2,23 @@ package cn.siriusbot.siriuspro.admin.webapi;
 
 import cn.siriusbot.siriuspro.admin.entity.Robot;
 import cn.siriusbot.siriuspro.admin.service.BotService;
+import cn.siriusbot.siriuspro.admin.service.IntentService;
 import cn.siriusbot.siriuspro.bot.client.BotClient;
+import cn.siriusbot.siriuspro.bot.pojo.e.IntentsType;
 import cn.siriusbot.siriuspro.config.aop.PowerInterceptor;
+import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.web.R.R;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -20,6 +27,9 @@ import java.util.List;
 public class BotController {
     @Autowired
     BotService botService;
+
+    @Autowired
+    IntentService intentService;
 
 
     @RequestMapping("/add")
@@ -62,7 +72,7 @@ public class BotController {
         List<BotClient> botClients = botService.queryBotClientAll();
         List<JSONObject> list = new ArrayList<>();
         for (BotClient client : botClients) {
-            JSONObject bean = (JSONObject) JSONObject.toJSON(client.getInfo());
+            JSONObject bean = (JSONObject) JSON.toJSON(client.getInfo());
             bean.put("s", client.getSession().getS());
             list.add(bean);
         }
@@ -75,7 +85,7 @@ public class BotController {
             @RequestParam(value = "bot-id") String botId
     ) {
         BotClient client = botService.queryBotClientByBotId(botId);
-        JSONObject bean = (JSONObject) JSONObject.toJSON(client.getInfo());
+        JSONObject bean = (JSONObject) JSON.toJSON(client.getInfo());
         bean.put("s", client.getSession().getS());
         return new R()
                 .setData(bean);
@@ -108,5 +118,23 @@ public class BotController {
                 .setData(robot);
     }
 
-
+    @RequestMapping("/set-intents" )
+    public R setIntents(
+            @RequestBody JSONObject json
+    ) {
+        String botId = json.getString("botId");
+        JSONArray intents = json.getJSONArray("intents");
+        List<IntentsType> typeList = new ArrayList<>();
+        for (Object item : intents){
+            if (item instanceof Integer o){
+                IntentsType instance = IntentsType.getInstance(o);
+                if (instance == null){
+                    throw new MsgException(500, "订阅事件类型错误！");
+                }
+                typeList.add(IntentsType.getInstance(o));
+            }
+        }
+        intentService.subscription(botId, typeList.toArray(new IntentsType[0]));
+        return new R();
+    }
 }
