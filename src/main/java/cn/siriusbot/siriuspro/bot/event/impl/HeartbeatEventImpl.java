@@ -64,7 +64,13 @@ public class HeartbeatEventImpl implements HeartbeatEvent , EventMethodNoParam ,
             public void run() {
                 BotWebSocket webSocket = bean.getWebSocket();
                 log.info("Bot[" + client.getInfo().getBotId() + "]发送心跳包");
-                webSocket.send(getHeartBeatPack());
+                try{
+                    webSocket.send(getHeartBeatPack());
+                }catch (Exception e){
+                    pause();
+                    e.printStackTrace();
+                    client.pushEvent(BotEventType.SEND_HEART_BEAT_ERROR,null);
+                }
             }
         };
         this.timer.schedule(task, new Date(), this.client.getSession().getHeartBeat());
