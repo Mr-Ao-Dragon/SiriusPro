@@ -8,7 +8,7 @@ import cn.siriusbot.siriuspro.bot.BotApi;
 public interface SiriusApplication {
 
     default int versions(){
-        return 2;   // 版本号
+        return 3;   // 版本号
     }
 
     /**
