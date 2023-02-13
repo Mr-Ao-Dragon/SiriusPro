@@ -272,11 +272,15 @@ public class MessageImpl implements MessageApi {
                 .setMethod(RequestMethod.POST)
                 .setBodyType(RequestBodyType.FORM)
                 .setMediaType("multipart/form-data")
-                .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/messages")
-                .putRequestBody("content", content)
-                .putRequestBody("msg_id", msg_id)
-                .putRequestBody("file_image", new File(image_path))
-                .putRequestBody("event_id", event_id);
+                .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/messages");
+        if (!msg_id.isEmpty())
+            botRequest.putRequestBody("msg_id", msg_id);
+        if (!event_id.isEmpty())
+            botRequest.putRequestBody("event_id", event_id);
+        if(!content.isEmpty())
+            botRequest.putRequestBody("content",content);
+        if(!image_path.isEmpty())
+            botRequest.putRequestBody("image_path",image_path);
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
         BotResponse response = http.req(botRequest);
         String data = EmojiParser.parseToUnicode(response.getBody());

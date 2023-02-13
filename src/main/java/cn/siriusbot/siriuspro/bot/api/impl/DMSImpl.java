@@ -48,7 +48,7 @@ public class DMSImpl implements DMS_Api {
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "user/@me/dms")
                 .setMethod(RequestMethod.POST)
-                .addHeader("Content-Type","text/plain;application/json")
+                .addHeader("Content-Type", "text/plain;application/json")
                 .putRequestBody("recipient_id", recipient_id)
                 .putRequestBody("source_guild_id", source_guild_id);
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
@@ -224,7 +224,7 @@ public class DMSImpl implements DMS_Api {
      */
     @SneakyThrows
     @Override
-    public Tuple<Message, String> sendArkMessage(@NotNull String bot_id, @NotNull String guild_id, @NotNull MessageArk ark,String msg_id, String event_id) {
+    public Tuple<Message, String> sendArkMessage(@NotNull String bot_id, @NotNull String guild_id, @NotNull MessageArk ark, String msg_id, String event_id) {
         BotClient client = botPool.getBotById(bot_id);
         if (guild_id == null || guild_id.isEmpty())
             throw new MsgException(500, "guild_id不可为空");
@@ -303,9 +303,16 @@ public class DMSImpl implements DMS_Api {
                 .setMediaType("multipart/form-data")
                 .setUrl(client.getSession().getOpenUrl() + "dms/" + guild_id + "/messages")
                 .putRequestBody("content", content)
-                .putRequestBody("msg_id", msg_id)
-                .putRequestBody("file_image", new File(image_path))
-                .putRequestBody("event_id", event_id);
+                .putRequestBody("file_image", new File(image_path));
+
+        if (!msg_id.isEmpty())
+            botRequest.putRequestBody("msg_id", msg_id);
+        if (!event_id.isEmpty())
+            botRequest.putRequestBody("event_id", event_id);
+        if(!content.isEmpty())
+            botRequest.putRequestBody("content",content);
+        if(!image_path.isEmpty())
+            botRequest.putRequestBody("file_image",image_path);
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
         BotResponse response = http.req(botRequest);
         String data = EmojiParser.parseToUnicode(response.getBody());
