@@ -21,8 +21,9 @@ public class WebSocketEventImpl implements WebSocketEvent, EventMethodNoParam {
     BotWebSocket webSocket;
 
 
-    private static class BotWebSocketClientImpl extends BotWebSocketClient{
+    private static class BotWebSocketClientImpl extends BotWebSocketClient {
         BotClient client;
+
         /**
          * Constructs a WebSocketClient instance and sets it to the connect to the specified URI. The
          * channel does not attampt to connect automatically. The connection will be established once you
@@ -43,7 +44,7 @@ public class WebSocketEventImpl implements WebSocketEvent, EventMethodNoParam {
         @Override
         public void onMessage(String message) {
             JSONObject json = JSONObject.parseObject(message);
-            json.put("bot_id",client.getInfo().getBotId());
+            json.put("bot_id", client.getInfo().getBotId());
             message = json.toJSONString();
             client.pushEvent(BotEventType.WEBSOCKET_MESSAGE, new BotWebSocketMessage(
                     json.getInteger("op"), message, json));
@@ -58,7 +59,9 @@ public class WebSocketEventImpl implements WebSocketEvent, EventMethodNoParam {
         public void onError(Exception ex) {
             log.error(ex);
         }
-    };
+    }
+
+    ;
 
     /**
      * 注入客户端对象，并初始化，在BotClient的start方法中会调用此方法
@@ -76,7 +79,11 @@ public class WebSocketEventImpl implements WebSocketEvent, EventMethodNoParam {
      */
     @Override
     public void start() {
-        this.webSocket.connect();
+        try {
+            this.webSocket.connect();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 
@@ -100,7 +107,7 @@ public class WebSocketEventImpl implements WebSocketEvent, EventMethodNoParam {
     public void reconnection() {
         try {
             this.webSocket.close();
-        } catch (Throwable ignored){
+        } catch (Throwable ignored) {
 
         }
         this.webSocket = new BotWebSocketClientImpl(this.client.getSession().getWebSocketUri(), client);
@@ -111,7 +118,7 @@ public class WebSocketEventImpl implements WebSocketEvent, EventMethodNoParam {
     @OnBotEvent
     @Override
     public void onEvent(BotEventType type) {
-        if (type == BotEventType.BOT_CLOSE){
+        if (type == BotEventType.BOT_CLOSE) {
             // 退出机器人
             this.webSocket.close();
         }

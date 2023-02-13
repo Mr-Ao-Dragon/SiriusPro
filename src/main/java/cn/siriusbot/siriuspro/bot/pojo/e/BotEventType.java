@@ -30,7 +30,12 @@ public enum BotEventType {
     /**
      * 暂停心跳包事件
      */
-    TASK_HEARTBEAT_PAUSE;
+    TASK_HEARTBEAT_PAUSE,
+
+    /**
+     * 心跳包发送失败事件
+     */
+    SEND_HEART_BEAT_ERROR;
 
     BotEventType() {
     }
