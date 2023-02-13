@@ -1,6 +1,7 @@
 package cn.siriusbot.siriuspro.bot.plugin;
 
 import cn.siriusbot.siriuspro.bot.annotation.OnEventMessage;
+import cn.siriusbot.siriuspro.bot.annotation.OnExpandMessage;
 import cn.siriusbot.siriuspro.bot.application.SiriusApplication;
 import cn.siriusbot.siriuspro.bot.application.SiriusApplicationInfo;
 import cn.siriusbot.siriuspro.bot.pojo.e.MessageType;
@@ -21,14 +22,16 @@ import cn.siriusbot.siriuspro.bot.pojo.message.OpenForumEvent.OpenForumEventInfo
 import cn.siriusbot.siriuspro.bot.pojo.message.PrivateDomainEvent.PrivateDomainMessageInfo;
 import cn.siriusbot.siriuspro.bot.pojo.message.PublicMessageEvent.PublicMessageEvent;
 import cn.siriusbot.siriuspro.web.R.R;
+import cn.siriusbot.siriuspro.web.websocket.surface.WebsocketSession;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.log4j.Log4j2;
 
+import javax.websocket.Session;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
 @Log4j2
-public class JavaPlugInClient implements PlugInClient {
+public class JavaPlugInClient implements PlugInClient , ExpandClient {
 
     private static final HashMap<String, Class<? extends MessageBody>> eventMap = new HashMap<>();
 
@@ -159,5 +162,40 @@ public class JavaPlugInClient implements PlugInClient {
     @Override
     public R webPost(String name, JSONObject body) {
         return null;
+    }
+
+    /**
+     * 推送ws消息
+     *
+     * @param session
+     * @param message
+     */
+    @Override
+    public void putWebSocketMessage(WebsocketSession session, String message) {
+        Class<? extends SiriusApplication> clazz = app.getClass();
+        Method[] methods = clazz.getMethods();
+        for (Method method : methods) {
+            OnExpandMessage annotation = method.getAnnotation(OnExpandMessage.class);
+            if (annotation == null){
+                continue;
+            }
+            Class<?>[] parameterTypes = method.getParameterTypes();
+            if (parameterTypes.length != 2){
+                continue;
+            }
+            if (parameterTypes[0] != WebsocketSession.class || parameterTypes[1] != String.class){
+                continue;
+            }
+            try {
+                method.invoke(app, session, message);
+            } catch (Throwable e) {
+                log.error(String.format("插件[%s]监听的方法(%s)调用异常：%s",
+                        app.appInfo().getAppName(),
+                        method.getName(),
+                        e.getCause()
+                ));
+            }
+
+        }
     }
 }

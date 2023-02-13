@@ -10,7 +10,7 @@ public class Robot {
     Integer id;
 
     /**
-     * 机器人类型 - 公域 私域
+     * 机器人类型 - 0公域 1私域
      */
     Integer botType;
 

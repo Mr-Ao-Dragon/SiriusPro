@@ -3,15 +3,16 @@ package cn.siriusbot.siriuspro.bot.application;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.lang.reflect.Method;
-import java.util.Map;
-
 /**
  * 天狼星应用
  */
 @Data
 @Accessors(chain = true)
 public class SiriusApplicationInfo {
+    /**
+     * 应用包名，用于判断应用的唯一标识，比如 cn.siriusbot.siriuspro
+     */
+    private String packageName;
 
     /**
      * 应用名称
@@ -39,8 +40,8 @@ public class SiriusApplicationInfo {
     private String appPath;
 
     /**
-     * 应用方法集
+     * 应用图标
      */
-    private Map<String, Method> methods;
+    private byte[] appIcon;
 
 }
