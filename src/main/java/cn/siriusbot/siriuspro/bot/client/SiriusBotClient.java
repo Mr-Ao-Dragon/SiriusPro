@@ -115,6 +115,7 @@ public class SiriusBotClient implements BotClient {
             }
         }
         throw new NoFindBotEventException();
+
     }
 
     /**
