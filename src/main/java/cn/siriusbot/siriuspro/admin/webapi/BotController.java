@@ -3,7 +3,6 @@ package cn.siriusbot.siriuspro.admin.webapi;
 import cn.siriusbot.siriuspro.admin.entity.Robot;
 import cn.siriusbot.siriuspro.admin.service.BotService;
 import cn.siriusbot.siriuspro.admin.service.IntentService;
-import cn.siriusbot.siriuspro.admin.vo.BotList;
 import cn.siriusbot.siriuspro.bot.client.BotClient;
 import cn.siriusbot.siriuspro.bot.pojo.e.IntentsType;
 import cn.siriusbot.siriuspro.config.aop.PowerInterceptor;
@@ -13,7 +12,10 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +23,7 @@ import java.util.List;
 
 @RestController
 @PowerInterceptor(power = 0)
-@RequestMapping
+@RequestMapping("/api/bot")
 public class BotController {
     @Autowired
     BotService botService;
@@ -90,10 +92,10 @@ public class BotController {
     }
 
 
-    @GetMapping("/api/rule")
-    public BotList getDatabaseAll(
-            @RequestParam(value = "current", required = false) Integer page,
-            @RequestParam(value = "pageSize", required = false) Integer size
+    @RequestMapping("/get-database-all")
+    public R getDatabaseAll(
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size
 
     ) {
         if (page == null || page < 0) {
@@ -103,54 +105,8 @@ public class BotController {
             size = 1000;
         }
         List<Robot> robots = botService.queryRobotAll(page, size);
-
-        BotList botList = new BotList();
-        botList
-                .setCurrent(page)
-                .setPageSize(String.valueOf(size))
-                .setSuccess(true)
-                .setTotal(robots.size())
-                .setData(new ArrayList<>());    // todo 临时
-        int i = 1;
-        for (Robot robot : robots){
-            //botList.getData().add()
-            BotList.BotData botData = new BotList.BotData()
-                    .setAvatar("https://gw.alipayobjects.com/zos/rmsportal/udxAbMEhpwthVVcjLXik.png")
-                    .setCallNo(0)
-                    .setCreatedAt("2023-02-13")
-                    .setDesc("测试昵称")
-                    .setDisabled(false)
-                    .setHref("https://ant.design")
-                    .setKey(i++)
-                    .setName(robot.getBotId())
-                    .setOwner("")
-                    .setProgress(0)
-                    .setServer(robot.getSandBox() ? 1 : 0)
-                    .setStatus(robot.getState())
-                    .setType(robot.getBotType())
-                    .setUpdatedAt("2023-02-13");
-            botList.getData().add(botData);
-        }
-
-        return botList;
-    }
-
-
-    @PostMapping("/api/rule")
-    public BotList addBot(
-            @RequestBody JSONObject body
-    ) {
-        String botId = body.getString("desc");
-        String token = body.getString("name");
-        botService.addBot(
-                new Robot()
-                        .setBotType(0)
-                        .setSandBox(true)
-                        .setBotId(botId)
-                        .setToken(token)
-                        .setAutoLogin(false)
-        );
-        return null;
+        return new R()
+                .setData(robots);
     }
 
     @RequestMapping("/get-database-one")

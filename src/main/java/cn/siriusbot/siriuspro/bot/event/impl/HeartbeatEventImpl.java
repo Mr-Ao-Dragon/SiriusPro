@@ -17,7 +17,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 @Log4j2
-public class HeartbeatEventImpl implements HeartbeatEvent , EventMethodNoParam , EventMethodHaveParam<BotWebSocketMessage> {
+public class HeartbeatEventImpl implements HeartbeatEvent, EventMethodNoParam, EventMethodHaveParam<BotWebSocketMessage> {
     BotClient client;
     Timer timer = new Timer();    // 定时任务
     TimerTask task;
@@ -64,12 +64,12 @@ public class HeartbeatEventImpl implements HeartbeatEvent , EventMethodNoParam ,
             public void run() {
                 BotWebSocket webSocket = bean.getWebSocket();
                 log.info("Bot[" + client.getInfo().getBotId() + "]发送心跳包");
-                try{
+                try {
                     webSocket.send(getHeartBeatPack());
-                }catch (Exception e){
+                } catch (Exception e) {
                     pause();
                     e.printStackTrace();
-                    client.pushEvent(BotEventType.SEND_HEART_BEAT_ERROR,null);
+                    client.pushEvent(BotEventType.SEND_HEART_BEAT_ERROR, null);
                 }
             }
         };
@@ -88,7 +88,7 @@ public class HeartbeatEventImpl implements HeartbeatEvent , EventMethodNoParam ,
     @OnBotEvent
     @Override
     public void onEvent(BotEventType type) {
-        switch (type){
+        switch (type) {
             case TASK_HEARTBEAT_START -> {
                 // 启动心跳包事件
                 this.run();
@@ -111,7 +111,7 @@ public class HeartbeatEventImpl implements HeartbeatEvent , EventMethodNoParam ,
             bean.reconnection(); // 重连
         }
         if (type == BotEventType.WEBSOCKET_MESSAGE && body.getOp() == 9) {
-            if (!this.client.getSession().getSessionId().isEmpty()){
+            if (!this.client.getSession().getSessionId().isEmpty()) {
                 // 会话失效，进行重连
                 this.client.getSession().setSessionId("");
                 this.client.getSession().setS(0);
