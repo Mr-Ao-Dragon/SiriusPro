@@ -17,7 +17,7 @@ public class User{
     /**
      * 用户名称
      */
-    public String userName;
+    public String username;
 
     /**
      * 机器人头像地址

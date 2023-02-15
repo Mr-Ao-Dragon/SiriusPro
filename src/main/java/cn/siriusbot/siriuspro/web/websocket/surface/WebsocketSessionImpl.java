@@ -39,6 +39,7 @@ public class WebsocketSessionImpl implements WebsocketSession{
 
     @Override
     public void send(String s) throws IOException {
+        System.out.println("发送 -> " + s);
         this.session.getBasicRemote().sendText(s);
     }
 }

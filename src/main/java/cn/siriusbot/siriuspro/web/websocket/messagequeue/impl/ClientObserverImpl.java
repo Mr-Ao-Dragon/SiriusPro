@@ -12,4 +12,9 @@ public class ClientObserverImpl implements ClientObserver {
     public void sendMsg(String s) {
 
     }
+
+    @Override
+    public void asyncSendMsg(String s) {
+
+    }
 }

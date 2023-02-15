@@ -7,4 +7,7 @@ public interface ClientObserver {
      * @param s 数据内容
      */
     void sendMsg(String s) throws Exception;
+
+
+    void asyncSendMsg(String s);
 }

@@ -1,13 +1,9 @@
 package cn.siriusbot.siriuspro.web.websocket;
 
-import cn.siriusbot.siriuspro.bot.application.SiriusApplicationInfo;
 import cn.siriusbot.siriuspro.bot.plugin.PlugInFactory;
-import cn.siriusbot.siriuspro.bot.pojo.event.BotEventMessage;
 import cn.siriusbot.siriuspro.uitls.AppContextUtil;
-import cn.siriusbot.siriuspro.web.pojo.WebSocketBody;
 import cn.siriusbot.siriuspro.web.websocket.surface.WebsocketSession;
 import cn.siriusbot.siriuspro.web.websocket.surface.WebsocketSessionImpl;
-import com.alibaba.fastjson2.JSON;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
@@ -37,6 +33,7 @@ public class ExpandWebSocketServer {
         this.session = session;
         this.websocketSession = new WebsocketSessionImpl(session);
         this.factory = AppContextUtil.getBean(PlugInFactory.class);
+
     }
 
 
@@ -47,6 +44,7 @@ public class ExpandWebSocketServer {
      */
     @OnMessage
     public void onMessage(String message) {
+        System.out.println(message);
         factory.putExpandWebSocketEvent(websocketSession, message);
     }
 }

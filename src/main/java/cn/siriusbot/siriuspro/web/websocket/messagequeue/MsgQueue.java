@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.Executor;
 
 @Component
 @Log4j2
@@ -13,6 +14,15 @@ public class MsgQueue {
     Queue<ClientTask> tasks = new ConcurrentLinkedQueue<>();
 
     int resourceNumber = 0;
+
+    Executor executor;
+
+    public MsgQueue() {
+    }
+
+    public MsgQueue(Executor executor) {
+        this.executor = executor;
+    }
 
     /**
      * 推入任务
@@ -22,7 +32,15 @@ public class MsgQueue {
         synchronized (MsgQueue.class) {
             if (resourceNumber == 0) {
                 resourceNumber++;
-                this.startTask();
+                if (this.executor == null){
+                    // 注解启动
+                    this.startTask();
+                } else {
+                    // 手动启动
+                    System.out.println("手动启动线程");
+                    this.executor.execute(MsgQueue.this::startTask);
+                }
+
             }
         }
     }

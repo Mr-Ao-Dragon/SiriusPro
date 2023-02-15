@@ -26,7 +26,7 @@ public class ClientSubject {
     public void sendAllMsg(String s){
         for (ClientObserver observer : list){
             try {
-                observer.sendMsg(s);
+                observer.asyncSendMsg(s);
             } catch (Exception e) {
                 log.error(e);
             }
