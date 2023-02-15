@@ -1,6 +1,7 @@
 package cn.siriusbot.siriuspro.config.bean;
 
 import cn.siriusbot.siriuspro.bot.client.BotClient;
+import cn.siriusbot.siriuspro.bot.pojo.BotInfo;
 import cn.siriusbot.siriuspro.error.MsgException;
 import org.springframework.stereotype.Component;
 
@@ -39,6 +40,14 @@ public class BotPool {
      */
     public boolean botWhetherThereIs(String botId){
         return botClientMap.containsKey(botId);
+    }
+
+    public BotInfo queryBotInfoByBotId(String botId){
+        if (botClientMap.containsKey(botId)){
+            BotClient client = botClientMap.get(botId);
+            return client.getInfo();
+        }
+        return null;
     }
 
     public List<BotClient> getAllClient(){

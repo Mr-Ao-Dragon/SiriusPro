@@ -22,6 +22,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,35 @@ public class BotServiceImpl implements BotService {
             throw new MsgException(10301, "robot已存在！");
         }
         robotMapper.insert(robot);
+    }
+
+    /**
+     * 修改机器人到数据库
+     *
+     * @param robot 机器人信息
+     */
+    @Override
+    public void modifyBot(Robot robot) {
+        Robot select = robotMapper.selectById(robot.getId());
+        if (select == null) {
+            throw new MsgException(500, "修改失败，该记录不存在!");
+        }
+        if (robot.getBotId() != null){
+            select.setBotId(robot.getBotId());
+        }
+        if (robot.getToken() != null){
+            select.setToken(robot.getToken());
+        }
+        if (robot.getSandBox() != null){
+            select.setSandBox(robot.getSandBox());
+        }
+        if (robot.getBotType() != null){
+            select.setBotType(robot.getBotType());
+        }
+        if (robot.getAutoLogin() != null){
+            select.setAutoLogin(robot.getAutoLogin());
+        }
+        robotMapper.updateById(select);
     }
 
     /**
@@ -97,7 +127,7 @@ public class BotServiceImpl implements BotService {
     private void loginBot(Robot robot) {
         verificationInfo(robot);
         BotInfo token = this.robotToBotToken(robot);
-        if (botPool.botWhetherThereIs(token.getBotId())){
+        if (botPool.botWhetherThereIs(token.getBotId())) {
             throw new MsgException(10401, String.format("Bot[%s]当前robot已经登录中！", robot.getBotId()));
         }
         BotClient client = new SiriusBotClient(token, botConfig);
@@ -107,9 +137,9 @@ public class BotServiceImpl implements BotService {
         List<Intent> intentList = intentMapper.selectList(wrapper);
         List<String> intentNameList = new ArrayList<>();
         IntentsEvent intentsEvent = new IntentsEventImpl();
-        for (Intent intent: intentList){
+        for (Intent intent : intentList) {
             IntentsType instance = IntentsType.getInstance(intent.getIntentsType());
-            if (instance == null){
+            if (instance == null) {
                 throw new MsgException(10402, String.format("Bot[%s]订阅事件(%d)失败，参数有误！", robot.getBotId(), intent.getIntentsType()));
             }
             intentsEvent.setIntents(instance);
@@ -230,9 +260,7 @@ public class BotServiceImpl implements BotService {
         if (robot == null) {
             throw new MsgException(10401, "robot对应ID不存在！");
         }
-        if (botPool.botWhetherThereIs(robot.getBotId())){
-            robot.setState(Robot.STATE_ONLINE) ;
-        }
+        this.formatBotOnLine(robot);    // 格式化在线信息
         return robot;
     }
 
@@ -250,9 +278,7 @@ public class BotServiceImpl implements BotService {
         if (robot == null) {
             throw new MsgException(10301, "robot对应ID不存在！");
         }
-        if (botPool.botWhetherThereIs(robot.getBotId())){
-            robot.setState(Robot.STATE_ONLINE);
-        }
+        this.formatBotOnLine(robot);    // 格式化在线信息
         return robot;
     }
 
@@ -268,12 +294,80 @@ public class BotServiceImpl implements BotService {
         //分页参数
         Page<Robot> robotPage = robotMapper.selectPage(new Page<>(page + 1, size), null);
         List<Robot> records = robotPage.getRecords();
-        for (Robot robot : records){
-            if (botPool.botWhetherThereIs(robot.getBotId())){
-                robot.setState(Robot.STATE_ONLINE);
-            }
+        for (Robot robot : records) {
+            this.formatBotOnLine(robot);    // 格式化在线信息
         }
         return records;
+    }
+
+    /**
+     * 分页查询所有机器人信息 [模糊查询]
+     *
+     * @param page     页数 从0开始
+     * @param size     每页大小
+     * @param botId
+     * @param username
+     * @param state
+     * @param botType
+     * @param sandBox
+     * @return 机器人信息实体类列表
+     */
+    @Override
+    public List<Robot> queryRobotAllByCondition(int page, int size, String botId, String username, Integer state, Integer botType, Boolean sandBox) {
+        LambdaQueryWrapper<Robot> wrapper = new LambdaQueryWrapper<>();
+        if (!ObjectUtils.isEmpty(botId)) {
+            wrapper.and(e -> e.like(Robot::getBotId, botId));
+        }
+        if (!ObjectUtils.isEmpty(botType)) {
+            wrapper.and(e -> e.like(Robot::getBotType, botType));
+        }
+        if (!ObjectUtils.isEmpty(sandBox)) {
+            wrapper.and(e -> e.like(Robot::getSandBox, sandBox));
+        }
+        List<Robot> robots = robotMapper.selectList(wrapper);
+        for (Robot robot : robots) {
+            this.formatBotOnLine(robot);    // 格式化在线信息
+        }
+        // 搜索机器人昵称
+        if (!ObjectUtils.isEmpty(username)) {
+            robots.removeIf(robot -> robot.getUsername() == null || !robot.getUsername().contains(username));
+        }
+        // 搜索机器人登录状态
+        if (!ObjectUtils.isEmpty(state)) {
+            robots.removeIf(robot -> robot.getState() == null || !robot.getState().equals(state));
+        }
+        // 分页
+        if (robots.size() == 0){
+            return new ArrayList<>();
+        }
+        int pageSize = robots.size() / size;
+        if (robots.size() % size != 0){
+            pageSize += 1;
+        }
+        if (page >= pageSize){
+            page = pageSize - 1;
+        }
+        int start = page * size;
+        List<Robot> reply = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            int index = start + i;
+            if (index >= robots.size()){
+                break;
+            }
+            reply.add(robots.get(index));
+        }
+        return reply;
+    }
+
+    private void formatBotOnLine(Robot robot) {
+        BotInfo botInfo = botPool.queryBotInfoByBotId(robot.getBotId());
+        if (botInfo != null) {
+            robot.setState(botInfo.getState());
+            robot.setUsername(botInfo.getUsername());
+            if (robot.getState() == Robot.STATE_ERROR) {
+                robot.setErrorInfo(botInfo.getErrorInfo());
+            }
+        }
     }
 
     /**
@@ -303,12 +397,12 @@ public class BotServiceImpl implements BotService {
     @Override
     public void autoLoginBot() {
         List<Robot> robots = this.queryRobotAll(0, 10000);
-        for (Robot robot : robots){
-            if (robot.getAutoLogin()){
+        for (Robot robot : robots) {
+            if (robot.getAutoLogin()) {
                 try {
                     log.info(String.format("Bot[%s] 自动登录", robot.getBotId()));
                     loginBot(robot);
-                } catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     log.error(String.format("Bot[%s] 登录失败,失败原因:%s", robot.getBotId(), e.getCause()));
                 }

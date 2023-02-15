@@ -1,5 +1,6 @@
 package cn.siriusbot.siriuspro.bot.event.impl;
 
+import cn.siriusbot.siriuspro.admin.entity.Robot;
 import cn.siriusbot.siriuspro.bot.annotation.OnBotEvent;
 import cn.siriusbot.siriuspro.bot.client.BotClient;
 import cn.siriusbot.siriuspro.bot.client.BotWebSocket;
@@ -113,6 +114,8 @@ public class HeartbeatEventImpl implements HeartbeatEvent, EventMethodNoParam, E
         if (type == BotEventType.WEBSOCKET_MESSAGE && body.getOp() == 9) {
             if (!this.client.getSession().getSessionId().isEmpty()) {
                 // 会话失效，进行重连
+                this.client.getInfo().setState(Robot.STATE_ERROR); // 异常
+                this.client.getInfo().setErrorInfo("会话失效，重连重新授权");
                 this.client.getSession().setSessionId("");
                 this.client.getSession().setS(0);
                 log.info("Bot[" + client.getInfo().getBotId() + "]会话失效，重连重新授权");
@@ -120,6 +123,8 @@ public class HeartbeatEventImpl implements HeartbeatEvent, EventMethodNoParam, E
                 WebSocketEvent bean = this.client.getBean(WebSocketEvent.class);
                 bean.reconnection(); // 重连
             } else {
+                this.client.getInfo().setState(Robot.STATE_ERROR); // 异常
+                this.client.getInfo().setErrorInfo("连接失败或会话上限，请检查配置");
                 log.error("Bot[" + client.getInfo().getBotId() + "]连接失败或会话上限，请检查配置。");
                 this.client.pushEvent(BotEventType.WEBSOCKET_ERROR, null);
             }

@@ -29,4 +29,19 @@ public class BotInfo {
      * 是否为沙箱模式,false非沙箱环境,true沙箱环境
      */
     boolean sandBox;
+
+    /**
+     * 机器人昵称
+     */
+    String username;
+
+    /**
+     * 是否在线 0 未登录 1 登录中 2 已登录  3 登录失败
+     */
+    int state = 0;
+
+    /**
+     * 错误原因
+     */
+    String errorInfo;
 }

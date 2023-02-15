@@ -38,19 +38,19 @@ public class PlugInWebSocketServer implements ClientObserver{
      */
     private Session session;
 
-    private ClientSubject clientSubject;
     private PlugInFactory plugInFactory;
     private Executor executor;
+
+    private PlugInClient plugInClient;
 
     private int verify = 0; // 验证状态 0 未验证 1 验证通过
 
     @OnOpen
     public void onOpen(Session session) {
         this.executor = AppContextUtil.getBean(Executor.class);
-        this.clientSubject = AppContextUtil.getBean(ClientSubject.class);
         this.plugInFactory = AppContextUtil.getBean(PlugInFactory.class);
         this.session = session;
-        this.clientSubject.add(this);
+        log.info(String.format("[ws] (%s)新客户端连接", this.session.getId()));
     }
 
 
@@ -76,6 +76,7 @@ public class PlugInWebSocketServer implements ClientObserver{
      */
     @OnMessage
     public void onMessage(String message) {
+        System.out.println(message);
         try {
             WebSocketBody body = JSON.parseObject(message, WebSocketBody.class);
             switch (body.getCode()) {
@@ -118,8 +119,9 @@ public class PlugInWebSocketServer implements ClientObserver{
                         info.setAppDesc("");
                     }
                     this.info = info;
+                    this.plugInClient = new EPlugInClient(this, info, this.executor);
                     this.plugInFactory.add(
-                            new EPlugInClient(this, info, this.executor)
+                            this.plugInClient
                     );
                     R r = new R()
                             .setCode(0)
@@ -150,7 +152,9 @@ public class PlugInWebSocketServer implements ClientObserver{
      */
     @OnClose
     public void onClose() {
-        this.clientSubject.remove(this);
+        this.plugInFactory.remove(this.plugInClient.getPackageName());
+
+        log.info(String.format("[ws] (%s)客户端断开", this.session.getId()));
     }
 
 }

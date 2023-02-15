@@ -82,4 +82,54 @@ public enum IntentsType {
             }
         }
     }
+
+    static public IntentsType getInstance(String s) {
+        switch (s) {
+            case "GUILDS" -> {
+                return GUILDS;
+            }
+            case "GUILD_MEMBERS" -> {
+                return GUILD_MEMBERS;
+            }
+            case "GUILD_MESSAGES" -> {
+                return GUILD_MESSAGES;
+            }
+            case "GUILD_MESSAGE_REACTIONS" -> {
+                return GUILD_MESSAGE_REACTIONS;
+            }
+            case "DIRECT_MESSAGE" -> {
+                return DIRECT_MESSAGE;
+            }
+            case "OPEN_FORUMS_EVENT" -> {
+                return OPEN_FORUMS_EVENT;
+            }
+            case "AUDIO_OR_LIVE_CHANNEL_MEMBER" -> {
+                return AUDIO_OR_LIVE_CHANNEL_MEMBER;
+            }
+            case "INTERACTION" -> {
+                return INTERACTION;
+            }
+            case "MESSAGE_AUDIT" -> {
+                return MESSAGE_AUDIT;
+            }
+            case "FORUMS_EVENT" -> {
+                return FORUMS_EVENT;
+            }
+            case "AUDIO_ACTION" -> {
+                return AUDIO_ACTION;
+            }
+            case "PUBLIC_GUILD_MESSAGES" -> {
+                return PUBLIC_GUILD_MESSAGES;
+            }
+            case "PUBLIC_ALL" -> {
+                return PUBLIC_ALL;
+            }
+            case "ALL" -> {
+                return ALL;
+            }
+            default -> {
+                return null;
+            }
+        }
+    }
 }

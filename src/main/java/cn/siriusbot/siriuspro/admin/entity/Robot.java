@@ -39,6 +39,21 @@ public class Robot {
     @TableField(exist = false)
     Integer state = 0;
 
+    /**
+     * 机器人昵称
+     */
+    @TableField(exist = false)
+    String username;
+
+
+    /**
+     * 错误原因
+     */
+    @TableField(exist = false)
+    String errorInfo;
+
     public static final int STATE_READY = 0;    // 未登录
+    public static final int STATE_PROCEED = 1;    // 登录中
     public static final int STATE_ONLINE = 2;    // 已登录
+    public static final int STATE_ERROR = 3;    // 登录异常
 }

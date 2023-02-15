@@ -56,4 +56,8 @@ public class PlugInFactory {
         }
         plugInClientMap.put(packageName, client);
     }
+
+    public void remove(String packageName){
+        this.plugInClientMap.remove(packageName);
+    }
 }

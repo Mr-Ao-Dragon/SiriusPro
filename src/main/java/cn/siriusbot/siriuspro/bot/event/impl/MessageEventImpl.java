@@ -1,5 +1,6 @@
 package cn.siriusbot.siriuspro.bot.event.impl;
 
+import cn.siriusbot.siriuspro.admin.entity.Robot;
 import cn.siriusbot.siriuspro.bot.annotation.OnBotEvent;
 import cn.siriusbot.siriuspro.bot.client.BotClient;
 import cn.siriusbot.siriuspro.bot.event.MessageEvent;
@@ -96,6 +97,7 @@ public class MessageEventImpl implements MessageEvent , EventMethodHaveParam<Bot
     @OnBotEvent
     @Override
     public void onEvent(BotEventType type, BotWebSocketMessage body) {
+        System.out.println(body.getMessage());
         if (type == BotEventType.WEBSOCKET_MESSAGE && body.getOp() == 0) {
             JSONObject d = body.getBody().getJSONObject("d");
             String event = body.getBody().getString("t");
@@ -109,13 +111,19 @@ public class MessageEventImpl implements MessageEvent , EventMethodHaveParam<Bot
                   初始化事件
                  */
                 case "READY" -> {
+                    JSONObject user = d.getJSONObject("user");
                     this.client.getSession()
                             .setS(s)
                             .setSessionId(d.getString("session_id"));
                     log.info("bot初始化完毕，session -> " + this.client.getSession());
+                    this.client.getInfo().setState(Robot.STATE_ONLINE); // 在线中
+                    this.client.getInfo().setUsername(user.getString("username"));
                     this.client.pushEvent(BotEventType.TASK_HEARTBEAT_START, null); // 开始心跳包任务
                 }
-                case "RESUMED" -> this.client.pushEvent(BotEventType.TASK_HEARTBEAT_START, null); // 开始心跳包任务
+                case "RESUMED" -> {
+                    this.client.getInfo().setState(Robot.STATE_ONLINE); // 在线中
+                    this.client.pushEvent(BotEventType.TASK_HEARTBEAT_START, null); // 开始心跳包任务
+                }
             }
             if (this.map.containsKey(event)){
                 /*

@@ -1,5 +1,6 @@
 package cn.siriusbot.siriuspro.bot.client;
 
+import cn.siriusbot.siriuspro.admin.entity.Robot;
 import cn.siriusbot.siriuspro.bot.annotation.OnBotEvent;
 import cn.siriusbot.siriuspro.bot.error.BotIsInOperationException;
 import cn.siriusbot.siriuspro.bot.error.NoFindBotEventException;
@@ -68,6 +69,7 @@ public class SiriusBotClient implements BotClient {
     @Override
     public void start() {
         this.start = true;
+        this.info.setState(Robot.STATE_PROCEED);    // 登录中
         for (Class<? extends BotEvent> key : this.botEvents.keySet()) {
             BotEvent event = this.botEvents.get(key);
             event.start();

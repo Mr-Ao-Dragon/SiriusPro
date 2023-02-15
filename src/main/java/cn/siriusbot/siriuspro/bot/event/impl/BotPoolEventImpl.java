@@ -1,5 +1,6 @@
 package cn.siriusbot.siriuspro.bot.event.impl;
 
+import cn.siriusbot.siriuspro.admin.entity.Robot;
 import cn.siriusbot.siriuspro.bot.annotation.OnBotEvent;
 import cn.siriusbot.siriuspro.bot.client.BotClient;
 import cn.siriusbot.siriuspro.bot.event.BotPoolEvent;
@@ -18,7 +19,6 @@ public class BotPoolEventImpl implements BotPoolEvent , EventMethodNoParam {
     /**
      * 注入客户端对象，并初始化
      *
-     * @param client
      */
     @Override
     public void init(BotClient client) {
@@ -38,6 +38,7 @@ public class BotPoolEventImpl implements BotPoolEvent , EventMethodNoParam {
     public void onEvent(BotEventType type) {
         if (type == BotEventType.BOT_CLOSE){
             // 机器人关闭事件
+            this.client.getInfo().setState(Robot.STATE_READY);
             pool.remove(this.client.getInfo().getBotId());
         }
     }
