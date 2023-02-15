@@ -280,7 +280,7 @@ public class MessageImpl implements MessageApi {
         if(!content.isEmpty())
             botRequest.putRequestBody("content",content);
         if(!image_path.isEmpty())
-            botRequest.putRequestBody("image_path",image_path);
+            botRequest.putRequestBody("file_image",new File(image_path));
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
         BotResponse response = http.req(botRequest);
         String data = EmojiParser.parseToUnicode(response.getBody());

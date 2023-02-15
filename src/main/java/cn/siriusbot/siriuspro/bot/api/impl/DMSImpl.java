@@ -312,7 +312,7 @@ public class DMSImpl implements DMS_Api {
         if(!content.isEmpty())
             botRequest.putRequestBody("content",content);
         if(!image_path.isEmpty())
-            botRequest.putRequestBody("file_image",image_path);
+            botRequest.putRequestBody("file_image",new File(image_path));
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
         BotResponse response = http.req(botRequest);
         String data = EmojiParser.parseToUnicode(response.getBody());
