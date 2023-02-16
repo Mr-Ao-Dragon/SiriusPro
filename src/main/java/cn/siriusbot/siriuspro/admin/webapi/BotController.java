@@ -141,6 +141,7 @@ public class BotController {
         if (size == null || size < 1) {
             size = 1000;
         }
+        System.out.println(sandBox);
         List<Robot> robots = botService.queryRobotAllByCondition(page, size, botId, username, state, botType, sandBox);
         return new R()
                 .setData(robots);

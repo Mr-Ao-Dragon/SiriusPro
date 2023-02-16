@@ -38,7 +38,7 @@ public class BotPoolEventImpl implements BotPoolEvent , EventMethodNoParam {
     public void onEvent(BotEventType type) {
         if (type == BotEventType.BOT_CLOSE){
             // 机器人关闭事件
-            this.client.getInfo().setState(Robot.STATE_READY);
+            this.client.getInfo().setState(Robot.STATE_READY);  // 未登录
             pool.remove(this.client.getInfo().getBotId());
         }
     }

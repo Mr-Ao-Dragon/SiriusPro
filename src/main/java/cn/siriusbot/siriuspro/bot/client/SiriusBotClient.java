@@ -181,12 +181,17 @@ public class SiriusBotClient implements BotClient {
                 .setMethod(RequestMethod.GET)
                 .setUrl(this.session.getOpenUrl() + "gateway");
         BotHttpEvent http = getBean(BotHttpEvent.class);
-        JSONObject json = JSONObject.parseObject(http.request(botRequest));
+
         try {
+            JSONObject json = JSONObject.parseObject(http.request(botRequest));
             this.session.setWebSocketUri(new URI(json.getString("url")));
         } catch (URISyntaxException e) {
             log.error(e);
             throw new MsgException(500, "WebSocketUri验证异常!");
+        } catch (MsgException e){
+            this.info.setState(Robot.STATE_ERROR);
+            this.info.setErrorInfo("验证机器人信息失败，请检查BotId和Token配置!");
+            throw e;
         }
     }
 

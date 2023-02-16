@@ -130,7 +130,14 @@ public class BotServiceImpl implements BotService {
         if (botPool.botWhetherThereIs(token.getBotId())) {
             throw new MsgException(10401, String.format("Bot[%s]当前robot已经登录中！", robot.getBotId()));
         }
-        BotClient client = new SiriusBotClient(token, botConfig);
+        BotClient client;
+        try {
+            client = new SiriusBotClient(token, botConfig);
+            botPool.addBot(client);
+        } catch (Throwable e){
+            botPool.addErrorBot(token);
+            throw e;
+        }
         // 配置订阅属性
         LambdaQueryWrapper<Intent> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Intent::getRobotId, robot.getBotId());
@@ -319,14 +326,16 @@ public class BotServiceImpl implements BotService {
             wrapper.and(e -> e.like(Robot::getBotId, botId));
         }
         if (!ObjectUtils.isEmpty(botType)) {
-            wrapper.and(e -> e.like(Robot::getBotType, botType));
+            wrapper.and(e -> e.eq(Robot::getBotType, botType));
         }
         if (!ObjectUtils.isEmpty(sandBox)) {
-            wrapper.and(e -> e.like(Robot::getSandBox, sandBox));
+            wrapper.and(e -> e.eq(Robot::getSandBox, sandBox));
         }
         List<Robot> robots = robotMapper.selectList(wrapper);
         for (Robot robot : robots) {
+            System.out.println(robot);
             this.formatBotOnLine(robot);    // 格式化在线信息
+            System.out.println(robot);
         }
         // 搜索机器人昵称
         if (!ObjectUtils.isEmpty(username)) {

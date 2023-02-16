@@ -17,9 +17,14 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class BotPool {
     Map<String, BotClient> botClientMap = new ConcurrentHashMap<>();
+    Map<String, BotInfo> errorInfo = new ConcurrentHashMap<>(); // 记录无法正常创建对象的异常消息
 
     public void addBot(BotClient client){
         botClientMap.put(client.getInfo().getBotId(), client);
+    }
+
+    public void addErrorBot(BotInfo info){
+        errorInfo.put(info.getBotId(), info);
     }
 
     public void remove(String botId){
@@ -46,6 +51,9 @@ public class BotPool {
         if (botClientMap.containsKey(botId)){
             BotClient client = botClientMap.get(botId);
             return client.getInfo();
+        }
+        if (errorInfo.containsKey(botId)){
+            return errorInfo.get(botId);
         }
         return null;
     }

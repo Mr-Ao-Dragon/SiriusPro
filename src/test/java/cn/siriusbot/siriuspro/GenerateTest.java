@@ -8,6 +8,8 @@ public class GenerateTest {
     @Test
     void QT(){
         QTLanguageGenerate qtLanguageGenerate = new QTLanguageGenerate();
-        System.out.println(qtLanguageGenerate.generateTypeInfos()); // 生成结构体
+        qtLanguageGenerate.generateTypeInfos(); // 生成结构体
+        qtLanguageGenerate.generationAnalysis(); // 生成工具类
+        qtLanguageGenerate.generationBuild(); // 生成工具类
     }
 }
