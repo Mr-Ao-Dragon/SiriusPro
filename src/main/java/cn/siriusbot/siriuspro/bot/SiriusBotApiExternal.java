@@ -1,65 +1,29 @@
 package cn.siriusbot.siriuspro.bot;
 
+import cn.siriusbot.siriuspro.admin.service.ServerConfigService;
 import cn.siriusbot.siriuspro.bot.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import cn.siriusbot.siriuspro.bot.api.impl.bot.BotManageApiImpl;
+import cn.siriusbot.siriuspro.bot.application.SiriusApplicationInfo;
+import cn.siriusbot.siriuspro.config.bean.BotPool;
 
-@Component
-public class SiriusBotApi implements BotApi{
+/**
+ * BotApi外部对象
+ */
+public class SiriusBotApiExternal implements BotApi{
 
-    @Autowired
-    AnnouncesApi announcesApi;
+    SiriusApplicationInfo info;
+    BotApi api;
+    BotManageApi botManageApi;
 
-    @Autowired
-    ApiPermissionApi apiPermissionApi;
-
-    @Autowired
-    AudioApi audioApi;
-    @Autowired
-    ChannelApi channelApi;
-
-    @Autowired
-    ChannelPermissionsApi channelPermissionsApi;
-
-    @Autowired
-    DMS_Api dmsApi;
-
-    @Autowired
-    ForumApi forumApi;
-
-    @Autowired
-    GuildApi guildApi;
-
-    @Autowired
-    MemberApi memberApi;
-
-    @Autowired
-    MessageApi messageApi;
-
-    @Autowired
-    MessageReactionApi messageReactionApi;
-
-    @Autowired
-    MessageSettingApi messageSettingApi;
-
-    @Autowired
-    NoSpeakApi noSpeakApi;
-
-    @Autowired
-    PinsMessageApi pinsMessageApi;
-
-    @Autowired
-    RoleApi roleApi;
-
-    @Autowired
-    ScheduleApi scheduleApi;
-
-    @Autowired
-    UserApi userApi;
+    public SiriusBotApiExternal(SiriusApplicationInfo info, BotApi api, BotPool botPool, ServerConfigService serverConfigService) {
+        this.info = info;
+        this.api = api;
+        this.botManageApi = new BotManageApiImpl(info.getPackageName(), botPool, serverConfigService);
+    }
 
     @Override
     public BotManageApi botManageApi() {
-        return null;
+        return this.botManageApi;
     }
 
     /**
@@ -67,7 +31,7 @@ public class SiriusBotApi implements BotApi{
      */
     @Override
     public AnnouncesApi announcesApi() {
-        return announcesApi;
+        return this.api.announcesApi();
     }
 
     /**
@@ -75,7 +39,7 @@ public class SiriusBotApi implements BotApi{
      */
     @Override
     public ApiPermissionApi apiPermissionApi() {
-        return apiPermissionApi;
+        return this.api.apiPermissionApi();
     }
 
     /**
@@ -83,7 +47,7 @@ public class SiriusBotApi implements BotApi{
      */
     @Override
     public AudioApi audioApi() {
-        return audioApi;
+        return this.api.audioApi();
     }
 
     /**
@@ -91,7 +55,7 @@ public class SiriusBotApi implements BotApi{
      */
     @Override
     public ChannelApi channelApi() {
-        return channelApi;
+        return this.api.channelApi();
     }
 
     /**
@@ -99,7 +63,7 @@ public class SiriusBotApi implements BotApi{
      */
     @Override
     public ChannelPermissionsApi channelPermissionsApi() {
-        return channelPermissionsApi;
+        return this.api.channelPermissionsApi();
     }
 
     /**
@@ -107,7 +71,7 @@ public class SiriusBotApi implements BotApi{
      */
     @Override
     public DMS_Api dmsApi() {
-        return dmsApi;
+        return this.api.dmsApi();
     }
 
     /**
@@ -115,7 +79,7 @@ public class SiriusBotApi implements BotApi{
      */
     @Override
     public ForumApi forumApi() {
-        return forumApi;
+        return this.api.forumApi();
     }
 
     /**
@@ -123,7 +87,7 @@ public class SiriusBotApi implements BotApi{
      */
     @Override
     public GuildApi guildApi() {
-        return guildApi;
+        return this.api.guildApi();
     }
 
     /**
@@ -131,7 +95,7 @@ public class SiriusBotApi implements BotApi{
      */
     @Override
     public MemberApi memberApi() {
-        return memberApi;
+        return this.api.memberApi();
     }
 
     /**
@@ -139,7 +103,7 @@ public class SiriusBotApi implements BotApi{
      */
     @Override
     public MessageApi messageApi() {
-        return messageApi;
+        return this.api.messageApi();
     }
 
     /**
@@ -147,7 +111,7 @@ public class SiriusBotApi implements BotApi{
      */
     @Override
     public MessageReactionApi messageReactionApi() {
-        return messageReactionApi;
+        return this.api.messageReactionApi();
     }
 
     /**
@@ -155,7 +119,7 @@ public class SiriusBotApi implements BotApi{
      */
     @Override
     public MessageSettingApi messageSettingApi() {
-        return messageSettingApi;
+        return this.api.messageSettingApi();
     }
 
     /**
@@ -163,7 +127,7 @@ public class SiriusBotApi implements BotApi{
      */
     @Override
     public NoSpeakApi noSpeakApi() {
-        return noSpeakApi;
+        return this.api.noSpeakApi();
     }
 
     /**
@@ -171,7 +135,7 @@ public class SiriusBotApi implements BotApi{
      */
     @Override
     public PinsMessageApi pinsMessageApi() {
-        return pinsMessageApi;
+        return this.api.pinsMessageApi();
     }
 
     /**
@@ -179,7 +143,7 @@ public class SiriusBotApi implements BotApi{
      */
     @Override
     public RoleApi roleApi() {
-        return roleApi;
+        return this.api.roleApi();
     }
 
     /**
@@ -187,7 +151,7 @@ public class SiriusBotApi implements BotApi{
      */
     @Override
     public ScheduleApi scheduleApi() {
-        return scheduleApi;
+        return this.api.scheduleApi();
     }
 
     /**
@@ -195,6 +159,6 @@ public class SiriusBotApi implements BotApi{
      */
     @Override
     public UserApi userApi() {
-        return userApi;
+        return this.api.userApi();
     }
 }

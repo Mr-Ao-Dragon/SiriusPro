@@ -3,6 +3,9 @@ package cn.siriusbot.siriuspro.bot;
 import cn.siriusbot.siriuspro.bot.api.*;
 
 public interface BotApi {
+
+    BotManageApi botManageApi();
+
     /**
      *
      * @return

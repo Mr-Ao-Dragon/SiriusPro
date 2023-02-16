@@ -93,7 +93,7 @@ public class QTLanguageGenerate extends BaseGenerate {
     public void generateTypeInfos() {
 
         StringBuilder head = new StringBuilder();
-        head.append("add_executable(SiriusProQTSDK main.cpp UI/SiriusUI.h ");
+        head.append("add_executable(\nSiriusProQTSDK main.cpp \nUI/SiriusUI.h \n");
         for (String key : map.keySet()) {
             String upperCase = key.toUpperCase(Locale.ROOT);
             StringBuilder sb = new StringBuilder();
@@ -206,8 +206,8 @@ public class QTLanguageGenerate extends BaseGenerate {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                head.append(String.format("./pojo/%s.cpp ", key));
-                head.append(String.format("./pojo/%s.h ", key));
+                head.append(String.format("./pojo/%s.cpp \n", key));
+                head.append(String.format("./pojo/%s.h \n", key));
             }
         }
         head.append(")");
