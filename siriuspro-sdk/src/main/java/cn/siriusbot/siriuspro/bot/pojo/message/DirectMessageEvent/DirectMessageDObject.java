@@ -1,13 +1,12 @@
 package cn.siriusbot.siriuspro.bot.pojo.message.DirectMessageEvent;
 
 import cn.siriusbot.siriuspro.bot.api.pojo.User;
+import cn.siriusbot.siriuspro.bot.api.pojo.member.Member;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.Message;
 import cn.siriusbot.siriuspro.bot.pojo.message.MessageBody;
 import cn.siriusbot.siriuspro.bot.pojo.message.Op_User;
 import lombok.Data;
 import lombok.experimental.Accessors;
-
-import java.lang.reflect.Member;
 
 /**
  * 私信消息事件详情对象
