@@ -133,11 +133,13 @@ public class BotServiceImpl implements BotService {
         BotClient client;
         try {
             client = new SiriusBotClient(token, botConfig);
-            botPool.addBot(client);
+        } catch (MsgException e){
+            throw new MsgException(10401, String.format("Bot[%s]检查令牌失败，请重试！", robot.getBotId()));
         } catch (Throwable e){
             botPool.addErrorBot(token);
             throw e;
         }
+        botPool.addBot(client);
         // 配置订阅属性
         LambdaQueryWrapper<Intent> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Intent::getRobotId, robot.getBotId());

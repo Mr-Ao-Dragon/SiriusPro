@@ -7,6 +7,7 @@ import cn.siriusbot.siriuspro.web.websocket.surface.WebsocketSessionImpl;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
+import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
@@ -33,7 +34,7 @@ public class ExpandWebSocketServer {
         this.session = session;
         this.websocketSession = new WebsocketSessionImpl(session);
         this.factory = AppContextUtil.getBean(PlugInFactory.class);
-
+        this.factory.putExpandWebSocketOpen(this.websocketSession);
     }
 
 
@@ -46,5 +47,10 @@ public class ExpandWebSocketServer {
     public void onMessage(String message) {
         System.out.println(message);
         factory.putExpandWebSocketEvent(websocketSession, message);
+    }
+
+    @OnClose
+    public void onClose() {
+        this.factory.putExpandWebSocketClose(this.websocketSession);
     }
 }

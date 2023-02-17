@@ -24,4 +24,9 @@ public interface BotManageApi {
      * @return
      */
     String getServerConfig(String key);
+
+    /**
+     * 关闭框架
+     */
+    void closeFrame();
 }

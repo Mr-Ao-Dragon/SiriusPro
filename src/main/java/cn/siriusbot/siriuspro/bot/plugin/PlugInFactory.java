@@ -30,6 +30,25 @@ public class PlugInFactory {
         plugInClient.putEvent(botId, body);
     }
 
+
+    public void putExpandWebSocketOpen(WebsocketSession session){
+        for (String key : plugInClientMap.keySet()) {
+            PlugInClient plugInClient = plugInClientMap.get(key);
+            if (plugInClient instanceof ExpandClient expandClient){
+                expandClient.putWebSocketOpen(session);
+            }
+        }
+    }
+
+    public void putExpandWebSocketClose(WebsocketSession session){
+        for (String key : plugInClientMap.keySet()) {
+            PlugInClient plugInClient = plugInClientMap.get(key);
+            if (plugInClient instanceof ExpandClient expandClient){
+                expandClient.putWebSocketClose(session);
+            }
+        }
+    }
+
     public void putExpandWebSocketEvent(WebsocketSession session, String message){
         for (String key : plugInClientMap.keySet()) {
             PlugInClient plugInClient = plugInClientMap.get(key);

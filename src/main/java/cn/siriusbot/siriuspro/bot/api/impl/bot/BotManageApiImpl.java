@@ -52,4 +52,12 @@ public class BotManageApiImpl implements BotManageApi {
     public String getServerConfig(String key) {
         return serverConfigService.getString(packageName + "." + key);
     }
+
+    /**
+     * 关闭框架
+     */
+    @Override
+    public void closeFrame() {
+        System.exit(0);
+    }
 }

@@ -1,7 +1,9 @@
 package cn.siriusbot.siriuspro.bot.plugin;
 
 import cn.siriusbot.siriuspro.bot.annotation.OnEventMessage;
+import cn.siriusbot.siriuspro.bot.annotation.OnExpandClose;
 import cn.siriusbot.siriuspro.bot.annotation.OnExpandMessage;
+import cn.siriusbot.siriuspro.bot.annotation.OnExpandOpen;
 import cn.siriusbot.siriuspro.bot.application.SiriusApplication;
 import cn.siriusbot.siriuspro.bot.application.SiriusApplicationInfo;
 import cn.siriusbot.siriuspro.bot.pojo.e.MessageType;
@@ -165,6 +167,40 @@ public class JavaPlugInClient implements PlugInClient , ExpandClient {
     }
 
     /**
+     * 推送ws连接事件
+     *
+     * @param session
+     */
+    @Override
+    public void putWebSocketOpen(WebsocketSession session) {
+        Class<? extends SiriusApplication> clazz = app.getClass();
+        Method[] methods = clazz.getMethods();
+        for (Method method : methods) {
+            OnExpandOpen annotation = method.getAnnotation(OnExpandOpen.class);
+            if (annotation == null) {
+                continue;
+            }
+            Class<?>[] parameterTypes = method.getParameterTypes();
+            if (parameterTypes.length != 1){
+                continue;
+            }
+            if (parameterTypes[0] != WebsocketSession.class){
+                continue;
+            }
+            try {
+                method.invoke(app, session);
+            } catch (Throwable e) {
+                log.error(String.format("插件[%s]监听的方法(%s)调用异常：%s",
+                        app.appInfo().getAppName(),
+                        method.getName(),
+                        e.getCause()
+                ));
+            }
+        }
+
+    }
+
+    /**
      * 推送ws消息
      *
      * @param session
@@ -196,6 +232,39 @@ public class JavaPlugInClient implements PlugInClient , ExpandClient {
                 ));
             }
 
+        }
+    }
+
+    /**
+     * 推送ws关闭事件
+     *
+     * @param session
+     */
+    @Override
+    public void putWebSocketClose(WebsocketSession session) {
+        Class<? extends SiriusApplication> clazz = app.getClass();
+        Method[] methods = clazz.getMethods();
+        for (Method method : methods) {
+            OnExpandClose annotation = method.getAnnotation(OnExpandClose.class);
+            if (annotation == null) {
+                continue;
+            }
+            Class<?>[] parameterTypes = method.getParameterTypes();
+            if (parameterTypes.length != 1){
+                continue;
+            }
+            if (parameterTypes[0] != WebsocketSession.class){
+                continue;
+            }
+            try {
+                method.invoke(app, session);
+            } catch (Throwable e) {
+                log.error(String.format("插件[%s]监听的方法(%s)调用异常：%s",
+                        app.appInfo().getAppName(),
+                        method.getName(),
+                        e.getCause()
+                ));
+            }
         }
     }
 }
