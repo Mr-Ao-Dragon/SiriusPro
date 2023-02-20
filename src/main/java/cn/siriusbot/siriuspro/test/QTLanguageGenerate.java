@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public class QTLanguageGenerate extends BaseGenerate {
 
@@ -486,6 +483,227 @@ public class QTLanguageGenerate extends BaseGenerate {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public void generateAPIMethod() {
+        for (String apiName : apiMap.keySet()) {
+            StringBuilder sb = new StringBuilder();
+            String upperCase = apiName.toUpperCase(Locale.ROOT);
+            sb.append(String.format("""
+                    //
+                    // Created by 四川镜芯网络科技有限公司-Mr.01010011 on 2023/2/17.
+                    //
+                                        
+                    #ifndef %s_API_H
+                    #define %s_API_H
+                                        
+                    #include "../serialize/BuildObject2Json.h"
+                    #include "../serialize/ParseJson2Object.h"
+                    #include "../httpclient/HttpUtils.h"
+                    #include <QJsonDocument>
+                    #include <QJsonObject>
+                    #include <QJsonArray>
+                    #include <QString>
+                    #include <QVector>
+                    #include "SiriusApi.h"
+                    """, upperCase, upperCase));
+            Set<String> librarys = new HashSet<>();
+            for (MethodInfo info : apiMap.get(apiName)) {
+                if (info.getType().isObj()) {
+                    librarys.add(info.getType().getType());
+                }
+                for (Info paramInfo : info.getParams()) {
+                    if (paramInfo.isObj()) {
+                        librarys.add(paramInfo.getType());
+                    }
+                }
+            }
+            for (String library : librarys) {
+                sb.append(String.format("#include \"../pojo/%s.h\"", library)).append('\n');
+            }
+            sb.append('\n').append('\n');
+            sb.append(String.format("""
+                    class %s {
+                    public:
+                    """, apiName));
+            for (MethodInfo methodInfo : apiMap.get(apiName)) {
+                sb.append(String.format("""
+                             /**
+                             * %s
+                             * @param result 引用，消息对象
+                             * @param source 引用，原始数据
+                        """, methodInfo.getFormatName()));
+                for (Info info : methodInfo.getParams()) {
+                    sb.append(String.format("     * @param %s %s", info.getName(), info.getJavaDoc())).append('\n');
+                }
+                sb.append("     * @return").append('\n');
+                sb.append("     */").append('\n');
+                sb.append(String.format("    static int %s(", methodInfo.getName())).append('\n');
+                if (methodInfo.getType().isList()) {
+                    sb.append("            QVector<").append(methodInfo.getType().getType()).append("> &").append("result").append(',').append('\n');
+                } else {
+                    sb.append("            ").append(methodInfo.getType().getType()).append(" &").append("result").append(',').append('\n');
+                }
+                sb.append("            QString &source");
+                for (Info info : methodInfo.getParams()) {
+                    sb.append(String.format(",\n            %s %s", info.getType(), info.getName()));
+                }
+                sb.append(");\n");
+                sb.append('\n');
+            }
+            sb.append("}").append('\n');
+
+            sb.append(String.format("""
+                                                    
+                    #endif //%s_API_H""", upperCase));
+
+
+            try {
+                Files.writeString(Path.of(String.format("D:\\cppsrc\\api\\%s.h", apiName)), sb.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // 生成cpp
+        for (String apiName : apiMap.keySet()) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(String.format("""
+                    //
+                    // Created by 四川镜芯网络科技有限公司-Mr.01010011 on 2023/2/17.
+                    //
+                                        
+                    #include <QHttpMultiPart>
+                    #include "../%s.h"
+                    """, apiName));
+
+            for (MethodInfo methodInfo : apiMap.get(apiName)) {
+                sb.append(String.format("""
+                        /**
+                        * %s
+                        * @param result 引用，消息对象
+                        * @param source 引用，原始数据
+                        """, methodInfo.getFormatName()));
+                for (Info info : methodInfo.getParams()) {
+                    sb.append(String.format("* @param %s %s", info.getName(), info.getJavaDoc())).append('\n');
+                }
+                sb.append("* @return").append('\n');
+                sb.append("*/").append('\n');
+                sb.append(String.format("int %s::%s(", apiName, methodInfo.getName())).append('\n');
+                if (methodInfo.getType().isList()) {
+                    sb.append("    QVector<").append(methodInfo.getType().getType()).append("> &").append("result").append(',').append('\n');
+                } else {
+                    sb.append("    ").append(methodInfo.getType().getType()).append(" &").append("result").append(',').append('\n');
+                }
+                sb.append("    QString &source");
+                for (Info info : methodInfo.getParams()) {
+                    if (info.isList()) {
+                        sb.append(String.format(",\n    QVector<%s> %s", info.getType(), info.getName()));
+                    } else {
+                        sb.append(String.format(",\n    %s %s", info.getType(), info.getName()));
+                    }
+
+                }
+                sb.append(")\n{\n");
+                // ===
+                sb.append(String.format("""
+                            // 创建JSON文档流对象
+                            QJsonDocument doc;
+                            // 创建Json结构对象
+                            QJsonObject obj;
+                                                
+                            obj.insert("api", "%s");
+                            obj.insert("method", "%s");
+                                                
+                            // 创建请求参数结构对象
+                            QJsonObject param;
+                        """, apiName, methodInfo.getName()));
+
+                for (Info info : methodInfo.getParams()) {
+                    if (info.isList()) {
+                        // 数组
+                        String array = randomVariableName();  // 随机变量名
+                        sb.append(String.format("    QVector<%s> %s;", info.getType(), array));
+                        sb.append(String.format("    for (%s item : %s) {",
+                                        info.getType(),
+                                        info.getName()
+                                )
+                        ).append('\n');
+
+                        if (info.isObj()) {
+                            // 对象
+                            sb.append(String.format("        doc = QJsonDocument::fromJson(BuildObject2Json::build%s(item).toUtf8());",
+                                    info.getSrcType()
+                            )).append('\n');
+                            sb.append(String.format("        %s.append(doc.object());", array));
+                        } else {
+                            // 基础类型
+                            sb.append(String.format("        %s.append(item);", array)).append('\n');
+                        }
+                        sb.append("    }").append('\n');
+                        sb.append(String.format("    param.insert(\"%s\", %s);", info.getName(), array)).append('\n');
+                    } else {
+                        // 单个
+                        if (info.isObj()) {
+                            // 对象
+                            sb.append(String.format("    doc = QJsonDocument::fromJson(BuildObject2Json::build%s(%s).toUtf8());",
+                                    info.getSrcType(),
+                                    info.getName()
+                            )).append('\n');
+                            sb.append(String.format("    param.insert(\"%s\", %s);", info.getName(), "doc.object()")).append('\n');
+                        } else {
+                            // 基础类型
+                            sb.append(String.format("    param.insert(\"%s\", %s);", info.getName(), info.getName())).append('\n');
+                        }
+                    }
+                }
+                sb.append("    // 设置请求参数对象").append('\n');
+                sb.append("    obj.insert(\"param\", param);").append('\n');
+                sb.append("    doc.setObject(obj);").append('\n');
+                sb.append("""
+                            // 创建Http请求对象
+                            QNetworkRequest request;
+                            request.setUrl(QUrl(SiriusApi::url + "api/control"));
+                            // 设置请求头
+                            request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+                            // 发送请求，并获取Http响应码
+                            int resCode = HttpUtils::postRequest(request, source, doc.toJson(QJsonDocument::Compact));
+                        """);
+                if (methodInfo.getType().isList()) {
+                    // 数组
+
+                } else {
+                    // 单个
+                    if (methodInfo.getType().isObj()) {
+                        sb.append(String.format("    result = ParseJson2Object::parse%s(QJsonDocument::fromJson(source.toUtf8()).object().value(\"data\").toString());",
+                                methodInfo.getType().getType()
+                        )).append('\n');
+                    } else {
+                        String json = "QJsonDocument::fromJson(source.toUtf8()).object().value(\"data\")";
+                        sb.append(String.format("    result = %s", typeConversion(methodInfo.getType().getSrcType(), json))).append('\n');
+                    }
+                }
+
+                sb.append("    return resCode;").append('\n');
+                // ===
+                sb.append("}").append('\n');
+                sb.append('\n');
+            }
+
+            try {
+                Files.writeString(Path.of(String.format("D:\\cppsrc\\api\\impl\\%s.cpp", apiName)), sb.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("==========================================");
+        StringBuilder sb = new StringBuilder();
+        for (String apiName : apiMap.keySet()) {
+            sb.append(String.format("siriusapi/%s.h", apiName)).append('\n');
+            sb.append(String.format("siriusapi/impl/%s.cpp", apiName)).append('\n');
+        }
+        System.out.println(sb);
     }
 
 }
