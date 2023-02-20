@@ -143,8 +143,11 @@ public class BotController {
         }
         System.out.println(sandBox);
         List<Robot> robots = botService.queryRobotAllByCondition(page, size, botId, username, state, botType, sandBox);
+        JSONObject extra = new JSONObject();
+        extra.put("count", botService.queryRobotAllCount());
         return new R()
-                .setData(robots);
+                .setData(robots)
+                .setExtra(extra);
     }
 
     @RequestMapping("/get-database-one")

@@ -3,6 +3,7 @@ package cn.siriusbot.siriuspro.bot.plugin;
 import cn.siriusbot.siriuspro.bot.application.SiriusApplicationInfo;
 import cn.siriusbot.siriuspro.bot.pojo.event.BotEventMessage;
 import cn.siriusbot.siriuspro.web.R.R;
+import cn.siriusbot.siriuspro.web.pojo.BotHttpRequest;
 import cn.siriusbot.siriuspro.web.websocket.messagequeue.ClientObserver;
 import cn.siriusbot.siriuspro.web.websocket.messagequeue.ClientTask;
 import cn.siriusbot.siriuspro.web.websocket.messagequeue.MsgQueue;
@@ -111,12 +112,10 @@ public class EPlugInClient implements PlugInClient {
     /**
      * 插件web请求处理
      *
-     * @param name 事件名称
-     * @param body 请求json体
      * @return R对象
      */
     @Override
-    public R webPost(String name, JSONObject body) {
+    public R webPost(BotHttpRequest request) {
         return null;
     }
 }

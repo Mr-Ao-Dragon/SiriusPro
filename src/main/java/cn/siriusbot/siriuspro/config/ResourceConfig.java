@@ -6,7 +6,7 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@Configuration
+
 public class ResourceConfig extends WebMvcConfigurationSupport {
 
     @Override
@@ -22,15 +22,7 @@ public class ResourceConfig extends WebMvcConfigurationSupport {
         registry
                 .addViewController( "/" )
                 .setViewName( "forward:/index.html" );
-        registry
-                .addViewController("/user/login")
-                .setViewName( "forward:/index.html" );
-        registry
-                .addViewController("/user/login")
-                .setViewName( "forward:/index.html" );
-        registry
-                .addViewController("/qqbot")
-                .setViewName( "forward:/index.html" );
+
 
     }
 }

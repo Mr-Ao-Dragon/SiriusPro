@@ -370,6 +370,11 @@ public class BotServiceImpl implements BotService {
         return reply;
     }
 
+    @Override
+    public int queryRobotAllCount() {
+        return robotMapper.queryAllCount();
+    }
+
     private void formatBotOnLine(Robot robot) {
         BotInfo botInfo = botPool.queryBotInfoByBotId(robot.getBotId());
         if (botInfo != null) {

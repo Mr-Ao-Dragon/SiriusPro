@@ -1,11 +1,15 @@
 package cn.siriusbot.siriuspro.web.controller;
 
+import cn.siriusbot.siriuspro.admin.entity.Admin;
 import cn.siriusbot.siriuspro.bot.BotApi;
 import cn.siriusbot.siriuspro.bot.api.*;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
+import cn.siriusbot.siriuspro.bot.plugin.PlugInFactory;
+import cn.siriusbot.siriuspro.config.Constant;
 import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.web.R.R;
 import cn.siriusbot.siriuspro.web.pojo.BaseApiBody;
+import cn.siriusbot.siriuspro.web.pojo.BotHttpRequest;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.Data;
 import lombok.SneakyThrows;
@@ -15,10 +19,14 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -145,17 +153,74 @@ public class BaseApiControl {
         }
     }
 
+    @Autowired
+    PlugInFactory plugInFactory;
+
     @SneakyThrows
     @PostMapping("plugin/{package}/{name}")
     public R plugin(
             @PathVariable("package") String packageName,
             @PathVariable("name") String name,
-            @RequestBody JSONObject body
+            @RequestBody JSONObject body,
+            HttpServletRequest request,
+            HttpSession session
     ){
-        System.out.println(packageName);
-        System.out.println(name);
-        System.out.println(body);
-        return new R();
+        Admin admin = (Admin) session.getAttribute(Constant.SESSION_ADMIN);
+        String ipAddr = getIpAddr(request);
+        InetAddress localHost = InetAddress.getLocalHost();
+        String hostAddress = localHost.getHostAddress();
+        BotHttpRequest botHttpRequest = new BotHttpRequest()
+                .setName(name)
+                .setSourceIp(ipAddr)
+                .setLocalIp(hostAddress)
+                .setBody(body.toJSONString());
+        if (admin == null){
+            botHttpRequest.setPower(-1);
+        } else {
+            botHttpRequest.setPower(admin.getPower());
+        }
+        R r = plugInFactory.putWebEvent(packageName, botHttpRequest);
+        if (r == null){
+            throw new MsgException(404, "找不到web映射入口!");
+        }
+        return r;
+    }
+
+    private String getIpAddr(HttpServletRequest request) {
+        String ipAddress = null;
+        try {
+            ipAddress = request.getHeader("x-forwarded-for");
+            if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+                ipAddress = request.getHeader("Proxy-Client-IP");
+            }
+            if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+                ipAddress = request.getHeader("WL-Proxy-Client-IP");
+            }
+            if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+                ipAddress = request.getRemoteAddr();
+                if (ipAddress.equals("127.0.0.1")) {
+                    // 根据网卡取本机配置的IP
+                    InetAddress inet;
+                    try {
+                        inet = InetAddress.getLocalHost();
+                        ipAddress = inet.getHostAddress();
+                    } catch (UnknownHostException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            // 对于通过多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割
+            if (ipAddress != null && ipAddress.length() > 15) { // "***.***.***.***".length()
+                // = 15
+                if (ipAddress.indexOf(",") > 0) {
+                    ipAddress = ipAddress.substring(0, ipAddress.indexOf(","));
+                }
+            }
+        } catch (Exception e) {
+            ipAddress="";
+        }
+        // ipAddress = this.getRequest().getRemoteAddr();
+        return ipAddress;
     }
 
 

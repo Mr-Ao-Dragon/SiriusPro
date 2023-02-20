@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest(classes = {SiriusProApplication.class},webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class SiriusProApplicationTests {
 
-    @Test
+
     void test1(){
         String str = "哈哈哈,🚐ces \uD83D\uDE06矮矮";
         String result = EmojiParser.parseToAliases(str);

@@ -1,9 +1,6 @@
 package cn.siriusbot.siriuspro.bot.plugin;
 
-import cn.siriusbot.siriuspro.bot.annotation.OnEventMessage;
-import cn.siriusbot.siriuspro.bot.annotation.OnExpandClose;
-import cn.siriusbot.siriuspro.bot.annotation.OnExpandMessage;
-import cn.siriusbot.siriuspro.bot.annotation.OnExpandOpen;
+import cn.siriusbot.siriuspro.bot.annotation.*;
 import cn.siriusbot.siriuspro.bot.application.SiriusApplication;
 import cn.siriusbot.siriuspro.bot.application.SiriusApplicationInfo;
 import cn.siriusbot.siriuspro.bot.pojo.e.MessageType;
@@ -23,7 +20,9 @@ import cn.siriusbot.siriuspro.bot.pojo.message.MessageReactionEvent.ReactionEven
 import cn.siriusbot.siriuspro.bot.pojo.message.OpenForumEvent.OpenForumEventInfo;
 import cn.siriusbot.siriuspro.bot.pojo.message.PrivateDomainEvent.PrivateDomainMessageInfo;
 import cn.siriusbot.siriuspro.bot.pojo.message.PublicMessageEvent.PublicMessageEvent;
+import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.web.R.R;
+import cn.siriusbot.siriuspro.web.pojo.BotHttpRequest;
 import cn.siriusbot.siriuspro.web.websocket.surface.WebsocketSession;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.log4j.Log4j2;
@@ -157,12 +156,35 @@ public class JavaPlugInClient implements PlugInClient , ExpandClient {
     /**
      * 插件web请求处理
      *
-     * @param name 事件名称
-     * @param body 请求json体
      * @return R对象
      */
     @Override
-    public R webPost(String name, JSONObject body) {
+    public R webPost(BotHttpRequest request) {
+        Class<? extends SiriusApplication> clazz = app.getClass();
+        Method[] methods = clazz.getMethods();
+        for (Method method : methods) {
+            OnWebRequestEvent annotation = method.getAnnotation(OnWebRequestEvent.class);
+            if (annotation != null && annotation.name().equals(request.getName())) {
+                Class<?>[] parameterTypes = method.getParameterTypes();
+                if (parameterTypes.length != 1 || parameterTypes[0] != BotHttpRequest.class) {
+                    break;
+                }
+                if (method.getReturnType() != R.class){
+                    break;
+                }
+                try {
+                    return (R) method.invoke(app, request);
+                } catch (MsgException e){
+                    return e.getR();
+                } catch (Throwable e) {
+                    log.error(String.format("插件[%s]监听的方法(%s)调用异常：%s",
+                            app.appInfo().getAppName(),
+                            method.getName(),
+                            e.getCause()
+                    ));
+                }
+            }
+        }
         return null;
     }
 

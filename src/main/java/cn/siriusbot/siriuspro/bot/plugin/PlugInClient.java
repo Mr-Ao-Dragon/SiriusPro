@@ -3,7 +3,7 @@ package cn.siriusbot.siriuspro.bot.plugin;
 import cn.siriusbot.siriuspro.bot.application.SiriusApplicationInfo;
 import cn.siriusbot.siriuspro.bot.pojo.event.BotEventMessage;
 import cn.siriusbot.siriuspro.web.R.R;
-import com.alibaba.fastjson2.JSONObject;
+import cn.siriusbot.siriuspro.web.pojo.BotHttpRequest;
 
 public interface PlugInClient {
 
@@ -26,9 +26,7 @@ public interface PlugInClient {
 
     /**
      * 插件web请求处理
-     * @param name  事件名称
-     * @param body  请求json体
      * @return R对象
      */
-    R webPost(String name, JSONObject body);
+    R webPost(BotHttpRequest request);
 }

@@ -1,6 +1,8 @@
 package cn.siriusbot.siriuspro.bot.plugin;
 
 import cn.siriusbot.siriuspro.bot.pojo.event.BotEventMessage;
+import cn.siriusbot.siriuspro.web.R.R;
+import cn.siriusbot.siriuspro.web.pojo.BotHttpRequest;
 import cn.siriusbot.siriuspro.web.websocket.surface.WebsocketSession;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Async;
@@ -28,6 +30,13 @@ public class PlugInFactory {
     @Async
     public void putEvent(PlugInClient plugInClient, String botId, BotEventMessage body) {
         plugInClient.putEvent(botId, body);
+    }
+
+    public R putWebEvent(String packageName, BotHttpRequest request) {
+        if (plugInClientMap.containsKey(packageName)){
+            return plugInClientMap.get(packageName).webPost(request);
+        }
+        return null;
     }
 
 
