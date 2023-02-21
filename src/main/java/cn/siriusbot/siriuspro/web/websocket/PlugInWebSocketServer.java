@@ -122,6 +122,13 @@ public class PlugInWebSocketServer implements ClientObserver{
                         this.sendMsg(JSONObject.toJSONString(r));
                         return;
                     }
+                    if (info.getAppVersion() == null) {
+                        R r = new R()
+                                .setCode(500)
+                                .setMsg("插件版本不能为空!");
+                        this.sendMsg(JSONObject.toJSONString(r));
+                        return;
+                    }
                     if (info.getAppDesc() == null) {
                         info.setAppDesc("");
                     }

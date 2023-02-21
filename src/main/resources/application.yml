@@ -3,7 +3,6 @@ spring:
     multipart:
       max-file-size: 60MB
       max-request-size: 60MB
-
 mybatis-plus:
   global-config:
     db-config:

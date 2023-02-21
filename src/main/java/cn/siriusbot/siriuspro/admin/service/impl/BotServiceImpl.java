@@ -16,7 +16,6 @@ import cn.siriusbot.siriuspro.config.aop.PowerInterceptor;
 import cn.siriusbot.siriuspro.config.bean.BotConfig;
 import cn.siriusbot.siriuspro.config.bean.BotPool;
 import cn.siriusbot.siriuspro.error.MsgException;
-import cn.siriusbot.siriuspro.web.R.R;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.log4j.Log4j2;
@@ -372,6 +371,16 @@ public class BotServiceImpl implements BotService {
 
     @Override
     public int queryRobotAllCount() {
+        return robotMapper.queryAllCount();
+    }
+
+    /**
+     * 获取机器人总数量(缓存)
+     *
+     * @return
+     */
+    @Override
+    public int queryRobotAllCountCache() {
         return robotMapper.queryAllCount();
     }
 

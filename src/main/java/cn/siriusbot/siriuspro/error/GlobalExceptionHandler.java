@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
         ex.printStackTrace();
         log.error(request.getRequestURI() +  "请求异常错误："  + ex.getMessage());
         return new R()
-                .setData(50000)
+                .setCode(50000)
                 .setMsg("请求失败，未知错误!")
                 .setError(ex.getMessage());
     }

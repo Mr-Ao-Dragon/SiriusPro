@@ -552,7 +552,7 @@ public class QTLanguageGenerate extends BaseGenerate {
                 sb.append(");\n");
                 sb.append('\n');
             }
-            sb.append("}").append('\n');
+            sb.append("};").append('\n');
 
             sb.append(String.format("""
                                                     
@@ -672,7 +672,23 @@ public class QTLanguageGenerate extends BaseGenerate {
                         """);
                 if (methodInfo.getType().isList()) {
                     // 数组
-
+                    sb.append(String.format("""
+                                QVector<%s> vector;
+                                QJsonArray array = QJsonDocument::fromJson(source.toUtf8()).object().value("data").toArray();
+                            """, methodInfo.getType().getType()));
+                    sb.append("    for (const auto &item: array) {").append('\n');
+                    if (methodInfo.getType().isObj()) {
+                        // 对象
+                        sb.append("        doc.setObject(item.toObject());").append('\n');
+                        sb.append(String.format("        vector.append(ParseJson2Object::parse%s(doc.toJson()));", methodInfo.getType().getType())).append('\n');
+                    } else {
+                        // 单个
+                        sb.append(String.format("        vector.append(%s);", typeConversion(methodInfo.getType().getSrcType(), "item"))).append('\n');
+                    }
+                    sb.append("""
+                                }
+                                result = vector;
+                            """);
                 } else {
                     // 单个
                     if (methodInfo.getType().isObj()) {
@@ -681,7 +697,7 @@ public class QTLanguageGenerate extends BaseGenerate {
                         )).append('\n');
                     } else {
                         String json = "QJsonDocument::fromJson(source.toUtf8()).object().value(\"data\")";
-                        sb.append(String.format("    result = %s", typeConversion(methodInfo.getType().getSrcType(), json))).append('\n');
+                        sb.append(String.format("    result = %s;", typeConversion(methodInfo.getType().getSrcType(), json))).append('\n');
                     }
                 }
 
@@ -703,7 +719,6 @@ public class QTLanguageGenerate extends BaseGenerate {
             sb.append(String.format("siriusapi/%s.h", apiName)).append('\n');
             sb.append(String.format("siriusapi/impl/%s.cpp", apiName)).append('\n');
         }
-        System.out.println(sb);
     }
 
 }
