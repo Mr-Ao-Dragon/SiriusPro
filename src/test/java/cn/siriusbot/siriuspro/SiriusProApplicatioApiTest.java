@@ -78,6 +78,6 @@ public class SiriusProApplicatioApiTest {
 
     @Test
     void test_1(){
-
+        System.out.println(botApi.messageApi().sendMessage("102003612","6034803","测试",null,"08d8beb89ca4cae1801d10f3aaf00238f72d48fcc1cc9f06",null));
     }
 }

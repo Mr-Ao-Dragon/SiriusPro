@@ -51,6 +51,12 @@ public class PlugInWebSocketServer implements ClientObserver{
         this.plugInFactory = AppContextUtil.getBean(PlugInFactory.class);
         this.session = session;
         log.info(String.format("[ws] (%s)新客户端连接", this.session.getId()));
+        try {
+
+            sendMsg(JSONObject.toJSONString(new R().setCode(0)));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -79,6 +85,7 @@ public class PlugInWebSocketServer implements ClientObserver{
         System.out.println(message);
         try {
             WebSocketBody body = JSON.parseObject(message, WebSocketBody.class);
+            System.out.println(body);
             switch (body.getCode()) {
                 case 1 -> {
                     if (this.verify != 0){

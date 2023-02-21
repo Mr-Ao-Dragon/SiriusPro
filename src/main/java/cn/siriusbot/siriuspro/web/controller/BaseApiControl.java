@@ -11,9 +11,11 @@ import cn.siriusbot.siriuspro.web.R.R;
 import cn.siriusbot.siriuspro.web.pojo.BaseApiBody;
 import cn.siriusbot.siriuspro.web.pojo.BotHttpRequest;
 import com.alibaba.fastjson2.JSONObject;
+import com.baomidou.mybatisplus.core.toolkit.sql.StringEscape;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
+import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
@@ -115,18 +117,19 @@ public class BaseApiControl {
 
     @SneakyThrows
     @PostMapping("control")
-    public R control(@RequestBody BaseApiBody body){
-        System.out.println(body);
-        if (ObjectUtils.isEmpty(body.getApi())){
+    public R control(@RequestBody String bodyStr) {
+        System.out.println(bodyStr);
+        BaseApiBody body = JSONObject.parseObject(bodyStr, BaseApiBody.class);
+        if (ObjectUtils.isEmpty(body.getApi())) {
             throw new MsgException(500, "构建请求错误，api为空!");
         }
-        if (ObjectUtils.isEmpty(body.getMethod())){
+        if (ObjectUtils.isEmpty(body.getMethod())) {
             throw new MsgException(500, "构建请求错误，method为空!");
         }
-        if (!apiMethodInfo.containsKey(body.getApi())){
+        if (!apiMethodInfo.containsKey(body.getApi())) {
             throw new MsgException(500, "构建请求错误，api信息错误!");
         }
-        if (!apiMethodInfo.get(body.getApi()).containsKey(body.getMethod())){
+        if (!apiMethodInfo.get(body.getApi()).containsKey(body.getMethod())) {
             throw new MsgException(500, "构建请求错误，method信息错误!");
         }
         Object o = apiObject.get(body.getApi());
@@ -142,14 +145,16 @@ public class BaseApiControl {
             R r = new R();
             r.setCode(0);
             Object invoke = method.invoke(o, objects);
-            if (invoke instanceof Tuple tuple){
+            if (invoke instanceof Tuple tuple) {
                 r.setData(tuple.getFirst());
+                r.setExtra(tuple.getSecond());
             } else {
                 r.setData(invoke);
             }
             return r;
         } catch (InvocationTargetException | IllegalAccessException e) {
-             throw e.getCause();
+            e.printStackTrace();
+            throw e.getCause();
         }
     }
 
@@ -164,7 +169,7 @@ public class BaseApiControl {
             @RequestBody JSONObject body,
             HttpServletRequest request,
             HttpSession session
-    ){
+    ) {
         Admin admin = (Admin) session.getAttribute(Constant.SESSION_ADMIN);
         String ipAddr = getIpAddr(request);
         InetAddress localHost = InetAddress.getLocalHost();
@@ -174,13 +179,13 @@ public class BaseApiControl {
                 .setSourceIp(ipAddr)
                 .setLocalIp(hostAddress)
                 .setBody(body.toJSONString());
-        if (admin == null){
+        if (admin == null) {
             botHttpRequest.setPower(-1);
         } else {
             botHttpRequest.setPower(admin.getPower());
         }
         R r = plugInFactory.putWebEvent(packageName, botHttpRequest);
-        if (r == null){
+        if (r == null) {
             throw new MsgException(404, "找不到web映射入口!");
         }
         return r;
@@ -217,7 +222,7 @@ public class BaseApiControl {
                 }
             }
         } catch (Exception e) {
-            ipAddress="";
+            ipAddress = "";
         }
         // ipAddress = this.getRequest().getRemoteAddr();
         return ipAddress;

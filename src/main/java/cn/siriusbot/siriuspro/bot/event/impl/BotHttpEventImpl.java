@@ -104,7 +104,7 @@ public class BotHttpEventImpl implements BotHttpEvent {
                             .setTraceId(response.header("X-Tps-trace-ID"));
                 }
                 default -> {
-                    throw new MsgException(500, String.format("httpClient请求错误代码:%d，body:%s,X-Tps-trace-ID：%d", response.code(), response.body().string(), response.header("X-Tps-trace-ID")));
+                    throw new MsgException(500, String.format("httpClient请求错误代码:%d，body:%s,X-Tps-trace-ID：%s", response.code(), response.body().string(), response.header("X-Tps-trace-ID")));
                 }
             }
         } catch (MsgException e) {
@@ -112,6 +112,7 @@ public class BotHttpEventImpl implements BotHttpEvent {
             throw e;
         } catch (Exception e) {
             log.error(e);
+            e.printStackTrace();
             throw new MsgException(500, "httpClient请求错误!");
         }
     }
