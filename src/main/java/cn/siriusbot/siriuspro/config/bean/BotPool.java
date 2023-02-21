@@ -1,13 +1,14 @@
 package cn.siriusbot.siriuspro.config.bean;
 
 import cn.siriusbot.siriuspro.admin.entity.Robot;
+import cn.siriusbot.siriuspro.admin.service.BotService;
 import cn.siriusbot.siriuspro.bot.client.BotClient;
 import cn.siriusbot.siriuspro.bot.pojo.BotInfo;
 import cn.siriusbot.siriuspro.error.MsgException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Component
 public class BotPool {
+
     Map<String, BotClient> botClientMap = new ConcurrentHashMap<>();
     Map<String, BotInfo> errorInfo = new ConcurrentHashMap<>(); // 记录无法正常创建对象的异常消息
 
@@ -71,5 +73,13 @@ public class BotPool {
 
     public List<BotClient> getAllClient(){
         return new ArrayList<>(botClientMap.values());
+    }
+
+    /**
+     * 获取机器人在线数量
+     * @return
+     */
+    public int getCount(){
+        return botClientMap.size();
     }
 }

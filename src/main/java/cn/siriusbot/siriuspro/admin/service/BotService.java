@@ -97,7 +97,18 @@ public interface BotService {
      */
     List<Robot> queryRobotAllByCondition(int page, int size, String botId, String username, Integer state, Integer botType, Boolean sandBox);
 
+    /**
+     * 获取机器人总数量
+     * @return
+     */
     int queryRobotAllCount();
+
+    /**
+     * 获取机器人总数量(缓存)
+     * @return
+     */
+    int queryRobotAllCountCache();
+
     /**
      * 根据botId获取机器人客户端实例
      *

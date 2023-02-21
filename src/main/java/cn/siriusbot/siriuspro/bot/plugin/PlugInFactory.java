@@ -20,6 +20,13 @@ public class PlugInFactory {
     Map<String, PlugInClient> plugInClientMap = new ConcurrentHashMap<>();
 
 
+    /**
+     * 获取插件数量
+     * @return
+     */
+    public int getCount(){
+        return plugInClientMap.size();
+    }
 
     public void putEvent(String botId, BotEventMessage body) {
         for (String key : plugInClientMap.keySet()) {

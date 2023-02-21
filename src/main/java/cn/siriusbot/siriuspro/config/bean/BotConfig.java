@@ -26,6 +26,9 @@ public class BotConfig implements BotConfigBuilder {
     @Autowired
     BotPool botPool;
 
+    @Autowired
+    StatisticsPool statisticsPool;
+
 
     /**
      * 首要配置事件类
@@ -50,6 +53,7 @@ public class BotConfig implements BotConfigBuilder {
                 .setConfig(HeartbeatEvent.class, new HeartbeatEventImpl())
                 .setConfig(PlugInEvent.class, new PlugInEventImpl(factory))
                 .setConfig(BotPoolEvent.class, new BotPoolEventImpl(botPool))
-                .setConfig(ExceptionEvent.class, new ExceptionEventImpl());
+                .setConfig(ExceptionEvent.class, new ExceptionEventImpl())
+                .setConfig(StatisticsEvent.class, new StatisticsEventImpl(statisticsPool));
     }
 }
