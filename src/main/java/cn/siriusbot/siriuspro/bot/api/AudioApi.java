@@ -4,12 +4,13 @@ import cn.siriusbot.siriuspro.bot.annotation.EDoc;
 import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.audio.AudioControl;
+import cn.siriusbot.siriuspro.bot.api.proxy.ApiProxy;
 import lombok.NonNull;
 
 /**
  * 语音对象Api
  */
-public interface AudioApi {
+public interface AudioApi extends ApiProxy {
 
     /**
      * 音频控制 Api

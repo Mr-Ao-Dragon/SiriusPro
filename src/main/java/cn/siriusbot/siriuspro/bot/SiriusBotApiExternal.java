@@ -3,22 +3,33 @@ package cn.siriusbot.siriuspro.bot;
 import cn.siriusbot.siriuspro.admin.service.ServerConfigService;
 import cn.siriusbot.siriuspro.bot.api.*;
 import cn.siriusbot.siriuspro.bot.api.impl.bot.BotManageApiImpl;
+import cn.siriusbot.siriuspro.bot.api.proxy.ApiStatisticsProxy;
 import cn.siriusbot.siriuspro.bot.application.SiriusApplicationInfo;
 import cn.siriusbot.siriuspro.config.bean.BotPool;
+import cn.siriusbot.siriuspro.config.bean.StatisticsPool;
 
 /**
  * BotApi外部对象
  */
 public class SiriusBotApiExternal implements BotApi{
+    ApiStatisticsProxy proxy;
 
     SiriusApplicationInfo info;
     BotApi api;
     BotManageApi botManageApi;
+    StatisticsPool statisticsPool;
 
-    public SiriusBotApiExternal(SiriusApplicationInfo info, BotApi api, BotPool botPool, ServerConfigService serverConfigService) {
+    MessageApi messageApi;
+    DMS_Api dmsApi;
+
+
+    public SiriusBotApiExternal(SiriusApplicationInfo info, BotApi api, BotPool botPool, ServerConfigService serverConfigService, StatisticsPool statisticsPool) {
         this.info = info;
         this.api = api;
+        this.proxy = new ApiStatisticsProxy(info, statisticsPool);
         this.botManageApi = new BotManageApiImpl(info.getPackageName(), botPool, serverConfigService);
+        this.dmsApi = proxy.getProxy(DMS_Api.class, this.api.dmsApi());
+        this.messageApi = proxy.getProxy(MessageApi.class, this.api.messageApi());
     }
 
     @Override
@@ -71,7 +82,7 @@ public class SiriusBotApiExternal implements BotApi{
      */
     @Override
     public DMS_Api dmsApi() {
-        return this.api.dmsApi();
+        return this.dmsApi;
     }
 
     /**
@@ -103,7 +114,7 @@ public class SiriusBotApiExternal implements BotApi{
      */
     @Override
     public MessageApi messageApi() {
-        return this.api.messageApi();
+        return this.messageApi;
     }
 
     /**

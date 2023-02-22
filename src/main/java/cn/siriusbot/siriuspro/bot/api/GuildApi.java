@@ -5,13 +5,14 @@ import cn.siriusbot.siriuspro.bot.annotation.EDoc;
 import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.Guild;
+import cn.siriusbot.siriuspro.bot.api.proxy.ApiProxy;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
 import lombok.NonNull;
 
 /**
  * 频道Api
  */
-public interface GuildApi {
+public interface GuildApi extends ApiProxy {
 
     /**
      * 获取频道详情

@@ -10,13 +10,14 @@ import cn.siriusbot.siriuspro.bot.api.pojo.message.MessageReference;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.ark.MessageArk;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.embed.MessageEmbed;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.requestPack.RequestCustomKeyboard;
+import cn.siriusbot.siriuspro.bot.api.proxy.ApiProxy;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
 import lombok.NonNull;
 
 /**
  * 消息Api
  */
-public interface MessageApi {
+public interface MessageApi extends ApiProxy {
     /**
      * 用于向 channel_id 指定的子频道发送消息。
      * 要求机器人在该子频道具有发送消息的权限。

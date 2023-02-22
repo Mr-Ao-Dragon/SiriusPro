@@ -8,13 +8,14 @@ import cn.siriusbot.siriuspro.bot.api.pojo.Channel;
 import cn.siriusbot.siriuspro.bot.api.pojo.role.GuildRoleList;
 import cn.siriusbot.siriuspro.bot.api.pojo.role.NewRole;
 import cn.siriusbot.siriuspro.bot.api.pojo.role.Role;
+import cn.siriusbot.siriuspro.bot.api.proxy.ApiProxy;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
 import lombok.NonNull;
 
 /**
  * 身份组Api
  */
-public interface RoleApi {
+public interface RoleApi extends ApiProxy {
 
     /**
      * 创建频道身份组

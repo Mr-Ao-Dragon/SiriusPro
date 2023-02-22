@@ -3,6 +3,9 @@ package cn.siriusbot.siriuspro.config.pojo;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Accessors(chain = true)
 public class StatisticsData {
@@ -51,4 +54,6 @@ public class StatisticsData {
      * 虚拟机内存占用率(%)
      */
     double virtualMemoryUsage;
+
+    List<String> title = new ArrayList<>();
 }

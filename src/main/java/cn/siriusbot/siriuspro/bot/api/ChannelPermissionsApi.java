@@ -5,13 +5,14 @@ import cn.siriusbot.siriuspro.bot.annotation.EDoc;
 import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.ChannelPermissions;
+import cn.siriusbot.siriuspro.bot.api.proxy.ApiProxy;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
 import lombok.NonNull;
 
 /**
  * 子频道权限接口
  */
-public interface ChannelPermissionsApi {
+public interface ChannelPermissionsApi extends ApiProxy {
 
     /**
      * 获取子频道用户权限

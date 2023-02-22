@@ -6,6 +6,7 @@ import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.member.Member;
 import cn.siriusbot.siriuspro.bot.api.pojo.member.MemberQueryLimit;
+import cn.siriusbot.siriuspro.bot.api.proxy.ApiProxy;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
 import lombok.NonNull;
 
@@ -14,7 +15,7 @@ import java.util.List;
 /**
  * 成员Api
  */
-public interface MemberApi {
+public interface MemberApi extends ApiProxy {
 
     /**
      * 获取频道成员列表

@@ -4,13 +4,14 @@ import cn.siriusbot.siriuspro.bot.annotation.EDoc;
 import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.MessageSetting;
+import cn.siriusbot.siriuspro.bot.api.proxy.ApiProxy;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
 import lombok.NonNull;
 
 /**
  * 频道消息频率设置对象Api
  */
-public interface MessageSettingApi {
+public interface MessageSettingApi extends ApiProxy {
 
     /**
      * 获取频道消息频率设置信息

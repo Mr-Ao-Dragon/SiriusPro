@@ -4,6 +4,7 @@ import cn.siriusbot.siriuspro.bot.annotation.EDoc;
 import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.Schedule;
+import cn.siriusbot.siriuspro.bot.api.proxy.ApiProxy;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
 import lombok.NonNull;
 
@@ -12,7 +13,7 @@ import java.util.List;
 /**
  * 日程对象Api
  */
-public interface ScheduleApi {
+public interface ScheduleApi extends ApiProxy {
 
     /**
      * 获取日程列表

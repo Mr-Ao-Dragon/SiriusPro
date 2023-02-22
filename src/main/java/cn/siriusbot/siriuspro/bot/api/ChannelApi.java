@@ -4,6 +4,7 @@ import cn.siriusbot.siriuspro.bot.annotation.EDoc;
 import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.Channel;
+import cn.siriusbot.siriuspro.bot.api.proxy.ApiProxy;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
 import lombok.NonNull;
 
@@ -12,7 +13,7 @@ import java.util.List;
 /**
  * 子频道Api
  */
-public interface ChannelApi {
+public interface ChannelApi extends ApiProxy {
 
     /**
      * 获取子频道列表

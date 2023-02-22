@@ -6,13 +6,14 @@ import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.forum.responseObj.CreateThread;
 import cn.siriusbot.siriuspro.bot.api.pojo.forum.responseObj.ThreadList;
 import cn.siriusbot.siriuspro.bot.api.pojo.forum.thread.ForumThread;
+import cn.siriusbot.siriuspro.bot.api.proxy.ApiProxy;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
 import lombok.NonNull;
 
 /**
  * 论坛消息Api
  */
-public interface ForumApi {
+public interface ForumApi extends ApiProxy {
 
     /**
      * 获取指定论坛子频道帖子列表
