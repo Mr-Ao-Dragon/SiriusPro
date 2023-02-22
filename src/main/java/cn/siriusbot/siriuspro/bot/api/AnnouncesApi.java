@@ -6,6 +6,7 @@ import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.announces.Announces;
 import cn.siriusbot.siriuspro.bot.api.pojo.announces.RecommendChannel;
+import cn.siriusbot.siriuspro.bot.api.proxy.ApiProxy;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
 import lombok.NonNull;
 
@@ -14,7 +15,7 @@ import java.util.List;
 /**
  * 公告消息Api
  */
-public interface AnnouncesApi {
+public interface AnnouncesApi extends ApiProxy {
 
 
     /**

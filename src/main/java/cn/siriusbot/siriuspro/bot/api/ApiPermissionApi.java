@@ -7,6 +7,7 @@ import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.apipermission.APIPermission;
 import cn.siriusbot.siriuspro.bot.api.pojo.apipermission.ApiPermissionDemand;
 import cn.siriusbot.siriuspro.bot.api.pojo.apipermission.ApiPermissionDemandIdentify;
+import cn.siriusbot.siriuspro.bot.api.proxy.ApiProxy;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
 import lombok.NonNull;
 
@@ -15,7 +16,7 @@ import java.util.List;
 /**
  * Api权限对象Api
  */
-public interface ApiPermissionApi {
+public interface ApiPermissionApi extends ApiProxy {
 
     /**
      * 创建频道Api接口权限，授权链接

@@ -5,13 +5,14 @@ import cn.siriusbot.siriuspro.bot.annotation.EDoc;
 import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.emoji.ReactionReply;
+import cn.siriusbot.siriuspro.bot.api.proxy.ApiProxy;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
 import lombok.NonNull;
 
 /**
  * 消息表情表态Api
  */
-public interface MessageReactionApi {
+public interface MessageReactionApi extends ApiProxy {
 
     /**
      * 拉取表情表态用户列表

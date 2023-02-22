@@ -5,6 +5,7 @@ import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.Guild;
 import cn.siriusbot.siriuspro.bot.api.pojo.User;
+import cn.siriusbot.siriuspro.bot.api.proxy.ApiProxy;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
 import lombok.NonNull;
 
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * 用户Api
  */
-public interface UserApi {
+public interface UserApi extends ApiProxy {
 
     /**
      * 获取机器人基本信息

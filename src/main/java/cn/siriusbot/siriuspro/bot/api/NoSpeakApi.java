@@ -4,6 +4,7 @@ import cn.siriusbot.siriuspro.bot.annotation.EDoc;
 import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.pojo.NoSpeak;
+import cn.siriusbot.siriuspro.bot.api.proxy.ApiProxy;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
 import lombok.NonNull;
 
@@ -12,7 +13,7 @@ import java.util.List;
 /**
  * 禁言Api
  */
-public interface NoSpeakApi {
+public interface NoSpeakApi extends ApiProxy {
 
     /**
      * 禁言指定成员

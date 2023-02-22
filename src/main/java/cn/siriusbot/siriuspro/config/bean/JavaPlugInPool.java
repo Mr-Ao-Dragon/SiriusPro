@@ -40,6 +40,9 @@ public class JavaPlugInPool {
     @Autowired
     ServerConfigService serverConfigService;
 
+    @Autowired
+    StatisticsPool statisticsPool;
+
     @PostConstruct
     void init() {
         loadApps();
@@ -95,7 +98,7 @@ public class JavaPlugInPool {
                     aClass = appClass.loadClass(fileName);
                     Object o = aClass.newInstance();
                     if (o instanceof SiriusApplication application) {
-                        BotApi siriusBotApiExternal = new SiriusBotApiExternal(application.appInfo(), botApi, botPool, serverConfigService);
+                        BotApi siriusBotApiExternal = new SiriusBotApiExternal(application.appInfo(), botApi, botPool, serverConfigService, statisticsPool);
                         application.SiriusAppInit(siriusBotApiExternal);
                         return application;
                     }
