@@ -115,7 +115,8 @@ public class PlugInWebSocketServer implements ClientObserver {
                     );
                     R r = new R()
                             .setCode(0)
-                            .setMsg("插件验证通过");
+                            .setMsg("插件验证通过")
+                            .setData(this.plugInClient.getUuid());
                     this.sendMsg(JSONObject.toJSONString(r));
                     this.verify = 1;
                 }

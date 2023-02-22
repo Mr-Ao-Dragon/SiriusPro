@@ -10,6 +10,7 @@ import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.Queue;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executor;
 
@@ -42,11 +43,21 @@ public class EPlugInClient implements PlugInClient {
     ClientObserver observer;
     SiriusApplicationInfo info; // 插件信息
     Executor executor; // 插件信息
+    private String uuid;
 
     public EPlugInClient(ClientObserver observer, SiriusApplicationInfo info, Executor executor) {
         this.observer = observer;
         this.info = info;
         this.executor = executor;
+        this.uuid = UUID.randomUUID().toString();
+    }
+
+    /**
+     * 生成一个唯一的uuid作为键
+     */
+    @Override
+    public String getUuid() {
+        return this.uuid;
     }
 
     /**

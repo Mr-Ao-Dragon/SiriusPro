@@ -1,11 +1,17 @@
 package cn.siriusbot.siriuspro.web.controller;
 
 import cn.siriusbot.siriuspro.admin.entity.Admin;
+import cn.siriusbot.siriuspro.admin.service.ServerConfigService;
 import cn.siriusbot.siriuspro.bot.BotApi;
+import cn.siriusbot.siriuspro.bot.SiriusBotApiExternal;
 import cn.siriusbot.siriuspro.bot.api.*;
 import cn.siriusbot.siriuspro.bot.api.tuple.Tuple;
+import cn.siriusbot.siriuspro.bot.application.SiriusApplicationInfo;
+import cn.siriusbot.siriuspro.bot.plugin.PlugInClient;
 import cn.siriusbot.siriuspro.bot.plugin.PlugInFactory;
 import cn.siriusbot.siriuspro.config.Constant;
+import cn.siriusbot.siriuspro.config.bean.BotPool;
+import cn.siriusbot.siriuspro.config.bean.StatisticsPool;
 import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.web.R.R;
 import cn.siriusbot.siriuspro.web.pojo.BaseApiBody;
@@ -87,6 +93,37 @@ public class BaseApiControl {
         apiObject.put(getClassName(clazz.getName()), object);
     }
 
+    // ============= 代理
+    // <包名, api>
+    @Autowired
+    BotPool botPool;
+    @Autowired
+    ServerConfigService serverConfigService;
+    @Autowired
+    StatisticsPool statisticsPool;
+    private final Map<String, BotApi> proxyApi = new ConcurrentHashMap<>();
+
+    private Object getProxyByName(SiriusApplicationInfo info, String clazzName) {
+        if (!proxyApi.containsKey(info.getPackageName())) {
+            // 创建代理对象
+            BotApi siriusBotApiExternal = new SiriusBotApiExternal(info, botApi, botPool, serverConfigService, statisticsPool);
+            proxyApi.put(info.getPackageName(), siriusBotApiExternal);
+        }
+        BotApi botApi = proxyApi.get(info.getPackageName());
+        Method[] methods = botApi.getClass().getMethods();
+        for (Method method : methods) {
+            if (getClassName(method.getReturnType().getName()).equals(clazzName)) {
+                try {
+                    return method.invoke(botApi);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    throw new MsgException(500, "请求错误，调用代理对象失败!");
+                }
+            }
+        }
+        throw new MsgException(500, "请求错误，找不到对应调用类!");
+    }
+    // ==================
+
     /**
      * 初始化配置
      */
@@ -113,11 +150,18 @@ public class BaseApiControl {
 
     }
 
+
+    @Autowired
+    PlugInFactory plugInFactory;
+
     @SneakyThrows
     @PostMapping("control")
     public R control(@RequestBody String bodyStr) {
         System.out.println(bodyStr);
         BaseApiBody body = JSONObject.parseObject(bodyStr, BaseApiBody.class);
+        if (ObjectUtils.isEmpty(body.getSession())) {
+            throw new MsgException(500, "构建请求错误，session为空!");
+        }
         if (ObjectUtils.isEmpty(body.getApi())) {
             throw new MsgException(500, "构建请求错误，api为空!");
         }
@@ -130,7 +174,12 @@ public class BaseApiControl {
         if (!apiMethodInfo.get(body.getApi()).containsKey(body.getMethod())) {
             throw new MsgException(500, "构建请求错误，method信息错误!");
         }
-        Object o = apiObject.get(body.getApi());
+        PlugInClient client = plugInFactory.getPlugInClientBySessionId(body.getSession());
+        if (client == null) {
+            throw new MsgException(500, "构建请求错误，session会话过期或不存在!");
+        }
+        //Object o = apiObject.get(body.getApi());
+        Object o = this.getProxyByName(client.getInfo(), body.getApi());
         MethodInfo methodInfo = apiMethodInfo.get(body.getApi()).get(body.getMethod());
         // 构建调用参数
         Method method = methodInfo.getMethod();
@@ -156,8 +205,6 @@ public class BaseApiControl {
         }
     }
 
-    @Autowired
-    PlugInFactory plugInFactory;
 
     @SneakyThrows
     @PostMapping("plugin/{package}/{name}")

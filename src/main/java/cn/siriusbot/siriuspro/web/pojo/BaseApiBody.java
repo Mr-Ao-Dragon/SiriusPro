@@ -10,4 +10,5 @@ public class BaseApiBody {
     String api;
     String method;
     JSONObject param;
+    String session;
 }

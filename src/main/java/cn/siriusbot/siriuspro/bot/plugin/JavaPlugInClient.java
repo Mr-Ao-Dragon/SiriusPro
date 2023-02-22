@@ -28,9 +28,11 @@ import lombok.extern.log4j.Log4j2;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.UUID;
 
 @Log4j2
 public class JavaPlugInClient implements PlugInClient , ExpandClient {
+    private String uuid;
 
     private static final HashMap<String, Class<? extends MessageBody>> eventMap = new HashMap<>();
 
@@ -86,6 +88,15 @@ public class JavaPlugInClient implements PlugInClient , ExpandClient {
     public JavaPlugInClient(SiriusApplication app, SiriusApplicationInfo info) {
         this.app = app;
         this.info = info;
+        this.uuid = UUID.randomUUID().toString();
+    }
+
+    /**
+     * 生成一个唯一的uuid作为键
+     */
+    @Override
+    public String getUuid() {
+        return this.uuid;
     }
 
     /**

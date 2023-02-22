@@ -8,6 +8,11 @@ import cn.siriusbot.siriuspro.web.pojo.BotHttpRequest;
 public interface PlugInClient {
 
     /**
+     * 生成一个唯一的uuid作为键
+     */
+    String getUuid();
+
+    /**
      * 插件唯一id
      */
     String getPackageName();

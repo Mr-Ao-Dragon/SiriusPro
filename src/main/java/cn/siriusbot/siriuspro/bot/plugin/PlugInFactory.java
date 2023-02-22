@@ -94,4 +94,14 @@ public class PlugInFactory {
     public void remove(String packageName){
         this.plugInClientMap.remove(packageName);
     }
+
+    public PlugInClient getPlugInClientBySessionId(String session){
+        for (String packageName : plugInClientMap.keySet()){
+            PlugInClient client = plugInClientMap.get(packageName);
+            if (client.getUuid().equals(session)){
+                return client;
+            }
+        }
+        return null;
+    }
 }
