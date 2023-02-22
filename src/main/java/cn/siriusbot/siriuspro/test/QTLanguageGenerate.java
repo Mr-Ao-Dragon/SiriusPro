@@ -631,7 +631,7 @@ public class QTLanguageGenerate extends BaseGenerate {
                     if (info.isList()) {
                         // 数组
                         String array = randomVariableName();  // 随机变量名
-                        sb.append(String.format("    QVector<%s> %s;", info.getType(), array));
+                        sb.append(String.format("    QJsonArray %s;", array));
                         sb.append(String.format("    for (%s item : %s) {",
                                         info.getType(),
                                         info.getName()
