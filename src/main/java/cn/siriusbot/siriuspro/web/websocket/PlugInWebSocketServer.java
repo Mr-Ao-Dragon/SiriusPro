@@ -5,6 +5,7 @@ import cn.siriusbot.siriuspro.bot.plugin.EPlugInClient;
 import cn.siriusbot.siriuspro.bot.plugin.PlugInClient;
 import cn.siriusbot.siriuspro.bot.plugin.PlugInFactory;
 import cn.siriusbot.siriuspro.bot.pojo.event.BotEventMessage;
+import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.uitls.AppContextUtil;
 import cn.siriusbot.siriuspro.web.R.R;
 import cn.siriusbot.siriuspro.web.pojo.WebSocketBody;
@@ -29,7 +30,7 @@ import java.util.concurrent.Executor;
 @Component
 @ServerEndpoint(value = "/websocket")
 @Log4j2
-public class PlugInWebSocketServer implements ClientObserver{
+public class PlugInWebSocketServer implements ClientObserver {
 
     SiriusApplicationInfo info;
 
@@ -88,46 +89,26 @@ public class PlugInWebSocketServer implements ClientObserver{
             System.out.println(body);
             switch (body.getCode()) {
                 case 1 -> {
-                    if (this.verify != 0){
+                    if (this.verify != 0) {
                         break;
                     }
                     // 首次连接验证插件信息
                     SiriusApplicationInfo info = body.getBody().toJavaObject(SiriusApplicationInfo.class);
                     // 检验插件信息
                     if (info.getPackageName() == null) {
-                        R r = new R()
-                                .setCode(500)
-                                .setMsg("插件包名不能为空!");
-                        this.sendMsg(JSONObject.toJSONString(r));
-                        return;
+                        throw new MsgException(500, "插件包名不能为空!");
                     }
                     if (info.getAppName() == null) {
-                        R r = new R()
-                                .setCode(500)
-                                .setMsg("插件名不能为空!");
-                        this.sendMsg(JSONObject.toJSONString(r));
-                        return;
+                        throw new MsgException(500, "插件名不能为空!");
                     }
                     if (info.getAppAuthor() == null) {
-                        R r = new R()
-                                .setCode(500)
-                                .setMsg("插件作者不能为空!");
-                        this.sendMsg(JSONObject.toJSONString(r));
-                        return;
+                        throw new MsgException(500, "插件作者不能为空!");
                     }
                     if (info.getAppPath() == null) {
-                        R r = new R()
-                                .setCode(500)
-                                .setMsg("插件路径不能为空!");
-                        this.sendMsg(JSONObject.toJSONString(r));
-                        return;
+                        throw new MsgException(500, "插件路径不能为空!");
                     }
                     if (info.getAppVersion() == null) {
-                        R r = new R()
-                                .setCode(500)
-                                .setMsg("插件版本不能为空!");
-                        this.sendMsg(JSONObject.toJSONString(r));
-                        return;
+                        throw new MsgException(500, "插件版本不能为空!");
                     }
                     if (info.getAppDesc() == null) {
                         info.setAppDesc("");
@@ -143,6 +124,12 @@ public class PlugInWebSocketServer implements ClientObserver{
                     this.sendMsg(JSONObject.toJSONString(r));
                     this.verify = 1;
                 }
+            }
+        } catch (MsgException e) {
+            try {
+                this.sendMsg(JSONObject.toJSONString(e.getR()));
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         } catch (Exception e) {
             log.error("处理ws消息异常，嵌套异常为 -> " + e);
