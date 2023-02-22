@@ -44,4 +44,6 @@ public interface BotWebSocket {
      * @throws WebsocketNotConnectedException websocket is not yet connected
      */
     void send(byte[] bytes);
+
+    void reconnect();
 }

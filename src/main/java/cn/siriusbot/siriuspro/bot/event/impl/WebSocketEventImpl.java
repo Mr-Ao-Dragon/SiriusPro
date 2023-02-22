@@ -58,6 +58,14 @@ public class WebSocketEventImpl implements WebSocketEvent, EventMethodNoParam {
         @Override
         public void onError(Exception ex) {
             log.error(ex);
+            try {
+                Thread.sleep(5000);
+                new Thread(() -> {
+                    client.pushEvent(BotEventType.SEND_HEART_BEAT_ERROR, null);
+                }).start();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -110,8 +118,8 @@ public class WebSocketEventImpl implements WebSocketEvent, EventMethodNoParam {
         } catch (Throwable ignored) {
 
         }
-        this.webSocket = new BotWebSocketClientImpl(this.client.getSession().getWebSocketUri(), client);
-        this.webSocket.connect();
+        //this.webSocket = new BotWebSocketClientImpl(this.client.getSession().getWebSocketUri(), client);
+        this.webSocket.reconnect();
     }
 
 
