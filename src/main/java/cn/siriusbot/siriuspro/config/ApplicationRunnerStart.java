@@ -2,13 +2,6 @@ package cn.siriusbot.siriuspro.config;
 
 import cn.siriusbot.siriuspro.admin.service.BotService;
 import cn.siriusbot.siriuspro.bot.BotApi;
-import cn.siriusbot.siriuspro.bot.client.BotClient;
-import cn.siriusbot.siriuspro.bot.client.SiriusBotClient;
-import cn.siriusbot.siriuspro.bot.event.IntentsEvent;
-import cn.siriusbot.siriuspro.bot.event.impl.IntentsEventImpl;
-import cn.siriusbot.siriuspro.bot.pojo.BotInfo;
-import cn.siriusbot.siriuspro.bot.pojo.e.BotType;
-import cn.siriusbot.siriuspro.bot.pojo.e.IntentsType;
 import cn.siriusbot.siriuspro.config.bean.BotConfig;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -7,7 +7,6 @@ import cn.siriusbot.siriuspro.bot.api.pojo.message.MessageMarkdown;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.MessageMarkdownParams;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.keyboard.*;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.requestPack.RequestCustomKeyboard;
-import cn.siriusbot.siriuspro.bot.pojo.e.IntentsType;
 import com.alibaba.fastjson.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

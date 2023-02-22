@@ -3,9 +3,6 @@ package cn.siriusbot.siriuspro.bot.application;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.lang.reflect.Method;
-import java.util.Map;
-
 /**
  * 天狼星应用
  */

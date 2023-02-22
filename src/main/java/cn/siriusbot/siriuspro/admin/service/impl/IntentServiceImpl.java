@@ -2,7 +2,6 @@ package cn.siriusbot.siriuspro.admin.service.impl;
 
 import cn.siriusbot.siriuspro.admin.dao.IntentMapper;
 import cn.siriusbot.siriuspro.admin.entity.Intent;
-import cn.siriusbot.siriuspro.admin.entity.Robot;
 import cn.siriusbot.siriuspro.admin.service.IntentService;
 import cn.siriusbot.siriuspro.bot.pojo.e.IntentsType;
 import cn.siriusbot.siriuspro.error.MsgException;

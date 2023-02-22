@@ -1,11 +1,9 @@
 package cn.siriusbot.siriuspro.config.bean;
 
 import cn.siriusbot.siriuspro.admin.entity.Robot;
-import cn.siriusbot.siriuspro.admin.service.BotService;
 import cn.siriusbot.siriuspro.bot.client.BotClient;
 import cn.siriusbot.siriuspro.bot.pojo.BotInfo;
 import cn.siriusbot.siriuspro.error.MsgException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

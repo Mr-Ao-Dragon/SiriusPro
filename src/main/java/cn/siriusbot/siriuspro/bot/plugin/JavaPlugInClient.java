@@ -24,10 +24,8 @@ import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.web.R.R;
 import cn.siriusbot.siriuspro.web.pojo.BotHttpRequest;
 import cn.siriusbot.siriuspro.web.websocket.surface.WebsocketSession;
-import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.log4j.Log4j2;
 
-import javax.websocket.Session;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 

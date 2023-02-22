@@ -1,10 +1,12 @@
 package cn.siriusbot.siriuspro.test;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Random;
+import java.util.Set;
 
 public class QTLanguageGenerate extends BaseGenerate {
 

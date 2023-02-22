@@ -4,8 +4,6 @@ import cn.siriusbot.siriuspro.admin.service.ServerConfigService;
 import cn.siriusbot.siriuspro.bot.api.BotManageApi;
 import cn.siriusbot.siriuspro.bot.pojo.BotInfo;
 import cn.siriusbot.siriuspro.config.bean.BotPool;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 

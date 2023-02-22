@@ -1,6 +1,5 @@
 package cn.siriusbot.siriuspro.config.bean;
 
-import cn.siriusbot.siriuspro.admin.service.BotService;
 import cn.siriusbot.siriuspro.bot.plugin.PlugInFactory;
 import cn.siriusbot.siriuspro.config.pojo.StatisticsData;
 import com.sun.management.OperatingSystemMXBean;

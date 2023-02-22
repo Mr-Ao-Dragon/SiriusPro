@@ -2,8 +2,6 @@ package cn.siriusbot.siriuspro.bot.plugin;
 
 import cn.siriusbot.siriuspro.web.websocket.surface.WebsocketSession;
 
-import javax.websocket.Session;
-
 /**
  * 拓展功能
  */
