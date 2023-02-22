@@ -25,6 +25,7 @@ public class SiriusProApplicatioApiTest {
     IntentService intentService;
 
 
+    @Test
     void api_1(){
         List<MessageMarkdownParams> messageMarkdownParams = new ArrayList<>();
         List<String> value1 = new ArrayList<>();
