@@ -144,7 +144,9 @@ public class MessageImpl implements MessageApi {
     @Override
     public Tuple<Message, String> sendMarkdownMessage(@NotNull String bot_id, @NotNull String channel_id, String msg_id, String event_id, @NotNull MessageMarkdown markdown) {
         BotClient client = botPool.getBotById(bot_id);
-        markdown.setContent(EmojiParser.parseToUnicode(markdown.getContent()));
+        if(markdown.getContent()!=null){
+            markdown.setContent(EmojiParser.parseToUnicode(markdown.getContent()));
+        }
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/messages")
                 .setMethod(RequestMethod.POST)
@@ -301,7 +303,9 @@ public class MessageImpl implements MessageApi {
     @Override
     public Tuple<Message, String> sendCustomInLineKeyword(@NotNull String bot_id, @NotNull String channel_id, @NotNull RequestCustomKeyboard requestCustomKeyboard) {
         BotClient client = botPool.getBotById(bot_id);
-        requestCustomKeyboard.getMarkdown().setContent(EmojiParser.parseToUnicode(requestCustomKeyboard.getMarkdown().getContent()));
+        if(requestCustomKeyboard.getMarkdown().getContent()!=null){
+            requestCustomKeyboard.getMarkdown().setContent(EmojiParser.parseToUnicode(requestCustomKeyboard.getMarkdown().getContent()));
+        }
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/messages")
                 .setMethod(RequestMethod.POST)

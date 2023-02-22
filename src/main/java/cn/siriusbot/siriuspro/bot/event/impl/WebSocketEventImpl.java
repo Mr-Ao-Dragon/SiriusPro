@@ -119,7 +119,8 @@ public class WebSocketEventImpl implements WebSocketEvent, EventMethodNoParam {
 
         }
         //this.webSocket = new BotWebSocketClientImpl(this.client.getSession().getWebSocketUri(), client);
-        this.webSocket.reconnect();
+        new Thread(() -> this.webSocket.reconnect()).start();
+
     }
 
 
