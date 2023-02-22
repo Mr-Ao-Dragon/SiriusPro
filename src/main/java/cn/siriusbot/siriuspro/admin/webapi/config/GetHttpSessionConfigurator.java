@@ -22,8 +22,4 @@ public class GetHttpSessionConfigurator extends ServerEndpointConfig.Configurato
         super.modifyHandshake(sec, request, response);
     }
 
-    @Bean
-    public ServerEndpointExporter serverEndpointExporter(){
-        return new ServerEndpointExporter();
-    }
 }
