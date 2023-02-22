@@ -38,6 +38,15 @@ public class StatisticsPool {
 
     // <包名, 响应次数>
     Map<String, AtomicInteger> response = new ConcurrentHashMap<>();
+
+    public int queryResponseNumByPackageName(String packageName){
+        AtomicInteger atomicInteger = response.get(packageName);
+        if (atomicInteger != null){
+            return atomicInteger.get();
+        }
+        return 0;
+    }
+
     /**
      * 消息数量
      */

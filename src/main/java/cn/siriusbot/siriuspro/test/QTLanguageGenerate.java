@@ -549,7 +549,12 @@ public class QTLanguageGenerate extends BaseGenerate {
                 }
                 sb.append("            QString &source");
                 for (Info info : methodInfo.getParams()) {
-                    sb.append(String.format(",\n            %s %s", info.getType(), info.getName()));
+                    if (info.isList()) {
+                        sb.append(String.format(",\n            QVector<%s> %s", info.getType(), info.getName()));
+                    } else {
+                        sb.append(String.format(",\n            %s %s", info.getType(), info.getName()));
+                    }
+
                 }
                 sb.append(");\n");
                 sb.append('\n');

@@ -1,5 +1,7 @@
 package cn.siriusbot.siriuspro.admin.webapi;
 
+import cn.siriusbot.siriuspro.admin.service.PlugInService;
+import cn.siriusbot.siriuspro.admin.service.impl.PlugInServiceImpl;
 import cn.siriusbot.siriuspro.config.aop.PowerInterceptor;
 import cn.siriusbot.siriuspro.config.bean.StatisticsPool;
 import cn.siriusbot.siriuspro.web.R.R;
@@ -15,6 +17,9 @@ public class PlugInController {
     @Autowired
     StatisticsPool statisticsPool;
 
+    @Autowired
+    PlugInService plugInService;
+
     /**
      * 获取统计信息
      */
@@ -23,5 +28,15 @@ public class PlugInController {
         return new R()
                 .setCode(0)
                 .setData(statisticsPool.getStatisticsData());
+    }
+
+    /**
+     * 获取插件信息列表
+     */
+    @RequestMapping("/info-list")
+    public R getInfoList(){
+        return new R()
+                .setCode(0)
+                .setData(plugInService.queryAllPlugInList());
     }
 }

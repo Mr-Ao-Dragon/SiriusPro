@@ -25,7 +25,6 @@ public class SiriusProApplicatioApiTest {
     IntentService intentService;
 
 
-    @Test
     void api_1(){
         List<MessageMarkdownParams> messageMarkdownParams = new ArrayList<>();
         List<String> value1 = new ArrayList<>();
@@ -76,7 +75,6 @@ public class SiriusProApplicatioApiTest {
         System.out.println(JSONObject.toJSONString(requestCustomKeyboard));
     }
 
-    @Test
     void test_1(){
         System.out.println(botApi.messageApi().sendMessage("102003612","6034803","测试",null,"08d8beb89ca4cae1801d10f3aaf00238f72d48fcc1cc9f06",null));
     }

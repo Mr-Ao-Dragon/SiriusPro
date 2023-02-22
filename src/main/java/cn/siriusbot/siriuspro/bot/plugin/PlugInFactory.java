@@ -9,6 +9,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -103,5 +105,9 @@ public class PlugInFactory {
             }
         }
         return null;
+    }
+
+    public List<PlugInClient> queryAllClient(){
+        return new ArrayList<>(plugInClientMap.values());
     }
 }
