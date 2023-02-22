@@ -13,6 +13,7 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
@@ -89,22 +90,22 @@ public class PlugInWebSocketServer implements ClientObserver {
                     // 首次连接验证插件信息
                     SiriusApplicationInfo info = body.getBody().toJavaObject(SiriusApplicationInfo.class);
                     // 检验插件信息
-                    if (info.getPackageName() == null) {
+                    if (ObjectUtils.isEmpty(info.getPackageName())) {
                         throw new MsgException(500, "插件包名不能为空!");
                     }
-                    if (info.getAppName() == null) {
+                    if (ObjectUtils.isEmpty(info.getAppName())) {
                         throw new MsgException(500, "插件名不能为空!");
                     }
-                    if (info.getAppAuthor() == null) {
+                    if (ObjectUtils.isEmpty(info.getAppAuthor())) {
                         throw new MsgException(500, "插件作者不能为空!");
                     }
-                    if (info.getAppPath() == null) {
+                    if (ObjectUtils.isEmpty(info.getAppPath())) {
                         throw new MsgException(500, "插件路径不能为空!");
                     }
-                    if (info.getAppVersion() == null) {
+                    if (ObjectUtils.isEmpty(info.getAppVersion())) {
                         throw new MsgException(500, "插件版本不能为空!");
                     }
-                    if (info.getAppDesc() == null) {
+                    if (ObjectUtils.isEmpty(info.getAppDesc())) {
                         info.setAppDesc("");
                     }
                     this.info = info;
