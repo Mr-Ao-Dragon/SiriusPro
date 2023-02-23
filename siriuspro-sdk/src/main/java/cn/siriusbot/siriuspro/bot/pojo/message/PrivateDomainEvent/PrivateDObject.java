@@ -3,9 +3,7 @@ package cn.siriusbot.siriuspro.bot.pojo.message.PrivateDomainEvent;
 
 import cn.siriusbot.siriuspro.bot.api.pojo.User;
 import cn.siriusbot.siriuspro.bot.api.pojo.member.Member;
-import cn.siriusbot.siriuspro.bot.api.pojo.message.Message;
 import cn.siriusbot.siriuspro.bot.pojo.message.MessageBody;
-import cn.siriusbot.siriuspro.bot.pojo.message.Op_User;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -61,13 +59,4 @@ public class PrivateDObject implements MessageBody {
      */
     private String timestamp;
 
-    /**
-     * 被操作的消息对象
-     */
-    private Message message;
-
-    /**
-     * 操作人对象
-     */
-    private Op_User op_user;
 }

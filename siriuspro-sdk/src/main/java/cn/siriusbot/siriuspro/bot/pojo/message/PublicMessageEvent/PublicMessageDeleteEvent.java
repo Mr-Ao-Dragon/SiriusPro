@@ -1,15 +1,14 @@
-package cn.siriusbot.siriuspro.bot.pojo.message.DirectMessageEvent;
+package cn.siriusbot.siriuspro.bot.pojo.message.PublicMessageEvent;
 
-import cn.siriusbot.siriuspro.bot.pojo.message.MessageBody;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * 私信消息事件对象
+ * 公域消息被撤回事件对象
  */
 @Data
 @Accessors(chain = true)
-public class DirectMessageEventInfo implements MessageBody {
+public class PublicMessageDeleteEvent {
     /**
      * op值
      */
@@ -26,9 +25,9 @@ public class DirectMessageEventInfo implements MessageBody {
     private String t;
 
     /**
-     * 消息对象
+     * 事件对象详情
      */
-    private DirectMessageDObject d;
+    private PublicMessageDeleteDObject d;
 
     /**
      * 事件ID
