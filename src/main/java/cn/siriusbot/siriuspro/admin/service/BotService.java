@@ -1,6 +1,7 @@
 package cn.siriusbot.siriuspro.admin.service;
 
 import cn.siriusbot.siriuspro.admin.entity.Robot;
+import cn.siriusbot.siriuspro.admin.vo.PageRobotList;
 import cn.siriusbot.siriuspro.bot.client.BotClient;
 
 import java.util.List;
@@ -95,7 +96,7 @@ public interface BotService {
      * @param size 每页大小
      * @return 机器人信息实体类列表
      */
-    List<Robot> queryRobotAllByCondition(int page, int size, String botId, String username, Integer state, Integer botType, Boolean sandBox);
+    PageRobotList queryRobotAllByCondition(int page, int size, String botId, String username, Integer state, Integer botType, Boolean sandBox);
 
     /**
      * 获取机器人总数量

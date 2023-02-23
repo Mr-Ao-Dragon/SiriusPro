@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
+
 @RestController
 @PowerInterceptor(power = 0)
 @RequestMapping("/api/plugin-manage")
@@ -38,5 +40,17 @@ public class PlugInController {
         return new R()
                 .setCode(0)
                 .setData(plugInService.queryAllPlugInList());
+    }
+
+    /**
+     * 获取sessionId
+     */
+    @RequestMapping("/get-session-id")
+    public R getSessionId(
+            HttpSession session
+    ){
+        return new R()
+                .setCode(0)
+                .setData(session.getId());
     }
 }

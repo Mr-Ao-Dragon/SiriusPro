@@ -3,6 +3,7 @@ package cn.siriusbot.siriuspro.admin.webapi;
 import cn.siriusbot.siriuspro.admin.entity.Robot;
 import cn.siriusbot.siriuspro.admin.service.BotService;
 import cn.siriusbot.siriuspro.admin.service.IntentService;
+import cn.siriusbot.siriuspro.admin.vo.PageRobotList;
 import cn.siriusbot.siriuspro.bot.client.BotClient;
 import cn.siriusbot.siriuspro.bot.pojo.e.IntentsType;
 import cn.siriusbot.siriuspro.config.aop.PowerInterceptor;
@@ -141,11 +142,11 @@ public class BotController {
             size = 1000;
         }
         System.out.println(sandBox);
-        List<Robot> robots = botService.queryRobotAllByCondition(page, size, botId, username, state, botType, sandBox);
+        PageRobotList pageRobotList = botService.queryRobotAllByCondition(page, size, botId, username, state, botType, sandBox);
         JSONObject extra = new JSONObject();
-        extra.put("count", botService.queryRobotAllCount());
+        extra.put("count", pageRobotList.getCount());
         return new R()
-                .setData(robots)
+                .setData(pageRobotList.getRobots())
                 .setExtra(extra);
     }
 

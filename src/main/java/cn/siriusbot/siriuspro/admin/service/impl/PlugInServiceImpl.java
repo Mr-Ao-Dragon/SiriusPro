@@ -8,8 +8,7 @@ import cn.siriusbot.siriuspro.config.bean.StatisticsPool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class PlugInServiceImpl implements PlugInService {
@@ -34,6 +33,7 @@ public class PlugInServiceImpl implements PlugInService {
                             .setResponseNum(statisticsPool.queryResponseNumByPackageName(client.getPackageName()))
             );
         }
+        plugInInfos.sort((o1, o2) -> o2.getResponseNum() - o1.getResponseNum());
         return plugInInfos;
     }
 }

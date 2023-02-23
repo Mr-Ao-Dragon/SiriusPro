@@ -39,9 +39,9 @@ public class StatisticsPool {
     // <包名, 响应次数>
     Map<String, AtomicInteger> response = new ConcurrentHashMap<>();
 
-    public int queryResponseNumByPackageName(String packageName){
+    public int queryResponseNumByPackageName(String packageName) {
         AtomicInteger atomicInteger = response.get(packageName);
-        if (atomicInteger != null){
+        if (atomicInteger != null) {
             return atomicInteger.get();
         }
         return 0;
@@ -128,8 +128,8 @@ public class StatisticsPool {
                 .setPlugInNUm(plugInFactory.getCount())
                 .setMsgNum(msgNum.get())
                 .setRunTime(t - startTime)
-                .setOnLineRate((double) onlineBotNum / botNum * 100)
-                .setMessageResponseRate((double) responseNumVal / msgNumVal  * 100)
+                .setOnLineRate(botNum == 0 ? 0 : (double) onlineBotNum / botNum * 100)
+                .setMessageResponseRate(msgNumVal == 0 ? 0 : (double) responseNumVal / msgNumVal * 100)
                 .setCpuUsage(mem.getCpuLoad() * 100)
                 .setMemoryUsage(usedRAM)
                 .setVirtualMemoryUsage(usedRAMJava);
@@ -137,8 +137,8 @@ public class StatisticsPool {
         title.add(String.format("%d 个 / %d 个", onlineBotNum, botNum));
         title.add(String.format("%d 条 / %d 条", responseNumVal, msgNumVal));
         title.add(String.format("%d 核", processors));
-        title.add(String.format("%d M / %d M", freeMemorySize / 1048576L, totalMemorySize / 1048576L));
-        title.add(String.format("%d M / %d M", freeMemory / 1048576L, totalMemory / 1048576L));
+        title.add(String.format("%d M / %d M", (totalMemorySize - freeMemorySize) / 1048576L, totalMemorySize / 1048576L));
+        title.add(String.format("%d M / %d M", (totalMemory - freeMemory) / 1048576L, totalMemory / 1048576L));
         return statisticsData;
     }
 

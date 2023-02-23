@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 @Data
 @Accessors(chain = true)
 public class Robot {
@@ -51,6 +53,10 @@ public class Robot {
      */
     @TableField(exist = false)
     String errorInfo;
+
+
+    @TableField(exist = false)
+    List<Intent> intents;
 
     public static final int STATE_READY = 0;    // 未登录
     public static final int STATE_PROCEED = 1;    // 登录中

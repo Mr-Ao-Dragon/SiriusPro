@@ -18,7 +18,7 @@ import java.util.Map;
 @Log4j2
 public class DatabaseInit {
 
-    @Value("classpath:sql/sql.sql")
+    @Value("classpath:sql/sql2.sql")
     private Resource sql;
 
     @javax.annotation.Resource

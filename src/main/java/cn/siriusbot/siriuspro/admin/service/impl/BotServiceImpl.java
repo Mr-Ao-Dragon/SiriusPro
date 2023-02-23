@@ -5,6 +5,7 @@ import cn.siriusbot.siriuspro.admin.dao.RobotMapper;
 import cn.siriusbot.siriuspro.admin.entity.Intent;
 import cn.siriusbot.siriuspro.admin.entity.Robot;
 import cn.siriusbot.siriuspro.admin.service.BotService;
+import cn.siriusbot.siriuspro.admin.vo.PageRobotList;
 import cn.siriusbot.siriuspro.bot.client.BotClient;
 import cn.siriusbot.siriuspro.bot.client.SiriusBotClient;
 import cn.siriusbot.siriuspro.bot.event.IntentsEvent;
@@ -257,6 +258,16 @@ public class BotServiceImpl implements BotService {
     }
 
     /**
+     * 刷新订阅事件
+     */
+    private void refreshSubscriptionEvent(Robot robot){
+        LambdaQueryWrapper<Intent> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Intent::getRobotId, robot.getBotId());
+        List<Intent> intentList = intentMapper.selectList(wrapper);
+        robot.setIntents(intentList);
+    }
+
+    /**
      * 根据id查询机器人信息
      *
      * @param id 唯一id
@@ -321,7 +332,7 @@ public class BotServiceImpl implements BotService {
      * @return 机器人信息实体类列表
      */
     @Override
-    public List<Robot> queryRobotAllByCondition(int page, int size, String botId, String username, Integer state, Integer botType, Boolean sandBox) {
+    public PageRobotList queryRobotAllByCondition(int page, int size, String botId, String username, Integer state, Integer botType, Boolean sandBox) {
         LambdaQueryWrapper<Robot> wrapper = new LambdaQueryWrapper<>();
         if (!ObjectUtils.isEmpty(botId)) {
             wrapper.and(e -> e.like(Robot::getBotId, botId));
@@ -346,9 +357,12 @@ public class BotServiceImpl implements BotService {
         if (!ObjectUtils.isEmpty(state)) {
             robots.removeIf(robot -> robot.getState() == null || !robot.getState().equals(state));
         }
+        int count = robots.size();
         // 分页
         if (robots.size() == 0){
-            return new ArrayList<>();
+            return new PageRobotList()
+                    .setRobots(new ArrayList<>())
+                    .setCount(0);
         }
         int pageSize = robots.size() / size;
         if (robots.size() % size != 0){
@@ -366,7 +380,9 @@ public class BotServiceImpl implements BotService {
             }
             reply.add(robots.get(index));
         }
-        return reply;
+        return new PageRobotList()
+                .setRobots(reply)
+                .setCount(count);
     }
 
     @Override
@@ -392,6 +408,7 @@ public class BotServiceImpl implements BotService {
             if (robot.getState() == Robot.STATE_ERROR) {
                 robot.setErrorInfo(botInfo.getErrorInfo());
             }
+            this.refreshSubscriptionEvent(robot);
         }
     }
 
