@@ -23,7 +23,22 @@ CREATE TABLE `admin` (
   `power` int NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `account` (`account`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Table structure for table `robot` */
+
+DROP TABLE IF EXISTS `robot`;
+
+CREATE TABLE `robot` (
+                         `id` int NOT NULL AUTO_INCREMENT,
+                         `bot_type` int NOT NULL,
+                         `sand_box` int NOT NULL,
+                         `bot_id` varchar(20) NOT NULL,
+                         `token` varchar(64) NOT NULL,
+                         `auto_login` int NOT NULL,
+                         PRIMARY KEY (`id`),
+                         UNIQUE KEY `bot_id` (`bot_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Table structure for table `intent` */
 
@@ -37,22 +52,9 @@ CREATE TABLE `intent` (
   PRIMARY KEY (`id`),
   KEY `robot_id` (`robot_id`),
   CONSTRAINT `intent_ibfk_1` FOREIGN KEY (`robot_id`) REFERENCES `robot` (`bot_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-/*Table structure for table `robot` */
 
-DROP TABLE IF EXISTS `robot`;
-
-CREATE TABLE `robot` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `bot_type` int NOT NULL,
-  `sand_box` int NOT NULL,
-  `bot_id` varchar(20) NOT NULL,
-  `token` varchar(64) NOT NULL,
-  `auto_login` int NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `bot_id` (`bot_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Table structure for table `server_config` */
 
@@ -63,7 +65,7 @@ CREATE TABLE `server_config` (
   `key` varchar(512) NOT NULL,
   `val` varchar(4096) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
