@@ -51,8 +51,7 @@ public class SiriusUtils {
 
         AnsiConsole.out().println(SiriusLoggerUtil.getFormatLogString("SiriusPro是一款高度自定义的QQ频道机器人框架，由四川镜芯网络科技有限公司独立完成开发，如要使用，请同意以下开源协议(AGPL3.0)。",32,1));
         AnsiConsole.out().println(SiriusLoggerUtil.getFormatLogString("SiriusPro is a highly customized QQ channel robot framework developed independently by Sichuan Jingxin Network Technology Co., Ltd. If you want to use it, please agree to the following open source agreement (AGPL3.0).",32,1));
-
-        AnsiConsole.out().println(SiriusLoggerUtil.getFormatLogString("这个最强的copyleft许可证的权限取决于在同一许可证下提供许可作品和修改的完整源代码，包括使用许可作品的较大作品。",31,1));
+        AnsiConsole.out().println(SiriusLoggerUtil.getFormatLogString("\n这个最强的copyleft许可证的权限取决于在同一许可证下提供许可作品和修改的完整源代码，包括使用许可作品的较大作品。",31,1));
         AnsiConsole.out().println(SiriusLoggerUtil.getFormatLogString("Permissions of this strongest copyleft license are conditioned on making available complete source code of licensed works and modifications, which include larger works using a licensed work, under the same license.",31,3));
         AnsiConsole.out().println(SiriusLoggerUtil.getFormatLogString("\n版权和许可声明必须保留。",31,1));
         AnsiConsole.out().println(SiriusLoggerUtil.getFormatLogString("Copyright and license notices must be preserved.",31,3));
@@ -60,10 +59,8 @@ public class SiriusUtils {
         AnsiConsole.out().println(SiriusLoggerUtil.getFormatLogString("Contributors provide an express grant of patent rights. ",31,3));
         AnsiConsole.out().println(SiriusLoggerUtil.getFormatLogString("\n当修改版本用于通过网络提供服务时，必须提供修改版本的完整源代码。",31,1));
         AnsiConsole.out().println(SiriusLoggerUtil.getFormatLogString("When a modified version is used to provide a service over a network, the complete source code of the modified version must be made available.",31,3));
-
         AnsiConsole.out().println(SiriusLoggerUtil.getFormatLogString("\n禁止用于一切商业化行为。",31,1));
         AnsiConsole.out().println(SiriusLoggerUtil.getFormatLogString("Prohibited for all commercial activities.",31,3));
-
         AnsiConsole.out().println(SiriusLoggerUtil.getFormatLogString("\n不得未经授权的情况下私自(包括但不限于,个人,个体,企业)运营任何相关社区。",31,1));
         AnsiConsole.out().println(SiriusLoggerUtil.getFormatLogString("It is not allowed to operate any relevant community without authorization (including but not limited to individuals, individuals and enterprises).",31,3));
 
