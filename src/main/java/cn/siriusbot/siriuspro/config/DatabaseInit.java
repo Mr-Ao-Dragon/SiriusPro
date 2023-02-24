@@ -1,10 +1,10 @@
 package cn.siriusbot.siriuspro.config;
 
+import jakarta.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
@@ -19,9 +19,9 @@ import java.util.Map;
 public class DatabaseInit {
 
     @Value("classpath:sql/sql.sql")
-    private Resource sql;
+    private org.springframework.core.io.Resource sql;
 
-    @javax.annotation.Resource
+    @Resource
     private DataSource dataSource;
 
     @Bean

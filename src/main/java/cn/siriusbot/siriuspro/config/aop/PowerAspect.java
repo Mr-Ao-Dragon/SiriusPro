@@ -4,6 +4,7 @@ package cn.siriusbot.siriuspro.config.aop;
 import cn.siriusbot.siriuspro.admin.entity.Admin;
 import cn.siriusbot.siriuspro.config.Constant;
 import cn.siriusbot.siriuspro.error.MsgException;
+import jakarta.servlet.http.HttpSession;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -14,7 +15,6 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
 
 @Aspect

@@ -3,10 +3,12 @@ package cn.siriusbot.siriuspro.bot.pojo;
 import cn.siriusbot.siriuspro.bot.pojo.e.RequestBodyType;
 import cn.siriusbot.siriuspro.bot.pojo.e.RequestMethod;
 import com.alibaba.fastjson2.JSON;
+import lombok.ToString;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@ToString
 public class BotRequest {
     StringBuilder url;
     String mediaType;
@@ -95,4 +97,6 @@ public class BotRequest {
         this.bodyType = bodyType;
         return this;
     }
+
+
 }

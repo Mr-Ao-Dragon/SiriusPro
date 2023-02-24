@@ -1,7 +1,7 @@
 package cn.siriusbot.siriuspro.web.websocket.surface;
 
-import javax.websocket.CloseReason;
-import javax.websocket.Session;
+import jakarta.websocket.Session;
+
 import java.io.IOException;
 
 public class WebsocketSessionImpl implements WebsocketSession{

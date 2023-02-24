@@ -1,8 +1,8 @@
 package cn.siriusbot.siriuspro.admin.webapi.config;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpSession;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

@@ -1,13 +1,10 @@
 package cn.siriusbot.siriuspro.admin.webapi.config;
 
-import org.springframework.context.annotation.Bean;
+import jakarta.servlet.http.HttpSession;
+import jakarta.websocket.HandshakeResponse;
+import jakarta.websocket.server.HandshakeRequest;
+import jakarta.websocket.server.ServerEndpointConfig;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.socket.server.standard.ServerEndpointExporter;
-
-import javax.servlet.http.HttpSession;
-import javax.websocket.HandshakeResponse;
-import javax.websocket.server.HandshakeRequest;
-import javax.websocket.server.ServerEndpointConfig;
 
 @Configuration
 public class GetHttpSessionConfigurator extends ServerEndpointConfig.Configurator {

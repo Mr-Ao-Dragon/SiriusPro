@@ -11,12 +11,12 @@ import cn.siriusbot.siriuspro.web.pojo.WebSocketBody;
 import cn.siriusbot.siriuspro.web.websocket.messagequeue.ClientObserver;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
+import jakarta.websocket.*;
+import jakarta.websocket.server.ServerEndpoint;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
-import javax.websocket.*;
-import javax.websocket.server.ServerEndpoint;
 import java.util.concurrent.Executor;
 
 /**

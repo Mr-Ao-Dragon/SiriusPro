@@ -4,14 +4,15 @@ import cn.siriusbot.siriuspro.bot.plugin.PlugInFactory;
 import cn.siriusbot.siriuspro.uitls.AppContextUtil;
 import cn.siriusbot.siriuspro.web.websocket.surface.WebsocketSession;
 import cn.siriusbot.siriuspro.web.websocket.surface.WebsocketSessionImpl;
+import jakarta.websocket.OnClose;
+import jakarta.websocket.OnMessage;
+import jakarta.websocket.OnOpen;
+import jakarta.websocket.Session;
+import jakarta.websocket.server.ServerEndpoint;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import javax.websocket.server.ServerEndpoint;
+
 
 /**
  * 拓展WebSocket

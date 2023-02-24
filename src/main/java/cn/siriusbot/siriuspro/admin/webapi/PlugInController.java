@@ -5,11 +5,11 @@ import cn.siriusbot.siriuspro.admin.service.impl.PlugInServiceImpl;
 import cn.siriusbot.siriuspro.config.aop.PowerInterceptor;
 import cn.siriusbot.siriuspro.config.bean.StatisticsPool;
 import cn.siriusbot.siriuspro.web.R.R;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpSession;
 
 @RestController
 @PowerInterceptor(power = 0)

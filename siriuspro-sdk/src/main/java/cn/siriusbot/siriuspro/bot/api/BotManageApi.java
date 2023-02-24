@@ -1,15 +1,17 @@
 package cn.siriusbot.siriuspro.bot.api;
 
-import cn.siriusbot.siriuspro.bot.pojo.BotInfo;
+
+
+import cn.siriusbot.siriuspro.bot.pojo.BotInfoJson;
 
 import java.util.List;
 
-public interface BotManageApi {
+public interface BotManageApi{
     /**
      * 获取在线的机器人列表
      * @return
      */
-    List<BotInfo> queryOnLineBotList();
+    List<BotInfoJson> queryOnLineBotList();
 
     /**
      * 写配置

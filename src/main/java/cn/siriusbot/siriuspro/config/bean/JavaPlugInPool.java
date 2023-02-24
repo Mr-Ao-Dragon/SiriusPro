@@ -7,12 +7,12 @@ import cn.siriusbot.siriuspro.bot.application.SiriusApplication;
 import cn.siriusbot.siriuspro.bot.plugin.JavaPlugInClient;
 import cn.siriusbot.siriuspro.bot.plugin.PlugInFactory;
 import cn.siriusbot.siriuspro.uitls.ApplicationUtils;
+import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;

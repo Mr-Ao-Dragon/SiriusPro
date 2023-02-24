@@ -70,13 +70,14 @@ import cn.siriusbot.siriuspro.bot.pojo.message.PublicMessageEvent.PublicMessageD
 import cn.siriusbot.siriuspro.bot.pojo.message.PublicMessageEvent.PublicMessageDeleteEvent;
 import cn.siriusbot.siriuspro.bot.pojo.message.PublicMessageEvent.PublicMessageEvent;
 import cn.siriusbot.siriuspro.bot.pojo.message.PublicMessageEvent.PublicMessageEventDObject;
+import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 import org.aspectj.util.FileUtil;
 
-import javax.annotation.PostConstruct;
+
 import java.io.File;
 import java.lang.reflect.*;
 import java.util.*;

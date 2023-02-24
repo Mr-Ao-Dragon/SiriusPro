@@ -77,6 +77,7 @@ public class UserApiImpl implements UserApi {
         } catch (Exception e) {
             botRequest = botRequest.setUrl(path + "?limit=" + limit);
         }
+        System.out.println("botRequest -> " + botRequest);
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
         BotResponse response = http.req(botRequest);
         String data = EmojiParser.parseToUnicode(response.getBody());
