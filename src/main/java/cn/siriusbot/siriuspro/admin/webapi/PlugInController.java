@@ -2,6 +2,7 @@ package cn.siriusbot.siriuspro.admin.webapi;
 
 import cn.siriusbot.siriuspro.admin.service.PlugInService;
 import cn.siriusbot.siriuspro.admin.service.impl.PlugInServiceImpl;
+import cn.siriusbot.siriuspro.admin.webapi.config.SessionContext;
 import cn.siriusbot.siriuspro.config.aop.PowerInterceptor;
 import cn.siriusbot.siriuspro.config.bean.StatisticsPool;
 import cn.siriusbot.siriuspro.web.R.R;
@@ -21,6 +22,9 @@ public class PlugInController {
 
     @Autowired
     PlugInService plugInService;
+
+    @Autowired
+    SessionContext sessionContext;
 
     /**
      * 获取统计信息
@@ -49,6 +53,7 @@ public class PlugInController {
     public R getSessionId(
             HttpSession session
     ){
+        sessionContext.AddSession(session);
         return new R()
                 .setCode(0)
                 .setData(session.getId());

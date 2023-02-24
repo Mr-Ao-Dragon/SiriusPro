@@ -16,7 +16,7 @@ class SiriusProApplicationTests {
         System.out.println(s);
     }
 
-    @Test
+    //@Test
     void test2(){
 
     }

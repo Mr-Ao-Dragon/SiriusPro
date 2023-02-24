@@ -43,6 +43,7 @@ public class WebsocketController {
 
     @OnMessage
     public void onMessage(String message) {
+        System.out.println("dash-board -> " + message);
         JSONObject json = JSONObject.parseObject(message);
         if (json.getInteger("event") == 1) {
             // 验证头信息
@@ -50,6 +51,8 @@ public class WebsocketController {
             if (jsessionid != null) {
                 System.out.println(jsessionid);
                 HttpSession session = this.sessionContext.getSession(jsessionid);
+                System.out.println("session => " + session);
+
                 Admin admin = (Admin) session.getAttribute(Constant.SESSION_ADMIN);
                 if (admin == null) {
                     try {
