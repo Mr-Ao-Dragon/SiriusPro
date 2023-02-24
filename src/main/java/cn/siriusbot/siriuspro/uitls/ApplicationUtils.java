@@ -1,6 +1,9 @@
 package cn.siriusbot.siriuspro.uitls;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * 应用工具类
@@ -51,6 +54,19 @@ public class ApplicationUtils {
         }
         if(!appsPathExist(imgCachePath)){
             createAppsPath(imgCachePath);
+        }
+        File file = new File(confPath + "\\database.properties");
+        if (!file.exists()){
+            try {
+                Files.writeString(Path.of(confPath + "\\database.properties"), """
+                        jdbc.driver=com.mysql.cj.jdbc.Driver
+                        jdbc.url=jdbc:mysql://localhost:3306/siriuspro
+                        jdbc.username=root
+                        jdbc.password=root
+                        """);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }
