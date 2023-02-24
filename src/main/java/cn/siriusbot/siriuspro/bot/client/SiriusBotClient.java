@@ -28,7 +28,7 @@ public class SiriusBotClient implements BotClient {
     BotInfo info;
     BotSession session;
 
-    HashMap<Class< ? extends BotEvent>, BotEvent> botEvents = new HashMap<>();
+    HashMap<Class<? extends BotEvent>, BotEvent> botEvents = new HashMap<>();
 
     boolean start = false;
 
@@ -93,7 +93,7 @@ public class SiriusBotClient implements BotClient {
      */
     @Override
     public <T extends BotEvent> BotClient setConfig(Class<T> clazz, T config) {
-        if (start){
+        if (start) {
             throw new BotIsInOperationException();
         }
         this.botEvents.put(clazz, config);
@@ -188,7 +188,7 @@ public class SiriusBotClient implements BotClient {
         } catch (URISyntaxException e) {
             log.error(e);
             throw new MsgException(500, "WebSocketUri验证异常!");
-        } catch (MsgException e){
+        } catch (MsgException e) {
             this.info.setState(Robot.STATE_ERROR);
             this.info.setErrorInfo("验证机器人信息失败，请检查BotId和Token配置!");
             throw e;

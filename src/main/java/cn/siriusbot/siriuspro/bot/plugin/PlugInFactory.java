@@ -85,7 +85,7 @@ public class PlugInFactory {
         if (ObjectUtils.isEmpty(packageName)) {
             log.error(String.format("加载插件[%s]失败，未设置唯一包名。", client.getInfo().getAppName()));
         }
-        System.out.println(packageName);
+
         if (this.plugInClientMap.containsKey(packageName)) {
             PlugInClient temp = this.plugInClientMap.get(packageName);
             log.warn(String.format("插件[%s]的包名与[%s]插的包名重复！", client.getInfo().getAppName(), temp.getInfo().getAppName()));

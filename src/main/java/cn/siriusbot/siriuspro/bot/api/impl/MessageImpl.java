@@ -17,6 +17,7 @@ import cn.siriusbot.siriuspro.bot.pojo.e.RequestMethod;
 import cn.siriusbot.siriuspro.config.bean.BotPool;
 import com.alibaba.fastjson.JSONObject;
 import com.vdurmont.emoji.EmojiParser;
+import jdk.swing.interop.SwingInterOpUtils;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,7 @@ public class MessageImpl implements MessageApi {
      */
     @Override
     public Tuple<Message, String> sendMessage(@NotNull String bot_id, @NotNull String channel_id, String content, String image_Url, String msg_id, String event_id) {
+
         BotClient client = botPool.getBotById(bot_id);
         content = EmojiParser.parseToUnicode(content);
         BotRequest botRequest = new BotRequest()
@@ -144,7 +146,7 @@ public class MessageImpl implements MessageApi {
     @Override
     public Tuple<Message, String> sendMarkdownMessage(@NotNull String bot_id, @NotNull String channel_id, String msg_id, String event_id, @NotNull MessageMarkdown markdown) {
         BotClient client = botPool.getBotById(bot_id);
-        if(markdown.getContent()!=null){
+        if (markdown.getContent() != null) {
             markdown.setContent(EmojiParser.parseToUnicode(markdown.getContent()));
         }
         BotRequest botRequest = new BotRequest()
@@ -279,10 +281,10 @@ public class MessageImpl implements MessageApi {
             botRequest.putRequestBody("msg_id", msg_id);
         if (!event_id.isEmpty())
             botRequest.putRequestBody("event_id", event_id);
-        if(!content.isEmpty())
-            botRequest.putRequestBody("content",content);
-        if(!image_path.isEmpty())
-            botRequest.putRequestBody("file_image",new File(image_path));
+        if (!content.isEmpty())
+            botRequest.putRequestBody("content", content);
+        if (!image_path.isEmpty())
+            botRequest.putRequestBody("file_image", new File(image_path));
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
         BotResponse response = http.req(botRequest);
         String data = EmojiParser.parseToUnicode(response.getBody());
@@ -303,7 +305,7 @@ public class MessageImpl implements MessageApi {
     @Override
     public Tuple<Message, String> sendCustomInLineKeyword(@NotNull String bot_id, @NotNull String channel_id, @NotNull RequestCustomKeyboard requestCustomKeyboard) {
         BotClient client = botPool.getBotById(bot_id);
-        if(requestCustomKeyboard.getMarkdown().getContent()!=null){
+        if (requestCustomKeyboard.getMarkdown().getContent() != null) {
             requestCustomKeyboard.getMarkdown().setContent(EmojiParser.parseToUnicode(requestCustomKeyboard.getMarkdown().getContent()));
         }
         BotRequest botRequest = new BotRequest()

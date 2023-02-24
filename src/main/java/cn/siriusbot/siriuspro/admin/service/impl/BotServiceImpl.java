@@ -71,19 +71,19 @@ public class BotServiceImpl implements BotService {
         if (select == null) {
             throw new MsgException(500, "修改失败，该记录不存在!");
         }
-        if (robot.getBotId() != null){
+        if (robot.getBotId() != null) {
             select.setBotId(robot.getBotId());
         }
-        if (robot.getToken() != null){
+        if (robot.getToken() != null) {
             select.setToken(robot.getToken());
         }
-        if (robot.getSandBox() != null){
+        if (robot.getSandBox() != null) {
             select.setSandBox(robot.getSandBox());
         }
-        if (robot.getBotType() != null){
+        if (robot.getBotType() != null) {
             select.setBotType(robot.getBotType());
         }
-        if (robot.getAutoLogin() != null){
+        if (robot.getAutoLogin() != null) {
             select.setAutoLogin(robot.getAutoLogin());
         }
         robotMapper.updateById(select);
@@ -133,9 +133,9 @@ public class BotServiceImpl implements BotService {
         BotClient client;
         try {
             client = new SiriusBotClient(token, botConfig);
-        } catch (MsgException e){
+        } catch (MsgException e) {
             throw new MsgException(10401, String.format("Bot[%s]检查令牌失败，请重试！", robot.getBotId()));
-        } catch (Throwable e){
+        } catch (Throwable e) {
             botPool.addErrorBot(token);
             throw e;
         }
@@ -359,23 +359,23 @@ public class BotServiceImpl implements BotService {
         }
         int count = robots.size();
         // 分页
-        if (robots.size() == 0){
+        if (robots.size() == 0) {
             return new PageRobotList()
                     .setRobots(new ArrayList<>())
                     .setCount(0);
         }
         int pageSize = robots.size() / size;
-        if (robots.size() % size != 0){
+        if (robots.size() % size != 0) {
             pageSize += 1;
         }
-        if (page >= pageSize){
+        if (page >= pageSize) {
             page = pageSize - 1;
         }
         int start = page * size;
         List<Robot> reply = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             int index = start + i;
-            if (index >= robots.size()){
+            if (index >= robots.size()) {
                 break;
             }
             reply.add(robots.get(index));

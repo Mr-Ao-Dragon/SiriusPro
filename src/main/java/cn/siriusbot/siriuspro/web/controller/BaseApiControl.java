@@ -178,6 +178,7 @@ public class BaseApiControl {
         if (client == null) {
             throw new MsgException(500, "构建请求错误，session会话过期或不存在!");
         }
+        System.out.println(body);
         //Object o = apiObject.get(body.getApi());
         Object o = this.getProxyByName(client.getInfo(), body.getApi());
         MethodInfo methodInfo = apiMethodInfo.get(body.getApi()).get(body.getMethod());
