@@ -47,12 +47,7 @@ public class PlugInWebSocketServer implements ClientObserver {
         this.plugInFactory = AppContextUtil.getBean(PlugInFactory.class);
         this.session = session;
         log.info(String.format("[ws] (%s)新客户端连接", this.session.getId()));
-        try {
 
-            sendMsg(JSONObject.toJSONString(new R().setCode(0)));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
 

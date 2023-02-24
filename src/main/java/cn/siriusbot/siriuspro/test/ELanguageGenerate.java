@@ -88,6 +88,11 @@ import java.util.*;
 @Log4j2
 public class ELanguageGenerate {
 
+    public ELanguageGenerate() {
+        config();
+        configApi();
+    }
+
     private final Map<String, List<Info>> map = new HashMap<>();
     private final Map<String, List<MethodInfo>> apiMap = new HashMap<>();
 
@@ -493,7 +498,7 @@ public class ELanguageGenerate {
      *
      * @return
      */
-    private String generateAPIMethod() {
+    public String generateAPIMethod() {
         StringBuilder sb = new StringBuilder();
         String paramSource = "source";
         String url = "global_url_head";
@@ -643,9 +648,11 @@ public class ELanguageGenerate {
                         ));
                     }
                 }
+//                json.置文本 (“session”, apiToken)
+                sb.append("json.置文本 (“session”, apiToken)").append("\n");
 
                 sb.append(String.format("""              
-                        source ＝ 网页_访问S (%s, 1, , , , “Content-Type: application/json;charset=utf-8”, , , , , , , , , , , , , , 编码转换 (到字节集 (json.到文本 (, , , )), #编码_GB18030, #编码_UTF_8, ), )
+                        source ＝ 编码_Utf8到Ansi (网页_访问_对象 (%s, 1, , , , “Content-Type: application/json;charset=utf-8”, , , , 编码转换 (到字节集 (json.到文本 (, , , )), #编码_GB18030, #编码_UTF_8, ), , , , , , , , , ))
                         data.解析 (source)
                         code ＝ data.取整数 (“code”)
                         .如果真 (code ＝ 0)
@@ -703,7 +710,7 @@ public class ELanguageGenerate {
     @SneakyThrows
     private void config() {
         // 配置实体类
-            put(Channel.class);
+        put(Channel.class);
         put(ChannelPermissions.class);
         put(DMS.class);
         put(Guild.class);
@@ -844,7 +851,7 @@ public class ELanguageGenerate {
             methodInfo.setParams(new ArrayList<>());
 
             EName annotation = method.getAnnotation(EName.class);
-            if (annotation != null){
+            if (annotation != null) {
                 methodInfo.setFormatName(annotation.name());
             }
 
@@ -905,7 +912,7 @@ public class ELanguageGenerate {
                         .setName(parameter.getName())
                         .setJavaDoc("");
                 ENonNull eNonNull = parameter.getAnnotation(ENonNull.class);
-                if (eNonNull != null){
+                if (eNonNull != null) {
                     info.setNonNull(true);
                 }
 

@@ -163,6 +163,7 @@ public class BotController {
     public R setIntents(
             @RequestBody JSONObject json
     ) {
+        System.out.println(json.toJSONString());
         String botId = json.getString("botId");
         JSONArray intents = json.getJSONArray("intents");
         List<IntentsType> typeList = new ArrayList<>();
