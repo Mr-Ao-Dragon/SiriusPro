@@ -3,6 +3,8 @@ package cn.siriusbot.siriuspro.config;
 import cn.siriusbot.siriuspro.uitls.ApplicationUtils;
 import org.fusesource.jansi.AnsiConsole;
 
+import java.io.IOException;
+
 public class Sirius {
 
     /**
@@ -20,7 +22,14 @@ public class Sirius {
         ApplicationUtils.initAppPath();
         if(!SiriusUtils.authAgreement()){
             SiriusUtils.printAgreement();
+            try {
+                System.in.read();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             System.exit(0);
         }
+        // 数据库引导
+        ApplicationUtils.databaseInit();
     }
 }

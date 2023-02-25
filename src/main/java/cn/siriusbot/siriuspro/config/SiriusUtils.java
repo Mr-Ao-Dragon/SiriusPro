@@ -34,6 +34,7 @@ public class SiriusUtils {
             writer.write("eula=false");
             writer.flush();
             writer.close();
+            System.in.read();
             System.exit(0);
             return false;
         }
