@@ -64,14 +64,12 @@ public class SiriusUtils {
         AnsiConsole.out().println(SiriusLoggerUtil.getFormatLogString("Prohibited for all commercial activities.",31,3));
         AnsiConsole.out().println(SiriusLoggerUtil.getFormatLogString("\n不得未经授权的情况下私自(包括但不限于,个人,个体,企业)运营任何相关社区。",31,1));
         AnsiConsole.out().println(SiriusLoggerUtil.getFormatLogString("It is not allowed to operate any relevant community without authorization (including but not limited to individuals, individuals and enterprises).",31,3));
-
         AnsiConsole.out().println(SiriusLoggerUtil.getFormatLogString("\n对框架本身做的一切修改,强制性要求开源。",31,1));
         AnsiConsole.out().println(SiriusLoggerUtil.getFormatLogString("All modifications made to the framework itself are mandatory to open source.",31,3));
-
         AnsiConsole.out().println(SiriusLoggerUtil.getFormatLogString("\n如有任何疑问，请加入QQ群进行提问376957298",31,1));
         AnsiConsole.out().println(SiriusLoggerUtil.getFormatLogString("If you have any questions, please join the QQ group to ask 376957298",31,3));
 
-        AnsiConsole.out().println(SiriusLoggerUtil.getFormatLogString("\n修改目录下eula.txt文件的eula，为true时代表您同意此开源协议( GNU Affero General Public License v3.0)，保存重新运行后方可继续使用",34,4));
+        AnsiConsole.out().println(SiriusLoggerUtil.getFormatLogString("\n修改目录下eula文件的字段[eula]，为true时代表您同意此开源协议( GNU Affero General Public License v3.0)，保存重新运行后方可继续使用",34,4));
         AnsiConsole.out().println(SiriusLoggerUtil.getFormatLogString("Modify the eula of the eula file in the directory. If it is true, it means that you agree to this open source agreement (GNU Affero General Public License v3.0). Save it and re run it before continuing to use it",34,3));
     }
 }
