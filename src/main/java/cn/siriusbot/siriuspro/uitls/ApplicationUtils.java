@@ -13,18 +13,18 @@ public class ApplicationUtils {
     /**
      * 应用目录
      */
-    public static String appsPath = new File(new File("").getAbsolutePath()+"\\apps").getAbsolutePath();
+    public static String appsPath = new File(new File("").getAbsolutePath()+"/apps").getAbsolutePath();
 
     /**
      * 配置目录
      */
-    public static String confPath = new File(new File("").getAbsolutePath()+"\\conf").getAbsolutePath();
+    public static String confPath = new File(new File("").getAbsolutePath()+"/conf").getAbsolutePath();
 
     /**
      * 图片缓存目录
      */
 
-    public static String imgCachePath = new File(new File("").getAbsolutePath()+"\\imgCache").getAbsolutePath();
+    public static String imgCachePath = new File(new File("").getAbsolutePath()+"/imgCache").getAbsolutePath();
     /**
      * 应用目录是否存在
      * @return
@@ -55,10 +55,10 @@ public class ApplicationUtils {
         if(!appsPathExist(imgCachePath)){
             createAppsPath(imgCachePath);
         }
-        File file = new File(confPath + "\\database.properties");
+        File file = new File(confPath + "/database.properties");
         if (!file.exists()){
             try {
-                Files.writeString(Path.of(confPath + "\\database.properties"), """
+                Files.writeString(Path.of(confPath + "/database.properties"), """
                         jdbc.driver=com.mysql.cj.jdbc.Driver
                         jdbc.url=jdbc:mysql://localhost:3306/siriuspro
                         jdbc.username=root

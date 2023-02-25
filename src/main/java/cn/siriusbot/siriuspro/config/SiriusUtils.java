@@ -16,7 +16,7 @@ public class SiriusUtils {
      */
     public static Properties ppt = new Properties();
 
-    public static String agreementFilePath = new File(new File("").getAbsolutePath()+"\\eula").getAbsolutePath();
+    public static String agreementFilePath = new File(new File("").getAbsolutePath()+"/eula").getAbsolutePath();
 
     /**
      * 开源协议验证是否通过

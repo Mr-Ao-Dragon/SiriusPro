@@ -1,5 +1,6 @@
 package cn.siriusbot.siriuspro.test;
 
+import cn.siriusbot.siriuspro.bot.annotation.EDoc;
 import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.*;
@@ -417,6 +418,10 @@ public class BaseGenerate {
                 ENonNull eNonNull = parameter.getAnnotation(ENonNull.class);
                 if (eNonNull != null){
                     info.setNonNull(true);
+                }
+                EDoc eDoc = parameter.getAnnotation(EDoc.class);
+                if (eDoc != null){
+                    info.setJavaDoc(eDoc.doc());
                 }
 
                 if (genericParameterType instanceof ParameterizedType type) {
