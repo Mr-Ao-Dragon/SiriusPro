@@ -3,8 +3,10 @@ package cn.siriusbot.siriuspro.bot.api.impl.bot;
 import cn.siriusbot.siriuspro.admin.service.ServerConfigService;
 import cn.siriusbot.siriuspro.bot.api.BotManageApi;
 import cn.siriusbot.siriuspro.bot.pojo.BotInfo;
+import cn.siriusbot.siriuspro.bot.pojo.BotInfoJson;
 import cn.siriusbot.siriuspro.config.bean.BotPool;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BotManageApiImpl implements BotManageApi {
@@ -25,8 +27,13 @@ public class BotManageApiImpl implements BotManageApi {
      * @return
      */
     @Override
-    public List<BotInfo> queryOnLineBotList() {
-        return this.botPool.queryOnLineBotList();
+    public List<BotInfoJson> queryOnLineBotList() {
+        List<BotInfoJson> botInfoJsons = new ArrayList<>();
+        List<BotInfo> botInfos = this.botPool.queryOnLineBotList();
+        for (BotInfo botInfo : botInfos){
+            botInfoJsons.add(new BotInfoJson(botInfo));
+        }
+        return botInfoJsons;
     }
 
     /**
