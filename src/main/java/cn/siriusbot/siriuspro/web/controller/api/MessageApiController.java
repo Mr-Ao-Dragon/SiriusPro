@@ -6,6 +6,7 @@ import cn.siriusbot.siriuspro.bot.api.pojo.message.MessageReference;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.ark.MessageArk;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.embed.MessageEmbed;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.requestPack.RequestCustomKeyboard;
+import cn.siriusbot.siriuspro.config.Constant;
 import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.uitls.ApplicationUtils;
 import cn.siriusbot.siriuspro.web.R.R;
@@ -216,7 +217,7 @@ public class MessageApiController {
         try {
             String imgPath = null;
             if (file != null) {
-                imgPath = ApplicationUtils.imgCachePath + "/" + UUID.randomUUID().toString() + ".png";
+                imgPath = ApplicationUtils.imgCachePath + Constant.SEPARATOR() + UUID.randomUUID() + ".png";
                 file.transferTo(new File(imgPath));
             }
             return new R().setData(messageApi.sendImageAndTextMessage(bot_id, channel_id, content, imgPath, msg_id, event_id));

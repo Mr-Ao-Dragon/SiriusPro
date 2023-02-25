@@ -5,6 +5,7 @@ import cn.siriusbot.siriuspro.bot.api.pojo.message.MessageMarkdown;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.MessageReference;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.ark.MessageArk;
 import cn.siriusbot.siriuspro.bot.api.pojo.message.embed.MessageEmbed;
+import cn.siriusbot.siriuspro.config.Constant;
 import cn.siriusbot.siriuspro.error.MsgException;
 import cn.siriusbot.siriuspro.uitls.ApplicationUtils;
 import cn.siriusbot.siriuspro.web.R.R;
@@ -121,6 +122,7 @@ public class DirectApiController {
      * 私信场景下，每个机器人每天累计可以发 200 条主动消息。
      * 私信场景下，被动消息没有条数限制
      * 传入msg_id或event_id其一，此条消息视为被动消息
+     *
      * @param bot_id 传入机器人ID
      * @return 返回消息对象
      */
@@ -223,7 +225,7 @@ public class DirectApiController {
         try {
             String imgPath = null;
             if (file != null) {
-                imgPath = ApplicationUtils.imgCachePath + "/" + UUID.randomUUID().toString() + ".png";
+                imgPath = ApplicationUtils.imgCachePath + Constant.SEPARATOR() + UUID.randomUUID() + ".png";
                 file.transferTo(new File(imgPath));
             }
             return new R().setData(dmsApi.sendImageAndTextMessage(bot_id, guild_id, content, imgPath, msg_id, event_id));

@@ -11,7 +11,7 @@ public interface Constant {
      * 分隔符
      * @return
      */
-    default String SEPARATOR() {
+    static String SEPARATOR() {
         String os = System.getProperty("os.name");
         //Windows操作系统
         if (os != null && os.toLowerCase().startsWith("windows")) {
