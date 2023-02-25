@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 public class GenerateTest {
 
-    //@Test
+    @Test
     void QT(){
         QTLanguageGenerate qtLanguageGenerate = new QTLanguageGenerate();
         qtLanguageGenerate.generateTypeInfos(); // 生成结构体

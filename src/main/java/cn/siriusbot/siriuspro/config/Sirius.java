@@ -22,6 +22,5 @@ public class Sirius {
             SiriusUtils.printAgreement();
             System.exit(0);
         }
-
     }
 }

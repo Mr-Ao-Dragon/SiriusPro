@@ -1,5 +1,6 @@
 package cn.siriusbot.siriuspro.test;
 
+import cn.siriusbot.siriuspro.bot.annotation.EDoc;
 import cn.siriusbot.siriuspro.bot.annotation.EName;
 import cn.siriusbot.siriuspro.bot.annotation.ENonNull;
 import cn.siriusbot.siriuspro.bot.api.*;
@@ -525,19 +526,20 @@ public class ELanguageGenerate {
             for (MethodInfo methodInfo : methodInfos) {
                 // 构建方法
                 sb.append(String.format(".子程序 %s, 整数型, 公开", methodInfo.getFormatName())).append('\n');
-                sb.append(String.format(".参数 %s, %s, 参考%s, 返回结果",
+                sb.append(String.format(".参数 %s, %s, 参考 可空 %s, 返回结果",
                         methodInfo.getType().getSrcType(),
                         methodInfo.getType().getType(),
                         methodInfo.getType().isList() ? " 数组" : ""
                 )).append('\n');
-                sb.append(String.format(".参数 %s, 文本型, 参考, http源消息，包括错误消息", paramSource)).append('\n');
+                sb.append(String.format(".参数 %s, 文本型, 参考 可空, http源消息，包括错误消息", paramSource)).append('\n');
                 // 构造参数
                 for (Info param : methodInfo.getParams()) {
-                    sb.append(String.format(".参数 %s, %s,%s%s",
+                    sb.append(String.format(".参数 %s, %s,%s%s, %s",
                                     param.getName(),
                                     param.getType(),
                                     !param.isNonNull() ? " 可空" : "",
-                                    param.isList() ? " 数组" : ""
+                                    param.isList() ? " 数组" : "",
+                                    param.getJavaDoc()
                             )
                     ).append('\n');
                 }
@@ -915,7 +917,10 @@ public class ELanguageGenerate {
                 if (eNonNull != null) {
                     info.setNonNull(true);
                 }
-
+                EDoc eDoc = parameter.getAnnotation(EDoc.class);
+                if (eDoc != null){
+                    info.setJavaDoc(eDoc.doc());
+                }
                 if (genericParameterType instanceof ParameterizedType type) {
                     // 泛型类型
                     info.setList(true);

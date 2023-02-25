@@ -13,14 +13,14 @@ public class SessionContext {
 
     public synchronized void AddSession(HttpSession session) {
         if (session != null) {
-            System.out.println(session.getId() + " -> session创建");
+            //System.out.println(session.getId() + " -> session创建");
             sessionMap.put(session.getId(), session);
         }
     }
 
     public synchronized void DelSession(HttpSession session) {
         if (session != null) {
-            System.out.println(session.getId() + " -> sessions删除");
+            //System.out.println(session.getId() + " -> sessions删除");
             sessionMap.remove(session.getId());
         }
     }
