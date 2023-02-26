@@ -271,19 +271,20 @@ public class MessageImpl implements MessageApi {
     @Override
     public Tuple<Message, String> sendImageAndTextMessage(@NotNull String bot_id, @NotNull String channel_id, String content, String image_path, String msg_id, String event_id) {
         BotClient client = botPool.getBotById(bot_id);
+        System.out.println(content);
         content = EmojiParser.parseToUnicode(content);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.POST)
                 .setBodyType(RequestBodyType.FORM)
                 .setMediaType("multipart/form-data")
                 .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/messages");
-        if (!msg_id.isEmpty())
+        if (msg_id != null)
             botRequest.putRequestBody("msg_id", msg_id);
-        if (!event_id.isEmpty())
+        if (event_id != null)
             botRequest.putRequestBody("event_id", event_id);
-        if (!content.isEmpty())
+        if (content != null)
             botRequest.putRequestBody("content", content);
-        if (!image_path.isEmpty())
+        if (image_path != null)
             botRequest.putRequestBody("file_image", new File(image_path));
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
         BotResponse response = http.req(botRequest);

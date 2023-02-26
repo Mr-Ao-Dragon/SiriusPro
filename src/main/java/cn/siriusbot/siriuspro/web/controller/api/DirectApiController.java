@@ -220,8 +220,8 @@ public class DirectApiController {
      * @return 消息对象
      */
     @SneakyThrows
-    @PostMapping("/send-image-text/{bot_id}")
-    public R sendImageAndText(@PathVariable String bot_id, @Nullable @RequestParam MultipartFile file, @RequestParam String guild_id, @Nullable @RequestParam String content, @Nullable @RequestParam String msg_id, @Nullable @RequestParam String event_id) {
+    @PostMapping("/send-image-text/{bot_id}/{guild_id}")
+    public R sendImageAndText(@PathVariable String bot_id, @Nullable @RequestParam MultipartFile file, @PathVariable String guild_id, @Nullable @RequestParam String content, @Nullable @RequestParam String msg_id, @Nullable @RequestParam String event_id) {
         try {
             String imgPath = null;
             if (file != null) {

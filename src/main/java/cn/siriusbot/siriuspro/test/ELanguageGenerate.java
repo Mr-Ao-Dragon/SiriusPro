@@ -620,7 +620,7 @@ public class ELanguageGenerate {
                     build_return.append(".计次循环首 (length, i)").append('\n');
                     if (methodInfo.getType().getType().equals(methodInfo.getType().getSrcType())) {
                         // 对象类型
-                        build_return.append(String.format("%s [i] ＝ %s%s (data.取属性 (, “data[” ＋ 到文本 (i － 1) ＋ “]”).到文本 ())",
+                        build_return.append(String.format("%s [i] ＝ %s%s (data.取成员 ( “data”,i-1).到文本 ())",
                                 methodInfo.getType().getSrcType(),
                                 parse,
                                 methodInfo.getType().getType()
