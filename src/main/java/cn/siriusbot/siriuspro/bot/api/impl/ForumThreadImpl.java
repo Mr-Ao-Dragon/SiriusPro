@@ -41,6 +41,7 @@ public class ForumThreadImpl implements ForumApi {
                 .setMethod(RequestMethod.GET);
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
         BotResponse response = http.req(botRequest);
+        System.out.println(response.getTraceId());
         String data = EmojiParser.parseToUnicode(response.getBody());
         ThreadList threadList = JSONObject.parseObject(data, ThreadList.class);
         Tuple<ThreadList, String> tuple = new Tuple<>();
@@ -63,7 +64,7 @@ public class ForumThreadImpl implements ForumApi {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.GET)
-                .setUrl("channels/" + channel_id + "/threads/" + thread_id);
+                .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/threads/" + thread_id);
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
         BotResponse response = http.req(botRequest);
         String data = EmojiParser.parseToUnicode(response.getBody());
@@ -94,7 +95,7 @@ public class ForumThreadImpl implements ForumApi {
                 .setMethod(RequestMethod.PUT)
                 .putRequestBody("content", content)
                 .putRequestBody("format", format)
-                .putRequestBody("title",title);
+                .putRequestBody("title", title);
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
         BotResponse response = http.req(botRequest);
         String data = EmojiParser.parseToUnicode(response.getBody());
