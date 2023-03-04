@@ -29,15 +29,6 @@ public class ForumThreadInfo {
     /**
      * 发表时间
      */
-    private String data_time;
+    private String date_time;
 
-    @Override
-    public String toString() {
-        return "ForumThreadInfo{" +
-                "thread_id='" + thread_id + '\'' +
-                ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                ", data_time='" + data_time + '\'' +
-                '}';
-    }
 }

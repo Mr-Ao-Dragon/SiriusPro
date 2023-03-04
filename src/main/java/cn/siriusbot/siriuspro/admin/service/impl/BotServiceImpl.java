@@ -50,6 +50,7 @@ public class BotServiceImpl implements BotService {
      */
     @Override
     public void addBot(Robot robot) {
+        System.out.println("Robot -> " + robot);
         verificationInfo(robot);
         LambdaQueryWrapper<Robot> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Robot::getBotId, robot.getBotId());
@@ -74,7 +75,7 @@ public class BotServiceImpl implements BotService {
         if (robot.getBotId() != null) {
             select.setBotId(robot.getBotId());
         }
-        if (robot.getToken() != null) {
+        if (!ObjectUtils.isEmpty(robot.getToken())) {
             select.setToken(robot.getToken());
         }
         if (robot.getSandBox() != null) {
@@ -167,7 +168,6 @@ public class BotServiceImpl implements BotService {
      * @param botId 机器人ID
      */
     @Override
-    @PowerInterceptor(power = 1)
     public void loginBotByBotId(String botId) {
         LambdaQueryWrapper<Robot> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Robot::getBotId, botId);
@@ -345,9 +345,7 @@ public class BotServiceImpl implements BotService {
         }
         List<Robot> robots = robotMapper.selectList(wrapper);
         for (Robot robot : robots) {
-            System.out.println(robot);
             this.formatBotOnLine(robot);    // 格式化在线信息
-            System.out.println(robot);
         }
         // 搜索机器人昵称
         if (!ObjectUtils.isEmpty(username)) {
@@ -380,6 +378,9 @@ public class BotServiceImpl implements BotService {
             }
             reply.add(robots.get(index));
         }
+        reply.forEach((item) -> {
+            item.setToken(null);
+        });
         return new PageRobotList()
                 .setRobots(reply)
                 .setCount(count);
@@ -408,8 +409,8 @@ public class BotServiceImpl implements BotService {
             if (robot.getState() == Robot.STATE_ERROR) {
                 robot.setErrorInfo(botInfo.getErrorInfo());
             }
-            this.refreshSubscriptionEvent(robot);
         }
+        this.refreshSubscriptionEvent(robot);
     }
 
     /**

@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 @Log4j2
-public class JavaPlugInClient implements PlugInClient , ExpandClient {
+public class JavaPlugInClient implements PlugInClient, ExpandClient {
     private String uuid;
 
     private static final HashMap<String, Class<? extends MessageBody>> eventMap = new HashMap<>();
@@ -178,12 +178,12 @@ public class JavaPlugInClient implements PlugInClient , ExpandClient {
                 if (parameterTypes.length != 1 || parameterTypes[0] != BotHttpRequest.class) {
                     break;
                 }
-                if (method.getReturnType() != R.class){
+                if (method.getReturnType() != R.class) {
                     break;
                 }
                 try {
                     return (R) method.invoke(app, request);
-                } catch (MsgException e){
+                } catch (MsgException e) {
                     return e.getR();
                 } catch (Throwable e) {
                     log.error(String.format("插件[%s]监听的方法(%s)调用异常：%s",
@@ -212,10 +212,10 @@ public class JavaPlugInClient implements PlugInClient , ExpandClient {
                 continue;
             }
             Class<?>[] parameterTypes = method.getParameterTypes();
-            if (parameterTypes.length != 1){
+            if (parameterTypes.length != 1) {
                 continue;
             }
-            if (parameterTypes[0] != WebsocketSession.class){
+            if (parameterTypes[0] != WebsocketSession.class) {
                 continue;
             }
             try {
@@ -243,23 +243,24 @@ public class JavaPlugInClient implements PlugInClient , ExpandClient {
         Method[] methods = clazz.getMethods();
         for (Method method : methods) {
             OnExpandMessage annotation = method.getAnnotation(OnExpandMessage.class);
-            if (annotation == null){
+            if (annotation == null) {
                 continue;
             }
             Class<?>[] parameterTypes = method.getParameterTypes();
-            if (parameterTypes.length != 2){
+            if (parameterTypes.length != 2) {
                 continue;
             }
-            if (parameterTypes[0] != WebsocketSession.class || parameterTypes[1] != String.class){
+            if (parameterTypes[0] != WebsocketSession.class || parameterTypes[1] != String.class) {
                 continue;
             }
             try {
                 method.invoke(app, session, message);
             } catch (Throwable e) {
+                e.printStackTrace();
                 log.error(String.format("插件[%s]监听的方法(%s)调用异常：%s",
                         app.appInfo().getAppName(),
                         method.getName(),
-                        e.getCause()
+                        e.getCause() == null ? e : e.getCause()
                 ));
             }
 
@@ -281,10 +282,10 @@ public class JavaPlugInClient implements PlugInClient , ExpandClient {
                 continue;
             }
             Class<?>[] parameterTypes = method.getParameterTypes();
-            if (parameterTypes.length != 1){
+            if (parameterTypes.length != 1) {
                 continue;
             }
-            if (parameterTypes[0] != WebsocketSession.class){
+            if (parameterTypes[0] != WebsocketSession.class) {
                 continue;
             }
             try {

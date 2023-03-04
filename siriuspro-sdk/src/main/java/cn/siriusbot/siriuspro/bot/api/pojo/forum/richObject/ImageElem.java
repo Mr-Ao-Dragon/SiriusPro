@@ -13,7 +13,7 @@ public class ImageElem {
     /**
      * 第三方图片链接
      */
-    private String third_url;
+    private ImageElemInfo plat_image;
 
     /**
      * 宽度比例

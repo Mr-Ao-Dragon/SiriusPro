@@ -12,5 +12,5 @@ public class VideoElem {
     /**
      * 第三方视频文件链接
      */
-    private String third_url;
+    private VideoElemInfo plat_video;
 }

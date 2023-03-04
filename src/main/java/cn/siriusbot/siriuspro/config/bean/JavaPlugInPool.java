@@ -1,5 +1,7 @@
 package cn.siriusbot.siriuspro.config.bean;
 
+import cn.siriusbot.siriuspro.admin.service.BotService;
+import cn.siriusbot.siriuspro.admin.service.IntentService;
 import cn.siriusbot.siriuspro.admin.service.ServerConfigService;
 import cn.siriusbot.siriuspro.bot.BotApi;
 import cn.siriusbot.siriuspro.bot.SiriusBotApiExternal;
@@ -42,6 +44,12 @@ public class JavaPlugInPool {
 
     @Autowired
     StatisticsPool statisticsPool;
+
+    @Autowired
+    BotService botService;
+
+    @Autowired
+    IntentService intentService;
 
     @PostConstruct
     void init() {
@@ -98,7 +106,7 @@ public class JavaPlugInPool {
                     aClass = appClass.loadClass(fileName);
                     Object o = aClass.newInstance();
                     if (o instanceof SiriusApplication application) {
-                        BotApi siriusBotApiExternal = new SiriusBotApiExternal(application.appInfo(), botApi, botPool, serverConfigService, statisticsPool);
+                        BotApi siriusBotApiExternal = new SiriusBotApiExternal(application.appInfo(), botApi, botPool, serverConfigService, statisticsPool, botService, intentService);
                         application.SiriusAppInit(siriusBotApiExternal);
                         return application;
                     }

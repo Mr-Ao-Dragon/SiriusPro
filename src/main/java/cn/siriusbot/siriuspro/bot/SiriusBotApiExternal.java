@@ -1,5 +1,7 @@
 package cn.siriusbot.siriuspro.bot;
 
+import cn.siriusbot.siriuspro.admin.service.BotService;
+import cn.siriusbot.siriuspro.admin.service.IntentService;
 import cn.siriusbot.siriuspro.admin.service.ServerConfigService;
 import cn.siriusbot.siriuspro.bot.api.*;
 import cn.siriusbot.siriuspro.bot.api.impl.bot.BotManageApiImpl;
@@ -23,11 +25,11 @@ public class SiriusBotApiExternal implements BotApi{
     DMS_Api dmsApi;
 
 
-    public SiriusBotApiExternal(SiriusApplicationInfo info, BotApi api, BotPool botPool, ServerConfigService serverConfigService, StatisticsPool statisticsPool) {
+    public SiriusBotApiExternal(SiriusApplicationInfo info, BotApi api, BotPool botPool, ServerConfigService serverConfigService, StatisticsPool statisticsPool, BotService botService, IntentService intentService) {
         this.info = info;
         this.api = api;
         this.proxy = new ApiStatisticsProxy(info, statisticsPool);
-        this.botManageApi = new BotManageApiImpl(info.getPackageName(), botPool, serverConfigService);
+        this.botManageApi = new BotManageApiImpl(info.getPackageName(), botPool, serverConfigService, botService, intentService);
         this.dmsApi = proxy.getProxy(DMS_Api.class, this.api.dmsApi());
         this.messageApi = proxy.getProxy(MessageApi.class, this.api.messageApi());
     }

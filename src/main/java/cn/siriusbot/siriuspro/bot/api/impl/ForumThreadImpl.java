@@ -63,7 +63,7 @@ public class ForumThreadImpl implements ForumApi {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.GET)
-                .setUrl("channels/" + channel_id + "/threads/" + thread_id);
+                .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/threads/" + thread_id);
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
         BotResponse response = http.req(botRequest);
         String data = EmojiParser.parseToUnicode(response.getBody());

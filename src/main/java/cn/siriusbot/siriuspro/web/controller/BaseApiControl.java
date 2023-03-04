@@ -1,6 +1,8 @@
 package cn.siriusbot.siriuspro.web.controller;
 
 import cn.siriusbot.siriuspro.admin.entity.Admin;
+import cn.siriusbot.siriuspro.admin.service.BotService;
+import cn.siriusbot.siriuspro.admin.service.IntentService;
 import cn.siriusbot.siriuspro.admin.service.ServerConfigService;
 import cn.siriusbot.siriuspro.bot.BotApi;
 import cn.siriusbot.siriuspro.bot.SiriusBotApiExternal;
@@ -101,12 +103,16 @@ public class BaseApiControl {
     ServerConfigService serverConfigService;
     @Autowired
     StatisticsPool statisticsPool;
+    @Autowired
+    BotService botService;
+    @Autowired
+    IntentService intentService;
     private final Map<String, BotApi> proxyApi = new ConcurrentHashMap<>();
 
     private Object getProxyByName(SiriusApplicationInfo info, String clazzName) {
         if (!proxyApi.containsKey(info.getPackageName())) {
             // 创建代理对象
-            BotApi siriusBotApiExternal = new SiriusBotApiExternal(info, botApi, botPool, serverConfigService, statisticsPool);
+            BotApi siriusBotApiExternal = new SiriusBotApiExternal(info, botApi, botPool, serverConfigService, statisticsPool, botService, intentService);
             proxyApi.put(info.getPackageName(), siriusBotApiExternal);
         }
         BotApi botApi = proxyApi.get(info.getPackageName());

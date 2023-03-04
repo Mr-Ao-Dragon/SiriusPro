@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -47,6 +48,8 @@ public class IntentServiceImpl implements IntentService {
     @Override
     @Transactional
     public void subscription(String robotId, int[] intents) {
+        System.out.println(robotId);
+        System.out.println(Arrays.toString(intents));
         LambdaQueryWrapper<Intent> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Intent::getRobotId, robotId);
         List<Intent> intentList = intentMapper.selectList(wrapper);
