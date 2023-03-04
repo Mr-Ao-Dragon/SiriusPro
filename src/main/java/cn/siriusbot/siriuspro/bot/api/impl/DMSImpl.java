@@ -302,17 +302,16 @@ public class DMSImpl implements DMS_Api {
                 .setBodyType(RequestBodyType.FORM)
                 .setMediaType("multipart/form-data")
                 .setUrl(client.getSession().getOpenUrl() + "dms/" + guild_id + "/messages")
-                .putRequestBody("content", content)
                 .putRequestBody("file_image", new File(image_path));
 
-        if (!msg_id.isEmpty())
+        if (msg_id != null)
             botRequest.putRequestBody("msg_id", msg_id);
-        if (!event_id.isEmpty())
+        if (event_id != null)
             botRequest.putRequestBody("event_id", event_id);
-        if(!content.isEmpty())
-            botRequest.putRequestBody("content",content);
-        if(!image_path.isEmpty())
-            botRequest.putRequestBody("file_image",new File(image_path));
+        if (content != null)
+            botRequest.putRequestBody("content", content);
+        if (image_path != null)
+            botRequest.putRequestBody("file_image", new File(image_path));
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
         BotResponse response = http.req(botRequest);
         String data = EmojiParser.parseToUnicode(response.getBody());
