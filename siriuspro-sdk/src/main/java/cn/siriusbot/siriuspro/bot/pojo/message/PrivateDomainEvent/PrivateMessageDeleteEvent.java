@@ -1,8 +1,13 @@
 package cn.siriusbot.siriuspro.bot.pojo.message.PrivateDomainEvent;
 
+import lombok.Data;
+import lombok.experimental.Accessors;
+
 /**
  * 私域消息呗撤回事件
  */
+@Data
+@Accessors(chain = true)
 public class PrivateMessageDeleteEvent {
     /**
      * op值

@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
  * 私域消息事件消息对象
  */
 @Data
-@Accessors
+@Accessors(chain = true)
 public class PrivateDomainMessageInfo implements MessageBody {
 
     /**
