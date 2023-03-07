@@ -4,9 +4,11 @@ import cn.siriusbot.siriuspro.admin.dao.AdminMapper;
 import cn.siriusbot.siriuspro.admin.entity.Admin;
 import cn.siriusbot.siriuspro.admin.service.AdminService;
 import cn.siriusbot.siriuspro.error.MsgException;
+import cn.siriusbot.siriuspro.uitls.HTTPUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -39,5 +41,28 @@ public class AdminServiceImpl implements AdminService {
             throw new MsgException(20104, "密码错误！");
         }
         return admin;
+    }
+
+    /**
+     * 修改密码
+     *
+     * @param oldPasswd
+     * @param passwd
+     */
+    @Override
+    public void changePassword(String oldPasswd, String passwd) {
+        Admin admin = HTTPUtil.getAdmin();
+        admin = adminMapper.selectById(admin.getId());
+        if (admin == null){
+            throw new MsgException(500, "用户不存在!");
+        }
+        if (!admin.getPasswd().equals(oldPasswd)){
+            throw new MsgException(500, "旧密码错误!");
+        }
+        if (ObjectUtils.isEmpty(passwd)){
+            throw new MsgException(500, "新密码不能为空!");
+        }
+        admin.setPasswd(passwd);
+        adminMapper.updateById(admin);
     }
 }

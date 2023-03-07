@@ -10,4 +10,9 @@ public interface AdminService {
      * @return 用户对象
      */
     Admin login(String account, String passwd);
+
+    /**
+     * 修改密码
+     */
+    void changePassword(String oldPasswd, String passwd);
 }
