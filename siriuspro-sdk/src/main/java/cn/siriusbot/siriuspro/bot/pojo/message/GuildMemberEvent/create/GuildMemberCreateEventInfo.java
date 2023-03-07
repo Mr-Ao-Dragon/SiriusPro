@@ -1,10 +1,14 @@
 package cn.siriusbot.siriuspro.bot.pojo.message.GuildMemberEvent.create;
 
 import cn.siriusbot.siriuspro.bot.pojo.message.MessageBody;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * 频道成员加入事件
  */
+@Data
+@Accessors(chain = true)
 public class GuildMemberCreateEventInfo implements MessageBody {
 
     /**

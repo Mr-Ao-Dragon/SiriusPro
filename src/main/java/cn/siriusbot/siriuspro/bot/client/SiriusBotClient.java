@@ -183,7 +183,8 @@ public class SiriusBotClient implements BotClient {
         BotHttpEvent http = getBean(BotHttpEvent.class);
 
         try {
-            JSONObject json = JSONObject.parseObject(http.request(botRequest));
+            String request = http.request(botRequest);
+            JSONObject json = JSONObject.parseObject(request);
             this.session.setWebSocketUri(new URI(json.getString("url")));
         } catch (URISyntaxException e) {
             log.error(e);
