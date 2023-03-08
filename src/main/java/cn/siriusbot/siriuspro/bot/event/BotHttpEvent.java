@@ -12,6 +12,7 @@ public interface BotHttpEvent extends BotEvent {
      * @param request 请求对象
      * @return 响应内容
      */
+    @Deprecated
     String request(BotRequest request);
 
     /**

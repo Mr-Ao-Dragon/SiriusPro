@@ -35,10 +35,7 @@ import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
@@ -183,6 +180,7 @@ public class BaseApiControl {
         if (client == null) {
             throw new MsgException(500, "构建请求错误，session会话过期或不存在!");
         }
+        String log = "";
         //Object o = apiObject.get(body.getApi());
         Object o = this.getProxyByName(client.getInfo(), body.getApi());
         MethodInfo methodInfo = apiMethodInfo.get(body.getApi()).get(body.getMethod());
@@ -193,6 +191,12 @@ public class BaseApiControl {
             ParamInfo param = methodInfo.getParams().get(i);
             objects[i] = body.getParam().getObject(param.getName(), param.getType());
         }
+        log += String.format("(%s)调用API(%s)方法(%s)\n参数 -> %s\n",
+                client.getPackageName(),
+                body.getApi(),
+                method.getName(),
+                Arrays.toString(objects)
+        );
         try {
             R r = new R();
             r.setCode(0);
@@ -203,10 +207,20 @@ public class BaseApiControl {
             } else {
                 r.setData(invoke);
             }
+            log += "成功返回 -> " + r;
             return r;
         } catch (InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
-            throw e.getCause();
+            Throwable temp = e;
+            while (temp.getCause() != null){
+                temp = temp.getCause();
+            }
+            if (temp instanceof MsgException msg){
+                log += "异常 -> " + msg.getR();
+            } else {
+                log += "异常 -> " + temp;
+            }
+            throw temp;
         }
     }
 

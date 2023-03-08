@@ -6,12 +6,16 @@ import cn.siriusbot.siriuspro.bot.pojo.BotRequest;
 import cn.siriusbot.siriuspro.bot.pojo.BotResponse;
 import cn.siriusbot.siriuspro.bot.pojo.e.RequestBodyType;
 import cn.siriusbot.siriuspro.error.MsgException;
+import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Log4j2
 public class BotHttpEventImpl implements BotHttpEvent {
@@ -25,6 +29,15 @@ public class BotHttpEventImpl implements BotHttpEvent {
 
     BotClient client;
 
+    Map<Integer, String> errorMsg = new ConcurrentHashMap<>();
+
+    /**
+     * 初始化错误信息
+     */
+    private void initializeTheErrorMessage(){
+        errorMsg.put(10001, "UnknownAccount 账号异常");
+    }
+
     /**
      * 注入客户端对象，并初始化
      *
@@ -33,6 +46,7 @@ public class BotHttpEventImpl implements BotHttpEvent {
     @Override
     public void init(BotClient client) {
         this.client = client;
+        initializeTheErrorMessage();
     }
 
     /**
@@ -75,6 +89,17 @@ public class BotHttpEventImpl implements BotHttpEvent {
         }
     }
 
+    private void disposeResponse(Response response) throws IOException {
+        String body = Objects.requireNonNull(response.body()).string();
+        JSONObject json = JSONObject.parseObject(body);
+        if (json.getInteger("code") != null){
+            String msg = errorMsg.get(json.getInteger("code"));
+            if (msg != null){
+                throw new MsgException(json.getInteger("code"), msg);
+            }
+        }
+    }
+
     /**
      * http请求
      *
@@ -97,14 +122,20 @@ public class BotHttpEventImpl implements BotHttpEvent {
                             .setBody(Objects.requireNonNull(response.body()).string())
                             .setTraceId(response.header("X-Tps-trace-ID"));
                 }
+                case 405 -> throw new MsgException(405, "http method 不允许");
+                case 429 -> throw new MsgException(405, "频率限制");
+                case 404 -> throw new MsgException(405, "未找到 API");
                 case 500 -> {
+                    String body = Objects.requireNonNull(response.body()).string();
+                    this.disposeResponse(response);
                     return new BotResponse()
                             .setCode(500)
-                            .setBody(Objects.requireNonNull(response.body()).string())
+                            .setBody(body)
                             .setTraceId(response.header("X-Tps-trace-ID"));
                 }
                 default -> {
-                    throw new MsgException(500, String.format("httpClient请求错误代码:%d，body:%s,X-Tps-trace-ID：%s", response.code(), response.body().string(), response.header("X-Tps-trace-ID")));
+                    this.disposeResponse(response);
+                    throw new MsgException(response.code(), String.format("httpClient请求错误代码:%d，body:%s,X-Tps-trace-ID：%s", response.code(), response.body().string(), response.header("X-Tps-trace-ID")));
                 }
             }
         } catch (MsgException e) {
