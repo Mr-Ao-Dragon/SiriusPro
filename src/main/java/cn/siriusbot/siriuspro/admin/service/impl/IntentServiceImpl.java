@@ -48,8 +48,6 @@ public class IntentServiceImpl implements IntentService {
     @Override
     @Transactional
     public void subscription(String robotId, int[] intents) {
-        System.out.println(robotId);
-        System.out.println(Arrays.toString(intents));
         LambdaQueryWrapper<Intent> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Intent::getRobotId, robotId);
         List<Intent> intentList = intentMapper.selectList(wrapper);

@@ -1,6 +1,7 @@
 package cn.siriusbot.siriuspro.admin.webapi;
 
 import cn.siriusbot.siriuspro.admin.entity.Admin;
+import cn.siriusbot.siriuspro.admin.service.LogService;
 import cn.siriusbot.siriuspro.admin.service.PlugInService;
 import cn.siriusbot.siriuspro.admin.webapi.config.SessionContext;
 import cn.siriusbot.siriuspro.config.Constant;
@@ -16,6 +17,7 @@ import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -30,6 +32,8 @@ public class WebsocketController {
 
     SessionContext sessionContext;
 
+    LogService logService;
+
     Timer timer = new Timer();    // 定时任务
     TimerTask task;
 
@@ -39,20 +43,19 @@ public class WebsocketController {
     public void onOpen(Session session, EndpointConfig config) {
         this.session = session;
         this.sessionContext = AppContextUtil.getBean(SessionContext.class);
+        this.logService = AppContextUtil.getBean(LogService.class);
     }
 
     @OnMessage
     public void onMessage(String message) {
-        System.out.println("dash-board -> " + message);
         JSONObject json = JSONObject.parseObject(message);
-        if (json.getInteger("event") == 1) {
+        Integer event = json.getInteger("event");
+        // 首页仪表盘
+        if (event == 1 || event == 2) {
             // 验证头信息
             String jsessionid = json.getString("JSESSIONID");
             if (jsessionid != null) {
-                System.out.println(jsessionid);
                 HttpSession session = this.sessionContext.getSession(jsessionid);
-                System.out.println("session => " + session);
-
                 Admin admin = (Admin) session.getAttribute(Constant.SESSION_ADMIN);
                 if (admin == null) {
                     try {
@@ -63,19 +66,38 @@ public class WebsocketController {
                     return;
                 }
                 // 启动任务
-                this.statisticsPool = AppContextUtil.getBean(StatisticsPool.class);
-                this.plugInService = AppContextUtil.getBean(PlugInService.class);
-                this.task = new TimerTask() {
-                    @Override
-                    public void run() {
-                        R r = new R()
-                                .setCode(0)
-                                .setData(statisticsPool.getStatisticsData())
-                                .setExtra(plugInService.queryAllPlugInList());
-                        WebsocketController.this.session.getAsyncRemote().sendText(JSONObject.toJSONString(r));
-                    }
-                };
-                this.timer.schedule(task, new Date(), 1000);
+                if (event == 1){    // 仪表盘
+                    this.statisticsPool = AppContextUtil.getBean(StatisticsPool.class);
+                    this.plugInService = AppContextUtil.getBean(PlugInService.class);
+                    this.task = new TimerTask() {
+                        @Override
+                        public void run() {
+                            R r = new R()
+                                    .setCode(0)
+                                    .setData(statisticsPool.getStatisticsData())
+                                    .setExtra(plugInService.queryAllPlugInList());
+                            WebsocketController.this.session.getAsyncRemote().sendText(JSONObject.toJSONString(r));
+                        }
+                    };
+                    this.timer.schedule(task, new Date(), 1000);
+                }
+                if (event == 2){    // 日志信息
+                    logService.registerListener(this.session.getId());
+                    this.task = new TimerTask() {
+                        @Override
+                        public void run() {
+                            List<String> logBySession = logService.getLogBySession(WebsocketController.this.session.getId());
+                            if (logBySession.size() > 0) {
+                                R r = new R()
+                                        .setCode(0)
+                                        .setData(logBySession);
+                                WebsocketController.this.session.getAsyncRemote().sendText(JSONObject.toJSONString(r));
+                            }
+                        }
+                    };
+                    this.timer.schedule(task, new Date(), 200);
+                }
+
             }
         }
     }
@@ -85,5 +107,6 @@ public class WebsocketController {
         if (task != null) {
             task.cancel();
         }
+        logService.deleteListener(this.session.getId());
     }
 }

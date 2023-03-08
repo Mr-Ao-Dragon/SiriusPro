@@ -41,7 +41,6 @@ public class ForumThreadImpl implements ForumApi {
                 .setMethod(RequestMethod.GET);
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
         BotResponse response = http.req(botRequest);
-        System.out.println(response.getTraceId());
         String data = EmojiParser.parseToUnicode(response.getBody());
         ThreadList threadList = JSONObject.parseObject(data, ThreadList.class);
         Tuple<ThreadList, String> tuple = new Tuple<>();

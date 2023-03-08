@@ -163,7 +163,6 @@ public class BaseApiControl {
     @SneakyThrows
     @PostMapping("control")
     public R control(@RequestBody String bodyStr) {
-        System.out.println(bodyStr);
         BaseApiBody body = JSONObject.parseObject(bodyStr, BaseApiBody.class);
         if (ObjectUtils.isEmpty(body.getSession())) {
             throw new MsgException(500, "构建请求错误，session为空!");
@@ -184,7 +183,6 @@ public class BaseApiControl {
         if (client == null) {
             throw new MsgException(500, "构建请求错误，session会话过期或不存在!");
         }
-        System.out.println(body);
         //Object o = apiObject.get(body.getApi());
         Object o = this.getProxyByName(client.getInfo(), body.getApi());
         MethodInfo methodInfo = apiMethodInfo.get(body.getApi()).get(body.getMethod());

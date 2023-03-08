@@ -30,6 +30,15 @@
             </pattern>
         </layout>
     </appender>
+    <!--前端日志显示-->
+    <appender name="web" class="cn.siriusbot.siriuspro.config.LogFilter">
+        <!--控制台使用layout节点-->
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>
+                ${logging.pattern.file}
+            </pattern>
+        </layout>
+    </appender>
 
     <!--按天生成日志-->
     <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -71,6 +80,7 @@
         <appender-ref ref="console"/>
         <!--输出日志到文件-->
         <appender-ref ref="file"/>
+        <appender-ref ref="web"/>
 
     </root>
 

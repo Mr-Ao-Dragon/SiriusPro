@@ -1,9 +1,12 @@
 package cn.siriusbot.siriuspro.web.websocket.surface;
 
+import lombok.extern.log4j.Log4j2;
+
 import javax.websocket.CloseReason;
 import javax.websocket.Session;
 import java.io.IOException;
 
+@Log4j2
 public class WebsocketSessionImpl implements WebsocketSession{
 
     Session session;
@@ -39,7 +42,7 @@ public class WebsocketSessionImpl implements WebsocketSession{
 
     @Override
     public void send(String s) throws IOException {
-        System.out.println("发送 -> " + s);
+        log.info("Websocket.send() -> " + s);
         this.session.getBasicRemote().sendText(s);
     }
 }

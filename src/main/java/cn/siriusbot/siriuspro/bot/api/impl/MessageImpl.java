@@ -271,7 +271,6 @@ public class MessageImpl implements MessageApi {
     @Override
     public Tuple<Message, String> sendImageAndTextMessage(@NotNull String bot_id, @NotNull String channel_id, String content, String image_path, String msg_id, String event_id) {
         BotClient client = botPool.getBotById(bot_id);
-        System.out.println(content);
         content = EmojiParser.parseToUnicode(content);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.POST)

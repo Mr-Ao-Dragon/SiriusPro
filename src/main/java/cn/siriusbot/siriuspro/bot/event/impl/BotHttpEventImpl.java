@@ -160,7 +160,6 @@ public class BotHttpEventImpl implements BotHttpEvent {
             }
             return builder.build();
         }
-        System.out.println(request.getMediaType());
         return RequestBody.create(request.getRequestBody(), MediaType.parse(request.getMediaType()));
     }
 }

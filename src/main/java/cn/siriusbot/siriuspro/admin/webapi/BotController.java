@@ -141,7 +141,6 @@ public class BotController {
         if (size == null || size < 1) {
             size = 1000;
         }
-        System.out.println(sandBox);
         PageRobotList pageRobotList = botService.queryRobotAllByCondition(page, size, botId, username, state, botType, sandBox);
         JSONObject extra = new JSONObject();
         extra.put("count", pageRobotList.getCount());
@@ -163,7 +162,6 @@ public class BotController {
     public R setIntents(
             @RequestBody JSONObject json
     ) {
-        System.out.println(json.toJSONString());
         String botId = json.getString("botId");
         JSONArray intents = json.getJSONArray("intents");
         List<IntentsType> typeList = new ArrayList<>();

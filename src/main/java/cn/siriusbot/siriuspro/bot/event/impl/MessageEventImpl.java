@@ -97,7 +97,6 @@ public class MessageEventImpl implements MessageEvent , EventMethodHaveParam<Bot
     @OnBotEvent
     @Override
     public void onEvent(BotEventType type, BotWebSocketMessage body) {
-        System.out.println(body.getMessage());
         if (type == BotEventType.WEBSOCKET_MESSAGE && body.getOp() == 0) {
             JSONObject d = body.getBody().getJSONObject("d");
             String event = body.getBody().getString("t");

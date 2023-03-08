@@ -37,7 +37,6 @@ public class MsgQueue {
                     this.startTask();
                 } else {
                     // 手动启动
-                    System.out.println("手动启动线程");
                     this.executor.execute(MsgQueue.this::startTask);
                 }
 

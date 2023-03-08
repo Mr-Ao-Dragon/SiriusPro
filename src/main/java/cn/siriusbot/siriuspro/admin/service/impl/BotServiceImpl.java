@@ -50,7 +50,6 @@ public class BotServiceImpl implements BotService {
      */
     @Override
     public void addBot(Robot robot) {
-        System.out.println("Robot -> " + robot);
         verificationInfo(robot);
         LambdaQueryWrapper<Robot> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Robot::getBotId, robot.getBotId());

@@ -73,10 +73,8 @@ public class PlugInWebSocketServer implements ClientObserver {
      */
     @OnMessage
     public void onMessage(String message) {
-        System.out.println(message);
         try {
             WebSocketBody body = JSON.parseObject(message, WebSocketBody.class);
-            System.out.println(body);
             switch (body.getCode()) {
                 case 1 -> {
                     if (this.verify != 0) {
