@@ -116,7 +116,7 @@ public class ChannelImpl implements ChannelApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<Channel, String> modifyChannel(@NotNull String bot_id, @NotNull String channel_id, Channel channel) {
+    public Tuple<Channel, String> modifyChannel(@NotNull String bot_id, @NotNull String channel_id, @NotNull Channel channel) {
         BotClient client = botPool.getBotById(bot_id);
         channel.setName(EmojiParser.parseToUnicode(channel.getName()));
         BotRequest botRequest = new BotRequest()

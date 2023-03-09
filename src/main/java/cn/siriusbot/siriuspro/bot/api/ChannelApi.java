@@ -86,9 +86,11 @@ public interface ChannelApi extends ApiProxy {
             @EDoc(doc = "机器人ID")
             @NonNull @ENonNull String bot_id,
 
-            @EDoc(doc = "子频道对象")
+            @EDoc(doc = "子频道ID")
             @NonNull @ENonNull String channel_id,
-            Channel channel
+
+            @EDoc(doc = "子频道对象")
+            @NonNull @ENonNull Channel channel
     );
 
     /**

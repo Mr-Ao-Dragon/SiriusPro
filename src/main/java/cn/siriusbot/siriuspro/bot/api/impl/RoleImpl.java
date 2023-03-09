@@ -115,7 +115,9 @@ public class RoleImpl implements RoleApi {
     @Override
     public Tuple<NewRole, String> modifyRoleByGuild(@NotNull String bot_id, @NotNull String guild_id, @NotNull String role_id, String name, Integer color, Integer hoist) {
         BotClient client = botPool.getBotById(bot_id);
-        name = EmojiParser.parseToUnicode(name);
+        if (name != null){
+            name = EmojiParser.parseToUnicode(name);
+        }
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.PATCH)
                 .setUrl(client.getSession().getOpenUrl() + "guilds/" + guild_id + "/roles/" + role_id)

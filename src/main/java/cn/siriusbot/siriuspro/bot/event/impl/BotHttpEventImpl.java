@@ -392,7 +392,7 @@ public class BotHttpEventImpl implements BotHttpEvent {
                 default -> {
                     String body = Objects.requireNonNull(response.body()).string();
                     this.disposeResponse(body);
-                    throw new MsgException(response.code(), String.format("httpClient请求错误代码:%d，body:%s,X-Tps-trace-ID：%s", response.code(), response.body().string(), response.header("X-Tps-trace-ID")));
+                    throw new MsgException(response.code(), String.format("httpClient请求错误代码:%d，body:%s,X-Tps-trace-ID：%s", response.code(), body, response.header("X-Tps-trace-ID")));
                 }
             }
         } catch (MsgException e) {

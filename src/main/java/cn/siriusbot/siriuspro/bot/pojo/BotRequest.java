@@ -65,7 +65,9 @@ public class BotRequest {
     }
 
     public BotRequest putRequestBody(String key, Object val){
-        this.map.put(key, val);
+        if (val != null) {
+            this.map.put(key, val);
+        }
         return this;
     }
 

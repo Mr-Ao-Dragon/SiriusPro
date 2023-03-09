@@ -36,7 +36,7 @@ public class PinsMessageImpl implements PinsMessageApi {
     public Tuple<PinsMessage, String> addPinsMessage(@NotNull String bot_id, @NotNull String channel_id, @NotNull String message_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
-                .setUrl("channels/" + channel_id + "/pins/" + message_id)
+                .setUrl(client.getSession().getOpenUrl() +"channels/" + channel_id + "/pins/" + message_id)
                 .setMethod(RequestMethod.PUT);
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
         BotResponse response = http.req(botRequest);

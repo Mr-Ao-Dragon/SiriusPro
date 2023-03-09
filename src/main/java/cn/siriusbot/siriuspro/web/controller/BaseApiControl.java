@@ -22,6 +22,7 @@ import com.alibaba.fastjson2.JSONObject;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
@@ -37,9 +38,12 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/api")
+@Log4j2
 public class BaseApiControl {
 
     @Autowired
@@ -160,6 +164,7 @@ public class BaseApiControl {
     @SneakyThrows
     @PostMapping("control")
     public R control(@RequestBody String bodyStr) {
+        bodyStr = bodyStr.replaceAll("\\\\r\\\\n", "\\\\n");
         BaseApiBody body = JSONObject.parseObject(bodyStr, BaseApiBody.class);
         if (ObjectUtils.isEmpty(body.getSession())) {
             throw new MsgException(500, "构建请求错误，session为空!");
@@ -180,7 +185,7 @@ public class BaseApiControl {
         if (client == null) {
             throw new MsgException(500, "构建请求错误，session会话过期或不存在!");
         }
-        String log = "";
+        String logMsg = "";
         //Object o = apiObject.get(body.getApi());
         Object o = this.getProxyByName(client.getInfo(), body.getApi());
         MethodInfo methodInfo = apiMethodInfo.get(body.getApi()).get(body.getMethod());
@@ -191,7 +196,7 @@ public class BaseApiControl {
             ParamInfo param = methodInfo.getParams().get(i);
             objects[i] = body.getParam().getObject(param.getName(), param.getType());
         }
-        log += String.format("(%s)调用API(%s)方法(%s)\n参数 -> %s\n",
+        logMsg += String.format("(%s)调用API(%s)方法(%s)\n参数 -> %s\n",
                 client.getPackageName(),
                 body.getApi(),
                 method.getName(),
@@ -207,7 +212,8 @@ public class BaseApiControl {
             } else {
                 r.setData(invoke);
             }
-            log += "成功返回 -> " + r;
+            logMsg += "成功返回 -> " + r;
+            log.info(logMsg);
             return r;
         } catch (InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
@@ -216,10 +222,19 @@ public class BaseApiControl {
                 temp = temp.getCause();
             }
             if (temp instanceof MsgException msg){
-                log += "异常 -> " + msg.getR();
+                logMsg += "异常 -> " + msg.getR();
             } else {
-                log += "异常 -> " + temp;
+                String pattern = "Argument for @NotNull parameter '(\\w+)'";
+                Pattern r = Pattern.compile(pattern);
+                Matcher m = r.matcher(temp.getMessage() );
+                if (m.find()) {
+                    logMsg += "异常 -> " + String.format("参数%s不能为空!",  m.group(1));
+                    log.error(logMsg);
+                    throw new MsgException(500, String.format("参数%s不能为空!",  m.group(1)));
+                }
+                logMsg += "异常 -> " + temp;
             }
+            log.error(logMsg);
             throw temp;
         }
     }

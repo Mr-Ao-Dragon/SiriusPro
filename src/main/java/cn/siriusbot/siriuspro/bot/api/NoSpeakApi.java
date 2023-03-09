@@ -67,10 +67,10 @@ public interface NoSpeakApi extends ApiProxy {
             @EDoc(doc = "用户ID数组")
             @NonNull @ENonNull List<String> user_ids,
 
-            @EDoc(doc = "禁言到期时间戳")
+            @EDoc(doc = "禁言到期时间戳，绝对时间戳，单位：秒（与 mute_seconds 字段同时赋值的话，以该字段为准）")
             String mute_end_timestamp,
 
-            @EDoc(doc = "禁言秒数")
+            @EDoc(doc = "禁言多少秒（两个字段二选一，默认以 mute_end_timestamp 为准）")
             String mute_seconds
     );
 
