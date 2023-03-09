@@ -46,7 +46,7 @@ public class DMSImpl implements DMS_Api {
     public Tuple<DMS, String> createDMS(@NotNull String bot_id, @NotNull String recipient_id, @NotNull String source_guild_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
-                .setUrl(client.getSession().getOpenUrl() + "user/@me/dms")
+                .setUrl(client.getSession().getOpenUrl() + "users/@me/dms")
                 .setMethod(RequestMethod.POST)
                 .addHeader("Content-Type", "text/plain;application/json")
                 .putRequestBody("recipient_id", recipient_id)
@@ -83,7 +83,7 @@ public class DMSImpl implements DMS_Api {
     public Tuple<Message, String> sendMessage(@NotNull String bot_id, @NotNull String guild_id, String content, String image_Url, String msg_id, String event_id) {
         BotClient client = botPool.getBotById(bot_id);
         content = EmojiParser.parseToUnicode(content);
-        if (guild_id == null || guild_id.isEmpty())
+        if (guild_id.isEmpty())
             throw new MsgException(500, "guild_id不可为空");
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.POST)

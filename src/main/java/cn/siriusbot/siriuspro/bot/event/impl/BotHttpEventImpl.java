@@ -345,9 +345,8 @@ public class BotHttpEventImpl implements BotHttpEvent {
         }
     }
 
-    private void disposeResponse(Response response) throws IOException {
-        String body = Objects.requireNonNull(response.body()).string();
-        JSONObject json = JSONObject.parseObject(body);
+    private void disposeResponse(String response) throws IOException {
+        JSONObject json = JSONObject.parseObject(response);
         if (json.getInteger("code") != null){
             String msg = errorMsg.get(json.getInteger("code"));
             if (msg != null){
@@ -367,6 +366,7 @@ public class BotHttpEventImpl implements BotHttpEvent {
         request
                 .addHeader("Authorization", "Bot " + client.getInfo().getBotId() + "." + client.getInfo().getToken())
                 .addHeader("User-Agent", "SiriusBot");
+        log.info("HTTP请求 -> " + request);
         // 构建外部请求对象
         Request toRequest = botRequestToRequest(request);
         try {
@@ -383,14 +383,15 @@ public class BotHttpEventImpl implements BotHttpEvent {
                 case 404 -> throw new MsgException(405, "未找到 API");
                 case 500 -> {
                     String body = Objects.requireNonNull(response.body()).string();
-                    this.disposeResponse(response);
+                    this.disposeResponse(body);
                     return new BotResponse()
                             .setCode(500)
                             .setBody(body)
                             .setTraceId(response.header("X-Tps-trace-ID"));
                 }
                 default -> {
-                    this.disposeResponse(response);
+                    String body = Objects.requireNonNull(response.body()).string();
+                    this.disposeResponse(body);
                     throw new MsgException(response.code(), String.format("httpClient请求错误代码:%d，body:%s,X-Tps-trace-ID：%s", response.code(), response.body().string(), response.header("X-Tps-trace-ID")));
                 }
             }

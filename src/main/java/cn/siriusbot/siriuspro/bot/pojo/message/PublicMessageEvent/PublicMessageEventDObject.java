@@ -17,7 +17,10 @@ import java.util.List;
 public class PublicMessageEventDObject implements MessageBody {
 
 
-
+    /**
+     * 频道id
+     */
+    private String guild_id;
 
     /**
      * 子频道消息排序
