@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 public class GenerateTest {
 
-    @Test
+
     void QT(){
         QTLanguageGenerate qtLanguageGenerate = new QTLanguageGenerate();
         qtLanguageGenerate.generateTypeInfos(); // 生成结构体
@@ -17,6 +17,8 @@ public class GenerateTest {
     @Test
     void E(){
         ELanguageGenerate eLanguageGenerate = new ELanguageGenerate();
-        System.out.println(eLanguageGenerate.generateAPIMethod());
+        //System.out.println(eLanguageGenerate.generateTypeInfos());
+        //System.out.println(eLanguageGenerate.generateBuildObject());
+        System.out.println(eLanguageGenerate.generateAnalyticClass());
     }
 }

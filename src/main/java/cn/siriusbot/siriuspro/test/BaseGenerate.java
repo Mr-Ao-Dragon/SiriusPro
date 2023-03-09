@@ -311,6 +311,8 @@ public class BaseGenerate {
         put(PublicMessageEvent.class);
         put(PublicMessageEventDObject.class);
         put(Op_User.class);
+        put(VideoElemInfo.class);
+        put(ImageElemInfo.class);
     }
 
     private void configApi() {
