@@ -14,6 +14,8 @@
     <!--日志文件输出内容的格式-->
     <substitutionProperty name="logging.pattern.file"
                           value="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+    <substitutionProperty name="logging.pattern.web"
+                          value='%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}{----分割线----}${LOG_LEVEL_PATTERN:-%p }{----分割线----}${PID:- }{----分割线----}[%t]{----分割线----}%logger{39}{----分割线----}%m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}'/>
 
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
     <conversionRule conversionWord="wex"
@@ -35,7 +37,7 @@
         <!--控制台使用layout节点-->
         <layout class="ch.qos.logback.classic.PatternLayout">
             <pattern>
-                ${logging.pattern.file}
+                ${logging.pattern.web}
             </pattern>
         </layout>
     </appender>
