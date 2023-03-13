@@ -94,7 +94,7 @@ public class ChannelPermissionsImpl implements ChannelPermissionsApi {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/members/" + user_id + "/permissions")
-                .setMethod(RequestMethod.PATCH)
+                .setMethod(RequestMethod.PUT)
                 .putRequestBody("add", add)
                 .putRequestBody("remove", remove);
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
