@@ -23,6 +23,7 @@ public class WebSocketEventImpl implements WebSocketEvent, EventMethodNoParam {
 
     private static class BotWebSocketClientImpl extends BotWebSocketClient {
         BotClient client;
+        String bot_id = "";
 
         /**
          * Constructs a WebSocketClient instance and sets it to the connect to the specified URI. The
@@ -44,7 +45,8 @@ public class WebSocketEventImpl implements WebSocketEvent, EventMethodNoParam {
         @Override
         public void onMessage(String message) {
             JSONObject json = JSONObject.parseObject(message);
-            json.put("bot_id", client.getInfo().getBotId());
+            bot_id = client.getInfo().getBotId();
+            json.put("bot_id", bot_id);
             message = json.toJSONString();
             log.info(message);
             client.pushEvent(BotEventType.WEBSOCKET_MESSAGE, new BotWebSocketMessage(
@@ -53,16 +55,16 @@ public class WebSocketEventImpl implements WebSocketEvent, EventMethodNoParam {
 
         @Override
         public void onClose(int code, String reason, boolean remote) {
-
+            log.info(String.format("Bot[%s] ws连接已被断开", bot_id));
         }
 
         @Override
         public void onError(Exception ex) {
-            log.error(ex);
+            log.error(String.format("Bot[%s] ws连接出现错误，错误信息为 -> %s", bot_id, ex), ex);
             try {
                 Thread.sleep(5000);
                 new Thread(() -> {
-                    client.pushEvent(BotEventType.SEND_HEART_BEAT_ERROR, null);
+                    client.pushEvent(BotEventType.REAUTHORIZATION_SESSION, null);   // 重新授权会话
                 }).start();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -90,7 +92,7 @@ public class WebSocketEventImpl implements WebSocketEvent, EventMethodNoParam {
     public void start() {
         try {
             this.webSocket.connect();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

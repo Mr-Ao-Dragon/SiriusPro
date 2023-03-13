@@ -218,23 +218,23 @@ public class BaseApiControl {
         } catch (InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
             Throwable temp = e;
-            while (temp.getCause() != null){
+            while (temp.getCause() != null) {
                 temp = temp.getCause();
             }
-            if (temp instanceof MsgException msg){
+            if (temp instanceof MsgException msg) {
                 logMsg += "异常 -> " + msg.getR();
             } else {
                 String pattern = "Argument for @NotNull parameter '(\\w+)'";
                 Pattern r = Pattern.compile(pattern);
-                Matcher m = r.matcher(temp.getMessage() );
+                Matcher m = r.matcher(temp.getMessage());
                 if (m.find()) {
-                    logMsg += "异常 -> " + String.format("参数%s不能为空!",  m.group(1));
-                    log.error(logMsg);
-                    throw new MsgException(500, String.format("参数%s不能为空!",  m.group(1)));
+                    logMsg += "异常 -> " + String.format("参数%s不能为空!", m.group(1));
+                    log.error(logMsg, e);
+                    throw new MsgException(500, String.format("参数%s不能为空!", m.group(1)));
                 }
                 logMsg += "异常 -> " + temp;
             }
-            log.error(logMsg);
+            log.error(logMsg, e);
             throw temp;
         }
     }

@@ -62,4 +62,5 @@ public class Robot {
     public static final int STATE_PROCEED = 1;    // 登录中
     public static final int STATE_ONLINE = 2;    // 已登录
     public static final int STATE_ERROR = 3;    // 登录异常
+    public static final int STATE_RECONNECTION = 4;    // 重连中
 }

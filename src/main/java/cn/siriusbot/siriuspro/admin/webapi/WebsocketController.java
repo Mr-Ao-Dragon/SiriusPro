@@ -82,7 +82,6 @@ public class WebsocketController {
                     this.timer.schedule(task, new Date(), 1000);
                 }
                 if (event == 2){    // 日志信息
-                    logService.registerListener(this.session.getId());
                     this.task = new TimerTask() {
                         @Override
                         public void run() {
@@ -95,6 +94,15 @@ public class WebsocketController {
                             }
                         }
                     };
+                    // 发送近200条数据
+                    List<String> logLately = logService.getLogLately();
+                    if (logLately.size() > 0) {
+                        R r = new R()
+                                .setCode(0)
+                                .setData(logLately);
+                        WebsocketController.this.session.getAsyncRemote().sendText(JSONObject.toJSONString(r));
+                    }
+                    logService.registerListener(this.session.getId());
                     this.timer.schedule(task, new Date(), 200);
                 }
 

@@ -55,7 +55,7 @@ public class MsgQueue {
             try {
                 poll.getObserver().sendMsg(poll.getMsg());  // 发送数据
             } catch (Exception e) {
-                log.error(e);
+                log.error("发送ws消息异常", e);
                 poll.setRetry(poll.getRetry() + 1);
                 if (poll.getRetry() < 6){
                     // 最多重发5次

@@ -6,6 +6,9 @@ import java.util.List;
  * 日志处理类
  */
 public interface LogService {
+
+    List<String> getLogLately();
+
     /**
      * 推入日志
      */

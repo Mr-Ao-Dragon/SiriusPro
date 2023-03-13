@@ -17,6 +17,8 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static cn.siriusbot.siriuspro.bot.pojo.e.BotEventType.REAUTHORIZATION_SESSION;
+
 @Log4j2
 public class HeartbeatEventImpl implements HeartbeatEvent, EventMethodNoParam, EventMethodHaveParam<BotWebSocketMessage> {
     BotClient client;
@@ -98,6 +100,18 @@ public class HeartbeatEventImpl implements HeartbeatEvent, EventMethodNoParam, E
                 // 停止心跳包事件
                 this.pause();
             }
+            case REAUTHORIZATION_SESSION -> {
+                // 重新授权会话
+                // 会话失效，进行重连
+                this.client.getInfo().setState(Robot.STATE_ERROR);  // 重连中
+                this.client.getInfo().setErrorInfo("会话失效，重连重新授权");
+                this.client.getSession().setSessionId("");
+                this.client.getSession().setS(0);
+                log.info("Bot[" + client.getInfo().getBotId() + "]会话失效，重连重新授权");
+                this.pause();
+                WebSocketEvent bean = this.client.getBean(WebSocketEvent.class);
+                bean.reconnection(); // 重连
+            }
         }
     }
 
@@ -107,21 +121,28 @@ public class HeartbeatEventImpl implements HeartbeatEvent, EventMethodNoParam, E
         if (type == BotEventType.WEBSOCKET_MESSAGE && body.getOp() == 7) {
             // 进行重连
             log.info("Bot[" + client.getInfo().getBotId() + "]进行重连");
+            this.client.getInfo().setState(Robot.STATE_ERROR);  // 重连中
+            this.client.getInfo().setErrorInfo("心跳包重连事件");
             this.pause();
             WebSocketEvent bean = this.client.getBean(WebSocketEvent.class);
             bean.reconnection(); // 重连
+            // 检测是否重连成功
+            new Thread(()->{
+                try {
+                    Thread.sleep(10000);
+                    // 10秒后检测是否连接成功
+                    if (client.getInfo().getState() != Robot.STATE_ONLINE){
+                        client.pushEvent(REAUTHORIZATION_SESSION, null);   // 重新发送授权包
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }).start();
         }
         if (type == BotEventType.WEBSOCKET_MESSAGE && body.getOp() == 9) {
             if (!this.client.getSession().getSessionId().isEmpty()) {
-                // 会话失效，进行重连
-                this.client.getInfo().setState(Robot.STATE_ERROR); // 异常
-                this.client.getInfo().setErrorInfo("会话失效，重连重新授权");
-                this.client.getSession().setSessionId("");
-                this.client.getSession().setS(0);
-                log.info("Bot[" + client.getInfo().getBotId() + "]会话失效，重连重新授权");
-                this.pause();
-                WebSocketEvent bean = this.client.getBean(WebSocketEvent.class);
-                bean.reconnection(); // 重连
+                this.client.pushEvent(REAUTHORIZATION_SESSION, null);   // 重新发送授权包
             } else {
                 this.client.getInfo().setState(Robot.STATE_ERROR); // 异常
                 this.client.getInfo().setErrorInfo("连接失败或会话上限，请检查配置");

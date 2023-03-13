@@ -35,7 +35,12 @@ public enum BotEventType {
     /**
      * 心跳包发送失败事件
      */
-    SEND_HEART_BEAT_ERROR;
+    SEND_HEART_BEAT_ERROR,
+
+    /**
+     * 重新授权会话
+     */
+    REAUTHORIZATION_SESSION;
 
     BotEventType() {
     }

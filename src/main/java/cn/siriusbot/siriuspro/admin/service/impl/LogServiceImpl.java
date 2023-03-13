@@ -9,11 +9,20 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class LogServiceImpl implements LogService {
 
     Map<String, Queue<String>> queueMap = new ConcurrentHashMap<>();
+    Queue<String> cache = new ConcurrentLinkedQueue<>();
+    AtomicInteger index = new AtomicInteger(0);
+
+    @Override
+    public List<String> getLogLately() {
+        return new ArrayList<>(cache);
+    }
 
     /**
      * 推入日志
@@ -24,6 +33,12 @@ public class LogServiceImpl implements LogService {
     public void pushLog(String log) {
         for (String key : queueMap.keySet()){
             queueMap.get(key).add(log);
+        }
+        cache.add(log);
+        if (index.get() > 200){
+            cache.poll();
+        } else {
+            index.addAndGet(1);
         }
     }
 

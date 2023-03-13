@@ -147,7 +147,7 @@ public class SiriusBotClient implements BotClient {
                             method.invoke(event, type);
                         } catch (IllegalAccessException | InvocationTargetException e) {
                             e.printStackTrace();
-                            log.error("bot事件推送异常，bot对象为:" + this + "，嵌套异常为:" + e);
+                            log.error("bot事件推送异常，bot对象为:" + this + "，嵌套异常为:" + e, e);
                         }
                     } else {
                         // 推送信息包事件
@@ -164,7 +164,7 @@ public class SiriusBotClient implements BotClient {
                             method.invoke(event, type, body);
                         } catch (IllegalAccessException | InvocationTargetException e) {
                             e.printStackTrace();
-                            log.error("bot事件推送异常，bot对象为:" + this + "，嵌套异常为:" + e);
+                            log.error("bot事件推送异常，bot对象为:" + this + "，嵌套异常为:" + e, e);
                         }
                     }
 
@@ -187,7 +187,7 @@ public class SiriusBotClient implements BotClient {
             JSONObject json = JSONObject.parseObject(request);
             this.session.setWebSocketUri(new URI(json.getString("url")));
         } catch (URISyntaxException e) {
-            log.error(e);
+            log.error("WebSocketUri验证异常!", e);
             throw new MsgException(500, "WebSocketUri验证异常!");
         } catch (MsgException e) {
             this.info.setState(Robot.STATE_ERROR);

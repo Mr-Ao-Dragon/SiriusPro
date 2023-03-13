@@ -446,7 +446,7 @@ public class BotServiceImpl implements BotService {
                     loginBot(robot);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    log.error(String.format("Bot[%s] 登录失败,失败原因:%s", robot.getBotId(), e.getCause()));
+                    log.error(String.format("Bot[%s] 登录失败,失败原因:%s", robot.getBotId(), e.getCause()), e);
                 }
             }
         }

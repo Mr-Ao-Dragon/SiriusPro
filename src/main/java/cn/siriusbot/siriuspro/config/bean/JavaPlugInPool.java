@@ -111,7 +111,7 @@ public class JavaPlugInPool {
                         return application;
                     }
                 } catch (Throwable e) {
-                    log.error(e);
+                    log.error("加载插件异常", e);
                 }
 
             }

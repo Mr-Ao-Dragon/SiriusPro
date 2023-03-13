@@ -100,7 +100,7 @@ public class EPlugInClient implements PlugInClient {
                         try {
                             EPlugInClient.this.observer.sendMsg(poll.getMessage().getMessage());  // 发送数据
                         } catch (Exception e) {
-                            log.error(e);
+                            log.error("消息推入栈异常", e);
                             poll.setRetry(poll.getRetry() + 1);
                             if (poll.getRetry() < 6) {
                                 // 最多重发5次

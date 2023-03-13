@@ -337,10 +337,10 @@ public class BotHttpEventImpl implements BotHttpEvent {
                 }
             }
         } catch (MsgException e) {
-            log.error(e);
+            log.error("httpClient请求错误", e);
             throw e;
         } catch (Exception e) {
-            log.error(e);
+            log.error("httpClient请求错误", e);
             throw new MsgException(500, "httpClient请求错误!");
         }
     }
@@ -396,11 +396,10 @@ public class BotHttpEventImpl implements BotHttpEvent {
                 }
             }
         } catch (MsgException e) {
-            log.error(e);
+            log.error("httpClient请求错误", e);
             throw e;
         } catch (Exception e) {
-            log.error(e);
-            e.printStackTrace();
+            log.error("httpClient请求错误", e);
             throw new MsgException(500, "httpClient请求错误!");
         }
     }

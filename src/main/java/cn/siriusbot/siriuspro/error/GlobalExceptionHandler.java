@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Throwable.class)
     public R globalException(HttpServletRequest request, Throwable ex){
         ex.printStackTrace();
-        log.error(request.getRequestURI() +  "请求异常错误："  + ex.getMessage());
+        log.error(request.getRequestURI() +  "请求异常错误："  + ex.getMessage(), ex);
         return new R()
                 .setCode(50000)
                 .setMsg("请求失败，未知错误!")

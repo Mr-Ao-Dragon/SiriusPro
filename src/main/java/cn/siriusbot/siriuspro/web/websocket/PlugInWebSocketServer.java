@@ -121,7 +121,7 @@ public class PlugInWebSocketServer implements ClientObserver {
                 ex.printStackTrace();
             }
         } catch (Exception e) {
-            log.error("处理ws消息异常，嵌套异常为 -> " + e);
+            log.error("处理ws消息异常，嵌套异常为 -> " + e, e);
         }
 
 

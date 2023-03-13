@@ -155,7 +155,7 @@ public class JavaPlugInClient implements PlugInClient, ExpandClient {
                             app.appInfo().getAppName(),
                             method.getName(),
                             e.getCause()
-                    ));
+                    ), e);
                 }
             }
         }
@@ -190,7 +190,7 @@ public class JavaPlugInClient implements PlugInClient, ExpandClient {
                             app.appInfo().getAppName(),
                             method.getName(),
                             e.getCause()
-                    ));
+                    ), e);
                 }
             }
         }
@@ -225,7 +225,7 @@ public class JavaPlugInClient implements PlugInClient, ExpandClient {
                         app.appInfo().getAppName(),
                         method.getName(),
                         e.getCause()
-                ));
+                ), e);
             }
         }
 
@@ -261,7 +261,7 @@ public class JavaPlugInClient implements PlugInClient, ExpandClient {
                         app.appInfo().getAppName(),
                         method.getName(),
                         e.getCause() == null ? e : e.getCause()
-                ));
+                ), e);
             }
 
         }
@@ -295,7 +295,7 @@ public class JavaPlugInClient implements PlugInClient, ExpandClient {
                         app.appInfo().getAppName(),
                         method.getName(),
                         e.getCause()
-                ));
+                ), e);
             }
         }
     }
