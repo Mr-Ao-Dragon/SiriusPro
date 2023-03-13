@@ -65,7 +65,7 @@ public class ChannelPermissionsImpl implements ChannelPermissionsApi {
     public Boolean modifyChannelPermissionsByRole_id(@NotNull String bot_id, @NotNull String channel_id, @NotNull String role_id, String add, String remove) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
-                .setMethod(RequestMethod.PATCH)
+                .setMethod(RequestMethod.PUT)
                 .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/roles/" + role_id + "/permissions")
                 .putRequestBody("add", add)
                 .putRequestBody("remove", remove);
