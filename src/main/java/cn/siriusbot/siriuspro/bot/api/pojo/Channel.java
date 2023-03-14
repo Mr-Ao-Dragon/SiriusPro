@@ -14,7 +14,7 @@ public class Channel{
     String id;
 
     /**
-     * 频道ID
+     * guild_id
      */
     String guild_id;
 

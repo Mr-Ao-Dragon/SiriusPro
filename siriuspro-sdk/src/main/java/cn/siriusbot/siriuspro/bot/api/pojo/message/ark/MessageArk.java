@@ -42,7 +42,11 @@ public class MessageArk {
         for (int i = 0; i < textAndLinkObjects.size(); i++) {
             MessageArkObj arkObj = new MessageArkObj();
             List<MessageArkObjKv> arkObjKvs = new ArrayList<>();
-            arkObjKvs.add(new MessageArkObjKv().setKey("desc").setValue(textAndLinkObjects.get(i).desc));
+            arkObjKvs.add(
+                    new MessageArkObjKv()
+                            .setKey("desc")
+                            .setValue(textAndLinkObjects.get(i).desc)
+            );
             if (textAndLinkObjects.get(i).link != null || textAndLinkObjects.get(i).link != "")
                 arkObjKvs.add(new MessageArkObjKv().setKey("link").setValue(textAndLinkObjects.get(i).link));
 
