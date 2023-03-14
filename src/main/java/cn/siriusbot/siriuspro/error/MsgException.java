@@ -19,6 +19,13 @@ public class MsgException extends RuntimeException{
         this.r.setMsg(message);
     }
 
+    public MsgException(int code, String message, String httpErrorId) {
+        super(message);
+        this.r.setCode(code);
+        this.r.setMsg(message);
+        this.r.setExtra(httpErrorId);
+    }
+
     public R getR() {
         return r;
     }

@@ -345,12 +345,12 @@ public class BotHttpEventImpl implements BotHttpEvent {
         }
     }
 
-    private void disposeResponse(String response) throws IOException {
+    private void disposeResponse(String response, String header) throws IOException {
         JSONObject json = JSONObject.parseObject(response);
         if (json.getInteger("code") != null){
             String msg = errorMsg.get(json.getInteger("code"));
             if (msg != null){
-                throw new MsgException(json.getInteger("code"), msg);
+                throw new MsgException(json.getInteger("code"), msg, header);
             }
         }
     }
@@ -383,7 +383,7 @@ public class BotHttpEventImpl implements BotHttpEvent {
                 case 404 -> throw new MsgException(405, "未找到 API");
                 case 500 -> {
                     String body = Objects.requireNonNull(response.body()).string();
-                    this.disposeResponse(body);
+                    this.disposeResponse(body, response.header("X-Tps-trace-ID"));
                     return new BotResponse()
                             .setCode(500)
                             .setBody(body)
@@ -391,7 +391,7 @@ public class BotHttpEventImpl implements BotHttpEvent {
                 }
                 default -> {
                     String body = Objects.requireNonNull(response.body()).string();
-                    this.disposeResponse(body);
+                    this.disposeResponse(body, response.header("X-Tps-trace-ID"));
                     throw new MsgException(response.code(), String.format("httpClient请求错误代码:%d，body:%s,X-Tps-trace-ID：%s", response.code(), body, response.header("X-Tps-trace-ID")));
                 }
             }
