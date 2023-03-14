@@ -89,6 +89,8 @@ public class MemberImpl implements MemberApi {
     @Override
     public Tuple<MemberQueryLimit, String> getMemberListByRoleId(@NotNull String bot_id, @NotNull String guild_id, @NotNull String role_id, String start_index, int limit) {
         BotClient client = botPool.getBotById(bot_id);
+        if(start_index==null||start_index.isEmpty())
+            start_index="0";
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "guilds/" + guild_id + "/roles/" + role_id + "/members?start_index=" + start_index + "&limit=" + limit)
                 .setMethod(RequestMethod.GET);

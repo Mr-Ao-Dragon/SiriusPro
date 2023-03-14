@@ -371,6 +371,7 @@ public class BotHttpEventImpl implements BotHttpEvent {
         Request toRequest = botRequestToRequest(request);
         try {
             Response response = httpClient.newCall(toRequest).execute();
+            System.out.println(response.code());
             switch (response.code()) {
                 case 202, 200, 204 -> {
                     return new BotResponse()

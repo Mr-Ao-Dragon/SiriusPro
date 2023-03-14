@@ -15,6 +15,7 @@ import cn.siriusbot.siriuspro.bot.pojo.BotResponse;
 import cn.siriusbot.siriuspro.bot.pojo.e.RequestBodyType;
 import cn.siriusbot.siriuspro.bot.pojo.e.RequestMethod;
 import cn.siriusbot.siriuspro.config.bean.BotPool;
+import cn.siriusbot.siriuspro.error.MsgException;
 import com.alibaba.fastjson.JSONObject;
 import com.vdurmont.emoji.EmojiParser;
 import jdk.swing.interop.SwingInterOpUtils;
@@ -271,7 +272,6 @@ public class MessageImpl implements MessageApi {
     @Override
     public Tuple<Message, String> sendImageAndTextMessage(@NotNull String bot_id, @NotNull String channel_id, String content, String image_path, String msg_id, String event_id) {
         BotClient client = botPool.getBotById(bot_id);
-        content = EmojiParser.parseToUnicode(content);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.POST)
                 .setBodyType(RequestBodyType.FORM)
@@ -281,10 +281,15 @@ public class MessageImpl implements MessageApi {
             botRequest.putRequestBody("msg_id", msg_id);
         if (event_id != null)
             botRequest.putRequestBody("event_id", event_id);
-        if (content != null)
+        if (content != null){
+            content = EmojiParser.parseToUnicode(content);
             botRequest.putRequestBody("content", content);
-        if (image_path != null)
-            botRequest.putRequestBody("file_image", new File(image_path));
+        }
+        File file = new File(image_path);
+        if(!file.exists()){
+            throw new MsgException(500, "文件不存在!");
+        }
+        botRequest.putRequestBody("file_image", file);
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
         BotResponse response = http.req(botRequest);
         String data = EmojiParser.parseToUnicode(response.getBody());

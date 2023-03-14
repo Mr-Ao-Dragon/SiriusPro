@@ -170,6 +170,7 @@ public class BaseApiControl {
     @SneakyThrows
     @PostMapping("control")
     public R control(@RequestBody String bodyStr) {
+        System.out.println(bodyStr);
         bodyStr = bodyStr.replaceAll("\\\\r\\\\n", "\\\\n");
         BaseApiBody body = JSONObject.parseObject(bodyStr, BaseApiBody.class);
         if (ObjectUtils.isEmpty(body.getSession())) {

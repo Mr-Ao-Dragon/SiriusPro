@@ -311,8 +311,11 @@ public class DMSImpl implements DMS_Api {
             content = EmojiParser.parseToUnicode(content);
             botRequest.putRequestBody("content", content);
         }
-        if (image_path != null)
-            botRequest.putRequestBody("file_image", new File(image_path));
+        File file = new File(image_path);
+        if(!file.exists()){
+            throw new MsgException(500, "文件不存在!");
+        }
+        botRequest.putRequestBody("file_image", file);
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
         BotResponse response = http.req(botRequest);
         String data = EmojiParser.parseToUnicode(response.getBody());
