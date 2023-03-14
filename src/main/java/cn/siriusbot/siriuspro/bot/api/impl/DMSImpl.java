@@ -201,7 +201,7 @@ public class DMSImpl implements DMS_Api {
             throw new MsgException(500, "guild_id不可为空");
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.DELETE)
-                .setUrl("dms/" + guild_id + "/messages/" + message_id + "?hidetip=" + hidetip);
+                .setUrl(client.getSession().getOpenUrl()+"dms/" + guild_id + "/messages/" + message_id + "?hidetip=" + hidetip);
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
         BotResponse response = http.req(botRequest);
         return response.getCode() == 200;
