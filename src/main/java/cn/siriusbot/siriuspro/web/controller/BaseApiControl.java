@@ -162,6 +162,12 @@ public class BaseApiControl {
     PlugInFactory plugInFactory;
 
     @SneakyThrows
+    @PostMapping("control/{api}/{method}")
+    public R controlUrl(@RequestBody String bodyStr) {
+        return control(bodyStr);
+    }
+
+    @SneakyThrows
     @PostMapping("control")
     public R control(@RequestBody String bodyStr) {
         bodyStr = bodyStr.replaceAll("\\\\r\\\\n", "\\\\n");

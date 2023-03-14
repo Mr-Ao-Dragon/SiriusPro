@@ -58,6 +58,7 @@ public class PlugInWebSocketServer implements ClientObserver {
      */
     @Override
     public void sendMsg(String s) throws Exception {
+        log.info(String.format("[ws->send(%s)] -> %s", this.session.getId(), s));
         this.session.getBasicRemote().sendText(s);
     }
 
@@ -110,6 +111,7 @@ public class PlugInWebSocketServer implements ClientObserver {
                             .setCode(0)
                             .setMsg("插件验证通过")
                             .setData(this.plugInClient.getUuid());
+                    log.info(String.format("[ws] (%s)新客户端应用验证通过 -> %s", session.getId(), info));
                     this.sendMsg(JSONObject.toJSONString(r));
                     this.verify = 1;
                 }
@@ -133,7 +135,7 @@ public class PlugInWebSocketServer implements ClientObserver {
      */
     @OnError
     public void onError(Throwable error) {
-
+        log.error("[ws] (%s)客户端连接错误", error);
     }
 
 

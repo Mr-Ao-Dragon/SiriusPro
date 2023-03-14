@@ -36,4 +36,14 @@ public class PlugInServiceImpl implements PlugInService {
         plugInInfos.sort((o1, o2) -> o2.getResponseNum() - o1.getResponseNum());
         return plugInInfos;
     }
+
+    /**
+     * 插件添加到数据库
+     *
+     * @param client
+     */
+    @Override
+    public void addDatabase(PlugInClient client) {
+
+    }
 }
