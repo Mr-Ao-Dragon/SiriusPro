@@ -58,7 +58,7 @@ public interface BotManageApi extends ApiProxy {
     /**
      * 根据机器人ID登录机器人
      *
-     * @param botId 机器人ID
+     * @param botId botId
      */
     void loginBotByBotId(String botId);
 
