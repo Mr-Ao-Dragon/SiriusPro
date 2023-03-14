@@ -37,11 +37,11 @@ public class MemberImpl implements MemberApi {
     @Override
     public Tuple<List<Member>, String> getMemberList(@NotNull String bot_id, @NotNull String guild_id, String after, int limit) {
         BotClient client = botPool.getBotById(bot_id);
-        if (after == null)
-            after = "0";
         BotRequest botRequest = new BotRequest()
                 .setUrl(client.getSession().getOpenUrl() + "guilds/" + guild_id + "/members?after=" + after + "&limit=" + limit)
                 .setMethod(RequestMethod.GET);
+        if (after == null)
+            botRequest.setUrl(client.getSession().getOpenUrl() + "guilds/" + guild_id + "/members?limit="+limit);
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
         BotResponse response = http.req(botRequest);
         String data = EmojiParser.parseToUnicode(response.getBody());
