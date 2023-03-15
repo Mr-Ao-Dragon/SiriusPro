@@ -36,7 +36,7 @@ public class ScheduleApiImpl implements ScheduleApi {
      */
     @SneakyThrows
     @Override
-    public Tuple<List<Schedule>, String> getScheduleListByChannel_id(@NotNull String bot_id, @NotNull String channel_id, String since) {
+    public Tuple<List<Schedule>, String>    getScheduleListByChannel_id(@NotNull String bot_id, @NotNull String channel_id, String since) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
                 .setMethod(RequestMethod.GET)
@@ -65,11 +65,12 @@ public class ScheduleApiImpl implements ScheduleApi {
     public Tuple<Schedule, String> getScheduleInfo(@NotNull String bot_id, @NotNull String channel_id, @NotNull String schedule_id) {
         BotClient client = botPool.getBotById(bot_id);
         BotRequest botRequest = new BotRequest()
-                .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "schedules/" + schedule_id)
+                .setUrl(client.getSession().getOpenUrl() + "channels/" + channel_id + "/schedules/" + schedule_id)
                 .setMethod(RequestMethod.GET);
         BotHttpEvent http = client.getBean(BotHttpEvent.class);
         BotResponse response = http.req(botRequest);
         String data = EmojiParser.parseToUnicode(response.getBody());
+        System.out.println(data);
         data = EmojiParser.parseToUnicode(data);
         Tuple<Schedule, String> tuple = new Tuple<>();
         tuple.setFirst(JSONObject.parseObject(data, Schedule.class)).setSecond(data);

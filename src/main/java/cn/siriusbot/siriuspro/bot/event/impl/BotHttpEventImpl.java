@@ -192,7 +192,6 @@ public class BotHttpEventImpl implements BotHttpEvent {
         errorMsg.put(501019, "公告类型错误");
         errorMsg.put(501020, "创建推荐子频道类型频道公告失败");
 
-
         errorMsg.put(502001, "频道 id 无效");
         errorMsg.put(502002, "频道 id 为空");
         errorMsg.put(502003, "用户 id 无效");
@@ -371,6 +370,7 @@ public class BotHttpEventImpl implements BotHttpEvent {
         Request toRequest = botRequestToRequest(request);
         try {
             Response response = httpClient.newCall(toRequest).execute();
+            System.out.println(response.code());
             switch (response.code()) {
                 case 202, 200, 204 -> {
                     return new BotResponse()
