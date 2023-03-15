@@ -93,7 +93,6 @@ public class BaseApiControl {
             methodInfos.put(method.getName(), methodInfo);
         }
         apiMethodInfo.put(getClassName(clazz.getName()), methodInfos);
-        apiObject.put(getClassName(clazz.getName()), object);
     }
 
     // ============= 代理
@@ -138,6 +137,7 @@ public class BaseApiControl {
     private void initConfig() {
         // 配置API类
         putApi(AnnouncesApi.class, botApi.announcesApi());
+        putApi(BotManageApi.class, null);
         putApi(ApiPermissionApi.class, botApi.apiPermissionApi());
         putApi(AudioApi.class, botApi.audioApi());
         putApi(ChannelApi.class, botApi.channelApi());
@@ -175,8 +175,18 @@ public class BaseApiControl {
         if (ObjectUtils.isEmpty(body.getSession())) {
             throw new MsgException(500, "构建请求错误，session为空!");
         }
+        PlugInClient client = plugInFactory.getPlugInClientBySessionId(body.getSession());
+        if (client == null) {
+            throw new MsgException(500, "构建请求错误，session会话过期或不存在!");
+        }
         if (ObjectUtils.isEmpty(body.getApi())) {
             throw new MsgException(500, "构建请求错误，api为空!");
+        }
+        Object o = this.getProxyByName(client.getInfo(), body.getApi());
+        if (apiMethodInfo.get(body.getApi()) == null){
+            if (body.getApi().equals("BotManageApi") && o instanceof BotManageApi api){
+                putApi(BotManageApi.class, api);
+            }
         }
         if (ObjectUtils.isEmpty(body.getMethod())) {
             throw new MsgException(500, "构建请求错误，method为空!");
@@ -187,13 +197,10 @@ public class BaseApiControl {
         if (!apiMethodInfo.get(body.getApi()).containsKey(body.getMethod())) {
             throw new MsgException(500, "构建请求错误，method信息错误!");
         }
-        PlugInClient client = plugInFactory.getPlugInClientBySessionId(body.getSession());
-        if (client == null) {
-            throw new MsgException(500, "构建请求错误，session会话过期或不存在!");
-        }
+
         String logMsg = "";
         //Object o = apiObject.get(body.getApi());
-        Object o = this.getProxyByName(client.getInfo(), body.getApi());
+
         MethodInfo methodInfo = apiMethodInfo.get(body.getApi()).get(body.getMethod());
         // 构建调用参数
         Method method = methodInfo.getMethod();

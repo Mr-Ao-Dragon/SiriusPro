@@ -40,7 +40,9 @@ public class BotManageApiImpl implements BotManageApi {
         List<BotInfoJson> botInfoJsons = new ArrayList<>();
         List<BotInfo> botInfos = this.botPool.queryOnLineBotList();
         for (BotInfo botInfo : botInfos){
-            botInfoJsons.add(new BotInfoJson(botInfo));
+            BotInfoJson botInfoJson = new BotInfoJson(botInfo);
+            botInfoJson.setToken(null);
+            botInfoJsons.add(botInfoJson);
         }
         return botInfoJsons;
     }
@@ -72,7 +74,14 @@ public class BotManageApiImpl implements BotManageApi {
      */
     @Override
     public void closeFrame() {
-        System.exit(0);
+        new Thread(()->{
+            try {
+                Thread.sleep(1000);
+                System.exit(0);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     /**
